@@ -65,6 +65,7 @@
 <script>
 
 import axios from "axios";
+import Auth from "@/Auth.js";
 import ml from '@/ml.js';
 import { HeaderDropdown as AppHeaderDropdown } from '@coreui/vue'
 import Vue from 'vue'
@@ -108,32 +109,12 @@ export default {
       response : [],
     }
   },
-  notifications: {
-    showSuccessMsg: {
-      type: VueNotifications.types.success,
-      title: 'Hello there',
-      message: 'That\'s the success!'
-    },
-    showInfoMsg: {
-      type: VueNotifications.types.info,
-      title: 'Hey you',
-      message: 'Here is some info for you'
-    },
-    showWarnMsg: {
-      type: VueNotifications.types.warn,
-      title: 'Wow, man',
-      message: 'That\'s the kind of warning'
-    },
-    showErrorMsg: {
-      type: VueNotifications.types.error,
-      title: 'Wow-wow',
-      message: 'That\'s the error'
-    }
-  },
   methods : {
       async sendData() {
-            axios.post("http://localhost:3000/login/",this.login_details, {withCredentials : true}).then((response) =>{
+            axios.post("http://127.0.0.1:3000/api/super/login/",this.login_details, {withCredentials : true}).then((response) =>{
               this.response = response;
+              Auth.login();
+              console.log(Auth.loggedIn);
               this.$router.push("/dashboard");
             })
             .catch(function(error) {

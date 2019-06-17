@@ -11,13 +11,16 @@
         <b-nav-item class="d-md-down-none">
           <DefaultHeaderDropdown/>
         </b-nav-item>
+        <b-nav-item class="d-md-down-none">
+          <DefaultHeaderDropdownAccnt/>
+        </b-nav-item>
       </b-navbar-nav>
       <AsideToggler class="d-none d-lg-block" />
     </AppHeader>
     <div class="app-body">
       <AppSidebar fixed>
         <SidebarHeader/>
-        <b-button type="button" variant="dark" @click="myModal = true" class="mr-1">Company Name</b-button>
+        
         <SidebarForm/>
         <SidebarNav :navItems="navItems"></SidebarNav>
         <SidebarFooter/>
@@ -45,16 +48,6 @@
         <a href="https://coreui.io">CoreUI for Vue</a>
       </div>
     </TheFooter>
-    <b-modal onlyok title="Your Account" v-model="myModal" @ok="myModal = false" >
-      <b-button variant="" size="md" block>Company</b-button>
-      <b-button size="md" block>Personal</b-button>
-      <br>
-      <router-link :to="{ name: 'Add Company' }" @click="myModal = false">Add another Company</router-link>
-      <hr>
-      <i class="icon-user"></i><router-link :to="{ name: 'Add Company' }" @click="myModal = false">Manage your Profile</router-link>
-      <br>
-      <i class="icon-link"></i><router-link :to="{ name: 'Add Company' }" @click="myModal = false">Logout</router-link>
-    </b-modal>
   </div>
 </template>
 
@@ -63,7 +56,7 @@ import nav from '@/_nav'
 import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, AsideToggler, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
 import DefaultAside from './DefaultAside'
 import DefaultHeaderDropdown from './DefaultHeaderDropdown'
-
+import DefaultHeaderDropdownAccnt from './DefaultHeaderDropdownAccnt'
 export default {
   name: 'DefaultContainer',
   components: {
@@ -75,6 +68,7 @@ export default {
     Breadcrumb,
     DefaultAside,
     DefaultHeaderDropdown,
+    DefaultHeaderDropdownAccnt,
     SidebarForm,
     SidebarFooter,
     SidebarToggler,
@@ -85,7 +79,6 @@ export default {
   data () {
     return {
       navItems: nav.items,
-      myModal: false
     }
   },
   computed: {

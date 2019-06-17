@@ -3,39 +3,47 @@
       <b-col md="12">
         <b-card>
           <div slot="header">
-            <strong>Add</strong> Company
+            <strong>Add</strong> User
           </div>
-          <b-form action="CompanyList" v-on:submit.prevent="sendData">
+          <b-form action="UserList" v-on:submit.prevent="sendData">
           <b-form-group
-            description="Name of Company"
+            description="Name of User"
             label="Name"
             label-for="basicName"
             :label-cols="3"
             :horizontal="true">
-            <b-form-input id="basicName" v-model="input.company_name" type="text" autocomplete="company_name" placeholder="Enter the name of your Company" ></b-form-input>
+            <b-form-input id="basicName" v-model="input.user_name" type="text" autocomplete="user_name" placeholder="Enter the name of your User" ></b-form-input>
           </b-form-group>
           <b-form-group
-              description="Select Type of Company"
+            description="Password"
+            label="Password"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true">
+            <b-form-input id="basicName" v-model="input.password" type="password" autocomplete="user_name" placeholder="Password" ></b-form-input>
+          </b-form-group>
+          <b-form-group
+              description="Select Type of User"
               label="Type"
               label-for="basicText"
               :label-cols="3"
               :horizontal="true">
               <cool-select
-                v-model="input.company_type"
+                v-model="input.user_type"
                 :items="items"
-                placeholder="Company Type"
+                placeholder="User Type"
                >
               </cool-select>
             </b-form-group>
           <b-form-group
-            description="Address of the company"
+            description="Address of the user"
             label="Address"
             label-for="basicName"
             :label-cols="3"
             :horizontal="true">
             <b-form-group>
             <label for="street">Adress Line 1</label>
-            <b-form-input v-model="addresslist.compAdd" type="text" id="street" placeholder="Recipient Name/ Street Address/ P.O Box / Company Name"></b-form-input>
+            <b-form-input v-model="addresslist.compAdd" type="text" id="street" placeholder="Recipient Name/ Street Address/ P.O Box / User Name"></b-form-input>
           </b-form-group>
             <b-row>
             <b-col sm="6">
@@ -77,27 +85,7 @@
               </cool-select>
           </b-form-group>
           </b-form-group>
-          <b-form-group
-            description="TAX Information of the country"
-            label="TAX Info"
-            label-for="basicName"
-            :label-cols="3"
-            :horizontal="true">
-            <b-row>
-            <b-col sm="8">
-              <b-form-group>
-                <label for="city">TAX ID</label>
-                <b-form-input v-model="taxx.tax_id" type="text" id="city" placeholder="Enter your TAX ID"></b-form-input>
-              </b-form-group>
-            </b-col>
-            <b-col sm="4">
-              <b-form-group>
-                <label for="postal-code">TAX Tag</label>
-                <b-form-input v-model="taxx.tax_tag" type="text" id="postal-code" placeholder="TAX Tag"></b-form-input>
-              </b-form-group>
-            </b-col>
-          </b-row>
-          </b-form-group>
+          
           <!-- <b-form-group
             description="Add new Attributes"
             label="Additional Attributes"
@@ -155,23 +143,25 @@ Vue.use(VueNotifications, options)
 
 
 export default {
-  name: 'Add Company',
+  name: 'Add User',
   components : {
     CoolSelect
   },
   data: function () {
     return {
-        items : ['Limited Liability Company (LLC)', 'Private Corporation', 'Partnership', 'Sole Proprietorship'],
+        items : ['Super Admin','Student','Staff','Vendor','Guardian','Guest'],
       selected: 'Month',
       posts: [],
       resp: [],
       errors: [],
       
       input : {
-            company_name : "",
-            company_type : "",
+          company : "",
+            user_name : "",
+            password : "",
+            user_type : "",
             address : [this.addresslist],
-            tax : this.taxx
+            
         },
         taxx : {
             tax_id : "",
@@ -440,9 +430,8 @@ export default {
   methods : {
     async sendData() {
               this.input.address = [this.addresslist];
-            this.input.tax = this.taxx;
             console.log(this.input);
-            axios.post("http://127.0.0.1:3000/api/company/add",this.input, {withCredentials : true}).then((response) =>{
+            axios.post("http://127.0.0.1:3000/api/user/add",this.input, {withCredentials : true}).then((response) =>{
               console.log(this.input);
 
               if(response.data.limit == "exceeded") {
@@ -458,10 +447,10 @@ export default {
                     title: 'User Unauthenticated',
                     message: 'Please Login.'
                     })
-                  this.$router.push("/login");
+                  console.log(response)
               }
               else {
-                this.$router.push("/company");
+                this.$router.push("/user");
               }
             })
             .catch( function (error){

@@ -3,39 +3,47 @@
       <b-col md="12">
         <b-card>
           <div slot="header">
-            <strong>Add</strong> Company
+            <strong>Update/Delete</strong> User
           </div>
-          <b-form action="CompanyList" v-on:submit.prevent="sendData">
+          <b-form action="UserList" v-on:submit.prevent="updateData">
           <b-form-group
-            description="Name of Company"
+            description="Name of User"
             label="Name"
             label-for="basicName"
             :label-cols="3"
             :horizontal="true">
-            <b-form-input id="basicName" v-model="input.company_name" type="text" autocomplete="company_name" placeholder="Enter the name of your Company" ></b-form-input>
+            <b-form-input id="basicName" v-model="input.user_name" type="text" autocomplete="user_name" placeholder="Enter the name of your User" ></b-form-input>
           </b-form-group>
           <b-form-group
-              description="Select Type of Company"
+            description="Password"
+            label="Password"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true">
+            <b-form-input id="basicName" v-model="input.password" type="password" autocomplete="user_name" placeholder="Password" ></b-form-input>
+          </b-form-group>
+          <b-form-group
+              description="Select Type of User"
               label="Type"
               label-for="basicText"
               :label-cols="3"
               :horizontal="true">
               <cool-select
-                v-model="input.company_type"
+                v-model="input.user_type"
                 :items="items"
-                placeholder="Company Type"
+                placeholder="User Type"
                >
               </cool-select>
             </b-form-group>
           <b-form-group
-            description="Address of the company"
+            description="Address of the user"
             label="Address"
             label-for="basicName"
             :label-cols="3"
             :horizontal="true">
             <b-form-group>
             <label for="street">Adress Line 1</label>
-            <b-form-input v-model="addresslist.compAdd" type="text" id="street" placeholder="Recipient Name/ Street Address/ P.O Box / Company Name"></b-form-input>
+            <b-form-input v-model="addresslist.compAdd" type="text" id="street" placeholder="Recipient Name/ Street Address/ P.O Box / User Name"></b-form-input>
           </b-form-group>
             <b-row>
             <b-col sm="6">
@@ -77,27 +85,7 @@
               </cool-select>
           </b-form-group>
           </b-form-group>
-          <b-form-group
-            description="TAX Information of the country"
-            label="TAX Info"
-            label-for="basicName"
-            :label-cols="3"
-            :horizontal="true">
-            <b-row>
-            <b-col sm="8">
-              <b-form-group>
-                <label for="city">TAX ID</label>
-                <b-form-input v-model="taxx.tax_id" type="text" id="city" placeholder="Enter your TAX ID"></b-form-input>
-              </b-form-group>
-            </b-col>
-            <b-col sm="4">
-              <b-form-group>
-                <label for="postal-code">TAX Tag</label>
-                <b-form-input v-model="taxx.tax_tag" type="text" id="postal-code" placeholder="TAX Tag"></b-form-input>
-              </b-form-group>
-            </b-col>
-          </b-row>
-          </b-form-group>
+          
           <!-- <b-form-group
             description="Add new Attributes"
             label="Additional Attributes"
@@ -111,7 +99,7 @@
            <div slot="footer">
               <b-button  type="submit" size="sm" variant="primary"><i class="fa fa-dot-circle-o"></i> Submit</b-button>
               <router-link :to="{ path: '/sites',}">
-              <b-button type="reset" size="sm" variant="danger"><i class="fa fa-ban"></i> Reset</b-button>
+              <b-button v-on:click="delData()" size="sm" variant="danger"><i class="fa fa-ban"></i> Reset</b-button>
               </router-link>
 
 
@@ -143,6 +131,7 @@ function toast ({title, message, type, timeout, cb}) {
 }
 import { CoolSelect } from 'vue-cool-select'
 
+
 const options = {
   success: toast,
   error: toast,
@@ -152,31 +141,31 @@ const options = {
 //  VueNotifications.setPluginOptions(options)
 
 Vue.use(VueNotifications, options)
-
+var link = window.location.href
+  var key = link.split("details/",24).pop()
+  console.log(key)
 
 export default {
-  name: 'Add Company',
+  name: 'User Details',
   components : {
     CoolSelect
   },
   data: function () {
     return {
-        items : ['Limited Liability Company (LLC)', 'Private Corporation', 'Partnership', 'Sole Proprietorship'],
+        items : ['Super Admin','Student','Staff','Vendor','Guardian','Guest'],
       selected: 'Month',
       posts: [],
       resp: [],
       errors: [],
       
       input : {
-            company_name : "",
-            company_type : "",
+            user_name : "",
+            password : "",
+            user_type : "",
             address : [this.addresslist],
-            tax : this.taxx
+            
         },
-        taxx : {
-            tax_id : "",
-            tax_tag : "",
-        },
+        
          addresslist : {
         compAdd : "",
         country : "",
@@ -438,31 +427,31 @@ export default {
     }
   },
   methods : {
-    async sendData() {
+    async updateData() {
               this.input.address = [this.addresslist];
-            this.input.tax = this.taxx;
             console.log(this.input);
-            axios.post("http://127.0.0.1:3000/api/company/add",this.input, {withCredentials : true}).then((response) =>{
+            axios.put(`http://127.0.0.1:3000/api/user/details/${key}`,this.input, {withCredentials : true}).then((response) =>{
               console.log(this.input);
+              console.log(response);
 
-              if(response.data.limit == "exceeded") {
-                toast({
-                    type: VueNotifications.types.warn,
-                    title: 'Limit Exceeded',
-                    message: 'Please Upgrade your License.'
-                    })
-              }
-              else if(response.data.auth == false) {
-                toast({
-                    type: VueNotifications.types.error,
-                    title: 'User Unauthenticated',
-                    message: 'Please Login.'
-                    })
-                  this.$router.push("/login");
-              }
-              else {
-                this.$router.push("/company");
-              }
+            //   if(response.data.limit == "exceeded") {
+            //     toast({
+            //         type: VueNotifications.types.warn,
+            //         title: 'Limit Exceeded',
+            //         message: 'Please Upgrade your License.'
+            //         })
+            //   }
+            //   else if(response.data.auth == false) {
+            //     toast({
+            //         type: VueNotifications.types.error,
+            //         title: 'User Unauthenticated',
+            //         message: 'Please Login.'
+            //         })
+            //       console.log(response)
+            //   }
+            //   else {
+            //     this.$router.push("/user");
+            //   }
             })
             .catch( function (error){
               console.log(error)
@@ -472,7 +461,25 @@ export default {
                     message: 'Something went wrong.'
                     })
             });
-      }
+      },
+      async delData() {
+                    axios.delete(`http://127.0.0.1:3000/api/user/details/${key}`,{withCredentials : true} ).then(result => {
+                        
+                        
+                            toast({
+                        type: VueNotifications.types.success,
+                        title: 'Done!',
+                        message: 'Company Successfully Deleted'
+                        })
+                        console.log(result);
+                    }, error => {
+                        toast({
+                        type: VueNotifications.types.error,
+                        title: 'Oops!',
+                        message: 'Something Went Wrong.'
+                        })
+                    });
+        },
   }
   
 }

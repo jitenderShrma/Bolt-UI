@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import Auth from '@/Auth.js'
+import axios from 'axios';
 // Containers
 const DefaultContainer = () => import('@/containers/DefaultContainer')
 
@@ -13,6 +14,16 @@ const UserLogin = () => import('@/views/login_pages/UserLogin');
 const UserRegistration = () => import('@/views/login_pages/UserRegistration');
 
 
+//UserGroups
+const Category = () => import('@/views/Category');
+const UserGroups = () => import('@/views/UserGroups');
+const UserGroupsDetails = () => import('@/views/UserGroupDetail');
+
+//Permissions
+const AddPermission = () => import('@/views/Permission/AddPermission')
+const PermissionDetails = () => import('@/views/Permission/PermissionDetails')
+
+
 // Company Routes
 
 const CompanyList = () => import('@/views/Company/CompanyList');
@@ -20,14 +31,13 @@ const CompanyDetails = () => import('@/views/Company/CompanyDetails');
 const AddCompany = () => import('@/views/Company/AddCompany');
 
 // User Routes
-const UserCategory = () => import('@/views/Users/UserCategory');
-
+const UserDetails = () => import('@/views/Users/UserDetails');
+const UserList = () => import('@/views/Users/UserList');
+const AddUser = () => import('@/views/Users/AddUser');
 
 Vue.use(Router)
 
-
-
-export default new Router({
+var router = new Router({
   mode: 'hash', // https://router.vuejs.org/api/#mode
   linkActiveClass: 'open active',
   scrollBehavior: () => ({ y: 0 }),
@@ -48,51 +58,128 @@ export default new Router({
           children:[
             {
               path:'',
+              meta : { requiresAuth : true },
               component: Dashboard
             },
             {
               path:'/company',
-              meta: { label: 'CompanyList'},
+              meta : { requiresAuth : true },
               component: {
                 render (c) { return c('router-view') }
               },
               children:[
                 {
-                  path:'',
-                  component: CompanyList,
+                  path : '',
+                  meta : { requiresAuth : true },
+                  name : 'Company',
+                  component : CompanyList
                 },
                 {
                   path: '/company/:companyId',
-                  meta: { label: 'Company Details'},
-                  name: 'ComapanyDetails',
+                  meta : { requiresAuth : true },
+                  name: 'Company Details',
                   component: CompanyDetails
                 },
                 {
-                  path:'/add',
+                  path:'/add/company',
+                  meta : { requiresAuth : true },
                   name: 'Add Company',
                   component: AddCompany
                 },
               ]
 
             },
+            {
+              path : '/user',
+              meta : { requiresAuth : true },
+              redirect: '/user/list',
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children : [
+                {
+                  path: '/user/list',
+                  meta : { requiresAuth : true },
+                  name: 'User List',
+                  component: UserList
+                },
+                {
+                  path: '/user/add',
+                  meta : { requiresAuth : true },
+                  name: 'Add User',
+                  component: AddUser
+                },
+                {
+                  path: '/user/details/:userId',
+                  meta : { requiresAuth : true },
+                  name: 'User Details',
+                  component: UserDetails
+                },
+              ]
+            },
+            {
+              path: '/usergroups',
+              meta : { requiresAuth : true },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  name : `User Groups`,
+                  meta : { requiresAuth : true },
+                  path : `/usergroups/:userType`,
+                  component : UserGroups
+                },
+                {
+                  name : `User Group Edit`,
+                  meta : { requiresAuth : true },
+                  path : `/usergroupsdetails/:userType`,
+                  component : UserGroupsDetails
+                }
+              ]
+            },
+            {
+              path: '/permission',
+              meta : { requiresAuth : true },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  name : `Add Permission`,
+                  meta : { requiresAuth : true },
+                  path : `/permission/add/:userType`,
+                  component : AddPermission
+                },
+                {
+                  name : `Permission Details`,
+                  meta : { requiresAuth : true },
+                  path : `/permission/details/:userType`,
+                  component : PermissionDetails
+                },
+              ]
+            },
+            {
+              path: '/category',
+              meta : { requiresAuth : true },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  name : `Category`,
+                  meta : { requiresAuth : true },
+                  path : `/category/:categoryType`,
+                  component : Category
+                }
+              ]
+            }
           ]
         },
+        
       ]
     },
-    {
-      path : '/permissions',
-      name : 'Permissions',
-      component: {
-        render (c) { return c('router-view') }
-      },
-      children : [
-        {
-          path: '',
-          name: 'User Category',
-          component: UserCategory
-        }
-      ]
-    },
+    
     {
       path: '/login',
       redirect: '/login',
@@ -113,10 +200,17 @@ export default new Router({
         }
       ]
     },
-    {
-      path: '/register',
-      name: 'Register',
-      component: UserRegistration
-    }
+    
   ]
 })
+router.beforeEach((to, from, next) => {
+  
+  if (to.matched.some(record => record.meta.requiresAuth) && !Auth.loggedIn) {
+    next({ path: '/login', query: { redirect: to.fullPath }});
+  } else {
+    next();
+  }
+});
+
+
+export default router
