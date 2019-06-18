@@ -156,7 +156,6 @@ export default {
       errors: [],
       
       input : {
-          company : "",
             user_name : "",
             password : "",
             user_type : "",

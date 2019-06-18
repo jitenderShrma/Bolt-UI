@@ -107,6 +107,12 @@ export default {
       console.log("add company");
       this.$router.push("/add/company");
     },
+
+    Settings(){
+      console.log("settings");
+      this.$router.push("/settings");
+
+    },
     async setSsn (id) {
       axios.get(`http://127.0.0.1:3000/api/company/${id}`,{withCredentials : true})
       .then(response => {
