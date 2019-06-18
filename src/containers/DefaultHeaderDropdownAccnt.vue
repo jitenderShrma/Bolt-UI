@@ -27,7 +27,7 @@
         <strong>Settings</strong>
       </b-dropdown-header>
       <b-dropdown-item><i class="fa fa-user" /> Profile</b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-wrench" /> Settings</b-dropdown-item>
+      <b-dropdown-item @click = "Settings"><i class="fa fa-wrench" /> Settings</b-dropdown-item>
       <b-dropdown-item><i class="fa fa-usd" /> Payments
         
       </b-dropdown-item>
