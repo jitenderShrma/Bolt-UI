@@ -10,26 +10,28 @@
       <b-col md="12">
         
           <div slot="header">
-            <strong>Update/Delete</strong> User Groups
+            <strong v-text="$ml.get('updatedelete')"></strong>&nbsp;<span v-text="$ml.get('usergroup')"></span>
           </div>
           <b-form action="UserList" v-on:submit.prevent="updateData">
-          <b-form-group
-            description="Name of User Group"
-            label="Name"
+            <b-form-group
+            :label="$ml.get('nameofusergroup')"
             label-for="basicName"
             :label-cols="3"
             :horizontal="true">
-            <b-form-input id="basicName"  type="text" autocomplete="user_name" placeholder="Enter the name of your User" ></b-form-input>
+            <b-form-input id="basicName" v-model="input.user_group" type="text" autocomplete="user_name" :placeholder="$ml.get('placeholderusergroup')" ></b-form-input>
           </b-form-group>
           <b-form-group
-            description="Name of Parent Group"
-            label="Parent Group"
+            :label="$ml.get('nameofparentgroup')"
             label-for="basicName"
             :label-cols="3"
             :horizontal="true">
-            <b-form-input id="basicName"  type="text" autocomplete="user_name" placeholder="Parent Group" ></b-form-input>
+            <cool-select
+                v-model="input.parent_group"
+                :items="items"
+                :placeholder="$ml.get('placeholderparentgroup')"
+               >
+              </cool-select>
           </b-form-group>
-          
           
           
           <!-- <b-form-group
@@ -43,9 +45,9 @@
           <b-button class="float-right" type="button" @click="addcontact()" size="sm" variant="primary"><i class="fa fa-dot-circle-o"></i> + Add Contact</b-button> -->
 
            <div slot="footer">
-              <b-button  type="submit" size="sm" variant="primary"><i class="fa fa-dot-circle-o"></i> Submit</b-button>
+              <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
               <router-link :to="{ path: '/sites',}">
-              <b-button v-on:click="delData()" size="sm" variant="danger"><i class="fa fa-ban"></i> Reset</b-button>
+              <b-button type="reset" size="sm" variant="danger" v-text="$ml.get('reset')"><i class="fa fa-ban"></i></b-button>
               </router-link>
 
 
@@ -62,24 +64,24 @@
               </template>
               <b-row>
           <b-col sm="2">
-              <h4><strong>Module Name</strong></h4>
+              <h4><strong v-text="$ml.get('modulename')"></strong></h4>
           </b-col>
           <b-col sm="10">
               <b-row>
                   <b-col></b-col>
                   <b-col></b-col>
-                  <b-col><h4><strong>Permissions</strong></h4></b-col>
+                  <b-col><h4><strong v-text="$ml.get('permissions')"></strong></h4></b-col>
                   <b-col></b-col>
                   <b-col></b-col>
               </b-row>
               <b-row>
                   <b-col></b-col>
                   <b-col></b-col>
-                  <b-col><strong>All</strong></b-col>
-                  <b-col><strong>Read</strong></b-col>
-                  <b-col><strong>Edit</strong></b-col>
-                  <b-col><strong>Delete</strong></b-col>
-                  <b-col><strong>More...</strong></b-col>
+                  <b-col><strong v-text="$ml.get('all')"></strong></b-col>
+                  <b-col><strong v-text="$ml.get('read')"></strong></b-col>
+                  <b-col><strong v-text="$ml.get('edit')"></strong></b-col>
+                  <b-col><strong v-text="$ml.get('delete')"></strong></b-col>
+                  <b-col><strong v-text="$ml.get('more')">...</strong></b-col>
 
               </b-row>
           </b-col>
@@ -92,26 +94,25 @@
           </b-col>
           <b-col sm="10">
             <b-form-group
-            label=""
             label-for="basicInlineCheckboxes"
             :label-cols="3"
             :horizontal="true">
-            <b-form-checkbox-group id="basicInlineCheckboxes" v-model="data[index].permission" :checked="[]" name="InlineCheckboxes" >
+            <b-form-checkbox-group id="basicInlineCheckboxes" v-model="data[index].permission"  name="InlineCheckboxes" >
             <b-row>
               <b-col>
-                  <b-form-checkbox :plain="true" value="All"></b-form-checkbox>
+                  <b-form-checkbox value="All"></b-form-checkbox>
               </b-col>
               <b-col>
-                <b-form-checkbox :plain="true" value="Read"></b-form-checkbox>  
+                <b-form-checkbox value="Read"></b-form-checkbox>  
               </b-col>
               <b-col>
-                  <b-form-checkbox :plain="true" value="Edit"></b-form-checkbox>
+                  <b-form-checkbox value="Edit"></b-form-checkbox>
               </b-col>
               <b-col>
-                  <b-form-checkbox :plain="true" value="Delete"></b-form-checkbox>
+                  <b-form-checkbox value="Delete"></b-form-checkbox>
               </b-col>
               <b-col>
-              <b-btn>Add More</b-btn>
+              <b-btn v-text="$ml.get('addmore')"></b-btn>
               </b-col>
               </b-row>
               
@@ -130,26 +131,34 @@
 </template>
 
 <script>
-
+  import ml from '@/ml'
    import Vue from 'vue'
   import {ClientTable, Event} from 'vue-tables-2'
   import axios from 'axios'
   import UserGroups from '@/views/UserGroups'
-  Vue.use(ClientTable)
+import { CoolSelect } from 'vue-cool-select'
+
+ Vue.use(ClientTable)
   export default {
     name: 'User Group Edit',
     components: {
       ClientTable,
       Event,
+      CoolSelect,
       UserGroups
     },
     data: function () {
       return {
           tabIndex: [0, 0],
       tabs: [
-        'Basic Information',
-        'Permissions',
+        "Basic Information",
+        "Permissions"
       ],
+      items : ['Super Admin','Student','Staff','Vendor','Guardian','Guest'],
+  input : {
+    user_group : "",
+    parent_group : ""
+  },
       link : "",
       key : "",
         columns: ['user_type','modules'],
@@ -195,7 +204,7 @@
   }
   };
 
-// </script>
+</script>
 
 <style lang="scss">
  

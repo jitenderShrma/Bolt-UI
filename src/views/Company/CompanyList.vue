@@ -1,17 +1,17 @@
 <template>
   <div className="animated">
         <router-link :to="{ name: 'Add Company' }">
-          <b-btn variant="primary">Add Company</b-btn>
+          <b-btn variant="primary" v-text="$ml.get('addcompany')"></b-btn>
         </router-link>
         <br>
         <br>
         <router-link :to="{ name: 'Add User' }">
-          <b-btn variant="primary">Add User</b-btn>
+          <b-btn variant="primary" v-text="$ml.get('adduser')"></b-btn>
         </router-link>
         <br>
         <br>
         <router-link :to="{ name: 'User List' }">
-          <b-btn variant="primary">Get all Users</b-btn>
+          <b-btn variant="primary" v-text="$ml.get('getallusers')"></b-btn>
         </router-link>
     
   </div>

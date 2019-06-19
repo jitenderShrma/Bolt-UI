@@ -98,6 +98,35 @@
             </b-col>
           </b-row>
           </b-form-group>
+          <div v-if="addattr.length!=0">
+          <b-form-group
+            description="Additional Attributes"
+            label="Additional Attributes"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true">
+            <div v-for="(run, index) in addattr" :key="index">
+              <b-row v-if="addattr[index].field_type == 'Text' ">
+                <label v-text="addattr[index].field_name"></label>
+                <b-form-input type="text" id="city" :placeholder="addattr[index].description"></b-form-input>
+              </b-row>
+              <b-row v-if="addattr[index].field_type == 'Email' ">
+                <label v-text="addattr[index].field_name"></label>
+                <b-form-input type="email" id="city" :placeholder="addattr[index].description"></b-form-input>
+              </b-row>
+              <b-row v-if="addattr[index].field_type == 'Phone' ">
+                <label v-text="addattr[index].field_name"></label>
+                <b-form-input type="phone" id="city" :placeholder="addattr[index].description"></b-form-input>
+              </b-row>
+              <b-row v-if="addattr[index].field_type == 'TexArea' ">
+                <label v-text="addattr[index].field_name"></label>
+                <b-form-input :textarea="true" id="city" :placeholder="addattr[index].description"></b-form-input>
+              </b-row>
+            </div>
+          </b-form-group>
+          </div>
+          <b-button type="button" variant="primary" @click="primaryModal = true" style="float:right" class="mr-1">Additional Attribute</b-button>
+
           <!-- <b-form-group
             description="Add new Attributes"
             label="Additional Attributes"
@@ -119,6 +148,41 @@
 
           </div>
           </b-form>
+          <b-modal title="Additional Attribute" class="modal-primary" v-model="primaryModal" @ok="primaryModal = false" hide-footer>
+            <b-form v-on:submit.prevent="addAttribute">
+              <b-form-group
+            description="Field Type"
+            label="Field Type"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true">
+            <cool-select
+                v-model="attribute.field_type"
+                :items="field_types"
+                placeholder="Field Type"
+               >
+              </cool-select>
+          </b-form-group>
+          <input v-model="attribute.context" value="Company" hidden>
+          <b-form-group
+              description="Field Name"
+              label="Field Name"
+              label-for="basicText"
+              :label-cols="3"
+              :horizontal="true">
+                <b-form-input v-model="attribute.field_name" type="text" id="city" placeholder="Enter Field Name"></b-form-input>
+            </b-form-group>
+            <b-form-group
+              description="Description of the Field"
+              label="Description"
+              label-for="basicText"
+              :label-cols="3"
+              :horizontal="true">
+                <b-form-input v-model="attribute.description" type="text" id="city" placeholder="Enter the Description"></b-form-input>
+            </b-form-group>
+             <b-button  type="submit" size="sm" variant="primary"><i class="fa fa-dot-circle-o"></i> Submit</b-button>
+            </b-form>
+          </b-modal>
         </b-card>
         </b-col>
     </b-row>
@@ -173,10 +237,14 @@ export default {
             address : [this.addresslist],
             tax : this.taxx
         },
+        primaryModal : false,
         taxx : {
             tax_id : "",
             tax_tag : "",
         },
+        addattr : [
+        
+      ],
          addresslist : {
         compAdd : "",
         country : "",
@@ -185,6 +253,14 @@ export default {
         phone : "",
         email : ""
       },
+      data :[],
+      attribute : {
+        context : "",
+        field_name : "",
+        field_type : "",
+        description : ""
+      },
+      field_types : ['Text','Email','Phone','TexArea'],
         countrylist : 
                         [ 
                         {"name": "Afghanistan", "code": "AF"}, 
@@ -436,66 +512,6 @@ export default {
             company_name : "",
             type : ""
         }
-    //   items:[],
-    //   data: [],
-    //   joinData : [],
-    //   fields: [
-    //     {key: 'room_code', label: 'Room Code', sortable: true},
-    //     {key: 'created_date',},
-    //     {key: 'room_name'},
-    //     {key: 'total_join_req'}, 
-    //     {key: 'no_of_users'},
-    //   ],
-    //   columns: ['username','room_name','room_code','_id'],
-    //     data1 : [],
-    //     options: {
-    //       headings: {
-    //         username : 'Username',
-    //         room_name : 'Room Name',
-    //         room_code : 'Room Code',
-    //         _id : 'URL'
-    //       },
-    //       sortable: ['username','room_name','room_code'],
-    //       filterable: ['username','room_name','room_code'],
-    //       sortIcon: { base:'fa', up:'fa-sort-asc', down:'fa-sort-desc', is:'fa-sort' },
-    //       pagination: {
-    //         chunk: 5,
-    //         edge: false,
-    //         nav: 'scroll'
-    //       }
-    //     },
-    //     useVuex: false,
-    //     theme: 'bootstrap4',
-    //     template: 'default',
-    //   selected: null,
-    //   items1: [],
-    //   items2:[],
-    //   items3:[],
-    //   items4:[],
-    //   test:[],
-    //   loading: false,
-    //   timeoutId: null,
-    //   noData: false,
-    //   // inventory: [],
-    //   errors: [],
-    //   chats: {
-    //     room_name: "",
-    //     room_site: "",
-    //     allowed_users: [],
-    //     group_admins: [],
-    //     only_admins:"",
-    //     emergency_contacts:[],
-    //     _id: key,
-    //   },
-    //   response: "",
-    //   join: {
-    //     username: "",
-    //     room_code: "",
-    //     user: "",
-    //     room_id: "",
-    //     user_token: "",
-    //     _id: key,
-    //   },
       
     }
   },
@@ -505,9 +521,28 @@ export default {
         
       response => {this.data = response.data
       console.log(this.data)
-      })        
+      })      
+      axios.get(`http://127.0.0.1:3000/api/super/attrib/view/`,{ withCredentials:true })
+    .then(
+      response => {
+        this.data = response.data
+        for(var i=0;i<this.data.length;i++) {
+          if(this.data[i].context == "Company") {
+            this.addattr.push(this.data[i]);
+          }
+        }
+        console.log(this.addattr)
+      })  
   },
   methods: {
+    async addAttribute() {
+      this.primaryModal = false
+      this.attribute.context = "Company";
+      console.log(this.attribute);
+      axios.post('http://127.0.0.1:3000/api/super/attrib/add',this.attribute,{withCredentials : true}).then((response) => {
+        console.log(response);
+      })
+    },
 //     async delDatajoin(id) {
 //                 axios({ method: "DELETE", "url": `https://selacious-cloud-siteapi.herokuapp.com/join/${id}`, "data": this.j, "headers": { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(result => {
 //                     this.join = result.data;

@@ -8,6 +8,11 @@ const DefaultContainer = () => import('@/containers/DefaultContainer')
 // Views
 const Dashboard = () => import('@/views/Dashboard')
 
+//Additional Attributes
+
+const AttributeList = () => import('@/views/Attributes/AttributeList')
+const AttributeEdit = () => import('@/views/Attributes/AttributeEdit')
+
 // Login Pages
 const SuperUserLogin = () => import('@/views/login_pages/SuperUserLogin');
 const UserLogin = () => import('@/views/login_pages/UserLogin');
@@ -24,6 +29,9 @@ const AddPermission = () => import('@/views/Permission/AddPermission')
 const PermissionDetails = () => import('@/views/Permission/PermissionDetails')
 
 
+//Communication 
+const  PluginList = () => import('@/views/Communication/Plugin');
+
 // Company Routes
 
 const CompanyList = () => import('@/views/Company/CompanyList');
@@ -34,9 +42,6 @@ const AddCompany = () => import('@/views/Company/AddCompany');
 const UserDetails = () => import('@/views/Users/UserDetails');
 const UserList = () => import('@/views/Users/UserList');
 const AddUser = () => import('@/views/Users/AddUser');
-
-//Setting Routes
-const Settings = () => import('@/views/settings');
 
 Vue.use(Router)
 
@@ -142,6 +147,28 @@ var router = new Router({
               ]
             },
             {
+              path :'/attr',
+              meta : { requiresAuth : true },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children : [
+                {
+                  path : '',
+                  name : "Attribute List",
+                  meta : { requiresAuth : true },
+                  component : AttributeList
+                },
+                {
+                  path : '/attr/:attrId',
+                  name : 'Edit Attribute',
+                  meta : { requiresAuth : true },
+                  component : AttributeEdit
+                },
+
+              ]
+            },
+            {
               path: '/permission',
               meta : { requiresAuth : true },
               component: {
@@ -151,7 +178,7 @@ var router = new Router({
                 {
                   name : `Add Permission`,
                   meta : { requiresAuth : true },
-                  path : `/permission/add/:userType`,
+                  path : `/permission/add`,
                   component : AddPermission
                 },
                 {
@@ -178,20 +205,20 @@ var router = new Router({
               ]
             },
             {
-              path: '/settings',
+              path: '/plugin',
               meta : { requiresAuth : true },
               component: {
                 render (c) { return c('router-view') }
               },
-              children:[
-               {
-                  path : '',
+              children: [
+                {
+                  name : `Plugin List`,
                   meta : { requiresAuth : true },
-                  name : 'Settings',
-                  component : Settings
+                  path : ``,
+                  component : PluginList
                 }
-            ]
-          },
+              ]
+            }
           ]
         },
         
@@ -215,9 +242,15 @@ var router = new Router({
           path: 'user',
           name: 'UserLogin',
           component: UserLogin
-        }
+        },
+        {
+          path: 'register',
+          name : 'Register',
+          component : UserRegistration
+        },
       ]
     },
+    
     
   ]
 })

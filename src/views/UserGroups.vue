@@ -33,19 +33,19 @@
             label-for="basicInlineCheckboxes"
             :label-cols="3"
             :horizontal="true">
-            <b-form-checkbox-group id="basicInlineCheckboxes" v-model="data[index].permission" name="InlineCheckboxes" :plain="true" >
+            <b-form-checkbox-group id="basicInlineCheckboxes" v-model="data[index].permission" :value="data[index].permission" name="InlineCheckboxes" >
                 <b-row>
               <b-col>
-                  <b-form-checkbox :plain="true" value="All"></b-form-checkbox>
+                  <b-form-checkbox  value="All"></b-form-checkbox>
               </b-col>
               <b-col>
-                <b-form-checkbox :plain="true" value="Read"></b-form-checkbox>  
+                <b-form-checkbox value="Read"></b-form-checkbox>  
               </b-col>
               <b-col>
-                  <b-form-checkbox :plain="true" value="Edit"></b-form-checkbox>
+                  <b-form-checkbox  value="Edit"></b-form-checkbox>
               </b-col>
               <b-col>
-                  <b-form-checkbox :plain="true" value="Delete"></b-form-checkbox>
+                  <b-form-checkbox  value="Delete"></b-form-checkbox>
               </b-col>
               <b-col>
               <b-btn>Add More</b-btn>

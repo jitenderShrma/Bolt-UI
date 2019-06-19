@@ -3,101 +3,126 @@
       <b-col md="12">
         <b-card>
           <div slot="header">
-            <strong>Add</strong> Company
+            <strong v-text="$ml.get('add')"></strong>&nbsp;<span v-text="$ml.get('company')"></span>
           </div>
           <b-form action="CompanyList" v-on:submit.prevent="sendData">
           <b-form-group
-            description="Name of Company"
-            label="Name"
+            :label="$ml.get('companyname')"
             label-for="basicName"
             :label-cols="3"
             :horizontal="true">
-            <b-form-input id="basicName" v-model="input.company_name" type="text" autocomplete="company_name" placeholder="Enter the name of your Company" ></b-form-input>
+            <b-form-input id="basicName" v-model="input.company_name" type="text" autocomplete="company_name" :placeholder="$ml.get('pholdcompanyname')" ></b-form-input>
           </b-form-group>
           <b-form-group
-              description="Select Type of Company"
-              label="Type"
+              :label="$ml.get('companytype')"
               label-for="basicText"
               :label-cols="3"
               :horizontal="true">
               <cool-select
                 v-model="input.company_type"
                 :items="items"
-                placeholder="Company Type"
+                :placeholder="$ml.get('companytype')"
                >
               </cool-select>
             </b-form-group>
           <b-form-group
-            description="Address of the company"
-            label="Address"
+            
+            :label="$ml.get('address')"
             label-for="basicName"
             :label-cols="3"
             :horizontal="true">
             <b-form-group>
-            <label for="street">Adress Line 1</label>
-            <b-form-input v-model="addresslist.compAdd" type="text" id="street" placeholder="Recipient Name/ Street Address/ P.O Box / Company Name"></b-form-input>
+            <label for="street" v-text="$ml.get('addressline1')"></label>
+            <b-form-input v-model="addresslist.compAdd" type="text" id="street" :placeholder="$ml.get('placeholderaddressline1')"></b-form-input>
           </b-form-group>
             <b-row>
             <b-col sm="6">
             <b-form-group>
-            <label for="street">E-mail</label>
-            <b-form-input v-model="addresslist.email" type="email" id="street" placeholder="Enter Email"></b-form-input>
+            <label for="street" v-text="$ml.get('email')"></label>
+            <b-form-input v-model="addresslist.email" type="email" id="street" :placeholder="$ml.get('placeholderemail')" required></b-form-input>
           </b-form-group>
           </b-col>
           <b-col sm="6">
               <b-form-group>
-            <label for="street">Phone</label>
-            <b-form-input v-model="addresslist.phone" type="number" id="street" placeholder="Enter Phone Number"></b-form-input>
+            <label for="street" v-text="$ml.get('phone')"></label>
+            <b-form-input v-model="addresslist.phone" type="number" id="street" :placeholder="$ml.get('placeholderphone')"></b-form-input>
           </b-form-group>
           </b-col>
           </b-row>
           <b-row>
             <b-col sm="8">
               <b-form-group>
-                <label for="city">State</label>
-                <b-form-input v-model="addresslist.state" type="text" id="city" placeholder="Enter your State"></b-form-input>
+                <label for="city" v-text="$ml.get('state')"></label>
+                <b-form-input  v-model="addresslist.state" type="text" id="city" :placeholder="$ml.get('placeholderstate')"></b-form-input>
               </b-form-group>
             </b-col>
             <b-col sm="4">
               <b-form-group>
-                <label for="postal-code">Postal Code</label>
-                <b-form-input v-model="addresslist.zip" type="text" id="postal-code" placeholder="Postal Code"></b-form-input>
+                <label for="postal-code" v-text="$ml.get('postalcode')"></label>
+                <b-form-input v-model="addresslist.zip" type="text" id="postal-code" :placeholder="$ml.get('placeholderpostalcode')"></b-form-input>
               </b-form-group>
             </b-col>
           </b-row>
           <b-form-group>
-            <label for="country">Country</label>
+            <label for="country" v-text="$ml.get('country')"></label>
             <cool-select
                 v-model="addresslist.country"
                 :items="countrylist"
                 item-text="name"
                 item-value="name"
-                placeholder="Country"
+                :placeholder="$ml.get('placeholdercompany')"
                 required>
               </cool-select>
           </b-form-group>
           </b-form-group>
           <b-form-group
-            description="TAX Information of the country"
-            label="TAX Info"
+            :label="$ml.get('taxinfo')"
             label-for="basicName"
             :label-cols="3"
             :horizontal="true">
             <b-row>
             <b-col sm="8">
               <b-form-group>
-                <label for="city">TAX ID</label>
-                <b-form-input v-model="taxx.tax_id" type="text" id="city" placeholder="Enter your TAX ID"></b-form-input>
+                <label for="city" v-text="$ml.get('taxid')"></label>
+                <b-form-input v-model="taxx.tax_id" type="text" id="city" :placeholder="$ml.get('pholdtaxid')"></b-form-input>
               </b-form-group>
             </b-col>
             <b-col sm="4">
               <b-form-group>
-                <label for="postal-code">TAX Tag</label>
-                <b-form-input v-model="taxx.tax_tag" type="text" id="postal-code" placeholder="TAX Tag"></b-form-input>
+                <label for="postal-code" v-text="$ml.get('taxtag')"></label>
+                <b-form-input v-model="taxx.tax_tag" type="text" id="postal-code" :placeholder="$ml.get('pholdtaxtag')"></b-form-input>
               </b-form-group>
             </b-col>
           </b-row>
           </b-form-group>
+          <div v-if="addattr.length!=0">
+          <b-form-group
+            
+            :label="$ml.get('customattributes')"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true">
+            <div v-for="(run, index) in addattr" :key="index">
+              <b-row v-if="addattr[index].field_type == 'Text' ">
+                <label v-text="addattr[index].field_name"></label>
+                <b-form-input type="text" id="city" :placeholder="addattr[index].description"></b-form-input>
+              </b-row>
+              <b-row v-if="addattr[index].field_type == 'Email' ">
+                <label v-text="addattr[index].field_name"></label>
+                <b-form-input type="email" id="city" :placeholder="addattr[index].description"></b-form-input>
+              </b-row>
+              <b-row v-if="addattr[index].field_type == 'Phone' ">
+                <label v-text="addattr[index].field_name"></label>
+                <b-form-input type="phone" id="city" :placeholder="addattr[index].description"></b-form-input>
+              </b-row>
+              <b-row v-if="addattr[index].field_type == 'TexArea' ">
+                <label v-text="addattr[index].field_name"></label>
+                <b-form-input :textarea="true" id="city" :placeholder="addattr[index].description"></b-form-input>
+              </b-row>
+            </div>
+          </b-form-group>
+          </div>
+          
           <!-- <b-form-group
             description="Add new Attributes"
             label="Additional Attributes"
@@ -109,9 +134,9 @@
           <b-button class="float-right" type="button" @click="addcontact()" size="sm" variant="primary"><i class="fa fa-dot-circle-o"></i> + Add Contact</b-button> -->
 
            <div slot="footer">
-              <b-button  type="submit" size="sm" variant="primary"><i class="fa fa-dot-circle-o"></i> Submit</b-button>
+              <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
               <router-link :to="{ path: '/sites',}">
-              <b-button type="reset" size="sm" variant="danger"><i class="fa fa-ban"></i> Reset</b-button>
+              <b-button type="reset" size="sm" variant="danger" v-text="$ml.get('reset')"><i class="fa fa-ban"></i></b-button>
               </router-link>
 
 
@@ -119,13 +144,51 @@
 
           </div>
           </b-form>
+          <b-button type="button" variant="primary" @click="primaryModal = true" style="float:right" class="mr-1" v-text="$ml.get('customattributes')"></b-button>
+          <b-modal :title="$ml.get('customattributes')" class="modal-primary" v-model="primaryModal" @ok="primaryModal = false" hide-footer>
+            <b-form v-on:submit.prevent="addAttribute">
+              <b-form-group
+            
+            :label="$ml.get('fieldtype')"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true">
+            <cool-select
+                v-model="attribute.field_type"
+                :items="field_types"
+                :placeholder="$ml.get('fieldtype')"
+               >
+              </cool-select>
+          </b-form-group>
+          <input v-model="attribute.context" value="Company" hidden>
+          <b-form-group
+              
+              :label="$ml.get('fieldname')"
+              label-for="basicText"
+              :label-cols="3"
+              :horizontal="true">
+                <b-form-input v-model="attribute.field_name" type="text" id="city" :placeholder="$ml.get('placeholderfieldname')"></b-form-input>
+            </b-form-group>
+            <b-form-group
+              
+              :label="$ml.get('description')"
+              label-for="basicText"
+              :label-cols="3"
+              :horizontal="true">
+                <b-form-input v-model="attribute.description" type="text" id="city" :placeholder="$ml.get('placeholderdescription')"></b-form-input>
+            </b-form-group>
+             <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+            </b-form>
+          </b-modal>
         </b-card>
         </b-col>
     </b-row>
+    
 </template>
 
 <script>
 import axios from 'axios';
+import ml from '@/ml'
 import VueNotifications from 'vue-notifications'
 import miniToastr from 'mini-toastr'// https://github.com/se-panfilov/mini-toastr
 import Vue from 'vue'
@@ -166,7 +229,8 @@ export default {
       posts: [],
       resp: [],
       errors: [],
-      
+      data : [],
+      primaryModal: false,
       input : {
             company_name : "",
             company_type : "",
@@ -185,7 +249,16 @@ export default {
         phone : "",
         email : ""
       },
-      
+      addattr : [
+        
+      ],
+      attribute : {
+        context : "",
+        field_name : "",
+        field_type : "",
+        description : ""
+      },
+      field_types : ['Text','Email','Phone','TexArea'],
       countrylist : 
                         [ 
                         {"name": "Afghanistan", "code": "AF"}, 
@@ -437,7 +510,29 @@ export default {
       
     }
   },
+  async mounted() {
+    axios.get(`http://127.0.0.1:3000/api/super/attrib/view/`,{ withCredentials:true })
+    .then(
+      response => {
+        this.data = response.data
+        for(var i=0;i<this.data.length;i++) {
+          if(this.data[i].context == "Company") {
+            this.addattr.push(this.data[i]);
+          }
+        }
+        console.log(this.addattr)
+      })
+  },
+  
   methods : {
+    async addAttribute() {
+      this.primaryModal = false
+      this.attribute.context = "Company";
+      console.log(this.attribute);
+      axios.post('http://127.0.0.1:3000/api/super/attrib/add',this.attribute,{withCredentials : true}).then((response) => {
+        console.log(response);
+      })
+    },
     async sendData() {
               this.input.address = [this.addresslist];
             this.input.tax = this.taxx;

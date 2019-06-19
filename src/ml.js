@@ -1,30 +1,15 @@
 import Vue from 'vue'
 import { MLInstaller, MLCreate, MLanguage } from 'vue-multilanguage'
- 
+import en_GB from '@/lang/en-GB';
+import pt_POR from '@/lang/pt-POR';
+
 Vue.use(MLInstaller)
  
 export default new MLCreate({
-  initial: 'english',
+  initial: 'en-GB',
   save: process.env.NODE_ENV === 'production',
   languages: [
-    new MLanguage('english').create({
-      
-          login : "Login",
-          signin : "Sign into your account",
-          username : "Username",
-          password :"Password",
-          forgotpassword : "Forgot Password?"
-      
-    }),
- 
-    new MLanguage('portuguese').create({
-        
-            login : "Entrar",
-            signin : "Faça login em sua conta",
-            username : "Nome de usuário",
-            password :"Senha",
-            forgotpassword : "Esqueceu a senha?"
-        
-    })
+    new MLanguage('en-GB').create(en_GB),
+    new MLanguage('pt-POR').create(pt_POR)
   ]
 })
