@@ -11,21 +11,25 @@
               </template>
               <b-row>
               	<b-col sm="2">
+
+              		
+
               	<p>SMTP</p></b-col>
               	<b-col sm="7">
-              <c-switch class="mx-1" color="success" checked label /></b-col>
+              		<c-switch class="mx-1" color="success" v-model="smtp" label />
+              	</b-col> 
           		</b-row>
           		<b-row>
           		<b-col sm="2">
           		<p>SMS</p></b-col>
           		<b-col sm="7">
-              <c-switch class="mx-1" color="success" checked label /></b-col>
+              	<c-switch class="mx-1" color="success" v-model="sms" label /></b-col>
           		</b-row>
           		<b-row>
           			<b-col sm="2">	
           		<p>SEND GRID</p></b-col>
           		<b-col sm="7">
-              <c-switch class="mx-1" color="success" label /></b-col>
+              <c-switch class="mx-1" color="success" v-model="sendgrid" label /></b-col>
           		</b-row>
              
             </b-tab>
@@ -37,15 +41,23 @@
 
 <script>
 import { Switch as cSwitch } from '@coreui/vue'
+import axios from 'axios'
+
 
 export default {
-	  name: 'switches',
+	  name: 'settings',
   components: {
     cSwitch
   },
-  name: 'tabs',
-  data () {
+  data: function() {
     return {
+    data:{
+  
+
+    },
+    smtp: false,
+    sms:false,
+    sendgrid:false,	
       tabIndex: [0, 0],
       tabs: [
         'Communications',
@@ -60,6 +72,15 @@ export default {
       }
     }
 
+  },
+   async mounted (){
+  	axios.get("http://127.0.0.1:3000/api/super/get/settings",{withCredentials :true}).then((response) =>{
+  		this.smtp = response.data[0].smtp;
+  		this.sms = response.data[0].sms;
+  		this.sendgrid = response.data[0].sendgrid;
+  		
+
+  	});
   }
 }
 </script>
