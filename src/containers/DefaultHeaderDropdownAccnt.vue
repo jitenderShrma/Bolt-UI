@@ -7,36 +7,36 @@
         alt="admin@bootstrapmaster.com" />
     </template>\
     <template slot="dropdown">
-      <b-dropdown-header tag="div" class="text-center"><strong v-text="ssnCompany.company_name"></strong>&nbsp; &nbsp; &nbsp;<b-badge variant="primary" @click="toggleNavs">Switch</b-badge>
+      <b-dropdown-header tag="div" class="text-center"><strong v-text="ssnCompany.company_name"></strong>&nbsp; &nbsp; &nbsp;<b-badge variant="primary" @click="toggleNavs" v-text="$ml.get('switch')"></b-badge>
       
       </b-dropdown-header>
-      <b-dropdown-item @click="reRoute(ssnCompany._id)" ><i class="fa fa-edit" /> Company Details
+      <b-dropdown-item @click="reRoute(ssnCompany._id)" ><i class="fa fa-edit" /> <span  v-text="$ml.get('companydetails')"></span>
       </b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-envelope-o" /> Messages
+      <b-dropdown-item><i class="fa fa-envelope-o" /> <span  v-text="$ml.get('messages')"></span>
         
       </b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-tasks" /> Tasks
+      <b-dropdown-item><i class="fa fa-tasks" /> <span  v-text="$ml.get('tasks')"></span>
         
       </b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-comments" /> Comments
+      <b-dropdown-item><i class="fa fa-comments" /> <span  v-text="$ml.get('comments')"></span>
         
       </b-dropdown-item>
       <b-dropdown-header
         tag="div"
         class="text-center">
-        <strong>Settings</strong>
+        <strong v-text="$ml.get('settings')"></strong>
       </b-dropdown-header>
-      <b-dropdown-item><i class="fa fa-user" /> Profile</b-dropdown-item>
-      <b-dropdown-item @click = "Settings"><i class="fa fa-wrench" /> Settings</b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-usd" /> Payments
+      <b-dropdown-item><i class="fa fa-user" /> <span  v-text="$ml.get('profile')"></span></b-dropdown-item>
+      <b-dropdown-item><i class="fa fa-wrench" /> <span  v-text="$ml.get('settings')"></span></b-dropdown-item>
+      <b-dropdown-item><i class="fa fa-usd" /> <span  v-text="$ml.get('payments')"></span>
         
       </b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-puzzle-piece" /> Extensions
+      <b-dropdown-item><i class="fa fa-file" /> <span  v-text="$ml.get('projects')"></span>
         
       </b-dropdown-item>
       <b-dropdown-divider />
-      <b-dropdown-item><i class="fa fa-shield" /> Lock Account</b-dropdown-item>
-      <b-dropdown-item @click = "Logout"><i class="fa fa-lock" /> Logout</b-dropdown-item>
+      <b-dropdown-item><i class="fa fa-shield" /> <span  v-text="$ml.get('lockaccount')"></span></b-dropdown-item>
+      <b-dropdown-item @click = "Logout"><i class="fa fa-lock" /> <span  v-text="$ml.get('logout')"></span></b-dropdown-item>
     </template>
   </AppHeaderDropdown>
   <AppHeaderDropdown right no-caret v-else-if="!tab">
@@ -47,7 +47,7 @@
         alt="admin@bootstrapmaster.com" />
     </template>\
     <template slot="dropdown">
-      <b-dropdown-header tag="div" class="text-center"><strong>Company List</strong>&nbsp; &nbsp; &nbsp;<b-badge variant="primary" @click="toggleNavs">Switch</b-badge>
+      <b-dropdown-header tag="div" class="text-center"><strong  v-text="$ml.get('companylist')"></strong>&nbsp; &nbsp; &nbsp;<b-badge variant="primary" @click="toggleNavs" v-text="$ml.get('switch')"></b-badge>
       </b-dropdown-header>
       <v-for >
       <b-dropdown-item v-for="(run, index) in data"
@@ -55,16 +55,17 @@
       </b-dropdown-item>
       </v-for>
       <b-dropdown-divider />
-      <b-dropdown-item @click="addCompany"><i class="fa fa-plus"  /> Add new Company</b-dropdown-item>
+      <b-dropdown-item @click="addCompany"><i class="fa fa-plus"  /> <span  v-text="$ml.get('addnewcompany')"></span></b-dropdown-item>
       <b-dropdown-divider />
 
-      <b-dropdown-item><i class="fa fa-shield" /> Lock Account</b-dropdown-item>
-      <b-dropdown-item @click = "Logout"><i class="fa fa-lock" /> Logout</b-dropdown-item>
+      <b-dropdown-item><i class="fa fa-shield" /><span  v-text="$ml.get('lockaccount')"></span></b-dropdown-item>
+      <b-dropdown-item @click = "Logout"><i class="fa fa-lock" /> <span  v-text="$ml.get('logout')"></span></b-dropdown-item>
     </template>
   </AppHeaderDropdown>
 </template>
 
 <script>
+import ml from '@/ml'
 import { HeaderDropdown as AppHeaderDropdown } from '@coreui/vue'
 import axios from 'axios';
 import Auth from '@/Auth.js'
@@ -85,13 +86,13 @@ export default {
       }
   },
   async mounted() {
-    axios.get("http://127.0.0.1:3000/api/company/list",{withCredentials : true})
+    await axios.get("http://127.0.0.1:3000/api/company/list",{withCredentials : true})
     .then(response => {
       this.data = response.data
       this.ssnCompany = this.data[0];
       axios.get(`http://127.0.0.1:3000/api/company/${this.ssnCompany._id}`,{withCredentials : true})
       .then(response => {
-      this.ssnCompany = response.data;
+      console.log(this.ssnCompany);
       this.tab = !this.tab;
       console.log(this.ssnCompany)})
     
@@ -106,12 +107,6 @@ export default {
     addCompany () {
       console.log("add company");
       this.$router.push("/add/company");
-    },
-
-    Settings(){
-      console.log("settings");
-      this.$router.push("/settings");
-
     },
     async setSsn (id) {
       axios.get(`http://127.0.0.1:3000/api/company/${id}`,{withCredentials : true})

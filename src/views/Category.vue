@@ -2,9 +2,9 @@
   <div className="animated fadeIn">
     <b-card>
       <b-card-header>
-        <i class="icon-menu mr-1"></i>User Groups
+        <i class="icon-menu mr-1"></i> <span v-text="$ml.get('usergroups')"></span>
         <router-link :to="{ name: 'Add Permission' }">
-          <h5><b-badge variant="primary">Add User Group</b-badge></h5>
+          <h5><b-badge variant="primary" v-text="$ml.get('addusergroups')"></b-badge></h5>
         </router-link>
       </b-card-header>
       <b-card-body style="padding : 0 1.25rem 0 1.25rem !important;">
@@ -28,22 +28,22 @@
   Vue.use(ClientTable)
 
   export default {
-    name: 'DataTable',
+    name: 'Category',
     components: {
       ClientTable,
       Event
     },
     data: function () {
       return {
-        columns: ['user_type','modules'],
+        columns: ['user_group','modules'],
         data: [],
         options: {
           headings: {
-            user_type : "User Group",
+            user_group : "User Group",
             modules : "Modules"
           },
-          sortable: ['user_type','modules'],
-          filterable: ['user_type','modules'],
+          sortable: ['user_group','modules'],
+          filterable: ['user_group','modules'],
           sortIcon: { base:'fa', up:'fa-sort-asc', down:'fa-sort-desc', is:'fa-sort' },
           pagination: {
             chunk: 5,
@@ -62,7 +62,7 @@
   },
   methods : {
     onRowClick(event){
-        window.location.href = `#/usergroupsdetails/${event.row.user_type}`
+        window.location.href = `#/usergroupsdetails/${event.row.user_group}`
       }
   }
   };
@@ -70,86 +70,5 @@
 // </script>
 
 <style lang="scss">
-  
-  .table th, .table td {
-    padding: 0.5rem !important;
-    vertical-align: top;
-    border-top: 1px solid #c8ced3;
-  }
-  table {
-    cursor:pointer !important;
-  }
-  h5 {
-    float:right;
-  }
-  .badge {
-    float:right;
-    
-  }
-  b-card {
-    margin:0px !important;
-    padding:0px !important;
-  }
-  .main .container-fluid {
-    padding: 0 20px !important; 
-  }
-  .card-body {
-    -webkit-box-flex: 1;
-    -ms-flex: 1 1 auto;
-    flex: 1 1 auto;
-    padding: 0 0 0  0 !important;
-  }
-
-  #dataTable {
-
-    .VuePagination {
-      text-align: center;
-      justify-content: center;
-    }
-
-    .vue-title {
-      text-align: center ;
-      margin-bottom: 10px;
-    }
-
-    .VueTables__search-field {
-      display: flex;
-      padding: 1.25rem 0 0 0;
-
-    }
-    .VueTables__search-field input {
-      margin-left: 0.25rem;
-    }
-
-    .VueTables__limit-field {
-      display: flex;
-    }
-
-    .VueTables__limit-field select {
-      margin-left: 0.25rem !important;
-    }
-
-    .VueTables__table th {
-      text-align: center;
-
-    }
-
-    .VueTables__child-row-toggler {
-      width: 16px;
-      height: 16px;
-      line-height: 16px;
-      display: block;
-      margin: auto;
-      text-align: center;
-    }
-
-    .VueTables__child-row-toggler--closed::before {
-      content: "+";
-    }
-
-    .VueTables__child-row-toggler--open::before {
-      content: "-";
-    }
-  }
 
 </style>

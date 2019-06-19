@@ -3,45 +3,27 @@
       <b-col md="12">
         <b-card>
           <div slot="header">
-            <strong>Add</strong> Permission
+            <strong  v-text="$ml.get('add')"></strong>&nbsp;<span  v-text="$ml.get('usergroup')"></span>
           </div>
           <b-form action="UserList" v-on:submit.prevent="sendData">
             <b-form-group
-            description="Name of Module"
-            label="Name of Module"
+            :label="$ml.get('nameofusergroup')"
             label-for="basicName"
             :label-cols="3"
             :horizontal="true">
-            <b-form-input id="basicName" v-model="input.module_name" type="text" autocomplete="user_name" placeholder="Enter the name of the module" ></b-form-input>
+            <b-form-input id="basicName" v-model="input.user_group" type="text" autocomplete="user_name" :placeholder="$ml.get('placeholderusergroup')" ></b-form-input>
           </b-form-group>
           <b-form-group
-            description="Name of Module"
-            label="Name of Module"
+            :label="$ml.get('nameofparentgroup')"
             label-for="basicName"
             :label-cols="3"
             :horizontal="true">
-            <b-form-input id="basicName" v-model="input.module_name" type="text" autocomplete="user_name" placeholder="Enter the name of the module" ></b-form-input>
-          </b-form-group>
-          <b-form-group
-            description="Permissions"
-            label="Permissions"
-            label-for="basicName"
-            :label-cols="3"
-            :horizontal="true">
-            <b-form-checkbox-group  id="basicInlineCustomCheckboxes">
-              <div class="custom-control custom-checkbox custom-control-inline">
-                <input type="checkbox" v-model="permis[0]" class="custom-control-input" id="customInChk1" value="All">
-                <label class="custom-control-label" for="customInChk1">All</label>
-              </div>
-              <div class="custom-control custom-checkbox custom-control-inline">
-                <input type="checkbox" v-model="permis[1]" class="custom-control-input" id="customInChk2" value="ReadAndEdit">
-                <label class="custom-control-label" for="customInChk2">Read And Edit</label>
-              </div>
-              <div class="custom-control custom-checkbox custom-control-inline">
-                <input type="checkbox" v-model="permis[2]" class="custom-control-input" id="customInChk3" value="ReadOnly">
-                <label class="custom-control-label" for="customInChk3">Read Only</label>
-              </div>
-            </b-form-checkbox-group>
+            <cool-select
+                v-model="input.parent_group"
+                :items="items"
+                :placeholder="$ml.get('placeholderparentgroup')"
+               >
+              </cool-select>
           </b-form-group>
           
           
@@ -56,9 +38,9 @@
           <b-button class="float-right" type="button" @click="addcontact()" size="sm" variant="primary"><i class="fa fa-dot-circle-o"></i> + Add Contact</b-button> -->
 
            <div slot="footer">
-              <b-button  type="submit" size="sm" variant="primary"><i class="fa fa-dot-circle-o"></i> Submit</b-button>
+              <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
               <router-link :to="{ path: '/sites',}">
-              <b-button type="reset" size="sm" variant="danger"><i class="fa fa-ban"></i> Reset</b-button>
+              <b-button type="reset" size="sm" variant="danger" v-text="$ml.get('reset')"><i class="fa fa-ban"></i></b-button>
               </router-link>
 
 
@@ -73,6 +55,7 @@
 
 <script>
 import axios from 'axios';
+import ml from '@/ml';
 import VueNotifications from 'vue-notifications'
 import miniToastr from 'mini-toastr'// https://github.com/se-panfilov/mini-toastr
 import Vue from 'vue'
@@ -108,40 +91,15 @@ export default {
   },
   data: function () {
     return {
-        items : ['Super Admin','Student','Staff','Vendor','Guardian','Guest'],
-      selected: 'Month',
-      posts: [],
-      resp: [],
-      errors: [],
-      permis : [],
+      items : ['Super Admin','Student','Staff','Vendor','Guardian','Guest'],
       input : {
-          user_type : "",
-          modules : [this.module],
-          
+          user_group : "",
+          parent_group : "",
         },
-        module : {
-            module_name : "",
-          permission : "",  
-        }
     }
-  },
-  mounted()  {
-
-  var link = window.location.href
-  var key = link.split("add/",24).pop()
-  console.log(key)
   },
   methods : {
     async sendData() {
-            if(this.permis[0]== true) {
-                this.input.permission = "All"
-            }
-            if(this.permis[1] == true) {
-                this.input.permission = "ReadAndEdit"
-            }
-            if(this.permis[2] == true) {
-                this.input.permission = "ReadOnly"
-            }
             axios.post(`http://127.0.0.1:3000/api/super/permission/add`,this.input, {withCredentials : true}).then((response) =>{
               console.log(this.input);
 

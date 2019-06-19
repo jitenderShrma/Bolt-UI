@@ -39,7 +39,7 @@
                             <b-button type="submit" variant="primary" class="px-4" v-text="$ml.get('login')"></b-button>
                     </b-col>
                     <b-col cols="6" class="text-right">
-                      <b-button variant="link" class="px-0" v-text="$ml.get('forgotpassword')">Forgot password?</b-button>
+                      <b-button variant="link" class="px-0" v-text="$ml.get('forgotpassword')"></b-button>
                     </b-col>
                   </b-row>
                 </b-form>

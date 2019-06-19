@@ -32,6 +32,7 @@ var items = [
       },
     ]
   },
+  
   {
     name: 'Company',
     url: '/company',
@@ -44,7 +45,12 @@ var items = [
     children: [
       
     ]
-  }
+  },
+  {
+    name: 'Additional Attributes',
+    url: '/attr',
+    icon: 'icon-star',
+  },
 ]
 for(var i=0;i<users.length;i++) {
   items[3].children.push({

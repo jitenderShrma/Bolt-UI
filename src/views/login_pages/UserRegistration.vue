@@ -46,7 +46,7 @@
                   </b-col>
                       <b-col lg="10">
                   <cool-select style="height:28px !important;" v-model="selected" :items="items" placeholder="Multi Category"
-                    /></b-col >
+                    /></b-col>
                 </b-row>
                 <br>
                 
