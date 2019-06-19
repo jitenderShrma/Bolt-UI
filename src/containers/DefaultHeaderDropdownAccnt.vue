@@ -27,11 +27,11 @@
         <strong>Settings</strong>
       </b-dropdown-header>
       <b-dropdown-item><i class="fa fa-user" /> Profile</b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-wrench" /> Settings</b-dropdown-item>
+      <b-dropdown-item @click = "Settings"><i class="fa fa-wrench" /> Settings</b-dropdown-item>
       <b-dropdown-item><i class="fa fa-usd" /> Payments
         
       </b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-file" /> Projects
+      <b-dropdown-item><i class="fa fa-puzzle-piece" /> Extensions
         
       </b-dropdown-item>
       <b-dropdown-divider />
@@ -89,7 +89,7 @@ export default {
     .then(response => {
       this.data = response.data
       this.ssnCompany = this.data[0];
-      axios.get(`http://127.0.0.1:3000/api/company/${ssnCompany._id}`,{withCredentials : true})
+      axios.get(`http://127.0.0.1:3000/api/company/${this.ssnCompany._id}`,{withCredentials : true})
       .then(response => {
       this.ssnCompany = response.data;
       this.tab = !this.tab;
@@ -106,6 +106,12 @@ export default {
     addCompany () {
       console.log("add company");
       this.$router.push("/add/company");
+    },
+
+    Settings(){
+      console.log("settings");
+      this.$router.push("/settings");
+
     },
     async setSsn (id) {
       axios.get(`http://127.0.0.1:3000/api/company/${id}`,{withCredentials : true})
