@@ -57,6 +57,7 @@
 <script>
 import axios from 'axios'
 import ml from '@/ml'
+import apiUrl from '@/apiUrl'
 import {CoolSelect} from 'vue-cool-select'
 var link = window.location.href
   var key = link.split("attr/",24).pop()
@@ -84,7 +85,7 @@ export default {
     methods : {
     async addAttribute() {
       console.log(this.attribute);
-      axios.put(`http://127.0.0.1:3000/api/super/attrib/update/${key}`,this.attribute,{withCredentials : true}).then((response) => {
+      axios.put(`${apiUrl}`+`super/attrib/update/`+`${key}`,this.attribute,{withCredentials : true}).then((response) => {
         console.log(response);
       })
     },

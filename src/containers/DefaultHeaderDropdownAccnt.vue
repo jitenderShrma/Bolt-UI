@@ -27,11 +27,11 @@
         <strong v-text="$ml.get('settings')"></strong>
       </b-dropdown-header>
       <b-dropdown-item><i class="fa fa-user" /> <span  v-text="$ml.get('profile')"></span></b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-wrench" /> <span  v-text="$ml.get('settings')"></span></b-dropdown-item>
+      <b-dropdown-item @click = "Settings"><i class="fa fa-wrench" /> <span  v-text="$ml.get('settings')"></span></b-dropdown-item>
       <b-dropdown-item><i class="fa fa-usd" /> <span  v-text="$ml.get('payments')"></span>
         
       </b-dropdown-item>
-      <b-dropdown-item><i class="fa fa-file" /> <span  v-text="$ml.get('projects')"></span>
+      <b-dropdown-item @click = "Plugin"><i class="fa fa-file" /> <span  v-text="$ml.get('extensions')"></span>
         
       </b-dropdown-item>
       <b-dropdown-divider />
@@ -99,7 +99,14 @@ export default {
       console.log(this.data)})
   },
   methods : {
-
+    Settings(){
+      console.log("settings");
+      this.$router.push("/settings");
+    },
+    Plugin(){
+      console.log("plugin");
+      this.$router.push("/plugin");
+    },
     toggleNavs () {
       this.tab = !this.tab;
       console.log("toggle");

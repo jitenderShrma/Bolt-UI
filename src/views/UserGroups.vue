@@ -66,7 +66,7 @@
     import Vue from 'vue'
   import {ClientTable, Event} from 'vue-tables-2'
   import axios from 'axios'
-
+  import apiUrl from '@/apiUrl'
 
   Vue.use(ClientTable)
 var link = window.location.href
@@ -106,14 +106,14 @@ var link = window.location.href
      var link = window.location.href
   var key = link.split("usergroups/",24).pop()
   console.log(key)
-    axios.get(`http://127.0.0.1:3000/api/super/permission/get/${key}`,{ withCredentials : true})
+    axios.get(`${apiUrl}`+`super/permission/get/${key}`,{ withCredentials : true})
     .then(response => {this.data = response.data.modules})
  },
  async updated() {
      var link = window.location.href
   var key = link.split("usergroups/",24).pop()
   console.log(key)
-    axios.get(`http://127.0.0.1:3000/api/super/permission/get/${key}`,{ withCredentials : true})
+    axios.get(`${apiUrl}`+`super/permission/get/${key}`,{ withCredentials : true})
     .then(response => {this.data = response.data.modules})
  },
  

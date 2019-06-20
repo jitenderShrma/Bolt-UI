@@ -132,6 +132,7 @@
 
 <script>
   import ml from '@/ml'
+  import apiUrl from '@/apiUrl'
    import Vue from 'vue'
   import {ClientTable, Event} from 'vue-tables-2'
   import axios from 'axios'
@@ -186,7 +187,7 @@ import { CoolSelect } from 'vue-cool-select'
      this.link = window.location.href
      this.key = this.link.split("usergroupsdetails/",24).pop()
   console.log(this.key)
-    axios.get(`http://127.0.0.1:3000/api/super/permission/get/${this.key}`,{ withCredentials : true})
+    axios.get(`${apiUrl}`+`super/permission/get/${this.key}`,{ withCredentials : true})
     .then(response => {this.data = response.data.modules}).catch(function(error) {
         console.log(error);
     });
@@ -194,7 +195,7 @@ import { CoolSelect } from 'vue-cool-select'
  async updated() {
      this.link = window.location.href
      this.key = this.link.split("usergroupsdetails/",24).pop()
-    axios.get(`http://127.0.0.1:3000/api/super/permission/get/${this.key}`,{ withCredentials : true})
+    axios.get(`${apiUrl}`+`super/permission/get/${this.key}`,{ withCredentials : true})
     .then(response => {this.data = response.data.modules}).catch(function(error) {
         console.log(error);
     })

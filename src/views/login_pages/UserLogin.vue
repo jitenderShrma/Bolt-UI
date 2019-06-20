@@ -65,6 +65,7 @@
 <script>
 import axios from "axios";
 import ml from '@/ml.js';
+import apiUrl from '@/apiUrl';
 import { HeaderDropdown as AppHeaderDropdown } from '@coreui/vue'
 import Vue from 'vue'
 import VueNotifications from 'vue-notifications'
@@ -131,7 +132,7 @@ export default {
   },
   methods : {
       async sendData() {
-            axios.post("http://localhost:3000/user/login/",this.login_details).then((response) =>{
+            axios.post(`${apiUrl}`+`user/login/`,this.login_details).then((response) =>{
               this.response = response;
               this.$router.push("/permissions");
             })
@@ -144,6 +145,5 @@ export default {
             });
       },
   }
-  
 }
 </script>

@@ -23,6 +23,7 @@
   import Vue from 'vue'
   import {ClientTable, Event} from 'vue-tables-2'
   import axios from 'axios'
+  import apiUrl from '@/apiUrl'
 
 
   Vue.use(ClientTable)
@@ -59,7 +60,7 @@
       }
     },
     async mounted() {
-    axios.get("http://127.0.0.1:3000/api/user/see/all",{ withCredentials : true})
+    axios.get(`${apiUrl}`+`user/see/all`,{ withCredentials : true})
     .then(response => {this.data = response.data})
   },
   methods : {

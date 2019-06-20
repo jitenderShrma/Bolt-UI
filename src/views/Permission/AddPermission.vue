@@ -59,6 +59,7 @@ import ml from '@/ml';
 import VueNotifications from 'vue-notifications'
 import miniToastr from 'mini-toastr'// https://github.com/se-panfilov/mini-toastr
 import Vue from 'vue'
+import apiUrl from '@/apiUrl'
 const toastTypes = {
   success: 'success',
   error: 'error',
@@ -100,7 +101,7 @@ export default {
   },
   methods : {
     async sendData() {
-            axios.post(`http://127.0.0.1:3000/api/super/permission/add`,this.input, {withCredentials : true}).then((response) =>{
+            axios.post(`${apiUrl}`+`super/permission/add`,this.input, {withCredentials : true}).then((response) =>{
               console.log(this.input);
 
             //   if(response.data.limit == "exceeded") {

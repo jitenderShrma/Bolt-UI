@@ -13,6 +13,7 @@
     "settings" : "Settings",
     "payments" : "Payments",
     "projects" : "Projects",
+    "extensions":"Extensions",
     "lockaccount": "Lock Account",
     "logout" : "Logout",
     "companylist" : "Company List",
@@ -75,5 +76,7 @@
     "edit" : "Edit",
     "delete" : "Delete",
     "more" :"More",
-    "addmore" :"Add More"
+    "addmore" :"Add More",
+    "install" : "Install"
+
 }

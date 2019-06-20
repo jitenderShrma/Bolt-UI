@@ -66,6 +66,7 @@
 
 import axios from "axios";
 import Auth from "@/Auth.js";
+import apiUrl from '@/apiUrl';
 import ml from '@/ml.js';
 import { HeaderDropdown as AppHeaderDropdown } from '@coreui/vue'
 import Vue from 'vue'
@@ -111,7 +112,7 @@ export default {
   },
   methods : {
       async sendData() {
-            axios.post("http://127.0.0.1:3000/api/super/login/",this.login_details, {withCredentials : true}).then((response) =>{
+            axios.post(`${apiUrl}`+`super/login/`,this.login_details, {withCredentials : true}).then((response) =>{
               this.response = response;
               Auth.login();
               console.log(Auth.loggedIn);

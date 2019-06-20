@@ -21,7 +21,7 @@
     import Vue from 'vue'
   import {ClientTable, Event} from 'vue-tables-2'
   import axios from 'axios'
-
+  import apiUrl from '@/apiUrl'
 
   Vue.use(ClientTable)
 
@@ -57,7 +57,7 @@
       }
     },
     async mounted() {
-    axios.get(`http://127.0.0.1:3000/api/super/attrib/view/`,{ withCredentials:true })
+    axios.get(`${apiUrl}`+`super/attrib/view/`,{ withCredentials:true })
     .then(
       response => {
         this.data = response.data

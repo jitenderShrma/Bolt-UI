@@ -21,7 +21,7 @@
 <script>
     import Vue from 'vue'
   import {ClientTable, Event} from 'vue-tables-2'
-
+  import apiUrl from '@/apiUrl'
 
   Vue.use(ClientTable)
 
@@ -58,7 +58,7 @@
       }
     },
     async mounted() {
-    axios({ method: "GET", "url": `http://127.0.0.1:8080/api/company/list`,"headers": { 'withCredentials': 'true' } }).then(result => {
+    axios({ method: "GET", "url": `${apiUrl}`+`company/list`,"headers": { 'withCredentials': 'true' } }).then(result => {
                     this.data = result.data;
                 }, error => {
                     console.error(error);

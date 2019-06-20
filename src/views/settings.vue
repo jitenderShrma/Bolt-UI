@@ -42,7 +42,7 @@
 <script>
 import { Switch as cSwitch } from '@coreui/vue'
 import axios from 'axios'
-
+import apiUrl from '@/apiUrl'
 
 export default {
 	  name: 'settings',
@@ -74,7 +74,7 @@ export default {
 
   },
    async mounted (){
-  	axios.get("http://127.0.0.1:3000/api/super/get/settings",{withCredentials :true}).then((response) =>{
+  	axios.get(`${apiUrl}`+`super/get/settings`,{withCredentials :true}).then((response) =>{
   		this.smtp = response.data[0].smtp;
   		this.sms = response.data[0].sms;
   		this.sendgrid = response.data[0].sendgrid;

@@ -193,7 +193,7 @@
   import axios from 'axios'
 import VueNotifications from 'vue-notifications'
 import miniToastr from 'mini-toastr'// https://github.com/se-panfilov/mini-toastr
-
+import apiUrl from '@/apiUrl'
 const toastTypes = {
   success: 'success',
   error: 'error',
@@ -516,13 +516,13 @@ export default {
     }
   },
   async mounted() {
-    axios.get(`http://127.0.0.1:3000/api/company/${key}`,{ withCredentials:true })
+    axios.get(`${apiUrl}`+`company/${key}`,{ withCredentials:true })
     .then(
         
       response => {this.data = response.data
       console.log(this.data)
       })      
-      axios.get(`http://127.0.0.1:3000/api/super/attrib/view/`,{ withCredentials:true })
+      axios.get(`${apiUrl}`+`super/attrib/view/`,{ withCredentials:true })
     .then(
       response => {
         this.data = response.data
@@ -539,7 +539,7 @@ export default {
       this.primaryModal = false
       this.attribute.context = "Company";
       console.log(this.attribute);
-      axios.post('http://127.0.0.1:3000/api/super/attrib/add',this.attribute,{withCredentials : true}).then((response) => {
+      axios.post(`${apiUrl}`+`super/attrib/add`,this.attribute,{withCredentials : true}).then((response) => {
         console.log(response);
       })
     },
@@ -567,13 +567,13 @@ export default {
             this.input.address = [this.addresslist];
             this.input.tax = this.taxx;
             console.log(this.input);
-        axios.put(`http://127.0.0.1:3000/api/company/${key}`,this.input,{withCredentials : true}).then((response) =>{
+        axios.put(`${apiUrl}`+`company/${key}`,this.input,{withCredentials : true}).then((response) =>{
             
             console.log(response);
         });
         },
         async delData() {
-                    axios.delete(`http://127.0.0.1:3000/api/company/${key}`,{withCredentials : true} ).then(result => {
+                    axios.delete(`${apiUrl}`+`company/${key}`,{withCredentials : true} ).then(result => {
                         
                         
                             toast({

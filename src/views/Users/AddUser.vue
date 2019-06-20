@@ -168,6 +168,7 @@
 <script>
 import axios from 'axios';
 import ml from '@/ml'
+import apiUrl from '@/apiUrl'
 import VueNotifications from 'vue-notifications'
 import miniToastr from 'mini-toastr'// https://github.com/se-panfilov/mini-toastr
 import Vue from 'vue'
@@ -492,7 +493,7 @@ export default {
     }
   },
   async mounted() {
-    axios.get(`http://127.0.0.1:3000/api/super/attrib/view/`,{ withCredentials:true })
+    axios.get(`${apiUrl}`+`super/attrib/view/`,{ withCredentials:true })
     .then(
       response => {
         this.data = response.data
@@ -509,14 +510,14 @@ export default {
       this.primaryModal = false
       this.attribute.context = "User";
       console.log(this.attribute);
-      axios.post('http://127.0.0.1:3000/api/super/attrib/add',this.attribute,{withCredentials : true}).then((response) => {
+      axios.post(`${apiUrl}`+`super/attrib/add`,this.attribute,{withCredentials : true}).then((response) => {
         console.log(response);
       })
     },
     async sendData() {
               this.input.address = [this.addresslist];
             console.log(this.input);
-            axios.post("http://127.0.0.1:3000/api/user/add",this.input, {withCredentials : true}).then((response) =>{
+            axios.post(`${apiUrl}`+`user/add`,this.input, {withCredentials : true}).then((response) =>{
               console.log(response);
 
               if(response.data.limit == "exceeded") {

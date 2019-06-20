@@ -43,6 +43,12 @@ const UserDetails = () => import('@/views/Users/UserDetails');
 const UserList = () => import('@/views/Users/UserList');
 const AddUser = () => import('@/views/Users/AddUser');
 
+
+
+//Setting Routes
+const Settings = () => import('@/views/settings');
+
+
 Vue.use(Router)
 
 var router = new Router({
@@ -216,6 +222,21 @@ var router = new Router({
                   meta : { requiresAuth : true },
                   path : ``,
                   component : PluginList
+                }
+              ]
+            },
+            {
+              path: '/settings',
+              meta : { requiresAuth : true },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  name : `Settings`,
+                  meta : { requiresAuth : true },
+                  path : ``,
+                  component : Settings
                 }
               ]
             }
