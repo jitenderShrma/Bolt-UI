@@ -94,9 +94,21 @@ export default {
       .then(response => {
       console.log(this.ssnCompany);
       console.log(this.ssnCompany)})
-    
+
       console.log(this.data)})
   },
+  // async updated() {
+  //   this.$nextTick(function () {
+  //     axios.get(`${apiUrl}`+`company/list`,{withCredentials : true})
+  //     .then(response => {
+  //       this.data = response.data
+  //     })
+  //     axios.get(`${apiUrl}`+`company/${this.ssnCompany._id}`,{withCredentials : true})
+  //     .then(response => {
+  //     this.ssnCompany = response.data;
+  //     })
+  // })
+  // },
   methods : {
     Settings(){
       console.log("settings");
@@ -135,7 +147,7 @@ export default {
       this.$router.push(`/company/${id}`);
     }
   }
-}
+};
 </script>
 <style>
   .app-header .nav-item .nav-link .badge {

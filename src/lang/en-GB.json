@@ -85,5 +85,16 @@
     "sendername"  : "Sender-Name",
     "pholdsendername" : "Enter the Sender-Name",
     "authkey" : "Auth-Key",
-    "pholdauthkey" : "Enter the Auth/API Key"
+    "pholdauthkey" : "Enter the Auth/API Key",
+    "template" : "Template",
+    "cc"  :"CC",
+    "pholdcc" : "Carbon Copy",
+    "bcc" : "BCC",
+    "pholdbcc" : " Blind Carbon Copy",
+    "subject" : "Subject",
+    "pholdsubject" : "Subject of the E-Mail",
+    "desctemplate" : "Template for your Email",
+    "theme" : "Theme",
+    "pholdcontext" : "Select a Context",
+    "pholdtheme" : "Select a Theme"
 }

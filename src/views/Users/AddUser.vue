@@ -536,6 +536,11 @@ export default {
                   console.log(response)
               }
               else {
+                toast({
+                    type: VueNotifications.types.success,
+                    title: 'Success',
+                    message: 'User Created Successfully'
+                    })
                 this.$router.push("/user");
               }
             })

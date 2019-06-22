@@ -237,6 +237,8 @@ export default {
             address : [this.addresslist],
             tax : this.taxx
         },
+        link : "",
+        key : "",
         primaryModal : false,
         taxx : {
             tax_id : "",
@@ -516,13 +518,16 @@ export default {
     }
   },
   async mounted() {
-    axios.get(`${apiUrl}`+`company/${key}`,{ withCredentials:true })
+    this.link = window.location.href
+  this.key = this.link.split("company/",24).pop()
+  console.log(this.key)
+    axios.get(`${apiUrl}`+`company/${this.key}`,{ withCredentials:true })
     .then(
         
       response => {this.data = response.data
       console.log(this.data)
       })      
-      axios.get(`${apiUrl}`+`super/attrib/view/`,{ withCredentials:true })
+    axios.get(`${apiUrl}`+`super/attrib/view/`,{ withCredentials:true })
     .then(
       response => {
         this.data = response.data
@@ -567,15 +572,17 @@ export default {
             this.input.address = [this.addresslist];
             this.input.tax = this.taxx;
             console.log(this.input);
-        axios.put(`${apiUrl}`+`company/${key}`,this.input,{withCredentials : true}).then((response) =>{
-            
-            console.log(response);
+            axios.put(`${apiUrl}`+`company/${this.key}`,this.input,{withCredentials : true}).then((response) =>{
+                toast({
+                        type: VueNotifications.types.success,
+                        title: 'Done!',
+                        message: 'Company Details Successfully Updated'
+                        })
+                      this.$router.push('/company');
         });
         },
         async delData() {
-                    axios.delete(`${apiUrl}`+`company/${key}`,{withCredentials : true} ).then(result => {
-                        
-                        
+                    axios.delete(`${apiUrl}`+`company/${this.key}`,{withCredentials : true} ).then(result => {
                             toast({
                         type: VueNotifications.types.success,
                         title: 'Done!',

@@ -23,7 +23,6 @@
   import axios from 'axios'
   import apiUrl from '@/apiUrl'
 
-
   Vue.use(ClientTable)
 
   export default {

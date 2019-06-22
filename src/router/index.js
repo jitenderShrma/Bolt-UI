@@ -18,6 +18,10 @@ const UserLogin = () => import('@/views/login_pages/UserLogin');
 const UserRegistration = () => import('@/views/login_pages/UserRegistration');
 
 
+// Templates
+const EmailTemplate = () => import('@/views/Templates/EmailTemplate');
+
+
 //UserGroups
 const Category = () => import('@/views/Category');
 const UserGroups = () => import('@/views/UserGroups');
@@ -222,6 +226,21 @@ var router = new Router({
                   path : ``,
                   component : PluginList
                 }
+              ]
+            },
+            {
+              path: '/templates',
+              meta : { requiresAuth : true },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  name : `Template`,
+                  meta : { requiresAuth : true },
+                  path : `/templates/email`,
+                  component : EmailTemplate
+                },
               ]
             },
             {
