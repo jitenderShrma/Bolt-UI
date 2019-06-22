@@ -51,6 +51,18 @@ var items = [
     url: '/attr',
     icon: 'icon-star',
   },
+  {
+    name : "Templates",
+    url : '/templates',
+    icon : 'icon-envelope',
+    children : [
+      {
+        name : 'Email Templates',
+        url : '/templates/email',
+        icon : 'icon-envelope',
+      }
+    ]
+  }
 ]
 for(var i=0;i<users.length;i++) {
   items[3].children.push({

@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Auth from '@/Auth.js'
-import axios from 'axios';
 // Containers
 const DefaultContainer = () => import('@/containers/DefaultContainer')
 
@@ -23,7 +22,7 @@ const UserRegistration = () => import('@/views/login_pages/UserRegistration');
 const Category = () => import('@/views/Category');
 const UserGroups = () => import('@/views/UserGroups');
 const UserGroupsDetails = () => import('@/views/UserGroupDetail');
-
+const SettingEdit = () => import('@/views/SettingEdit');
 //Permissions
 const AddPermission = () => import('@/views/Permission/AddPermission')
 const PermissionDetails = () => import('@/views/Permission/PermissionDetails')
@@ -237,6 +236,12 @@ var router = new Router({
                   meta : { requiresAuth : true },
                   path : ``,
                   component : Settings
+                },
+                {
+                  name : `Settings Edit`,
+                  meta : { requiresAuth : true },
+                  path : `/settings/:settingId`,
+                  component : SettingEdit
                 }
               ]
             }

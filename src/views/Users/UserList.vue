@@ -13,9 +13,7 @@
         </v-client-table>
       </b-card-body>
     </b-card>
-    
   </div>
-  
 </template>
 
 <script>
@@ -45,6 +43,7 @@
             address : "Address",
             _id : 'URL'
           },
+          listColumns : {},
           sortable: ['user_name','user_type','address'],
           filterable: ['user_name','user_type','address'],
           sortIcon: { base:'fa', up:'fa-sort-asc', down:'fa-sort-desc', is:'fa-sort' },
@@ -73,86 +72,6 @@
 // </script>
 
 <style lang="scss">
-  
-  .table th, .table td {
-    padding: 0.5rem !important;
-    vertical-align: top;
-    border-top: 1px solid #c8ced3;
-  }
-  table {
-    cursor:pointer !important;
-  }
-  h5 {
-    float:right;
-  }
-  .badge {
-    float:right;
-    
-  }
-  b-card {
-    margin:0px !important;
-    padding:0px !important;
-  }
-  .main .container-fluid {
-    padding: 0 20px !important; 
-  }
-  .card-body {
-    -webkit-box-flex: 1;
-    -ms-flex: 1 1 auto;
-    flex: 1 1 auto;
-    padding: 0 0 0  0 !important;
-  }
 
-  #dataTable {
-
-    .VuePagination {
-      text-align: center;
-      justify-content: center;
-    }
-
-    .vue-title {
-      text-align: center ;
-      margin-bottom: 10px;
-    }
-
-    .VueTables__search-field {
-      display: flex;
-      padding: 1.25rem 0 0 0;
-
-    }
-    .VueTables__search-field input {
-      margin-left: 0.25rem;
-    }
-
-    .VueTables__limit-field {
-      display: flex;
-    }
-
-    .VueTables__limit-field select {
-      margin-left: 0.25rem !important;
-    }
-
-    .VueTables__table th {
-      text-align: center;
-
-    }
-
-    .VueTables__child-row-toggler {
-      width: 16px;
-      height: 16px;
-      line-height: 16px;
-      display: block;
-      margin: auto;
-      text-align: center;
-    }
-
-    .VueTables__child-row-toggler--closed::before {
-      content: "+";
-    }
-
-    .VueTables__child-row-toggler--open::before {
-      content: "-";
-    }
-  }
 
 </style>

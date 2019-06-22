@@ -69,14 +69,14 @@ import ml from '@/ml'
 import { HeaderDropdown as AppHeaderDropdown } from '@coreui/vue'
 import axios from 'axios';
 import Auth from '@/Auth.js'
+import apiUrl from '@/apiUrl'
 export default {
   name: 'DefaultHeaderDropdownAccnt',
   components: {
     AppHeaderDropdown
   },
   data: () => {
-    return { 
-      itemsCount: 42,
+    return {
       tab : true,
       data : [],
       ssnCompany : {
@@ -86,14 +86,13 @@ export default {
       }
   },
   async mounted() {
-    await axios.get("http://127.0.0.1:3000/api/company/list",{withCredentials : true})
+    await axios.get(`${apiUrl}`+`company/list`,{withCredentials : true})
     .then(response => {
       this.data = response.data
       this.ssnCompany = this.data[0];
-      axios.get(`http://127.0.0.1:3000/api/company/${this.ssnCompany._id}`,{withCredentials : true})
+      axios.get(`${apiUrl}`+`company/${this.ssnCompany._id}`,{withCredentials : true})
       .then(response => {
       console.log(this.ssnCompany);
-      this.tab = !this.tab;
       console.log(this.ssnCompany)})
     
       console.log(this.data)})
@@ -116,14 +115,14 @@ export default {
       this.$router.push("/add/company");
     },
     async setSsn (id) {
-      axios.get(`http://127.0.0.1:3000/api/company/${id}`,{withCredentials : true})
+      axios.get(`${apiUrl}`+`company/${id}`,{withCredentials : true})
       .then(response => {
       this.ssnCompany = response.data;
       this.tab = !this.tab;
       console.log(this.ssnCompany)})
     },
     async Logout() {
-      axios.get("http://127.0.0.1:3000/api/super/logout",{withCredentials :true}).then((response) =>{
+      axios.get(`${apiUrl}`+`super/logout`,{withCredentials :true}).then((response) =>{
               Auth.logout();
               console.log(Auth.loggedIn);            
               this.$router.push('/login');

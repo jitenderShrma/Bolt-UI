@@ -77,6 +77,13 @@
     "delete" : "Delete",
     "more" :"More",
     "addmore" :"Add More",
-    "install" : "Install"
-
+    "install" : "Install",
+    "installing" : "Installing",
+    "useremail"  : "User-Email",
+    "connection" : "Connection",
+    "pholdconnection" : "Select a Connection Type",
+    "sendername"  : "Sender-Name",
+    "pholdsendername" : "Enter the Sender-Name",
+    "authkey" : "Auth-Key",
+    "pholdauthkey" : "Enter the Auth/API Key"
 }
