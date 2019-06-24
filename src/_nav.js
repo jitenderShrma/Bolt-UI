@@ -60,7 +60,12 @@ var items = [
         name : 'Email Templates',
         url : '/templates/email',
         icon : 'icon-envelope',
-      }
+      },
+      {
+        name : 'SMS Templates',
+        url : '/templates/sms',
+        icon : 'icon-envelope',
+      },
     ]
   }
 ]

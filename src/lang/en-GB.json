@@ -96,5 +96,8 @@
     "desctemplate" : "Template for your Email",
     "theme" : "Theme",
     "pholdcontext" : "Select a Context",
-    "pholdtheme" : "Select a Theme"
+    "pholdtheme" : "Select a Theme",
+    "pholdmessage" : "Enter your message",
+    "message" : "Message",
+    "sms" : "SMS"
 }

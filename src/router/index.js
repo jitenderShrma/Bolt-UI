@@ -20,7 +20,7 @@ const UserRegistration = () => import('@/views/login_pages/UserRegistration');
 
 // Templates
 const EmailTemplate = () => import('@/views/Templates/EmailTemplate');
-
+const SmsTemplate =() => import('@/views/Templates/SmsTemplate');
 
 //UserGroups
 const Category = () => import('@/views/Category');
@@ -236,10 +236,16 @@ var router = new Router({
               },
               children: [
                 {
-                  name : `Template`,
+                  name : `E-Mail Template`,
                   meta : { requiresAuth : true },
                   path : `/templates/email`,
                   component : EmailTemplate
+                },
+                {
+                  name : `SMS Template`,
+                  meta : { requiresAuth : true },
+                  path : `/templates/sms`,
+                  component : SmsTemplate
                 },
               ]
             },
