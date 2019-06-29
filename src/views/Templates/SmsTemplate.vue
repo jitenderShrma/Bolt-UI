@@ -7,8 +7,8 @@
           <div slot="header">
             <strong v-text="$ml.get('sms')"></strong>&nbsp;<span v-text="$ml.get('template')"></span>
           </div>
-          <b-form>
-            <b-form-group>
+          <b-form v-on:submit.prevent="sendData">
+            
               <b-form-group
             :label="$ml.get('context')"
             label-for="basicName"
@@ -33,7 +33,7 @@
 
               :label-cols="3"
               :horizontal="true">
-              <b-form-input v-model="input.sender_name" id="horizPass" type="text" :placeholder="$ml.get('pholdsendername')" maxlength="6"></b-form-input>
+              <b-form-input v-model="input.sendername" id="horizPass" type="text" :placeholder="$ml.get('pholdsendername')" maxlength="6"></b-form-input>
             </b-form-group>
             <b-form-group
               :label="$ml.get('message')"
@@ -43,11 +43,16 @@
             <b-form-textarea v-model="input.message" :placeholder="$ml.get('pholdmessage')" rows="3" max-rows="6"></b-form-textarea>
             </b-form-group>
 
-            <div>
-              <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
-              <b-button type="reset" size="sm" variant="danger" v-text="$ml.get('reset')"></b-button>
-            </div>
-             </b-form-group>
+            <div slot="footer">
+              <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i>a</b-button>
+              
+              <b-button type="reset" size="sm" variant="danger" v-text="$ml.get('reset')"><i class="fa fa-ban"></i></b-button>
+              
+
+
+
+
+          </div>
 
           </b-form>
         </b-card>
@@ -107,10 +112,9 @@ export default {
         'Sms Form',
         'Key Codes',
       ],
-      
       input: {
           context : "",
-          sender_name : "",
+          sendername : "",
           message : ""
       },
       contextlist : [],

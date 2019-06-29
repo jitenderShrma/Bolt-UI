@@ -112,7 +112,7 @@ export default {
   },
   methods : {
       async sendData() {
-            axios.post(`${apiUrl}`+`super/login/`,this.login_details, {withCredentials : true}).then((response) =>{
+            axios.post(`${apiUrl}`+`auth/super/login/`,this.login_details, {withCredentials : true}).then((response) =>{
               this.response = response;
               Auth.login();
               console.log(Auth.loggedIn);

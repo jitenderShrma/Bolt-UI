@@ -65,7 +65,7 @@
   },
   methods : {
     onRowClick(event){
-        window.location.href = `#/attr/${event.row._id}`
+        window.location.href = `#/attribute/details/${event.row._id}`
       }
   }
   };

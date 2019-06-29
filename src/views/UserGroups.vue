@@ -101,25 +101,25 @@ var link = window.location.href
         template: 'default'
       }
     },
-
+    props :['key'],
  async mounted() {
      var link = window.location.href
   var key = link.split("usergroups/",24).pop()
   console.log(key)
-    axios.get(`${apiUrl}`+`super/permission/get/${key}`,{ withCredentials : true})
+    axios.get(`${apiUrl}`+`super/group/get/${this.key}`,{ withCredentials : true})
     .then(response => {this.data = response.data.modules})
  },
  async updated() {
      var link = window.location.href
   var key = link.split("usergroups/",24).pop()
   console.log(key)
-    axios.get(`${apiUrl}`+`super/permission/get/${key}`,{ withCredentials : true})
+    axios.get(`${apiUrl}`+`super/group/get/${key}`,{ withCredentials : true})
     .then(response => {this.data = response.data.modules})
  },
  
   methods : {
     onRowClick(event){
-        window.location.href = `#/permission/details/${key}`
+        window.location.href = `#/usergroups/details/${key}`
       }
   }
   };

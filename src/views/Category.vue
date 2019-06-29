@@ -38,6 +38,7 @@
       return {
         columns: ['user_group','modules'],
         data: [],
+        
         options: {
           headings: {
             user_group : "User Group",
@@ -57,9 +58,17 @@
         template: 'default'
       }
     },
+    props :['key'],
     async mounted() {
-    axios.get(`${apiUrl}`+`super/permission/getall`,{ withCredentials : true})
+      axios.get(`${apiUrl}`+`super/group/getall/`+`${this.key}`,{ withCredentials : true})
     .then(response => {this.data = response.data})
+  },
+  async updated() {
+    
+      axios.get(`${apiUrl}`+`super/group/getall/`+`${this.key}`,{ withCredentials : true})
+    .then(response => {this.data = response.data})
+    
+      
   },
   methods : {
     onRowClick(event){

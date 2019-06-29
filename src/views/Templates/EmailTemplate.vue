@@ -130,8 +130,7 @@ export default {
             "E-Mail Template",
             "Key Codes"
           ],
-          input :{
-                body : "\r\n\t\"greeting\": \"\",\r\n\t\"name\": \"\",\r\n\t\"title\": \"\",\r\n\t\"intro\": [\"\",\"\",\"\"],\r\n\t\"action\": [\r\n\t\t{\r\n\t\t\t\"instructions\": \"\",\r\n\t\t\t\"button\": {\r\n\t\t\t\t\"color\": \"\",\r\n\t\t\t\t\"text\": \"\",\r\n\t\t\t\t\"link\": \"\"\r\n\t\t\t}\r\n\t\t},\t\r\n\t],\r\n\t\"outro\": [\"\",\"\",\"\"],\r\n\t\"table\": {\r\n\t\t\"data\": [\r\n\t\t\t{\t\t\r\n\t\t\t\t\"item\": \"\",\r\n\t\t\t\t\"description\": \"\",\r\n\t\t\t\t\"price\": \"\",\r\n\t\t\t}\t\t\t\r\n\t\t],\r\n\t\t\"column\" : {\r\n\t\t\t\"customWidth\": {\r\n\t\t\t\t\"item\": \"\",\r\n\t\t\t\t\"price\": \"\",\r\n\t\t\t},\r\n\t\t\t\"customAlign\": {\r\n\t\t\t\t\"price\": \"\"\t\t\t\r\n\t\t\t}\r\n\t\t}\r\n\t},\r\n\t\"signature\": \"\"\r\n",
+          input: {
                 context : "",
                 cc : "",
                 bcc : "",
@@ -200,7 +199,7 @@ export default {
 }
 </script>
 <style>
-@import 'emailtemplate.css';
+@import '../../styles/ejs-vue-base.css';
 @import "../../styles/ej2-vue-richtexteditor/styles/material.css";
 @import "../../styles/ej2-vue-lists/styles/material.css";
 @import "../../styles/ej2-vue-navigations/styles/material.css";

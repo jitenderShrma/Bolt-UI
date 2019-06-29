@@ -92,7 +92,7 @@ export default {
   },
   data: function () {
     return {
-      items : ['Super Admin','Student','Staff','Vendor','Guardian','Guest'],
+      items : ['SuperAdmin','Student','Staff','Vendor','Guardian','Guest'],
       input : {
           user_group : "",
           parent_group : "",
@@ -101,7 +101,7 @@ export default {
   },
   methods : {
     async sendData() {
-            axios.post(`${apiUrl}`+`super/permission/add`,this.input, {withCredentials : true}).then((response) =>{
+            axios.post(`${apiUrl}`+`super/group/add`,this.input, {withCredentials : true}).then((response) =>{
               console.log(this.input);
 
             //   if(response.data.limit == "exceeded") {

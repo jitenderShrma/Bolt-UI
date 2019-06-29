@@ -68,6 +68,7 @@ import ml from '@/ml.js';
 import apiUrl from '@/apiUrl';
 import { HeaderDropdown as AppHeaderDropdown } from '@coreui/vue'
 import Vue from 'vue'
+import Auth from '@/Auth'
 import VueNotifications from 'vue-notifications'
 import miniToastr from 'mini-toastr'// https://github.com/se-panfilov/mini-toastr
 
@@ -133,10 +134,15 @@ export default {
   methods : {
       async sendData() {
             axios.post(`${apiUrl}`+`user/login/`,this.login_details).then((response) =>{
-              this.response = response;
-              this.$router.push("/permissions");
+              console.log(response.data)
+              this.$session.start();
+              this.$session.set('permissions', response.data.permission)
+              console.log(this.$session.get('permissions'))
+              Auth.login()
+              this.$router.push("/dashboard");
             })
             .catch(function(error) {
+              console.log(error)
                 toast({
                     type: VueNotifications.types.error,
                     title: 'Login Error',

@@ -1,6 +1,4 @@
 <template>
-  <b-row>
-      <b-col md="12">
         <b-card>
           <div slot="header">
             <strong v-text="$ml.get('add')"></strong>&nbsp;<span v-text="$ml.get('company')"></span>
@@ -181,9 +179,6 @@
             </b-form>
           </b-modal>
         </b-card>
-        </b-col>
-    </b-row>
-    
 </template>
 
 <script>
@@ -512,7 +507,7 @@ export default {
     }
   },
   async mounted() {
-    axios.get(`${apiUrl}`+`super/attrib/view/`,{ withCredentials:true })
+      axios.get(`${apiUrl}`+`super/attrib/view/`,{ withCredentials:true })
     .then(
       response => {
         this.data = response.data
@@ -522,7 +517,8 @@ export default {
           }
         }
         console.log(this.addattr)
-      })
+    })
+    
   },
   
   methods : {
@@ -532,7 +528,9 @@ export default {
       console.log(this.attribute);
       axios.post(`${apiUrl}`+`super/attrib/add`,this.attribute,{withCredentials : true}).then((response) => {
         console.log(response);
+        window.location.href = `#/company/add`
       })
+      
     },
     async sendData() {
               this.input.address = [this.addresslist];
@@ -576,11 +574,5 @@ export default {
 </script>
 
 <style>
-  b-card {
-    margin:0px !important;
-    padding:1.25rem !important;
-  }
-  .card-body {
-    padding: 1.25rem !important;
-  }
+  
 </style>
