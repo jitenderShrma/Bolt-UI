@@ -2,14 +2,14 @@
     <div class="col-lg-12 control-section">
         <div>
             <ejs-treegrid ref='treegrid' :toolbar="toolbar" :rowHeight='rowHeight'  :dataSource='data' 
-            childMapping='sub_groups' :height='height' :allowReordering='true' :allowFiltering='true'
+            childMapping='sub_departments' :height='height' :allowReordering='true' :allowFiltering='true'
             :enableCollapseAll="true"
             :allowSorting='true' :editSettings='editSettings' :toolbarClick='clickHandler' :autoCheckHierarchy= 'true' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' >
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <!-- <e-column :visible=false field='_id'  headerText='Context'></e-column> -->
-                    <e-column field='user_type' headerText='User Groups' width='170' ></e-column>
-                     <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column>
+                    <e-column field='department_name' headerText='Departments' width='170' ></e-column>
+                     <e-column headerText='Manage Heads And Designations' width='140' :commands='commands'></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
@@ -30,7 +30,7 @@ var api = axios.create({
   withCredentials :true
 })
 export default {
-    name: "UserType List",
+    name: "Department List",
     components :  {
       addRecord,
         TreeGridPlugin, Edit,CommandColumn, Filter, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page
@@ -38,7 +38,9 @@ export default {
     data : function() {
         return {
              commands: [
-                 { type:"Details",tooltipText : "Double click", buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat',click:this.onClick } },
+                 { type:"Heads", buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat',click:this.onClick } },
+                 { type:"Designations",tooltipText : "Double click", buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat',click:this.onClick } },
+                 
                     ],
                 height : window.innerHeight*0.65,
              filterSettings: { type: "Menu" },
@@ -53,41 +55,77 @@ export default {
             ],
              data: [
              ],
-             subdata : []
    };
   },
   async mounted() {
-    this.data = [
-    {
-      user_type:["Guest"],
-      sub_groups : [
-      {
-        user_type:["Basic"]
-      }
-      ]
-    }
-    ]
+  	this.data = [
+  			{
+  				department_name:"Academics",
+  				sub_departments : [
+  					{
+  						department_name:"CSE",
+  						sub_departments : [
+  							{
+  								department_name:"1st Year"
+  							},
+  						]
+  					},
+
+  				]
+  			},
+  			{
+  				department_name:"Academics",
+  				sub_departments : [
+  					{
+  						department_name:"CSE",
+  						sub_departments : [
+  							{
+  								department_name:"1st Year"
+  							},
+  						]
+  					},
+
+  				]
+
+  			},
+  			{
+  				department_name:"Academics",
+  				sub_departments : [
+  					{
+  						department_name:"CSE",
+  						sub_departments : [
+  							{
+  								department_name:"1st Year"
+  							},
+  						]
+  					},
+
+  				]
+
+  			},
+
+
+
+
+
+  		]
       // await api.get(`${apiUrl}`+`usertype/permission/view/all`).then((response)=>{
       //   console.log(response.data);
       //   this.data = response.data;
       // });
-      // await api.get(`${apiUrl}`+`super/group/subgroup/getall/`).then((response)=> {
-      //         this.subdata = response.data;
+      // for(var i=0;i<this.data.length;i++) {
+      //       var test = []
+      //       await api.get(`${apiUrl}`+`super/group/subgroup/getall/`+`${this.data[i]._id}`).then((response)=> {
+      //         console.log(response.data[0]);
+      //         test = response.data[0]
       //       });
-      
+      //       console.log(test);
+      //       this.data[i].subgroups.push(test)
+      //       console.log(this.data[i].subgroups)
+      //     }
+      //     console.log(this.$refs.treegrid.ej2Instances.getDataRows())
+          
   },
-  // watch: {
-  //   'subdata' : function(){
-  //     for(var i=0;i<this.data.length;i++) { 
-  //       for(var i=0;i<this.subdata.length;i++) {
-  //         if(this.data[i]._id === this.subdata[i].parent_group) {
-  //           this.data[i].sub_groups.push(this.subdata[i])
-  //           console.log(this.data);
-  //         }
-  //       }
-  //     }
-  //   }
-  // },
   provide: {
       treegrid: [CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },

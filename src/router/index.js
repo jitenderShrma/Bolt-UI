@@ -56,6 +56,11 @@ const AddUser = () => import('@/views/Users/AddUser');
 //Setting Routes
 const Settings = () => import('@/views/settings');
 
+
+//Department Routes
+const DepartmentList = () => import('@/views/Departments/DepartmentList');
+
+
 Vue.use(Router)
 
 var router = new Router({
@@ -183,22 +188,16 @@ var router = new Router({
               ]
             },
             {
-              path: '/permission',
+              path: '/permissions',
               meta : { requiresAuth : true },
               component: {
                 render (c) { return c('router-view') }
               },
               children: [
                 {
-                  name : `Add Permission`,
-                  meta : { requiresAuth : true },
-                  path : `/permission/add`,
-                  component : AddPermission
-                },
-                {
                   name : `Permission Details`,
                   meta : { requiresAuth : true },
-                  path : `/permission/details/:userType`,
+                  path : `/permissions`,
                   component : PermissionDetails
                 },
               ]
@@ -329,6 +328,22 @@ var router = new Router({
                       meta : { requiresAuth : true },
                       path : `/templates/email/edit/:id`,
                       component: EmailTemplateEdit
+                    }
+                  ]
+                },
+                {
+                  
+                  meta : { requiresAuth : true },
+                  path : `/department`,
+                  component : {
+                    render (c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      name : `Department List`,
+                      meta : { requiresAuth : true },
+                      path : '/department/list',
+                      component: DepartmentList
                     }
                   ]
                 },

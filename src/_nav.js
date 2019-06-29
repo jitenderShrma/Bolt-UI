@@ -65,6 +65,11 @@ var items = [
     name: 'Communication Log',
     url: '/plugin/log',
     icon: 'icon-settings',
+  },
+  {
+    name : "Departments",
+    url : "/department/list",
+    icon : "icon-star"
   }
 ]
 

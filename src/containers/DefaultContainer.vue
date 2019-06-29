@@ -84,6 +84,11 @@ export default {
             text: 'NEW'
           }
         },
+        {
+          name: 'Permissions',
+          url: '/permissions',
+          icon: 'icon-settings',
+        }
       ],
     }
   },

@@ -27,7 +27,7 @@
               :label-cols="3"
               :horizontal="true">
               <cool-select
-                v-model="input.user_type"
+                v-model="input.user_type[`0`]"
                 :items="items"
                 :placeholder="$ml.get('placeholderusertype')"
                >
@@ -41,19 +41,19 @@
             :horizontal="true">
             <b-form-group>
             <label for="street" v-text="$ml.get('addressline1')"></label>
-            <b-form-input v-model="addresslist.compAdd" type="text" id="street" :placeholder="$ml.get('placeholderaddressline1')"></b-form-input>
+            <b-form-input v-model="input.address[`0`].compAdd" type="text" id="street" :placeholder="$ml.get('placeholderaddressline1')"></b-form-input>
           </b-form-group>
             <b-row>
             <b-col sm="6">
             <b-form-group>
             <label for="street" v-text="$ml.get('email')"></label>
-            <b-form-input v-model="addresslist.email" type="email" id="street" :placeholder="$ml.get('placeholderemail')" required></b-form-input>
+            <b-form-input v-model="input.address[`0`].email" type="email" id="street" :placeholder="$ml.get('placeholderemail')" required></b-form-input>
           </b-form-group>
           </b-col>
           <b-col sm="6">
               <b-form-group>
             <label for="street" v-text="$ml.get('phone')"></label>
-            <b-form-input v-model="addresslist.phone" type="number" id="street" :placeholder="$ml.get('placeholderphone')"></b-form-input>
+            <b-form-input v-model="input.address[`0`].phone" type="number" id="street" :placeholder="$ml.get('placeholderphone')"></b-form-input>
           </b-form-group>
           </b-col>
           </b-row>
@@ -61,20 +61,20 @@
             <b-col sm="8">
               <b-form-group>
                 <label for="city" v-text="$ml.get('state')"></label>
-                <b-form-input  v-model="addresslist.state" type="text" id="city" :placeholder="$ml.get('placeholderstate')"></b-form-input>
+                <b-form-input  v-model="input.address[`0`].state" type="text" id="city" :placeholder="$ml.get('placeholderstate')"></b-form-input>
               </b-form-group>
             </b-col>
             <b-col sm="4">
               <b-form-group>
                 <label for="postal-code" v-text="$ml.get('postalcode')"></label>
-                <b-form-input v-model="addresslist.zip" type="text" id="postal-code" :placeholder="$ml.get('placeholderpostalcode')"></b-form-input>
+                <b-form-input v-model="input.address[`0`].zip" type="text" id="postal-code" :placeholder="$ml.get('placeholderpostalcode')"></b-form-input>
               </b-form-group>
             </b-col>
           </b-row>
           <b-form-group>
             <label for="country" v-text="$ml.get('country')"></label>
             <cool-select
-                v-model="addresslist.country"
+                v-model="input.address[`0`].country"
                 :items="countrylist"
                 item-text="name"
                 item-value="name"
@@ -233,6 +233,7 @@ export default {
       field_types : ['Text','Email','Phone','TexArea'],
       input : {
             user_name : "",
+            _id:"",
             password : "",
             user_type : "",
             address : [this.addresslist],
@@ -500,6 +501,12 @@ export default {
     }
   },
   async mounted() {
+    var link = window.location.href;
+    var key = link.split(`details/`).pop()
+    axios.get(`${apiUrl}`+`/user/subuser/get/${key}`,{withCredentials:true}).then((response) => {
+      this.input = response.data
+      console.log(this.input)
+    })
     axios.get(`${apiUrl}`+`super/attrib/view/`,{ withCredentials:true })
     .then(
       response => {
@@ -522,12 +529,17 @@ export default {
       })
     },
     async updateData() {
-              this.input.address = [this.addresslist];
-            console.log(this.input);
-            axios.put(`${apiUrl}`+`user/details/${key}`,this.input, {withCredentials : true}).then((response) =>{
+
+            axios.put(`${apiUrl}`+`user/subuser/edit/${key}`,this.input, {withCredentials : true}).then((response) =>{
               console.log(this.input);
               console.log(response);
-
+                toast({
+                    type: VueNotifications.types.success,
+                    title: 'Done!!',
+                    message: 'Details Successfully Updated'
+                    })
+                this.$router.push(`/user/list`);
+              
             //   if(response.data.limit == "exceeded") {
             //     toast({
             //         type: VueNotifications.types.warn,

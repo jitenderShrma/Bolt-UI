@@ -58,7 +58,7 @@
       }
     },
     async mounted() {
-    axios.get(`${apiUrl}`+`user/see/all`,{ withCredentials : true})
+    axios.get(`${apiUrl}`+`user/subuser/see/all`,{ withCredentials : true})
     .then(response => {this.data = response.data})
   },
   methods : {
