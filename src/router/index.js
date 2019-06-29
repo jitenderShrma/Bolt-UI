@@ -1,16 +1,16 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Auth from '@/Auth.js'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Auth from '@/Auth.js';
 // Containers
-const DefaultContainer = () => import('@/containers/DefaultContainer')
+const DefaultContainer = () => import('@/containers/DefaultContainer');
 
 // Views
-const Dashboard = () => import('@/views/Dashboard')
+const Dashboard = () => import('@/views/Dashboard');
 
 //Additional Attributes
 
-const AttributeList = () => import('@/views/Attributes/AttributeList')
-const AttributeEdit = () => import('@/views/Attributes/AttributeEdit')
+const AttributeList = () => import('@/views/Attributes/AttributeList');
+const AttributeEdit = () => import('@/views/Attributes/AttributeEdit');
 
 // Login Pages
 const SuperUserLogin = () => import('@/views/login_pages/SuperUserLogin');
@@ -21,20 +21,25 @@ const UserRegistration = () => import('@/views/login_pages/UserRegistration');
 // Templates
 const EmailTemplate = () => import('@/views/Templates/EmailTemplate');
 const SmsTemplate =() => import('@/views/Templates/SmsTemplate');
+const EmailTemplateList = () => import('@/views/Templates/EmailTemplateList');
+const SmsTemplateList = () => import('@/views/Templates/SmsTemplateList');
+const SmsTemplateEdit = () => import('@/views/Templates/SmsTemplateEdit');
+const EmailTemplateEdit = () => import('@/views/Templates/EmailTemplateEdit')
 
 //UserGroups
 const Category = () => import('@/views/Category');
+const CategoryList = () => import('@/views/User Type/UserTypes');
+const PermissionList = () => import('@/views/User Type/PermissionList');
 const UserGroups = () => import('@/views/UserGroups');
 const UserGroupsDetails = () => import('@/views/UserGroupDetail');
 const SettingEdit = () => import('@/views/SettingEdit');
 //Permissions
-const AddPermission = () => import('@/views/Permission/AddPermission')
-const PermissionDetails = () => import('@/views/Permission/PermissionDetails')
-
-
-//Communication 
+const AddPermission = () => import('@/views/Permission/AddPermission');
+const PermissionDetails = () => import('@/views/Permission/PermissionDetails');
+//Communication
 const  PluginList = () => import('@/views/Communication/Plugin');
-
+const CommunicationLog = () => import('@/views/Communication/CommunicationLog');
+const test = () => import('./test');
 // Company Routes
 
 const CompanyList = () => import('@/views/Company/CompanyList');
@@ -51,7 +56,6 @@ const AddUser = () => import('@/views/Users/AddUser');
 //Setting Routes
 const Settings = () => import('@/views/settings');
 
-
 Vue.use(Router)
 
 var router = new Router({
@@ -61,16 +65,16 @@ var router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login',
-      name: 'Home',
+      redirect: '/dashboard',
+      name: 'Dashboard',
       component: DefaultContainer,
       children: [
         {
           path: 'dashboard',
-          name: 'Dashboard',
-          meta : { requiresAuth : true },
           component: {
-            render (c) { return c('router-view') }
+            render (c) {
+              return c('router-view')
+            }
           },
           children:[
             {
@@ -110,6 +114,7 @@ var router = new Router({
               path : '/user',
               meta : { requiresAuth : true },
               redirect: '/user/list',
+              name : 'Users',
               component: {
                 render (c) { return c('router-view') }
               },
@@ -117,7 +122,6 @@ var router = new Router({
                 {
                   path: '/user/list',
                   meta : { requiresAuth : true },
-                  name: 'User List',
                   component: UserList
                 },
                 {
@@ -134,42 +138,43 @@ var router = new Router({
                 },
               ]
             },
+            // {
+            //   path: '/usergroups',
+            //   meta : { requiresAuth : true },
+            //   component: {
+            //     render (c) { return c('router-view') }
+            //   },
+            //   children: [
+            //     {
+            //       name : `UserGroups`,
+            //       meta : { requiresAuth : true },
+            //       path : `/usergroups/:userType`,
+            //       component : UserGroups
+            //     },
+            //     {
+            //       name : `User Group Edit`,
+            //       meta : { requiresAuth : true },
+            //       path : `/usergroupsdetails/:userType`,
+            //       component : UserGroupsDetails
+            //     }
+            //   ]
+            // },
             {
-              path: '/usergroups',
+              path :'/attribute',
               meta : { requiresAuth : true },
-              component: {
-                render (c) { return c('router-view') }
-              },
-              children: [
-                {
-                  name : `User Groups`,
-                  meta : { requiresAuth : true },
-                  path : `/usergroups/:userType`,
-                  component : UserGroups
-                },
-                {
-                  name : `User Group Edit`,
-                  meta : { requiresAuth : true },
-                  path : `/usergroupsdetails/:userType`,
-                  component : UserGroupsDetails
-                }
-              ]
-            },
-            {
-              path :'/attr',
-              meta : { requiresAuth : true },
+              redirect : '/attribute/list',
+              name : 'Custom Attributes',
               component: {
                 render (c) { return c('router-view') }
               },
               children : [
                 {
-                  path : '',
-                  name : "Attribute List",
+                  path : '/attribute/list',
                   meta : { requiresAuth : true },
                   component : AttributeList
                 },
                 {
-                  path : '/attr/:attrId',
+                  path : '/attribute/details/:attrId',
                   name : 'Edit Attribute',
                   meta : { requiresAuth : true },
                   component : AttributeEdit
@@ -206,11 +211,47 @@ var router = new Router({
               },
               children: [
                 {
-                  name : `Category`,
+                  name : `Super Admin`,
                   meta : { requiresAuth : true },
-                  path : `/category/:categoryType`,
+                  path : `/category/SuperAdmin`,
+                  props : {key:'SuperAdmin'},
                   component : Category
-                }
+                },
+                {
+                  name : `Guest`,
+                  meta : { requiresAuth : true },
+                  props : {key:'Guest'},
+                  path : `/category/Guest`,
+                  component : Category
+                },
+                {
+                  name : `Vendor`,
+                  meta : { requiresAuth : true },
+                  props : {key:'Vendor'},
+                  path : `/category/Vendor`,
+                  component : Category
+                },
+                {
+                  name : `Student`,
+                  meta : { requiresAuth : true },
+                  props : {key:'Student'},
+                  path : `/category/Student`,
+                  component : Category
+                },
+                {
+                  name : `Guardian`,
+                  meta : { requiresAuth : true },
+                  props : {key:'Guardian'},
+                  path : `/category/Guardian`,
+                  component : Category
+                },
+                {
+                  name : `Staff`,
+                  meta : { requiresAuth : true },
+                  props : {key:'Staff'},
+                  path : `/category/Staff`,
+                  component : Category
+                },
               ]
             },
             {
@@ -225,6 +266,34 @@ var router = new Router({
                   meta : { requiresAuth : true },
                   path : ``,
                   component : PluginList
+                },
+                {
+                  name : `Communication Log`,
+                  meta : { requiresAuth : true },
+                  path : `/plugin/log`,
+                  component : CommunicationLog
+                },
+              ]
+            },
+            {
+              path: '/usertype',
+              name : `User Groups`,
+              redirect : '/usertype/list',
+              meta : { requiresAuth : true },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  meta : { requiresAuth : true },
+                  path : `/usertype/list`,
+                  component : CategoryList
+                },
+                {
+                  name : 'Permissions',
+                  meta : {requiresAuth :true},
+                  path : '/usertype/per/:id',
+                  component : PermissionList
                 }
               ]
             },
@@ -236,16 +305,59 @@ var router = new Router({
               },
               children: [
                 {
-                  name : `E-Mail Template`,
+                  
                   meta : { requiresAuth : true },
                   path : `/templates/email`,
-                  component : EmailTemplate
+                  component : {
+                    render (c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      name : `E-Mail Template`,
+                      meta : { requiresAuth : true },
+                      path : '',
+                      component: EmailTemplateList
+                    },
+                    {
+                      name : `E-Mail Template Add`,
+                      meta : { requiresAuth : true },
+                      path : `/templates/email/add`,
+                      component: EmailTemplate
+                    },
+                    {
+                      name : `E-mail Template Edit`,
+                      meta : { requiresAuth : true },
+                      path : `/templates/email/edit/:id`,
+                      component: EmailTemplateEdit
+                    }
+                  ]
                 },
                 {
-                  name : `SMS Template`,
                   meta : { requiresAuth : true },
-                  path : `/templates/sms`,
-                  component : SmsTemplate
+                  path : `/templates/sms/`,
+                  component : {
+                    render (c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      name : `SMS Template`,
+                      meta : { requiresAuth : true },
+                      path : ``,
+                      component: SmsTemplateList
+                    },
+                    {
+                      name : `SMS Template Add`,
+                      meta : { requiresAuth : true },
+                      path : `/templates/sms/add`,
+                      component: SmsTemplate
+                    },
+                    {
+                      name : `SMS Template Edit`,
+                      meta : { requiresAuth : true },
+                      path : `/templates/sms/edit/:id`,
+                      component: SmsTemplateEdit
+                    }
+                  ]
                 },
               ]
             },
@@ -267,8 +379,14 @@ var router = new Router({
                   meta : { requiresAuth : true },
                   path : `/settings/:settingId`,
                   component : SettingEdit
-                }
+                },
+                
               ]
+            },
+            {
+              name:"test",
+              path : "/test",
+              component : test
             }
           ]
         },

@@ -99,5 +99,8 @@
     "pholdtheme" : "Select a Theme",
     "pholdmessage" : "Enter your message",
     "message" : "Message",
-    "sms" : "SMS"
+    "sms" : "SMS",
+    "communicationlog" : "Communication Log",
+    "addtemplate" : "Add Template",
+    "edittemplate" : "Edit Template"
 }

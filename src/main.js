@@ -8,10 +8,13 @@ import App from './App'
 import router from './router/index'
 import VueSelect from "vue-cool-select";
 import './ml'
-// todo
-// cssVars()
+import { GridPlugin } from '@syncfusion/ej2-vue-grids';
+import VueSession from 'vue-session'
+import { TreeGridPlugin } from '@syncfusion/ej2-vue-treegrid';
 
-
+Vue.use(TreeGridPlugin);
+Vue.use(VueSession);
+Vue.use(GridPlugin);
 Vue.use(BootstrapVue)
 Vue.use(VueSelect, {
   theme: 'bootstrap' // "bootstrap" or 'material-design'

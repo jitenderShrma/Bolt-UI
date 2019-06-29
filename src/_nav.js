@@ -1,9 +1,5 @@
 
 
-var users = ['SuperAdmin','Guest','Vendor','Student','Guardian','Staff'];
-
-
-
 
 var items = [
   {
@@ -34,21 +30,18 @@ var items = [
   },
   
   {
-    name: 'Company',
-    url: '/company',
+    name: 'Users',
+    url: '/user/list',
     icon: 'icon-star',
   },
   {
     name: 'Category',
-    url: '/category',
+    url: '/usertype/list',
     icon: 'icon-star',
-    children: [
-      
-    ]
   },
   {
-    name: 'Additional Attributes',
-    url: '/attr',
+    name: 'Custom Attributes',
+    url: '/attribute',
     icon: 'icon-star',
   },
   {
@@ -67,15 +60,13 @@ var items = [
         icon : 'icon-envelope',
       },
     ]
+  },
+  {
+    name: 'Communication Log',
+    url: '/plugin/log',
+    icon: 'icon-settings',
   }
 ]
-for(var i=0;i<users.length;i++) {
-  items[3].children.push({
-    name : `${users[i]}`,
-    url: `/category/${users[i]}`,
-    icon: 'icon-star',
-  })
-}
 
 
 

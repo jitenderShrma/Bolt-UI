@@ -1,3 +1,4 @@
+
 var Auth = {
     loggedIn: false,
     login: function() { this.loggedIn = true },

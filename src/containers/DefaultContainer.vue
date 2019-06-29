@@ -3,8 +3,11 @@
     <AppHeader fixed>
       <SidebarToggler class="d-lg-none" display="md" mobile />
       <b-link class="navbar-brand" to="#">
-        <img class="navbar-brand-full" src="img/brand/logo.svg" width="89" height="25" alt="CoreUI Logo">
-        <img class="navbar-brand-minimized" src="img/brand/sygnet.svg" width="30" height="30" alt="CoreUI Logo">
+        <img style="position:relative; top:-5%;" src="favicon-16x16.png" alt="">
+        &nbsp;
+        <h3  style="color:black">BOLT</h3>
+       <!-- <img class="navbar-brand-full" src="favicon-16x16.png" width="89" height="25" alt="CoreUI Logo">
+        <img class="navbar-brand-minimized" src="favicon-16x16.png" width="30" height="30" alt="CoreUI Logo"> -->
       </b-link>
       <SidebarToggler class="d-md-down-none" display="lg" />
       <b-navbar-nav class="d-md-down-none ml-auto">
@@ -39,14 +42,7 @@
     </div>
     <TheFooter>
       <!--footer-->
-      <div>
-        <a href="https://coreui.io">CoreUI</a>
-        <span class="ml-1">&copy; 2018 creativeLabs.</span>
-      </div>
-      <div class="ml-auto">
-        <span class="mr-1">Powered by</span>
-        <a href="https://coreui.io">CoreUI for Vue</a>
-      </div>
+      
     </TheFooter>
   </div>
 </template>
@@ -78,7 +74,32 @@ export default {
   },
   data () {
     return {
-      navItems: nav.items,
+      navItems: [
+        {
+          name: 'Dashboard',
+          url: '/dashboard',
+          icon: 'icon-speedometer',
+          badge: {
+            variant: 'primary',
+            text: 'NEW'
+          }
+        },
+      ],
+    }
+  },
+  beforeMount: function () {
+    if(this.$session.exists()) {
+      var permission = this.$session.get('permissions').permissions
+      for(var i=0;i<permission.length;i++) {
+        this.navItems.push({
+          name : `${permission[i].module_name}`,
+          url: `${permission[i].module_name}/list`,
+          icon: 'icon-star',
+        })
+    }
+    }
+    else {
+    this.navItems = nav.items
     }
   },
   computed: {
@@ -91,3 +112,41 @@ export default {
   }
 }
 </script>
+<style>
+.card { 
+  margin:0px!important;
+}
+   .breadcrumb {
+         display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: 0 1rem;
+    margin-bottom: 1.5rem;
+    list-style: none;
+    background-color: #fff;
+    border-radius: 0;
+   }
+   .container-fluid {
+    width: 100%;
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+    margin-right: 0;
+    margin-left: 0;
+}
+.breadcrumb { 
+    margin-bottom: 0;
+}
+@media (min-width: 992px) {
+.header-fixed .app-body {
+    margin-top: 40px;
+}
+}
+.app-header  {
+  height:40px;
+}
+.navbar {
+  flex-wrap:nowrap !important ;
+}
+</style>
