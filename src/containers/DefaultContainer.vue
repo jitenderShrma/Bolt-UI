@@ -94,13 +94,16 @@ export default {
   },
   beforeMount: function () {
     if(this.$session.exists()) {
-      var permission = this.$session.get('permissions').permissions
+      var permission = this.$session.get('permissions')
       for(var i=0;i<permission.length;i++) {
-        this.navItems.push({
-          name : `${permission[i].module_name}`,
-          url: `${permission[i].module_name}/list`,
-          icon: 'icon-star',
-        })
+        if(permission[i].module_name != undefined)
+        {
+           this.navItems.push({
+           name : `${permission[i].module_name}`,
+           url: `${permission[i].module_name}/list`,
+           icon: 'icon-star',
+          })
+      }
     }
     }
     else {
@@ -115,7 +118,7 @@ export default {
       return this.$route.matched.filter((route) => route.name || route.meta.label )
     }
   }
-}
+};
 </script>
 <style>
 .card { 
@@ -128,7 +131,7 @@ export default {
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     padding: 0 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 5px;
     list-style: none;
     background-color: #fff;
     border-radius: 0;
@@ -140,18 +143,13 @@ export default {
     margin-right: 0;
     margin-left: 0;
 }
-.breadcrumb { 
-    margin-bottom: 0;
-}
 @media (min-width: 992px) {
 .header-fixed .app-body {
-    margin-top: 40px;
+    margin-top: 50px;
 }
 }
 .app-header  {
-  height:40px;
+  height:50px;
 }
-.navbar {
-  flex-wrap:nowrap !important ;
-}
+
 </style>

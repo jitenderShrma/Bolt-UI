@@ -1,13 +1,13 @@
 <template>
   <div className="animated fadeIn">
-    <b-card>
+    <b-card id="list-padding">
       <b-card-header>
-        <i class="icon-menu mr-1"></i><span v-text="$ml.get('users')"></span>
+        <span v-text="$ml.get('users')"></span>
         <router-link :to="{ name: 'Add User' }">
-          <h5><b-badge variant="primary" v-text="$ml.get('adduser')"></b-badge></h5>
+          <h5><b-badge id="add-badge" variant="primary" v-text="$ml.get('adduser')"></b-badge></h5>
         </router-link>
       </b-card-header>
-      <b-card-body style="padding : 0 1.25rem 0 1.25rem !important;">
+      <b-card-body id="list-padding">
         <v-client-table @row-click="onRowClick" :columns="columns" :data="data"  :options="options" :theme="theme" id="dataTable">
           <router-link slot="_id" slot-scope="props" target="_blank" :to="`user/details/${props.row._id}`" class="icon-eye"></router-link>
         </v-client-table>
@@ -70,7 +70,14 @@
 
 </script>
 
-<style lang="scss">
+<style>
+.card-body { 
+  padding:0px !important;
+}
 
+#add-badge { 
+  float:right;
+  margin-top: -20px;
+}
 
 </style>

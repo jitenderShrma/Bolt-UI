@@ -30,6 +30,8 @@ const EmailTemplateEdit = () => import('@/views/Templates/EmailTemplateEdit')
 const Category = () => import('@/views/Category');
 const CategoryList = () => import('@/views/User Type/UserTypes');
 const PermissionList = () => import('@/views/User Type/PermissionList');
+const UGPermissionList = () => import('@/views/User Type/UGPermissionList');
+
 const UserGroups = () => import('@/views/UserGroups');
 const UserGroupsDetails = () => import('@/views/UserGroupDetail');
 const SettingEdit = () => import('@/views/SettingEdit');
@@ -59,6 +61,16 @@ const Settings = () => import('@/views/settings');
 
 //Department Routes
 const DepartmentList = () => import('@/views/Departments/DepartmentList');
+const Head = () => import('@/views/Departments/Head');
+const Designation = () => import('@/views/Departments/Designation');
+
+
+//Head Routes
+const HeadList = () => import('@/views/Heads/HeadList');
+
+
+//Designation Routes
+const DesignationList = () => import('@/views/Designations/DesignationList');
 
 
 Vue.use(Router)
@@ -293,6 +305,12 @@ var router = new Router({
                   meta : {requiresAuth :true},
                   path : '/usertype/per/:id',
                   component : PermissionList
+                },
+                {
+                  name : 'Permissions',
+                  meta : {requiresAuth :true},
+                  path : '/usertype/:typeid/per/:id',
+                  component : UGPermissionList
                 }
               ]
             },
@@ -334,17 +352,62 @@ var router = new Router({
                 {
                   
                   meta : { requiresAuth : true },
+                  name : `Departments`,
                   path : `/department`,
+                  redirect : `/department/list`,
                   component : {
                     render (c) { return c('router-view') }
                   },
                   children : [
                     {
-                      name : `Department List`,
                       meta : { requiresAuth : true },
                       path : '/department/list',
                       component: DepartmentList
+                    },
+                    {
+                      name : `Heads`,
+                      meta : { requiresAuth : true },
+                      path : '/department/head/:deptId',
+                      component: Head
+                    },
+                    {
+                      name : `Designations`,
+                      meta : { requiresAuth : true },
+                      path : '/department/designation/:deptId',
+                      component: Designation
                     }
+                  ]
+                },
+                {
+                  meta : { requiresAuth : true },
+                  name : `Heads`,
+                  path : `/heads`,
+                  redirect : `/heads/list`,
+                  component : {
+                    render (c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      meta : { requiresAuth : true },
+                      path : '/heads/list',
+                      component: HeadList
+                    },
+                  ]
+                },
+                {
+                  meta : { requiresAuth : true },
+                  name : `Designations`,
+                  path : `/designation`,
+                  redirect : `/designation/list`,
+                  component : {
+                    render (c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      meta : { requiresAuth : true },
+                      path : '/designation/list',
+                      component: DesignationList
+                    },
                   ]
                 },
                 {

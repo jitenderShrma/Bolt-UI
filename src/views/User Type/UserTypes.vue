@@ -1,10 +1,26 @@
 <template>
     <div class="col-lg-12 control-section">
         <div>
-            <ejs-treegrid ref='treegrid' :toolbar="toolbar" :rowHeight='rowHeight'  :dataSource='data' 
+          <ejs-toolbar :clicked="clickHandler">
+            <e-items>
+              <e-item  id="add" :text="$ml.get('add')"></e-item>
+              <e-item id="delete" :text="$ml.get('delete')"></e-item>
+              <e-item id="exportPdf" :text="$ml.get('exportpdf')"></e-item>
+              <e-item id="exportExcel" :text="$ml.get('exportexcel')"></e-item>
+              <e-item id="small" prefixIcon='e-small-icon' ></e-item>
+              <e-item id="medium" prefixIcon='e-medium-icon' ></e-item>
+              <e-item id="big" prefixIcon='e-big-icon' ></e-item>
+              <e-item id="collapse" :text="$ml.get('collapseall')"></e-item>
+              <e-item id="expand" :text="$ml.get('expandall')"></e-item>
+            </e-items>
+          </ejs-toolbar>
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             childMapping='sub_groups' :height='height' :allowReordering='true' :allowFiltering='true'
-            :enableCollapseAll="true"
-            :allowSorting='true' :editSettings='editSettings' :toolbarClick='clickHandler' :autoCheckHierarchy= 'true' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' >
+            :allowPdfExport='true' 
+            :allowExcelExport='true'
+            :actionBegin="actionBegin"
+            :enableCollapseAll="false"
+            :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' >
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <!-- <e-column :visible=false field='_id'  headerText='Context'></e-column> -->
@@ -21,10 +37,13 @@
 import Vue from 'vue'
 import axios from 'axios'
 import apiUrl from '@/apiUrl'
-import { TreeGridPlugin, Edit, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
+import { addRecord,deleteRecord,actionComplete, ExcelExport,PdfExport,TreeGridPlugin, Edit, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
 import { addClass, removeClass, getValue } from '@syncfusion/ej2-base';
-import { addRecord } from "@syncfusion/ej2-vue-grids";
+// import { addRecord } from "@syncfusion/ej2-vue-grids";
+import { ToolbarPlugin,ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
+// import mydata from './datasrc';
 Vue.use(TreeGridPlugin)
+Vue.use(ToolbarPlugin)
 
 var api = axios.create({
   withCredentials :true
@@ -33,7 +52,7 @@ export default {
     name: "UserType List",
     components :  {
       addRecord,
-        TreeGridPlugin, Edit,CommandColumn, Filter, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page
+        TreeGridPlugin,ToolbarPlugin,ExcelExport,PdfExport, Edit,CommandColumn, Filter, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page
     },
     data : function() {
         return {
@@ -42,72 +61,91 @@ export default {
                     ],
                 height : window.innerHeight*0.65,
              filterSettings: { type: "Menu" },
-             pageSettings: { pageSize: 10},
-             editSettings: { allowDeleting: true, allowAdding: true, mode: 'Row',newRowPosition: 'Child' },
+             pageSettings: { pageSize: 15},
+             editSettings: { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Child' },
              rowHeight: 20,
               toolbar: [     
           'Add', 'Delete', 'Update', 'Cancel',
+          'ExcelExport','PdfExport',
                 { prefixIcon: 'e-big-icon', id: 'small', align: 'Left', tooltipText: 'Small' },
                 { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Left', tooltipText: 'Medium' },
                 { prefixIcon: 'e-small-icon', id: 'big', align: 'Left', tooltipText: 'Large' }
             ],
-             data: [
-             ],
-             subdata : []
+            selectionSettings : {type:"Single"},
+            data: []
+            
    };
   },
   async mounted() {
-    this.data = [
-    {
-      user_type:["Guest"],
-      sub_groups : [
-      {
-        user_type:["Basic"]
-      }
-      ]
-    }
-    ]
-      // await api.get(`${apiUrl}`+`usertype/permission/view/all`).then((response)=>{
-      //   console.log(response.data);
-      //   this.data = response.data;
-      // });
-      // await api.get(`${apiUrl}`+`super/group/subgroup/getall/`).then((response)=> {
-      //         this.subdata = response.data;
-      //       });
-      
-  },
-  // watch: {
-  //   'subdata' : function(){
-  //     for(var i=0;i<this.data.length;i++) { 
-  //       for(var i=0;i<this.subdata.length;i++) {
-  //         if(this.data[i]._id === this.subdata[i].parent_group) {
-  //           this.data[i].sub_groups.push(this.subdata[i])
-  //           console.log(this.data);
-  //         }
-  //       }
-  //     }
+     api.get(`${apiUrl}`+`my/path/get`)
+    .then((response) => {
+      this.data = response.data
+      })
+    },
+  // computed : {
+  //     async getData () {
+  //     await api.get(`${apiUrl}`+`usertype/permission/view/all`).then((response)=>{
+  //       console.log(response.data);
+  //       this.data = response.data;
+  //        api.get(`${apiUrl}`+`super/group/subgroup/getall/`).then((response)=> {
+  //             console.log(response.data)
+  //             this.subdata = response.data;
+  //             for(var i=0;i<this.data.length;i++) { 
+  //               for(var j=0;j<this.subdata.length;j++) {
+  //                   if(this.data[i]._id == this.subdata[j].parent_group) {
+  //                     this.data[i].sub_groups= this.subdata[j]
+  //                   }
+  //               }
+  //             }
+  //             console.log(this.data)
+  //           });
+  //     });
   //   }
   // },
   provide: {
-      treegrid: [CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
+      treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
-        expanding(args) {
-          console.log(this.$refs.treegrid.getSelectedRecords())
-        },
-        // async getMore() {
-        //   console.log("sadasd")
-        //   for(var i=0;i<this.data.length;i++) {
-        //     var test = []
-        //     await api.get(`${apiUrl}`+`super/group/subgroup/getall/`+`${this.data[i]._id}`).then((response)=> {
-        //       console.log(response.data[0]);
-        //       test = response.data[0]
-        //     });
-        //     console.log(test);
-        //     // this.data[i].subgroups.push(test)
-        //     // console.log(this.data[i].subgroups)
-        //   }
-        // },
+    
+      actionBegin(args) {
+        if(args.requestType==="save") {
+          let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
+          console.log(args.data);
+          if(parent[0].user_type == "SuperAdmin" || 
+               parent[0].user_type == "Staff" || 
+               parent[0].user_type == "Vendor" ||
+               parent[0].user_type == "Student" || 
+               parent[0].user_type == "Guest") {
+              api.post(`${apiUrl}`+`super/group/subgroup/add`,args.data).then((response) => {
+                  console.log(response.data)
+                  let id = {sub_groups:response.data._id};
+                  console.log(id)
+                  api.put(`${apiUrl}`+`/usertype/permission/push/one/`+`${parent[0].user_type[0]}`,id).then((res) => {
+                    console.log(res.data);
+                    this.$refs.treegrid.collapseAll()
+                    this.$refs.treegrid.expandAll()
+                  })
+                });
+            }
+          api.post(`${apiUrl}`+`super/group/subgroup/add`,args.data).then((response) => {
+            console.log(response.data)
+            let id = {sub_groups:response.data._id};
+            console.log(id)
+            api.put(`${apiUrl}`+`super/group/subgroup/push/`+`${parent[0]._id}`,id).then((res) => {
+              console.log(res.data);
+              this.$refs.treegrid.collapseAll()
+              this.$refs.treegrid.expandAll()
+
+            })
+          });
+
+        }
+      },
+      actionComplete: function(args) {
+        if(args.requestType==="save") {
+          console.log("savecomplete")
+        }
+      },
        onClick(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
             console.log(data);
@@ -119,32 +157,40 @@ export default {
                 this.$router.push(`/usertype/per/`+`${data[0].user_type}`)
             }
             else {
-                this.$router.push(`/usertype/per/`+`${data[0].parentItem.user_type}/`+`${data[0].user_type}`)
+                this.$router.push(`/usertype/`+`${data[0].parentItem.user_type}/per/`+`${data[0]._id}`)
             }
        },
 
        Add(args) {
            let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
             console.log(data);
-            if(data[0].user_type == "SuperAdmin" || 
-                        data[0].user_type == "Staff" || 
-                        data[0].user_type == "Vendor" ||
-                        data[0].user_type == "Student" || 
-                        data[0].user_type == "Guest") {
+            if(data.user_type == "SuperAdmin" || 
+                        data.user_type == "Staff" || 
+                        data.user_type == "Vendor" ||
+                        data.user_type == "Student" || 
+                        data.user_type == "Guest") {
             }
        },
        failure: function(args) {
         debugger;
       },
       clickHandler(args){
-        if(this.$refs.treegrid.getSelectedRecords().length<=0){
-                    if (args.item.text == 'Add') {
-                      alert("please select a user type before adding");
-                      asd = asd;
-                    }        
+        if(args.item.id === 'add') {
+          if(this.$refs.treegrid.getSelectedRecords().length<=0) {
+                  alert("please select a user type before adding");
                 }
-                if(this.$refs.treegrid.getSelectedRecords().length>0){
-                    if (args.item.text == 'Delete') {
+          else { 
+              this.$refs.treegrid.addRecord()
+            }
+          }
+          if(args.item.id == 'collapse') {
+            this.$refs.treegrid.collapseAll()
+          }
+          if(args.item.id == 'expand') {
+            this.$refs.treegrid.expandAll()
+          }
+        if(args.item.id == 'delete') {
+                    if(this.$refs.treegrid.getSelectedRecords().length>0) {
                       let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
                       if(data[0].user_type == "SuperAdmin" || 
                         data[0].user_type == "Staff" || 
@@ -152,12 +198,46 @@ export default {
                         data[0].user_type == "Student" || 
                         data[0].user_type == "Guest") {
                           alert('Cannot Delete User Types');
-                           asd = asd;
                         }
+                        else {
+                          let deleterows = this.$refs.treegrid.ej2Instances.getSelectedRows();
+                          console.log(deleterows[0])
+                          let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
+                          let id = parent[0].parentItem._id
+                          let delElem = {
+                            sub_groups : parent[0]._id
+                          }
+                          console.log(parent[0].parentItem.user);
+
+                          if(parent[0].parentItem.user_type == "SuperAdmin" || 
+                          parent[0].parentItem.user_type == "Staff" || 
+                          parent[0].parentItem.user_type == "Vendor" ||
+                          parent[0].parentItem.user_type == "Student" || 
+                          parent[0].parentItem.user_type == "Guest") {
+                            api.put(`${apiUrl}`+`usertype/permission/pop/one/`+`${parent[0].parentItem.user_type[0]}`,delElem).then((response) => {
+                                console.log(response.data)
+                                this.$refs.treegrid.collapseAll()
+                                this.$refs.treegrid.expandAll()
+                              })
+                          }
+                          else{
+                          api.put(`${apiUrl}`+`super/group/subgroup/pop/`+`${id}`,delElem).then((response) => {
+                            console.log(response.data)
+                            this.$refs.treegrid.collapseAll()
+                            this.$refs.treegrid.expandAll()
+                          })
+                        }
+                      }
                     }
                     
                 }
 
+        if (args.item.id === 'exportPdf') {
+            this.$refs.treegrid.pdfExport({hierarchyExportMode: 'All'});
+        }
+         if (args.item.id === 'exportExcel') {
+            this.$refs.treegrid.excelExport();
+        }
         
         if (args.item.id === 'small') {
             this.rowHeight = 20;

@@ -15,7 +15,7 @@
             </e-items>
           </ejs-toolbar>
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            childMapping='sub_department' :height='height' :allowReordering='true' :allowFiltering='true'
+            childMapping='sub_heads' :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionBegin="actionBegin"
@@ -24,9 +24,8 @@
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <!-- <e-column :visible=false field='_id'  headerText='Context'></e-column> -->
-                    <e-column isPrimaryKey="true" field='department_name' headerText='Department Name' width='170' ></e-column>
-                    <e-column headerText='Manage Designations' width='140' :commands='command1'></e-column>
-                     <e-column headerText='Manage Heads' width='140' :commands='command2'></e-column>
+                    <e-column :isPrimaryKey="true" field='name' headerText='Head Name' width='170' ></e-column>
+                     <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
             </ejs-treegrid>
         </div>
@@ -38,7 +37,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import apiUrl from '@/apiUrl'
-import { addRecord,deleteRecord,actionComplete, ExcelExport,PdfExport,TreeGridPlugin, Edit, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
+import { addRecord,actionComplete, ExcelExport,PdfExport,TreeGridPlugin, Edit, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
 import { addClass, removeClass, getValue } from '@syncfusion/ej2-base';
 // import { addRecord } from "@syncfusion/ej2-vue-grids";
 import { ToolbarPlugin,ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
@@ -50,19 +49,18 @@ var api = axios.create({
   withCredentials :true
 })
 export default {
-    name: "DepartmentList",
+    name: "HeadList",
     components :  {
       addRecord,
         TreeGridPlugin,ToolbarPlugin,ExcelExport,PdfExport, Edit,CommandColumn, Filter, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page
     },
     data : function() {
         return {
-             command1: [
-                 { type:"Designations",tooltipText : "Double click", buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat',click:this.onClickDes } },
+          link:"",
+          key:"",
+             commands: [
+                 { type:"Details",tooltipText : "Double click", buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat',click:this.onClick } },
                     ],
-              command2: [
-                { type:"Heads",tooltipText : "Double click", buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat',click:this.onClickHead } },
-              ],
                 height : window.innerHeight*0.65,
              filterSettings: { type: "Menu" },
              pageSettings: { pageSize: 15},
@@ -81,9 +79,11 @@ export default {
    };
   },
   async mounted() {
-     api.get(`${apiUrl}`+`department/dept/get`)
+     this.link = window.location.href;
+      this.key = this.link.split(`head/`).pop()
+     await api.get(`${apiUrl}`+`dept/head/get/`+`${this.key}`)
     .then((response) => {
-      this.data = response.data
+      this.data = response.data.heads
       })
     },
   // computed : {
@@ -117,54 +117,69 @@ export default {
           console.log(args.data);
           if(parent.length == 0) {
             this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Normal' }
-            let dept = {
-              department_name : args.data.department_name,
-              isHighest : true
-            }
-            api.post(`${apiUrl}`+`/department/dept/create`,dept).then((response) => {
-              console.log(response.data);
-                this.$refs.treegrid.collapseAll()
-                this.$refs.treegrid.expandAll()
+            api.post(`${apiUrl}`+`head/head/create`,args.data).then((response) => {
+            console.log(response.data)
+            let id = {heads:response.data._id};
+            console.log(id)
+            api.put(`${apiUrl}`+`dept/head/push/`+`${this.key}`,id).then((res) => {
+              console.log(res.data);
+              this.$refs.treegrid.collapseAll()
+              this.$refs.treegrid.expandAll()
             })
+          });
           }
           else {
             this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Child' }
-            api.post(`${apiUrl}`+`/department/dept/create`,args.data).then((response) => {
-              console.log(response.data)
-              let id = {sub_department:response.data._id};
-              console.log(id)
-              api.put(`${apiUrl}`+`/department/dept/push/`+`${parent[0]._id}`,id).then((res) => {
-                console.log(res.data);
-                this.$refs.treegrid.collapseAll()
-                this.$refs.treegrid.expandAll()
-              })
-            });
-          }
-          
+          api.post(`${apiUrl}`+`head/head/create`,args.data).then((response) => {
+            console.log(response.data)
+            let id = {sub_heads:response.data._id};
+            console.log(id)
+            api.put(`${apiUrl}`+`head/head/push/`+`${parent[0]._id}`,id).then((res) => {
+              console.log(res.data);
+              this.$refs.treegrid.collapseAll()
+              this.$refs.treegrid.expandAll()
+            })
+          });
 
         }
+      }
       },
       actionComplete: function(args) {
         if(args.requestType==="save") {
           console.log("savecomplete")
         }
       },
-       onClickDes(args) {
+       onClick(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
             console.log(data);
-            this.$router.push(`/department/`+`designation/${data[0]._id}`)
+            if(data[0].user_type == "SuperAdmin" || 
+               data[0].user_type == "Staff" || 
+               data[0].user_type == "Vendor" ||
+               data[0].user_type == "Student" || 
+               data[0].user_type == "Guest") {
+                this.$router.push(`/usertype/per/`+`${data[0].user_type}`)
+            }
+            else {
+                this.$router.push(`/usertype/`+`${data[0].parentItem.user_type}/per/`+`${data[0]._id}`)
+            }
        },
-       onClickHead(args) {
-            let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
+
+       Add(args) {
+           let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
             console.log(data);
-            this.$router.push(`/department/`+`head/${data[0]._id}`)
+            if(data.user_type == "SuperAdmin" || 
+                        data.user_type == "Staff" || 
+                        data.user_type == "Vendor" ||
+                        data.user_type == "Student" || 
+                        data.user_type == "Guest") {
+            }
        },
-       
        failure: function(args) {
         debugger;
       },
       clickHandler(args){
         if(args.item.id === 'add') {
+          
               this.$refs.treegrid.addRecord()
             
           }
@@ -178,7 +193,10 @@ export default {
                     if(this.$refs.treegrid.getSelectedRecords().length>0) {
                       let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
                       if(data[0].childRecords.length == 0){
-                          api.delete(`${apiUrl}`+`department/dept/delete/`+`${data[0]._id}`).then((response) => {
+                          let someElem = {
+                            heads : data[0]._id
+                          }
+                          api.put(`${apiUrl}`+`dept/head/pop/`+`${this.key}`,someElem).then((response) => {
                             console.log(response.data)
                             this.$refs.treegrid.deleteRecord(data[0])
                             this.$refs.treegrid.collapseAll()
@@ -186,12 +204,14 @@ export default {
                           })
                         }
                         else {
+                          let deleterows = this.$refs.treegrid.ej2Instances.getSelectedRows();
+                          console.log(deleterows[0])
                           let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
                           let id = parent[0].parentItem._id
                           let delElem = {
-                            sub_department : parent[0]._id
+                            sub_heads : parent[0]._id
                           }
-                          api.put(`${apiUrl}`+`/department/dept/pop/`+`${id}`,delElem).then((response) => {
+                          api.put(`${apiUrl}`+`head/head/pop/`+`${id}`,delElem).then((response) => {
                             console.log(response.data)
                             this.$refs.treegrid.deleteRecord(parent[0])
                             this.$refs.treegrid.collapseAll()

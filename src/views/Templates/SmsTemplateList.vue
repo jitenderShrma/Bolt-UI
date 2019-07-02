@@ -2,8 +2,8 @@
  <div className="animated fadeIn">
      <ejs-toolbar :clicked="addEditHandler">
     <e-items>
-             <e-item  id="add" :text="$ml.get('addtemplate')"></e-item>
-             <e-item id="edit" :text="$ml.get('edittemplate')"></e-item>
+             <e-item  id="add" :text="$ml.get('add')"></e-item>
+             <e-item id="edit" :text="$ml.get('edit')"></e-item>
           </e-items>
     </ejs-toolbar>
      <!-- <b-card no-body style="padding:0.5rem; margin:0px;">

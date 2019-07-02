@@ -1,11 +1,6 @@
 <template>
  <div className="animated fadeIn">
-     <ejs-toolbar :clicked="addEditHandler">
-    <e-items>
-             <e-item  id="add" :text="$ml.get('add')"></e-item>
-             <e-item id="edit" :text="$ml.get('edit')"></e-item>
-          </e-items>
-    </ejs-toolbar>
+    
      <!-- <b-card no-body style="padding:0.5rem; margin:0px;">
          <b-row>
              <b-col sm="5">
@@ -25,15 +20,17 @@
      <div class="col-lg-15 control-section">
         <div class="content-wrapper">
              <div class="control-section">
-            <ejs-grid ref='overviewgrid' :editSettings='editSettings' :rowHeight='rowHeight' :showColumnMenu='true' :allowResizing='true'  :showColumnChooser='true'  id='overviewgrid'  :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true'
-                :height="height" :actionBegin='actionBegin' :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler" :load='load'>
+            <ejs-grid ref='overviewgrid' :editSettings='editSettings' :rowHeight='rowHeight' :allowResizing='true'   id='overviewgrid'  :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions'  :allowSorting='true' :allowSelection="true" :selectionSettings="selectionSettings"
+                :height="height" :actionBegin='actionBegin' :enableHover='true' :toolbar="toolbar" :toolbarClick="clickHandler" :load='load'>
                 <e-columns>
-                    <e-column width="80" type='checkbox' :allowFiltering='false' :allowSorting='false'  ></e-column>
-                    <e-column :visible=false field='_id'  headerText='Context' :filter='filter' :isPrimaryKey='true'></e-column>
-                    <e-column field='context'  headerText='Context' :filter='filter' :isPrimaryKey='true'></e-column>
-                    <e-column field='cc' headerText='CC'  :filter='filter' ></e-column>
-                    <e-column field='bcc' headerText='BCC' :filter='filter'  ></e-column>
-                    <e-column field='subject' headerText='Subject' :filter='filter'></e-column>
+                    <e-column width="80"  isPrimaryKey='true' type='checkbox' :allowFiltering='false' :allowSorting='false'  ></e-column>
+                    
+                    <e-column field='module_name'  headerText='Module Name' :filter='filter' :isPrimaryKey='true'></e-column>
+                    <e-column editType= 'booleanedit' :displayAsCheckBox='true' field='edit' headerText='Edit'  :filter='filter' ></e-column>
+                    <e-column editType= 'booleanedit' :displayAsCheckBox='true' field='delete' headerText='Delete'  :filter='filter' ></e-column>
+                    <e-column editType= 'booleanedit' :displayAsCheckBox='true' field='read' headerText='Read'  :filter='filter' ></e-column>
+                    <e-column editType= 'booleanedit' :displayAsCheckBox='true' field='write' headerText='Add'  :filter='filter' ></e-column>
+                    
                 </e-columns>
                 </ejs-grid>
                  </div>
@@ -105,7 +102,7 @@ const options = {
 Vue.use(VueNotifications, options)
 
 export default {
-    name: 'Communication Log',
+    name: 'Permission List',
     components: {
       ClientTable,
       Event,
@@ -120,7 +117,7 @@ export default {
   Edit
     },
      provide: {
-            grid: [Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser]
+            grid: [Edit,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page]
         },
     data: function () {
       return {
@@ -129,14 +126,16 @@ export default {
             dropdownValue: 'Top',
             datasrc: [],
             data:{},
+            link :"",
+            key : "",
             height : window.innerHeight*0.65,
-            editSettings: { allowEditing: true, allowAdding: true, allowDeleting: true},
+            editSettings: {allowSelection:true, allowEditing: true, allowAdding: true, allowDeleting: true },
             editparams: { params: { popupHeight: '300px' }},
            rowHeight: 40,
           toolbar: [
-              'Update','Cancel',
-              'ColumnChooser',
           "Search",
+          'Edit',
+          'Update','Cancel',
             { text: 'Copy', tooltipText: 'Copy', prefixIcon: 'e-copy', id: 'copy' },
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
@@ -261,6 +260,7 @@ export default {
                 }
             },
             actionComplete: function(args) {
+                console.log("ASdas")
                 if ((args.requestType === 'beginEdit' || args.requestType === 'add')) {
                     if (Browser.isDevice) {
                         args.dialog.height = window.innerHeight - 90 + 'px';
@@ -309,8 +309,14 @@ export default {
                     this.$refs.alertDialog.hide();
                 },
                 actionBegin: function (args) {
-                    console.log("action")
                 if (args.requestType === 'save') {
+                    let datasend = {
+                        permissions : []
+                    }
+                    datasend.permissions = this.datasrc
+                    axios.put(`${apiUrl}`+`/usertype/permission/update/one/${this.key}`,datasend,{withCredentials:true}).then((response) => {
+                        console.log(response)
+                })
                     if (this.$refs.overviewgrid.ej2Instances.pageSettings.currentPage !== 1 && this.$refs.grid.ej2Instances.editSettings.newRowPosition === 'Top') {
                         args.index = (this.$refs.overviewgrid.ej2Instances.pageSettings.currentPage * this.$refs.grid.ej2Instances.pageSettings.pageSize) - this.$refs.grid.ej2Instances.pageSettings.pageSize;
                     } else if (this.$refs.overviewgrid.ej2Instances.editSettings.newRowPosition === 'Bottom') {
@@ -321,11 +327,13 @@ export default {
             
         },
         async mounted () { 
-                axios.get(`${apiUrl}`+`mail/template/view`,{withCredentials:true}).then((response) => {
-                    this.datasrc = response.data;
+                this.link = window.location.href;
+                this.key = this.link.split('per/').pop()
+                console.log(this.key)
+                axios.get(`${apiUrl}`+`/super/group/subgroup/getone/`+`${this.key}`,{withCredentials:true}).then((response) => {
+                    this.datasrc = response.data.permissions;
+                console.log(this.datasrc)
                 })
-                this.data = this.datasrc.slice(0)
-                return this.data
             
         },
 };

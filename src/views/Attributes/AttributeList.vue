@@ -2,10 +2,10 @@
   <div className="animated fadeIn">
     <b-card>
       <b-card-header>
-        <i class="icon-menu mr-1"></i> <span v-text="$ml.get('customattributes')"></span>
+        <span v-text="$ml.get('customattributes')"></span>
           <!-- <h5><b-badge variant="primary">Add Attribute</b-badge></h5> -->
       </b-card-header>
-      <b-card-body style="padding : 0 1.25rem 0 1.25rem !important;">
+      <b-card-body>
         <v-client-table @row-click="onRowClick" :columns="columns" :data="data"  :options="options" :theme="theme" id="dataTable">
           <router-link slot="_id" slot-scope="props" target="_blank" :to="`user/drtails/${props.row._id}`" class="icon-eye"></router-link>
         </v-client-table>
@@ -70,9 +70,16 @@
   }
   };
 
-// </script>
+</script>
 
-<style lang="scss">
-  
+<style>
+  .card-body { 
+  padding:0px !important;
+}
+
+#add-badge { 
+  float:right;
+  margin-top: -20px;
+}
 
 </style>

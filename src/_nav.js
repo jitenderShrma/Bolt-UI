@@ -35,7 +35,7 @@ var items = [
     icon: 'icon-star',
   },
   {
-    name: 'Category',
+    name: 'User Groups',
     url: '/usertype/list',
     icon: 'icon-star',
   },
@@ -70,10 +70,18 @@ var items = [
     name : "Departments",
     url : "/department/list",
     icon : "icon-star"
+  },
+  {
+    name : "Designations",
+    url : "/designation/list",
+    icon : "icon-star"
+  },
+  {
+    name : "Heads",
+    url : "/heads/list",
+    icon : "icon-star"
   }
 ]
-
-
 
 export default {
   items: items

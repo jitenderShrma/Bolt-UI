@@ -555,16 +555,7 @@ export default {
       }
   }
   
-}
+};
 
 </script>
 
-<style>
-  b-card {
-    margin:0px !important;
-    padding:1.25rem !important;
-  }
-  .card-body {
-    padding: 1.25rem !important;
-  }
-</style>

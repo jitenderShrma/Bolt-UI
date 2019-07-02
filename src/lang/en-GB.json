@@ -101,6 +101,9 @@
     "message" : "Message",
     "sms" : "SMS",
     "communicationlog" : "Communication Log",
-    "addtemplate" : "Add Template",
-    "edittemplate" : "Edit Template"
+    "edit" : "Edit",
+    "exportpdf" : "Export Pdf",
+    "exportexcel" : "Export Excel",
+    "collapseall" : "Collapse All",
+    "expandall" : "Expand All"
 }
