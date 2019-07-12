@@ -309,7 +309,7 @@ export default {
             
         },
         async mounted () { 
-                this.datasrc = this.$session.get('permissions').permissions;
+                this.datasrc = this.$session.get('permissions');
             
         },
 };

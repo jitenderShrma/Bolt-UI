@@ -1,118 +1,116 @@
 <template>
-    
-<div class="col-lg-12 control-section">
-    <!-- <button @contextmenu.prevent="handler">r-click</button>
-    <div>
-        <ejs-treegrid :dataSource='data' childMapping='states' :height='400' :allowReordering='true' :allowFiltering='true'
-        :allowSorting='true' :filterSettings='filterSettings' :queryCellInfo='queryCellInfo' :actionFailure='actionFailure'>
-            <e-columns>
-                <e-column field='name' headerText='Province' width='170' :template="flagtemplate"></e-column>
-                <e-column field='population' headerText='Population (Million)' width='188' textAlign='Right'></e-column>
-                <e-column field='gdp' headerText='GDP Rate %' :template='gdpTemplate' width='150'></e-column>
-                <e-column field='rating' headerText='Credit Rating' width='150' :template='ratingTemplate' :allowFiltering='false'></e-column>
-                <e-column field='unemployment' headerText='Unemployment Rate' :allowFiltering='false' width='170' :template='unemploymentTemplate'></e-column>
-                <e-column field='coordinates' headerText='Coordinates' width='220' :allowSorting='false' :template='locationTemplate'></e-column>
-                <e-column field='area' headerText='Area' width='140' :template='areaTemplate'></e-column>
-                <e-column field='timezone' headerText='Time Zone' width='150' :template='timezoneTemplate'></e-column>
-            </e-columns>
-        </ejs-treegrid>
-    </div> -->
-
-
+<div v-if="!upload">
+  <b-card>
+  <div id="modalTarget" class="control-section; position:relative" style="height:350px;">
+        <ejs-uploader ref="uploadObj" id='defaultfileupload' :multiple = "false" :success="onUploadSuccess" :progress="onProgress" :failure="onUploadFailed"  :allowedExtensions="extensions" :asyncSettings="path" name="UploadFiles"></ejs-uploader>
+    </div>
+  </b-card>
+</div>
+<div v-else>
+  <div class="control-section" style="overflow: auto">
+    <b-progress :value="100" variant="danger" :animated="animate" class="mb-3"></b-progress>
+</div>
 </div>
 </template>
-<script>
-// import Vue from "vue";
-// import { TreeGridPlugin, Filter, TreeGridComponent, Sort, Reorder, ITreeData } from "@syncfusion/ej2-vue-treegrid";
-// Vue.use(TreeGridPlugin);
-// Vue.use(GridPlugin);
 
-// export default {
-//     name:'test',
-//     components:{
-//         GridPlugin, DetailRow, Sort
-//     },
-
-//   data : function() {
-//     return {
-//       parentData: [{
-//           key1:"asdasdas",
-//             key2:"asdasd",
-//             key3:"asdasd"
-//       },
-//       {
-//           key1:"asdasdas",
-//             key2:"asdasd",
-//             key3:"asdasd"
-//       },
-//       {
-//           key1:"asdasdas",
-//             key2:"asdasd",
-//             key3:"asdasd"
-//       },
-//       ],
-//       childGrid: {
-//         dataSource: [{
-//             key1:"asdasdas",
-//             key2:"asdasd",
-//             key3:"asdasd"
-//         },
-//         {
-//           key1:"asdasdas",
-//             key2:"asdasd",
-//             key3:"asdasd"
-//       },
-//       {
-//           key1:"asdasdas",
-//             key2:"asdasd",
-//             key3:"asdasd"
-//       },],
-//         queryString: "key1",
-//           columns: [
-//           {
-//             field: "key1",
-//             headerText: "",
-//             textAlign: "Right",
-//             width: 120,
-//           },
-//           { field: "key2", headerText: "", width: 140},
-//           { field: "key3", headerText: "", width: 170},
-//           ]
-//       }
-//     };
-//   },
-//   methods : {
-//       handler () {
-
-//       }
-//   },
-//   provide: {
-//     grid: [DetailRow, Sort]
-//   }
-// };
-</script>
 <style>
-/* .grid .e-detailcell {
-    border-color: white;
+.control-section {
+        height: 100%;
+        min-height: 200px;
+    }
+
+</style>
+<script>
+import Vue from "vue";
+import apiUrl from '@/apiUrl'
+import axios from 'axios'
+import { UploaderPlugin } from '@syncfusion/ej2-vue-inputs';
+import { CheckBoxPlugin } from "@syncfusion/ej2-vue-buttons";
+import { PivotViewPlugin, IDataSet } from "@syncfusion/ej2-vue-pivotview";
+import { extend, enableRipple } from '@syncfusion/ej2-base';
+enableRipple(false);
+
+Vue.use(PivotViewPlugin);
+Vue.use(UploaderPlugin);
+Vue.use(CheckBoxPlugin);
+
+export default {
+  name:"test",
+    data: function(){
+        return {
+          dataSource: {
+            enableSorting: true,
+            columns: [{ name: "Year" }, { name: "Quarter" }],
+            values: [
+              { name: "Sold", caption: "Units Sold" },
+              { name: "Amount", caption: "Sold Amount" }
+            ],
+            data: [],
+            rows: [{ name: "Country" }, { name: "Products" }],
+            formatSettings: [{ name: "Amount", format: "C0" }],
+            expandAll: false,
+            filters: [],
+          },
+          complete:false,
+          upload:false,
+          extensions : '.csv',
+          path: {
+            saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+            removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove'
+          },
+          dropElement: '.control-fluid',
+          change: (args) => {
+            this.$refs.uploadObj.autoUpload = args.checked;
+            this.$refs.uploadObj.clearAll();
+        },
+        changed: (args) => {
+            this.$refs.uploadObj.sequentialUpload = args.checked;
+            this.$refs.uploadObj.clearAll();
+        }
+        }
+    },
+    methods:{
+      onProgress(args) {
+        let li = this.$refs.uploadObj;
+        console.log(li)
+            
+            let progressValue = Math.round((args.e.loaded / args.e.total) * 100);
+            if (!isNaN(progressValue)) {
+                li.getElementsByTagName('progress')[0].value = progressValue;
+            }
+      },
+       onUploadSuccess: function (args) {
+          var formData = new FormData();
+          formData.append('csv',args.file.rawFile);
+          console.log(formData);
+          this.upload = true
+          // axios.post(`${apiUrl}`+`csv/read`,formData,{headers:{'Content-Type':'multipart/form-data'}}).then((res) => {
+          //   console.log(res)
+          // })
+        },
+        onUploadFailed: function (args) {
+            console.log('Upload fails');
+        },
+        onFileRemove: function (args) {
+            args.postRawFile = false;
+        }
+    }
+};
+</script>
+
+  <style>
+#pivotview {
+  width: 100%;
 }
-.e-grid .e-detailcell {
-    border-top-style: none;
-    border-top-width: 0px;
-    border-bottom-width: 0px;
-    padding: 0;
-}
-.e-grid {
-    border-color:white
-}
-.e-grid .e-gridheader {
-    background-color: #fff;
-    border-bottom-color: black;
-    border-top-color: white;
-}
-grid .e-detailcell {
-    border-color: white;
-}
-.e-grid .e-rowcell, .e-grid .e-groupcaption, .e-grid .e-indentcell, .e-grid .e-recordplusexpand, .e-grid .e-recordpluscollapse, .e-grid .e-detailrowcollapse, .e-grid .e-detailrowexpand, .e-grid .e-detailindentcell, .e-grid .e-detailcell {
-    border-color: white;
-} */
+</style>
+
+<style>
+@import '../styles/ejs-vue-base.css';
+@import "../styles/ej2-vue-richtexteditor/styles/material.css";
+@import "../styles/ej2-vue-lists/styles/material.css";
+@import "../styles/ej2-vue-navigations/styles/material.css";
+@import "../styles/ej2-vue-popups/styles/material.css";
+@import "../styles/ej2-vue-splitbuttons/styles/material.css";
+@import "../styles/ej2-vue-buttons/styles/material.css";
+@import "../styles/ej2-vue-inputs/styles/material.css";
 </style>

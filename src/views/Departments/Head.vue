@@ -24,6 +24,7 @@
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <!-- <e-column :visible=false field='_id'  headerText='Context'></e-column> -->
+                    <e-column :isPrimaryKey="true" field='head_key' headerText='Head Key' width='70' ></e-column>
                     <e-column :isPrimaryKey="true" field='name' headerText='Head Name' width='170' ></e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
@@ -115,9 +116,14 @@ export default {
         if(args.requestType==="save") {
           let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
           console.log(args.data);
+          var sendData = {
+            name : args.data.name,
+            head_key:args.data.head_key,
+            department : this.key
+          }
           if(parent.length == 0) {
             this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Normal' }
-            api.post(`${apiUrl}`+`head/head/create`,args.data).then((response) => {
+            api.post(`${apiUrl}`+`head/head/create`,sendData).then((response) => {
             console.log(response.data)
             let id = {heads:response.data._id};
             console.log(id)
@@ -130,11 +136,11 @@ export default {
           }
           else {
             this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Child' }
-          api.post(`${apiUrl}`+`head/head/create`,args.data).then((response) => {
+          api.post(`${apiUrl}`+`head/head/create`,sendData).then((response) => {
             console.log(response.data)
             let id = {sub_heads:response.data._id};
             console.log(id)
-            api.put(`${apiUrl}`+`head/head/push/`+`${parent[0]._id}`,id).then((res) => {
+            api.put(`${apiUrl}`+`head/head/push/`+`${parent[0].head_key}`,id).then((res) => {
               console.log(res.data);
               this.$refs.treegrid.collapseAll()
               this.$refs.treegrid.expandAll()
@@ -198,6 +204,9 @@ export default {
                           }
                           api.put(`${apiUrl}`+`dept/head/pop/`+`${this.key}`,someElem).then((response) => {
                             console.log(response.data)
+                            api.delete(`${apiUrl}`+`head/head/delete/one/`+`${data[0].head_key}`).then((res) => {
+                              console.log(res.data)
+                            });
                             this.$refs.treegrid.deleteRecord(data[0])
                             this.$refs.treegrid.collapseAll()
                             this.$refs.treegrid.expandAll()
@@ -207,12 +216,15 @@ export default {
                           let deleterows = this.$refs.treegrid.ej2Instances.getSelectedRows();
                           console.log(deleterows[0])
                           let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-                          let id = parent[0].parentItem._id
+                          let id = parent[0].parentItem.head_key
                           let delElem = {
                             sub_heads : parent[0]._id
                           }
                           api.put(`${apiUrl}`+`head/head/pop/`+`${id}`,delElem).then((response) => {
                             console.log(response.data)
+                            api.delete(`${apiUrl}`+`head/head/delete/one/`+`${parent[0].head_key}`).then((res) => {
+                              console.log(res.data)
+                            });
                             this.$refs.treegrid.deleteRecord(parent[0])
                             this.$refs.treegrid.collapseAll()
                             this.$refs.treegrid.expandAll()

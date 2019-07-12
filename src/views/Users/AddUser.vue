@@ -27,7 +27,7 @@
               :label-cols="3"
               :horizontal="true">
               <cool-select
-                v-model="input.user_type"
+                v-model="input.onType"
                 :items="items"
                 :placeholder="$ml.get('placeholderusertype')"
                >
@@ -83,7 +83,7 @@
               </cool-select>
           </b-form-group>
           </b-form-group>
-          <div v-if="addattr.lengath!=0">
+          <div v-if="addattr.length!=0">
           <b-form-group
             
             :label="$ml.get('customattributes')"
@@ -110,19 +110,126 @@
             </div>
           </b-form-group>
           </div>
+          <div v-if="isVendor">
+            <b-form-group
+              :label="$ml.get('vendorcompany')"
+              label-for="basicName"
+              :label-cols="3"
+              :horizontal="true"
+              >
+              <b-form-input type="text" :placeholder="$ml.get('pholdvendorcompany')" v-model="vendor.vendor_company" id="vendor_company" ></b-form-input>
+            </b-form-group>
+            <b-form-group
+              :label="$ml.get('pan')"
+              label-for="basicName"
+              :label-cols="3"
+              :horizontal="true"
+              >
+              <b-row>
+                <b-col sm="9">
+                  <b-form-group>
+            <label for="street" v-text="$ml.get('pan')"></label>
+            <b-form-input type="text" :placeholder="$ml.get('pholdpan')" v-model="vendor.pan" id="vendor_company"></b-form-input>
+          </b-form-group>
+              </b-col>
+              <b-col sm="3">
+                <b-form-group>
+                  <label for="street" v-text="$ml.get('pancopy')"></label>
+                  <b-form-file v-model="vendor.pan_copy" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" ></b-form-file>
+              </b-form-group>
+              </b-col>
+            </b-row>
+          </b-form-group>
+            <b-form-group
+            :label="$ml.get('accountdetails')"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true">
+            <b-row>
+            <b-col sm="6">
+            <b-form-group>
+            <label for="street" v-text="$ml.get('accountname')"></label>
+            <b-form-input v-model="vendor.acc_name" type="text" id="street" :placeholder="$ml.get('pholdaccountname')" required></b-form-input>
+          </b-form-group>
+          </b-col>
+          <b-col sm="6">
+              <b-form-group>
+            <label for="street" v-text="$ml.get('accountno')"></label>
+            <b-form-input v-model="vendor.acc_no" type="number" id="street" :placeholder="$ml.get('pholdaccountno')"></b-form-input>
+          </b-form-group>
+          </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="8">
+              <b-form-group>
+                <label for="city" v-text="$ml.get('bankname')"></label>
+                <b-form-input  v-model="vendor.bank_name" type="text" id="city" :placeholder="$ml.get('pholdbankname')"></b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col sm="4">
+              <b-form-group>
+                <label for="postal-code" v-text="$ml.get('ifsc')"></label>
+                <b-form-input v-model="vendor.ifsc" type="text" id="postal-code" :placeholder="$ml.get('pholdifsc')"></b-form-input>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          </b-form-group>
+            <b-form-group
+              :label="$ml.get('turnover')"
+              label-for="basicName"
+              :label-cols="3"
+              :horizontal="true"
+              >
+              <b-form-input type="number" v-model="vendor.turnover" id="vendor_company" :placeholder="$ml.get('pholdturnover')" ></b-form-input>
+            </b-form-group>
+            <b-form-group
+            :label="$ml.get('kcpdetails')"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true">
+            <b-row>
+            <b-col sm="8">
+              <b-form-group>
+                <label for="city" v-text="$ml.get('kcpname')"></label>
+                <b-form-input  v-model="vendor.kcp_name" type="text" id="city" :placeholder="$ml.get('pholdkcpname')"></b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col sm="4">
+              <b-form-group>
+                <label for="postal-code" v-text="$ml.get('kcpno')"></label>
+                <b-form-input v-model="vendor.kcp_phone" type="number" id="postal-code" :placeholder="$ml.get('pholdkcpno')"></b-form-input>
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </b-form-group>
+        <b-form-group
+              :label="$ml.get('gst')"
+              label-for="basicName"
+              :label-cols="3"
+              :horizontal="true"
+              >
+              <b-row>
+                <b-col sm="9">
+                  <b-form-group>
+                  <label for="street" v-text="$ml.get('gst')"></label>
+                  <b-form-input type="text" :placeholder="$ml.get('gst')" v-model="vendor.gst" id="vendor_company"></b-form-input>
+                </b-form-group>
+                    </b-col>
+                    <b-col sm="3">
+                      <b-form-group>
+                        <label for="street" v-text="$ml.get('gstcerti')"></label>
+                        <b-form-file v-model="vendor.gst_certi" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" ></b-form-file>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            </b-form-group>
+          </div>
           <b-button type="button" variant="primary" @click="primaryModal = true" style="float:right" class="mr-1" v-text="$ml.get('customattributes')"></b-button>
-          
-          
-
            <div slot="footer">
               <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
               <router-link :to="{ path: '/sites',}">
               <b-button type="reset" size="sm" variant="danger" v-text="$ml.get('reset')"><i class="fa fa-ban"></i></b-button>
               </router-link>
-
-
-
-
           </div>
           </b-form>
           <b-modal :title="$ml.get('customattributes')" class="modal-primary" v-model="primaryModal" @ok="primaryModal = false" hide-footer>
@@ -216,6 +323,7 @@ export default {
         field_type : "",
         description : ""
       },
+      isVendor:null,
       addattr : [
         
       ],
@@ -224,9 +332,9 @@ export default {
       input : {
             user_name : "",
             password : "",
-            user_type : "",
-            address : [this.addresslist],
-            
+            onType : "",
+            user_type:"",
+            address : [this.addresslist]
         },
         taxx : {
             tax_id : "",
@@ -239,6 +347,21 @@ export default {
         zip : "",
         phone : "",
         email : ""
+      },
+      vendor : {
+        vendor_company:"",
+        pan:"",
+        gst:"",
+        turnover:"",
+        kcp_name : "",
+        kcp_phone : "",
+        acc_no : "",
+        acc_name:"",
+        ifsc : "",
+        bank_name:"",
+        pan_copy: null,
+        gst_certi:null,
+        address:this.addresslist
       },
       
       countrylist : 
@@ -505,6 +628,16 @@ export default {
         console.log(this.addattr)
       })
   },
+  watch : {
+      'input.onType': function() { 
+        if(this.input.onType == "Vendor") {
+          this.isVendor=true;
+        }
+        else {
+          this.isVendor=false;
+        }
+        }
+      },
   methods : {
     async addAttribute() {
       this.primaryModal = false
@@ -514,7 +647,64 @@ export default {
         console.log(response);
       })
     },
-    async sendData() {
+    sendData(args) {
+      console.log(args)
+      if(this.input.user_type="Vendor") {
+        this.vendor.address = this.addresslist;
+        this.input.address = [this.addresslist];
+        var vfd = new FormData();
+        vfd.append('vendor_company',this.vendor.vendor_company);
+        vfd.append('address',this.vendor.address);
+        vfd.append('pan',this.vendor.pan)
+        vfd.append('gst',this.vendor.gst)
+        vfd.append('turnover',this.vendor.turnover)
+        vfd.append('kcp_name',this.vendor.kcp_name)
+        vfd.append('kcp_phone',this.vendor.kcp_phone)
+        vfd.append('acc_no',this.vendor.acc_no)
+        vfd.append('ifsc',this.vendor.ifsc)
+        vfd.append('bank_name',this.vendor.bank_name)
+        console.log(this.vendor.pan_copy,this.vendor.gst_certi);
+        vfd.append('pan_copy',this.vendor.pan_copy)
+        vfd.append('gst_certi',this.vendor.gst_certi)
+        axios.post(`${apiUrl}`+`vendor/create`,vfd,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((response)=> {
+          this.input.user_type=response.data._id
+          axios.post(`${apiUrl}`+`user/subuser/add`,this.input, {withCredentials : true}).then((response) =>{
+              console.log(response);
+              if(response.data.limit == "exceeded") {
+                toast({
+                    type: VueNotifications.types.warn,
+                    title: 'Limit Exceeded',
+                    message: 'Please Upgrade your License.'
+                    })
+              }
+              else if(response.data.auth == false) {
+                toast({
+                    type: VueNotifications.types.error,
+                    title: 'User Unauthenticated',
+                    message: 'Please Login.'
+                    })
+                  console.log(response)
+              }
+              else {
+                toast({
+                    type: VueNotifications.types.success,
+                    title: 'Success',
+                    message: 'User Created Successfully'
+                    })
+                this.$router.push("/user");
+              }
+            })
+            .catch( function (error){
+              console.log(error)
+              toast({
+                    type: VueNotifications.types.error,
+                    title: 'Oops!',
+                    message: 'Something went wrong.'
+                    })
+            });
+        })
+      }
+      else{
               this.input.address = [this.addresslist];
             console.log(this.input);
             axios.post(`${apiUrl}`+`user/add`,this.input, {withCredentials : true}).then((response) =>{
@@ -553,8 +743,9 @@ export default {
                     })
             });
       }
+
   }
-  
+  }
 };
 
 </script>

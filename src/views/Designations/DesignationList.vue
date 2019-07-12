@@ -25,6 +25,7 @@
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <!-- <e-column :visible=false field='_id'  headerText='Context'></e-column> -->
                     <e-column :isPrimaryKey="true" field='name' headerText='Designation Name' width='170' ></e-column>
+                    <e-column :isPrimaryKey="true" field='department.department_name' headerText='Department' width='170' ></e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
             </ejs-treegrid>

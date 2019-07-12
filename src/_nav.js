@@ -80,6 +80,16 @@ var items = [
     name : "Heads",
     url : "/heads/list",
     icon : "icon-star"
+  },
+  {
+    name: "Test",
+    url : "/test",
+    icon:"icon-star"
+  },
+  {
+    name:"Transaction",
+    url:"/transaction/add",
+    icon:"icon-calculator"
   }
 ]
 

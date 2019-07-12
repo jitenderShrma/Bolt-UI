@@ -55,6 +55,11 @@ const AddUser = () => import('@/views/Users/AddUser');
 
 
 
+//Transaction Routes
+const AddTransaction = () => import('@/views/Transactions/AddTransaction');
+
+
+
 //Setting Routes
 const Settings = () => import('@/views/settings');
 
@@ -462,9 +467,35 @@ var router = new Router({
               ]
             },
             {
-              name:"test",
+              path: '/transaction',
+              component : {
+                render(c) { return c('router-view') }
+              },
+              children : [
+                {
+                  name:'Add Transaction',
+                  path:'/transaction/add',
+                  component : AddTransaction
+                }
+              ]
+            },
+            {
               path : "/test",
-              component : test
+              component : {
+                render (c) { return c('router-view') }
+              },
+              children : [
+                {
+                  name:"Test",
+                  path : "/test",
+                  component : test
+                },
+                {
+                  name:":id",
+                  path : "/test/:id",
+                  component : test
+                }
+              ]
             }
           ]
         },

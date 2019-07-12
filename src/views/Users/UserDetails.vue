@@ -27,7 +27,7 @@
               :label-cols="3"
               :horizontal="true">
               <cool-select
-                v-model="input.user_type[`0`]"
+                v-model="input.onType"
                 :items="items"
                 :placeholder="$ml.get('placeholderusertype')"
                >
@@ -83,7 +83,7 @@
               </cool-select>
           </b-form-group>
           </b-form-group>
-          <div v-if="addattr.lengath!=0">
+          <div v-if="addattr.length!=0">
           <b-form-group
             
             :label="$ml.get('customattributes')"
@@ -110,8 +110,121 @@
             </div>
           </b-form-group>
           </div>
-          <b-button type="button" variant="primary" @click="primaryModal = true" style="float:right" class="mr-1" v-text="$ml.get('customattributes')"></b-button>
           
+          <div v-if="isVendor">
+            <b-form-group
+              :label="$ml.get('vendorcompany')"
+              label-for="basicName"
+              :label-cols="3"
+              :horizontal="true"
+              >
+              <b-form-input type="text" :placeholder="$ml.get('pholdvendorcompany')" v-model="input.user_type.vendor_company" id="vendor_company" ></b-form-input>
+            </b-form-group>
+            <b-form-group
+              :label="$ml.get('pan')"
+              label-for="basicName"
+              :label-cols="3"
+              :horizontal="true"
+              >
+              <b-row>
+                <b-col sm="9">
+                  <b-form-group>
+            <label for="street" v-text="$ml.get('pan')"></label>
+            <b-form-input type="text" :placeholder="$ml.get('pholdpan')" v-model="input.user_type.pan" id="vendor_company"></b-form-input>
+          </b-form-group>
+              </b-col>
+              <b-col sm="3">
+                <b-form-group>
+                  <label for="street" v-text="$ml.get('pancopy')"></label>
+                  <b-form-file v-model="input.user_type.pan_copy" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" ></b-form-file>
+              </b-form-group>
+              </b-col>
+            </b-row>
+          </b-form-group>
+            <b-form-group
+            :label="$ml.get('accountdetails')"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true">
+            <b-row>
+            <b-col sm="6">
+            <b-form-group>
+            <label for="street" v-text="$ml.get('accountname')"></label>
+            <b-form-input v-model="input.user_type.payment.acc_name" type="text" id="street" :placeholder="$ml.get('pholdaccountname')" required></b-form-input>
+          </b-form-group>
+          </b-col>
+          <b-col sm="6">
+              <b-form-group>
+            <label for="street" v-text="$ml.get('accountno')"></label>
+            <b-form-input v-model="input.user_type.payment.acc_no" type="number" id="street" :placeholder="$ml.get('pholdaccountno')"></b-form-input>
+          </b-form-group>
+          </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="8">
+              <b-form-group>
+                <label for="city" v-text="$ml.get('bankname')"></label>
+                <b-form-input  v-model="input.user_type.payment.bank_name" type="text" id="city" :placeholder="$ml.get('pholdbankname')"></b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col sm="4">
+              <b-form-group>
+                <label for="postal-code" v-text="$ml.get('ifsc')"></label>
+                <b-form-input v-model="input.user_type.payment.ifsc" type="text" id="postal-code" :placeholder="$ml.get('pholdifsc')"></b-form-input>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          </b-form-group>
+            <b-form-group
+              :label="$ml.get('turnover')"
+              label-for="basicName"
+              :label-cols="3"
+              :horizontal="true"
+              >
+              <b-form-input type="number" v-model="input.user_type.turnover" id="vendor_company" :placeholder="$ml.get('pholdturnover')" ></b-form-input>
+            </b-form-group>
+            <b-form-group
+            :label="$ml.get('kcpdetails')"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true">
+            <b-row>
+            <b-col sm="8">
+              <b-form-group>
+                <label for="city" v-text="$ml.get('kcpname')"></label>
+                <b-form-input  v-model="input.user_type.kcp.kcp_name" type="text" id="city" :placeholder="$ml.get('pholdkcpname')"></b-form-input>
+              </b-form-group>
+            </b-col>
+            <b-col sm="4">
+              <b-form-group>
+                <label for="postal-code" v-text="$ml.get('kcpno')"></label>
+                <b-form-input v-model="input.user_type.kcp.kcp_phone" type="number" id="postal-code" :placeholder="$ml.get('pholdkcpno')"></b-form-input>
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </b-form-group>
+        <b-form-group
+              :label="$ml.get('gst')"
+              label-for="basicName"
+              :label-cols="3"
+              :horizontal="true"
+              >
+              <b-row>
+                <b-col sm="9">
+                  <b-form-group>
+                  <label for="street" v-text="$ml.get('gst')"></label>
+                  <b-form-input type="text" :placeholder="$ml.get('gst')" v-model="input.user_type.gst" id="vendor_company"></b-form-input>
+                </b-form-group>
+                    </b-col>
+                    <b-col sm="3">
+                      <b-form-group>
+                        <label for="street" v-text="$ml.get('gstcerti')"></label>
+                        <b-form-file v-model="input.user_type.gst_certi" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" ></b-form-file>
+                </b-form-group>
+              </b-col>
+            </b-row>
+            </b-form-group>
+          </div>
           <!-- <b-form-group
             description="Add new Attributes"
             label="Additional Attributes"
@@ -121,7 +234,7 @@
             <b-form-input id="basicName" v-model="input.add_attributes" type="text" autocomplete="type" placeholder="Add Attributes" required ></b-form-input>
           </b-form-group>
           <b-button class="float-right" type="button" @click="addcontact()" size="sm" variant="primary"><i class="fa fa-dot-circle-o"></i> + Add Contact</b-button> -->
-
+          <b-button type="button" variant="primary" @click="primaryModal = true" style="float:right" class="mr-1" v-text="$ml.get('customattributes')"></b-button>
            <div slot="footer">
               <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
               <router-link :to="{ path: '/sites',}">
@@ -235,11 +348,12 @@ export default {
             user_name : "",
             _id:"",
             password : "",
-            user_type : "",
+            onType : "",
+            user_type:"",
             address : [this.addresslist],
             
         },
-        
+        isVendor:null,
          addresslist : {
         compAdd : "",
         country : "",
@@ -248,7 +362,21 @@ export default {
         phone : "",
         email : ""
       },
-      
+      vendor : {
+        vendor_company:"",
+        pan:"",
+        gst:"",
+        turnover:"",
+        kyp_name : "",
+        kyp_phone : "",
+        acc_no : "",
+        acc_name:"",
+        ifsc : "",
+        bank_name:"",
+        pan_copy: null,
+        gst_certi:null,
+        address:this.addresslist
+      },
       countrylist : 
                         [ 
                         {"name": "Afghanistan", "code": "AF"}, 
@@ -503,7 +631,7 @@ export default {
   async mounted() {
     var link = window.location.href;
     var key = link.split(`details/`).pop()
-    axios.get(`${apiUrl}`+`/user/subuser/get/${key}`,{withCredentials:true}).then((response) => {
+    axios.get(`${apiUrl}`+`user/subuser/get/${key}`,{withCredentials:true}).then((response) => {
       this.input = response.data
       console.log(this.input)
     })
@@ -518,7 +646,18 @@ export default {
         }
         console.log(this.addattr)
       })
+    
   },
+  watch : {
+      'input.onType': function() { 
+        if(this.input.onType == "Vendor") {
+          this.isVendor=true;
+        }
+        else {
+          this.isVendor=false;
+        }
+        }
+      },
   methods : {
     async addAttribute() {
       this.primaryModal = false

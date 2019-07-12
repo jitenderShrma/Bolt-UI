@@ -196,7 +196,7 @@ export default {
         
     }
 
-}
+};
 </script>
 <style>
 @import '../../styles/ejs-vue-base.css';

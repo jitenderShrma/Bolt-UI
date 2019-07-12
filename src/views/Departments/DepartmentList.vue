@@ -15,7 +15,7 @@
             </e-items>
           </ejs-toolbar>
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            childMapping='sub_department' :height='height' :allowReordering='true' :allowFiltering='true'
+            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_department' :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionBegin="actionBegin"
@@ -23,7 +23,7 @@
             :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' >
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
-                    <!-- <e-column :visible=false field='_id'  headerText='Context'></e-column> -->
+                    <e-column :visible="false" field='_id'></e-column>
                     <e-column isPrimaryKey="true" field='department_name' headerText='Department Name' width='170' ></e-column>
                     <e-column headerText='Manage Designations' width='140' :commands='command1'></e-column>
                      <e-column headerText='Manage Heads' width='140' :commands='command2'></e-column>
@@ -112,6 +112,9 @@ export default {
    methods:{
     
       actionBegin(args) {
+        if (args.e && args.e.type === 'keydown' && args.e.keyCode === 13) { 
+            args.e.preventDefault(); 
+        } 
         if(args.requestType==="save") {
           let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
           console.log(args.data);
@@ -119,29 +122,29 @@ export default {
             this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Normal' }
             let dept = {
               department_name : args.data.department_name,
-              isHighest : true
             }
-            api.post(`${apiUrl}`+`/department/dept/create`,dept).then((response) => {
-              console.log(response.data);
+            api.post(`${apiUrl}`+`department/dept/create`,dept).then((response) => {
+                api.get(`${apiUrl}`+`department/dept/get`)
+                .then((response) => {
+                  this.data = response.data
+                  });
                 this.$refs.treegrid.collapseAll()
-                this.$refs.treegrid.expandAll()
-            })
+                this.$refs.treegrid.expandAll()            
+                });
           }
           else {
             this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Child' }
-            api.post(`${apiUrl}`+`/department/dept/create`,args.data).then((response) => {
-              console.log(response.data)
-              let id = {sub_department:response.data._id};
-              console.log(id)
-              api.put(`${apiUrl}`+`/department/dept/push/`+`${parent[0]._id}`,id).then((res) => {
-                console.log(res.data);
-                this.$refs.treegrid.collapseAll()
-                this.$refs.treegrid.expandAll()
-              })
+            var sendData = {
+                department_name:args.data.department_name,
+                parent_department:parent[0]._id
+              }
+            api.post(`${apiUrl}`+`department/dept/create`,sendData).then((response) => {
+              api.get(`${apiUrl}`+`department/dept/get`)
+                .then((response) => {
+                  this.data = response.data
+                  });
             });
           }
-          
-
         }
       },
       actionComplete: function(args) {
@@ -176,28 +179,13 @@ export default {
           }
         if(args.item.id == 'delete') {
                     if(this.$refs.treegrid.getSelectedRecords().length>0) {
-                      let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-                      if(data[0].childRecords.length == 0){
-                          api.delete(`${apiUrl}`+`department/dept/delete/`+`${data[0]._id}`).then((response) => {
-                            console.log(response.data)
-                            this.$refs.treegrid.deleteRecord(data[0])
-                            this.$refs.treegrid.collapseAll()
-                            this.$refs.treegrid.expandAll()
-                          })
-                        }
-                        else {
-                          let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-                          let id = parent[0].parentItem._id
-                          let delElem = {
-                            sub_department : parent[0]._id
-                          }
-                          api.put(`${apiUrl}`+`/department/dept/pop/`+`${id}`,delElem).then((response) => {
-                            console.log(response.data)
-                            this.$refs.treegrid.deleteRecord(parent[0])
-                            this.$refs.treegrid.collapseAll()
-                            this.$refs.treegrid.expandAll()
-                          })
-                        }
+                      var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
+                              api.delete(`${apiUrl}`+`department/dept/delete/`+`${data[0]._id}`).then((res) => {
+                                console.log(res.data)
+                              });
+                              this.$refs.treegrid.deleteRecord(data[0])
+                              this.$refs.treegrid.collapseAll()
+                              this.$refs.treegrid.expandAll()
                     }
                     
                 }

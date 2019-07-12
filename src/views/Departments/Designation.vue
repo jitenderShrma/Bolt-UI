@@ -76,7 +76,6 @@ export default {
             ],
             selectionSettings : {type:"Single"},
             data: []
-            
    };
   },
   async mounted() {
@@ -117,9 +116,13 @@ export default {
         if(args.requestType==="save") {
           let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
           console.log(args.data);
+          var sendData = {
+            name : args.data.name,
+            department : this.key
+          }
           if(parent.length == 0) {
             this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Normal' }
-            api.post(`${apiUrl}`+`designation/desig/create`,args.data).then((response) => {
+            api.post(`${apiUrl}`+`designation/desig/create`,sendData).then((response) => {
             console.log(response.data)
             let id = {designation:response.data._id};
             console.log(id)
@@ -132,7 +135,7 @@ export default {
           }
           else {
             this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Child' }
-            api.post(`${apiUrl}`+`designation/desig/create`,args.data).then((response) => {
+            api.post(`${apiUrl}`+`designation/desig/create`,sendData).then((response) => {
             console.log(response.data)
             let id = {sub_designations:response.data._id};
             console.log(id)
@@ -201,6 +204,9 @@ export default {
                           }
                           api.put(`${apiUrl}`+`dept/desig/pop/`+`${this.key}`,someElem).then((response) => {
                             console.log(response.data)
+                            api.delete(`${apiUrl}`+`designation/desig/delete/`+`${data[0]._id}`).then((res) => {
+                                console.log(res.data);
+                            })
                             this.$refs.treegrid.deleteRecord(data[0])
                             this.$refs.treegrid.collapseAll()
                             this.$refs.treegrid.expandAll()
@@ -216,6 +222,9 @@ export default {
                           }
                           api.put(`${apiUrl}`+`designation/desig/pop/`+`${id}`,delElem).then((response) => {
                             console.log(response.data)
+                            api.delete(`${apiUrl}`+`designation/desig/delete/`+`${parent[0]._id}`).then((res) => {
+                                console.log(res.data);
+                            })
                             this.$refs.treegrid.deleteRecord(parent[0])
                             this.$refs.treegrid.collapseAll()
                             this.$refs.treegrid.expandAll()
