@@ -154,6 +154,8 @@
     "addvendor" : "Add Vendor",
     "title" : "Title",
     "pholdtitle" : "Enter Quote's Title",
-    "uploadquote" : "Upload Quote"
-    
+    "uploadquote" : "Upload Quote",
+    "pholdhead" : "Select a Head",
+    "price" : "Price",
+    "pholdprice" : "Enter the Price"
 }

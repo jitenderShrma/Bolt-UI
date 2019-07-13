@@ -8,7 +8,7 @@
 </div>
 <div v-else>
   <div class="control-section" style="overflow: auto">
-    <b-progress :value="100" variant="danger" :animated="animate" class="mb-3"></b-progress>
+     <ejs-pivotview height="600" :dataSourceSettings="dataSourceSettings" :allowCalculatedField="allowCalculatedField"> </ejs-pivotview>
 </div>
 </div>
 </template>
@@ -36,21 +36,38 @@ Vue.use(CheckBoxPlugin);
 
 export default {
   name:"test",
+  components: {
+      PivotViewPlugin,UploaderPlugin,CheckBoxPlugin
+  },
+  
     data: function(){
         return {
-          dataSource: {
-            enableSorting: true,
-            columns: [{ name: "Year" }, { name: "Quarter" }],
-            values: [
-              { name: "Sold", caption: "Units Sold" },
-              { name: "Amount", caption: "Sold Amount" }
-            ],
-            data: [],
-            rows: [{ name: "Country" }, { name: "Products" }],
-            formatSettings: [{ name: "Amount", format: "C0" }],
-            expandAll: false,
-            filters: [],
-          },
+          dataSourceSettings: {
+        columns: [{ name: "Year" }],
+        values: [
+          { name: "Jan", caption: "Jan" },
+          { name: "Feb", caption: "Feb" },
+          { name: "Mar", caption: "Mar" },
+          { name: "Apr", caption: "Apr" },
+          { name: "May", caption: "May" },
+          { name: "Jun", caption: "Jun" },
+          { name: "Jul", caption: "Jul" },
+          { name: "Aug", caption: "Aug" },
+          { name: "Sep", caption: "Sep" },
+          { name: "Oct", caption: "Oct" },
+          { name: "Nov", caption: "Nov" },
+          { name: "Dec", caption: "Dec" },
+          { name: 'Total', caption: 'Total Units', type: 'CalculatedField' }
+        ],
+        dataSource: [],
+        rows: [{ name: "tree_id" }, { name: "name" }],
+        showColumnGrandTotals:false,
+        calculatedFieldSettings: [{
+             name: 'Total',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          }]
+      },
+      allowCalculatedField:true,
           complete:false,
           upload:false,
           extensions : '.csv',
@@ -83,10 +100,12 @@ export default {
           var formData = new FormData();
           formData.append('csv',args.file.rawFile);
           console.log(formData);
+          formData.append('import_setting',"M");
+          formData.append('year',"2019")
           this.upload = true
-          // axios.post(`${apiUrl}`+`csv/read`,formData,{headers:{'Content-Type':'multipart/form-data'}}).then((res) => {
-          //   console.log(res)
-          // })
+          axios.post(`${apiUrl}`+`csv/read`,formData,{headers:{'Content-Type':'multipart/form-data'}}).then((res) => {
+            this.dataSourceSettings.dataSource = res.data
+          })
         },
         onUploadFailed: function (args) {
             console.log('Upload fails');

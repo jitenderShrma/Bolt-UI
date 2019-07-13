@@ -29,7 +29,7 @@
                     <e-column :isPrimaryKey="true" field='head_key' headerText='Head Key' ></e-column>
                     <e-column field='accounting_head' headerText='Account Head' ></e-column>
                     <e-column field='notes' headerText='Notes'></e-column>
-                    <!-- <e-column :isPrimaryKey="true" field='department' headerText='Department' width='170' ></e-column> -->
+                    <e-column :isPrimaryKey="true" field='department' headerText='Department' width='170' ></e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
             </ejs-treegrid>
@@ -120,7 +120,10 @@ export default {
                 parent_head:parent[0]._id
               }
           api.post(`${apiUrl}`+`head/head/create`,sendData).then((response) => {
-            console.log(response.data)
+            api.get(`${apiUrl}`+`head/head/get`)
+                .then((response) => {
+                  this.data = response.data
+                  });
           });
         }
       }
