@@ -133,11 +133,9 @@ export default {
   },
   methods : {
       async sendData() {
-            axios.post(`${apiUrl}`+`user/login/`,this.login_details).then((response) =>{
+            axios.post(`${apiUrl}`+`user/subuser/login`,this.login_details, {withCredentials : true}).then((response) =>{
               console.log(response.data)
-              this.$session.start();
-              this.$session.set('permissions', response.data.permission)
-              console.log(this.$session.get('permissions'))
+              
               Auth.login()
               this.$router.push("/dashboard");
             })

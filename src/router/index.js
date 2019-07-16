@@ -42,6 +42,7 @@ const PermissionDetails = () => import('@/views/Permission/PermissionDetails');
 const  PluginList = () => import('@/views/Communication/Plugin');
 const CommunicationLog = () => import('@/views/Communication/CommunicationLog');
 const test = () => import('./test');
+const csvimport = () =>import('./csvMonth');
 // Company Routes
 
 const CompanyList = () => import('@/views/Company/CompanyList');
@@ -57,6 +58,8 @@ const AddUser = () => import('@/views/Users/AddUser');
 
 //Transaction Routes
 const AddTransaction = () => import('@/views/Transactions/AddTransaction');
+const TransactionList = () => import('@/views/Transactions/TransactionList');
+const EditTransaction = () => import('@/views/Transactions/EditTransaction');
 
 
 
@@ -468,19 +471,35 @@ var router = new Router({
             },
             {
               path: '/transaction',
+              meta : { requiresAuth : true },
+              redirect:'/transaction/list',
+              name:'Transaction List',
               component : {
                 render(c) { return c('router-view') }
               },
               children : [
                 {
                   name:'Add Transaction',
+                  meta : { requiresAuth : true },
                   path:'/transaction/add',
                   component : AddTransaction
+                },
+                {
+                  path:'/transaction/list',
+                  component : TransactionList
+                },
+                {
+                  path:'/transaction/edit/:id',
+                  meta : { requiresAuth : true },
+                  name:'Edit Transaction',
+                  component : EditTransaction
                 }
+
               ]
             },
             {
               path : "/test",
+              meta : { requiresAuth : true },
               component : {
                 render (c) { return c('router-view') }
               },
@@ -488,12 +507,14 @@ var router = new Router({
                 {
                   name:"Test",
                   path : "/test",
+                  meta : { requiresAuth : true },
                   component : test
                 },
                 {
-                  name:":id",
-                  path : "/test/:id",
-                  component : test
+                	name:"csv",
+                	path: "/test/import",
+                  meta : { requiresAuth : true },
+                	component: csvimport
                 }
               ]
             }
@@ -532,13 +553,20 @@ var router = new Router({
     
   ]
 })
+
+
 router.beforeEach((to, from, next) => {
-  
-  if (to.matched.some(record => record.meta.requiresAuth) && !Auth.loggedIn) {
-    next({ path: '/login', query: { redirect: to.fullPath }});
-  } else {
-    next();
+  if(sessionStorage.length>0) {
+    var sessionExists = JSON.parse(sessionStorage['vue-session-key']).user
+    if (to.matched.some(record => record.meta.requiresAuth) && !sessionExists) {
+      next({ path: '/login', query: { redirect: to.fullPath }});
+    } else {
+      next();
+    }
   }
+  else {
+      next();
+    }
 });
 
 

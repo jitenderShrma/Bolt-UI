@@ -88,7 +88,7 @@ var items = [
   },
   {
     name:"Transaction",
-    url:"/transaction/add",
+    url:"/transaction",
     icon:"icon-calculator"
   }
 ]

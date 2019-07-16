@@ -649,7 +649,7 @@ export default {
     },
     sendData(args) {
       console.log(args)
-      if(this.input.user_type="Vendor") {
+      if(this.input.onType="Vendor") {
         this.vendor.address = this.addresslist;
         this.input.address = [this.addresslist];
         var vfd = new FormData();
@@ -667,6 +667,7 @@ export default {
         vfd.append('pan_copy',this.vendor.pan_copy)
         vfd.append('gst_certi',this.vendor.gst_certi)
         axios.post(`${apiUrl}`+`vendor/create`,vfd,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((response)=> {
+          console.log(response);
           this.input.user_type=response.data._id
           axios.post(`${apiUrl}`+`user/subuser/add`,this.input, {withCredentials : true}).then((response) =>{
               console.log(response);

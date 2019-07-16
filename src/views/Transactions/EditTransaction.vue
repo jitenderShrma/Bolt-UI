@@ -92,14 +92,14 @@
             :label-cols="3"
             :horizontal="true">
             <b-row>
-              <b-col sm="4">
+              <b-col sm="6">
                 <b-form-group>
                 <label v-text="$ml.get('porequired')"></label>
                 <br>
                 <c-switch class="mx-1" color="primary" unchecked name="switch1" v-model="input.po_required" :uncheckedValue="false" @change="switchPO"  :checkedValue="true"/>
               </b-form-group>
               </b-col>
-              <b-col sm="4">
+              <b-col sm="6">
               <div v-if="this.input.po_required">
                   <b-form-group>
                   <label v-text="$ml.get('poraised')"></label>
@@ -108,21 +108,11 @@
                 </b-form-group>
               </div>
               </b-col>
+            </b-row>
+            <b-row>
               <b-col sm="4">
               <div v-if="is_po_rasied">
-              <label v-text="$ml.get('ponumber')"></label>
-              <cool-select
-                  v-model="input.po_raised"
-                  :items="purchase_orders"
-                  item-text="purchase_id"
-                  item-value="_id"
-                  :placeholder="$ml.get('pholdpo')"
-                 >
-                 <div slot="after-items-fixed" class="slot slot--after">
-                   <b-button type="button" size="sm" block variant="secondary" @click="poModal = true" class="mr-1"><i class="fa fa-plus"></i>&nbsp;<span v-text="$ml.get('addpo')"></span></b-button>
-                 </div>
-                </cool-select>
-              
+                  <ejs-textbox floatLabelType="Auto" id="basicName" v-model="input.po_raised" type="text" :placeholder="$ml.get('pholdponumber')" ></ejs-textbox>
               </div>
             </b-col>
             </b-row>
@@ -168,29 +158,6 @@
               </cool-select>
             </b-col></b-row>
           </b-form-group>
-          <b-form-group
-            :label="$ml.get('approval')"
-            label-for="basicName"
-            :label-cols="3"
-            :horizontal="true"
-            >
-            <b-row>
-              <b-col sm="4">
-              <b-form-group>
-                  <label v-text="$ml.get('isapproved')"></label>
-                  <br>
-                  <c-switch class="mx-1" color="secondary" unchecked name="switch1" v-model="input.isApproved" :uncheckedValue="false" :checkedValue="true"/>
-                </b-form-group>
-                </b-col>
-                <b-col sm="4">
-                <div v-if="input.isApproved">
-                  
-                    <ejs-textbox floatLabelType="Auto" v-model="input.approvalCode" :placeholder="$ml.get('pholdapprovalcode')"></ejs-textbox>
-                  
-                </div>
-                </b-col>
-              </b-row>
-            </b-form-group>
         </div>
            <div slot="footer">
               <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
@@ -513,16 +480,14 @@ Vue.use(TextBoxPlugin);
 				input:{
 					transaction_type:"",
 					category:"",
-					
+					department:null,
 					po_required:false,
 					po_raised:null,
-					
-          status:"Pending",
-          isApproved:false,
-          approvalCode:"",
+					head:null,
 					amount:"",
 					month:"",
 					quotes:[],
+					vendor:"",
 					cash:"",
 				},
         addresslist : {
@@ -583,6 +548,10 @@ Vue.use(TextBoxPlugin);
 			}
 		},
 		async mounted() {
+      var key = window.location.href.split('/edit').pop()
+      axios.get(`${apiUrl}`+`transaction/get`+`${key}`,{withCredentials:true}).then((res) => {
+        this.input = res.data
+      });
       axios.get(`${apiUrl}`+`vendor/get/all`,{withCredentials:true}).then((res) => {
         this.vendors = res.data
       });
@@ -610,12 +579,9 @@ Vue.use(TextBoxPlugin);
             e.updateData(department, query);
         },
         sendData() {
-          if(this.input.isApproved == true && this.input.approvalCode!=null) {
-            this.input.status = "Approved"
-          }
           console.log(this.input)
-          axios.post(`${apiUrl}`+`transaction/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
-            this.$router.push("/transaction/list")});
+          // axios.post(`${apiUrl}`+`transaction/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
+          //   this.$router.push("/transaction/list")});
         },
         addVendor() {
           this.vendor.address = this.addresslist

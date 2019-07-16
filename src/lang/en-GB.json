@@ -157,5 +157,17 @@
     "uploadquote" : "Upload Quote",
     "pholdhead" : "Select a Head",
     "price" : "Price",
-    "pholdprice" : "Enter the Price"
+    "pholdprice" : "Enter the Price",
+    "pholdpo" : "Select a Purchase Order",
+    "addpo" : "Add Purchase Order",
+    "pholdpoid" : "Enter the Unique Purchase Order ID",
+    "pholdamount" : "Enter the Purchase Order Amount",
+    "ispurchased" : "Is Purchased?",
+    "purchaseorder" : "Purchase Order",
+    "approval" : "Approval",
+    "approvalcode" : "Approval Code",
+    "pholdapprovalcode" : "Enter the Approval Code",
+    "isapproved" : "Already Approved?",
+    "pholdpivotdataview" : "Select the View",
+    "upload" : "Upload CSV"
 }

@@ -86,6 +86,7 @@ export default {
       this.ssnCompany = this.data[0];
       axios.get(`${apiUrl}`+`company/${this.ssnCompany._id}`,{withCredentials : true})
       .then(response => {
+      this.$session.set('company',response.data._id);
       console.log(this.ssnCompany);
       console.log(this.ssnCompany)})
 
@@ -128,7 +129,7 @@ export default {
       console.log(this.ssnCompany)})
     },
     async Logout() {
-      if(this.$session.exists()) {
+      if(this.$session.has('subuser')) {
         axios.post(`${apiUrl}`+`user/logout`,{withCredentials :true}).then((response) =>{
               Auth.logout();
               this.$session.destroy();
@@ -142,6 +143,7 @@ export default {
       else {
         axios.get(`${apiUrl}`+`auth/super/logout`,{withCredentials :true}).then((response) =>{
               Auth.logout();
+              this.$session.destroy();
               console.log(Auth.loggedIn);            
               this.$router.push('/login');
             })

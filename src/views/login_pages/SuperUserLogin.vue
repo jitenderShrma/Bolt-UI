@@ -115,8 +115,14 @@ export default {
             axios.post(`${apiUrl}`+`auth/super/login/`,this.login_details, {withCredentials : true}).then((response) =>{
               this.response = response;
               Auth.login();
+              this.$session.set('user',response.data.user)
               console.log(Auth.loggedIn);
-              this.$router.push("/dashboard");
+              if(!this.$route.query) {
+                this.$router.replace(this.$route.query.redirect)
+              }
+              else {
+                this.$router.push('/dashboard');
+              }
             })
             .catch(function(error) {
                 toast({
