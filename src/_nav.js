@@ -82,15 +82,26 @@ var items = [
     icon : "icon-star"
   },
   {
-    name: "Test",
-    url : "/test",
+    name: "Budget",
+    url : "/budget",
     icon:"icon-star"
   },
   {
     name:"Transaction",
     url:"/transaction",
     icon:"icon-calculator"
-  }
+  },
+  {
+    name:"Approval",
+    url:"/approval",
+    icon:"icon-calculator"
+  },
+  {
+    name:"Label",
+    url:"/label",
+    icon:"icon-calculator"
+  },
+  
 ]
 
 export default {

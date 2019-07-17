@@ -130,7 +130,7 @@ export default {
     },
     async Logout() {
       if(this.$session.has('subuser')) {
-        axios.post(`${apiUrl}`+`user/logout`,{withCredentials :true}).then((response) =>{
+        axios.post(`${apiUrl}`+`user/subuser/logout`,{withCredentials :true}).then((response) =>{
               Auth.logout();
               this.$session.destroy();
               console.log(Auth.loggedIn);            

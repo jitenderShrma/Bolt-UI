@@ -73,6 +73,7 @@ var api = axios.create({
   withCredentials :true
 })
 var company = JSON.parse(sessionStorage['vue-session-key']).company
+console.log(company)
 let remoteData = new DataManager({
   url: `http://127.0.0.1:3000/api/csv/read/M/${company}`,
   adaptor: new WebApiAdaptor(),
@@ -207,6 +208,7 @@ export default {
           	// this.dataSourceSettings.dataSource = res.data[0];
           })
           this.browseModal = false
+          this.$router.go()
           // axios.post(`${apiUrl}`+`csv/read`,formData,{headers:{'Content-Type':'multipart/form-data'}}).then((res) => {
           //   this.dataSourceSettings.dataSource = res.data
           // })

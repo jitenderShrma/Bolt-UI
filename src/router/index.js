@@ -61,6 +61,14 @@ const AddTransaction = () => import('@/views/Transactions/AddTransaction');
 const TransactionList = () => import('@/views/Transactions/TransactionList');
 const EditTransaction = () => import('@/views/Transactions/EditTransaction');
 
+//Approval Routes
+const AddApproval = () => import('@/views/Approval/AddApproval');
+const ApprovalList = () => import('@/views/Approval/ApprovalList');
+const EditApproval = () => import('@/views/Approval/EditApproval');
+
+
+//Label Routes
+const LabelList = () => import('@/views/Label/LabelList');
 
 
 //Setting Routes
@@ -79,6 +87,10 @@ const HeadList = () => import('@/views/Heads/HeadList');
 
 //Designation Routes
 const DesignationList = () => import('@/views/Designations/DesignationList');
+
+//Error Pages
+
+const NotFound = () => import('@/views/NotFound');
 
 
 Vue.use(Router)
@@ -498,15 +510,15 @@ var router = new Router({
               ]
             },
             {
-              path : "/test",
+              path : "/budget",
               meta : { requiresAuth : true },
               component : {
                 render (c) { return c('router-view') }
               },
               children : [
                 {
-                  name:"Test",
-                  path : "/test",
+                  name:"Budget",
+                  path : "/budget",
                   meta : { requiresAuth : true },
                   component : test
                 },
@@ -515,6 +527,48 @@ var router = new Router({
                 	path: "/test/import",
                   meta : { requiresAuth : true },
                 	component: csvimport
+                }
+              ]
+            },
+            {
+              path : "/label",
+              meta : { requiresAuth : true },
+              component : {
+                render (c) { return c('router-view') }
+              },
+              children : [
+                {
+                  name:"Labels",
+                  path : "/label",
+                  meta : { requiresAuth : true },
+                  component : LabelList
+                }
+              ]
+            },
+            {
+              path: '/approval',
+              meta : { requiresAuth : true },
+              redirect:'/Approval/list',
+              name:'Approval List',
+              component : {
+                render(c) { return c('router-view') }
+              },
+              children : [
+                {
+                  name:'Add Approval',
+                  meta : { requiresAuth : true },
+                  path:'/approval/add',
+                  component : AddApproval
+                },
+                {
+                  path:'/approval/list',
+                  component : ApprovalList
+                },
+                {
+                  path:'/approval/edit/:id',
+                  meta : { requiresAuth : true },
+                  name:'Edit Approval',
+                  component : EditApproval
                 }
               ]
             }
@@ -549,6 +603,8 @@ var router = new Router({
         },
       ]
     },
+    { path: '/404', component: NotFound },  
+    { path: '*', redirect: '/404' }
     
     
   ]
@@ -558,8 +614,17 @@ var router = new Router({
 router.beforeEach((to, from, next) => {
   if(sessionStorage.length>0) {
     var sessionExists = JSON.parse(sessionStorage['vue-session-key']).user
+    var sessionExists1 = JSON.parse(sessionStorage['vue-session-key']).subuser
+    if(sessionExists) {
     if (to.matched.some(record => record.meta.requiresAuth) && !sessionExists) {
       next({ path: '/login', query: { redirect: to.fullPath }});
+    } else {
+      next();
+    }
+  }
+  if(sessionExists1){
+    if (to.matched.some(record => record.meta.requiresAuth) && !sessionExists1) {
+      next({ path: '/login/user', query: { redirect: to.fullPath }});
     } else {
       next();
     }
@@ -567,6 +632,14 @@ router.beforeEach((to, from, next) => {
   else {
       next();
     }
+  }
+  else {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        next({ path: '/login', query: { redirect: to.fullPath }});
+      } else {
+        next();
+      }
+  }
 });
 
 

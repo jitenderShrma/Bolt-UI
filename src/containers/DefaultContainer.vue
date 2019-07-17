@@ -93,7 +93,7 @@ export default {
     }
   },
   beforeMount: function () {
-    if(this.$session.has('permissions')) {
+    if(this.$session.has('subuser')) {
       var permission = this.$session.get('permissions')
       for(var i=0;i<permission.length;i++) {
         if(permission[i].module_name != undefined)
