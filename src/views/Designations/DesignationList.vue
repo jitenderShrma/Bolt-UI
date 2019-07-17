@@ -81,7 +81,7 @@ export default {
    };
   },
   async mounted() {
-     api.get(`${apiUrl}`+`designation/desig/get`)
+     api.get(`${apiUrl}`+`designation/desig/get/all`)
     .then((response) => {
       this.data = response.data
       });

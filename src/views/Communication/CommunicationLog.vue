@@ -281,7 +281,7 @@ export default {
                 return this.data
             }
         }
-}
+};
 </script>
 
 

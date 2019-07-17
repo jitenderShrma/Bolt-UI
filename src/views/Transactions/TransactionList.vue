@@ -24,7 +24,7 @@
                     <e-column field='department.department_name' headerText='Department' :filter='filter'  ></e-column>
                     <e-column field='head.name' headerText='Head' :filter='filter'></e-column>
                     <e-column field='amount' headerText='Amount' :filter='filter'></e-column>
-                    <e-column field='month' headerText='Month'  :filter='filter' ></e-column>
+                    <e-column field='month' headerText='Month' :template="monthTemplate" :filter='filter' ></e-column>
                 </e-columns>
                 </ejs-grid>
                  </div>
@@ -125,6 +125,48 @@ export default {
             editSettings: { allowEditing: true, allowAdding: true, allowDeleting: true,mode:'Dialog'},
             editparams: { params: { popupHeight: '300px' }},
            rowHeight: 40,
+           monthTemplate: function () {
+              return {
+                  template: Vue.component("monthTemplate", {
+                      template: `<div>{{month}}</div>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                          month:null,
+                        };
+                      },
+                      mounted() {
+                        switch(this.data.month) {
+                          case "0": this.month = "January"
+                                  break;
+                          case "1": this.month = "February"
+                                  break;
+                          case "2": this.month = "March"
+                                  break;
+                          case "3": this.month = "April"
+                                  break;
+                          case "4": this.month = "May"
+                                  break;
+                          case "5": this.month = "June"
+                                  break;        
+                          case "6": this.month = "July"
+                                  break;
+                          case "7": this.month = "August"
+                                  break;
+                          case "8": this.month = "September"
+                                  break;
+                          case "9": this.month = "October"
+                                  break;        
+                          case "10": this.month = "November"
+                                  break;        
+                          case "11": this.month = "December"
+                                  break;
+                        }
+                      }
+                    })
+              }
+          },
            height : window.innerHeight*0.695,
           toolbar: [
           'ExcelExport','PdfExport',
@@ -240,7 +282,6 @@ export default {
         },
         computed: {
             getTradeData: async function () {
-                
                 this.data = this.datasrc.slice(0)
                 return this.data
             }

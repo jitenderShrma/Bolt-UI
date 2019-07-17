@@ -5,7 +5,29 @@
           <div slot="header">
             <span v-text="$ml.get('transactionform')"></span>
           </div>
-          <b-form action="UserList" v-on:submit.prevent="sendData">
+          <b-form action="UserList" v-on:keydown.enter.prevent="prevent" v-on:submit.prevent="sendData">
+          <b-form-group
+            :label="$ml.get('approval')"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true"
+            >
+            <b-row>
+              <b-col sm="4">
+              <b-form-group>
+                  <label v-text="$ml.get('isapproved')"></label>
+                  <br>
+                  <c-switch class="mx-1" color="secondary" unchecked name="switch1" v-model="input.isApproved" @change="changeVerified" :uncheckedValue="false" :checkedValue="true"/>
+                </b-form-group>
+                </b-col>
+                <b-col sm="4">
+                <div v-if="input.isApproved">
+                    <ejs-textbox v-on:keydown.enter='changeFields' floatLabelType="Auto" v-model="input.approvalCode" :placeholder="$ml.get('pholdapprovalcode')" ></ejs-textbox>
+                </div>
+                </b-col>
+              </b-row>
+            </b-form-group>
+            <div v-if="verified">
           <b-form-group
             :label="$ml.get('transactype')"
             label-for="basicName"
@@ -14,6 +36,7 @@
             <b-row>
             <b-col sm="4">
             <cool-select
+                :disabled="input.isApproved"
                 v-model="input.transaction_type"
                 :items="types"
                 :placeholder="$ml.get('pholdtransactype')"
@@ -30,6 +53,7 @@
             <b-row>
             <b-col sm="4">
             <cool-select
+                :disabled="disableCategory"
                 v-model="input.category"
                 :items="category"
                 :placeholder="$ml.get('pholdtransaccategory')"
@@ -45,7 +69,7 @@
               :horizontal="true">
               <b-row>
                 <b-col sm="4">
-                  <ejs-dropdownlist v-model="input.department" :groupTemplate="groupTemplate1"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
+                  <ejs-dropdownlist :readonly="input.isApproved" v-model="input.department" :groupTemplate="groupTemplate1"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
                 </b-col>
               </b-row>
             </b-form-group>
@@ -56,7 +80,7 @@
               :horizontal="true">
               <b-row>
                 <b-col sm="4">
-                  <ejs-dropdownlist v-model="input.head" id='head' :dataSource='head' :fields='head_fields' :allowFiltering="true" :groupTemplate="groupTemplate2" popupHeight='300' :placeholder="$ml.get('pholdhead')"></ejs-dropdownlist>
+                  <ejs-dropdownlist :readonly="input.isApproved" v-model="input.head" id='head' :dataSource='head' :fields='head_fields' :allowFiltering="true" :groupTemplate="groupTemplate2" popupHeight='300' :placeholder="$ml.get('pholdhead')"></ejs-dropdownlist>
                 </b-col>
               </b-row>
             </b-form-group>
@@ -70,6 +94,8 @@
               <cool-select
                 v-model="input.month"
                 :items="month"
+                item-text="name"
+                item-value="value"
                 :placeholder="$ml.get('pholdmonth')"
                >
               </cool-select>
@@ -82,9 +108,19 @@
               :label-cols="3"
               :horizontal="true">
               <b-row>
-              <b-col sm="4">
-              <ejs-textbox floatLabelType="Auto" v-model="input.amount" :placeholder="$ml.get('pholdtransacammount')"></ejs-textbox>
-            </b-col></b-row>
+              <b-col sm="2">
+              <ejs-textbox type="number" :max="boundaryAmount" @change="validateAmount" floatLabelType="Auto" v-model="input.amount"  :placeholder="$ml.get('pholdtransacammount')"></ejs-textbox>
+            </b-col>
+            <b-col sm="2">
+              <br>
+              <i class="fa fa-rupee font-2xl"></i>
+              &nbsp;
+              &nbsp;
+              &nbsp;
+              <label v-text="$ml.get('maxamount')"></label>&nbsp;:&nbsp;
+              <span v-text="boundaryAmount"></span>
+            </b-col>
+          </b-row>
             </b-form-group>
           <b-form-group
             :label="$ml.get('po')"
@@ -168,35 +204,10 @@
               </cool-select>
             </b-col></b-row>
           </b-form-group>
-          <b-form-group
-            :label="$ml.get('approval')"
-            label-for="basicName"
-            :label-cols="3"
-            :horizontal="true"
-            >
-            <b-row>
-              <b-col sm="4">
-              <b-form-group>
-                  <label v-text="$ml.get('isapproved')"></label>
-                  <br>
-                  <c-switch class="mx-1" color="secondary" unchecked name="switch1" v-model="input.isApproved" :uncheckedValue="false" :checkedValue="true"/>
-                </b-form-group>
-                </b-col>
-                <b-col sm="4">
-                <div v-if="input.isApproved">
-                  
-                    <ejs-textbox floatLabelType="Auto" v-model="input.approvalCode" :placeholder="$ml.get('pholdapprovalcode')"></ejs-textbox>
-                  
-                </div>
-                </b-col>
-              </b-row>
-            </b-form-group>
+        </div>
         </div>
            <div slot="footer">
-              <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
-              <router-link :to="{ path: '/sites',}">
-              <b-button type="reset" size="sm" variant="danger" v-text="$ml.get('reset')"><i class="fa fa-ban"></i></b-button>
-              </router-link>
+              <b-button :disabled="!verified" type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
           </div>
           </b-form>
         </b-card>
@@ -445,9 +456,33 @@
   import { CoolSelect } from 'vue-cool-select'
   import { Switch as cSwitch } from '@coreui/vue'
   import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
-
   import { MultiSelectPlugin, DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
   import { Query } from '@syncfusion/ej2-data';
+  import VueNotifications from 'vue-notifications'
+import miniToastr from 'mini-toastr'// https://github.com/se-panfilov/mini-toastr
+
+const toastTypes = {
+  success: 'success',
+  error: 'error',
+  info: 'info',
+  warn: 'warn'
+}
+
+miniToastr.init({types: toastTypes})
+
+function toast ({title, message, type, timeout, cb}) {
+  return miniToastr[type](message, title, timeout, cb)
+}
+
+const options = {
+  success: toast,
+  error: toast,
+  info: toast,
+  warn: toast
+}
+//  VueNotifications.setPluginOptions(options)
+
+Vue.use(VueNotifications, options)
   Vue.use(MultiSelectPlugin);
 Vue.use(TextBoxPlugin);
 
@@ -503,6 +538,7 @@ Vue.use(TextBoxPlugin);
                   template: groupVue1
               }
           },
+          
           groupTemplate2: function () {
               return {
                   template: groupVue2
@@ -510,13 +546,14 @@ Vue.use(TextBoxPlugin);
           },
           quotes:[
           ],
+          verified:false,
 				input:{
 					transaction_type:"",
 					category:"",
 					
 					po_required:false,
 					po_raised:null,
-					
+					boundaryAmount:null,
           status:"Pending",
           isApproved:false,
           approvalCode:"",
@@ -568,31 +605,40 @@ Vue.use(TextBoxPlugin);
 				types:[
           "One Time","Recurring"
 				],
+        disableCategory:false,
 				category:[
-					"Purchase Order","Bill","Invoice","Reimburstement","Interest","Advance"
+					"Purchase Order","Bill","Invoice","Reimburstement"
 				],
-        month:[
-          "January","February","March","April","May","June","July","August","September","October","November","December"
+        month:[ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"}
+        
+        
         ],
         department:[
         ],
+        approvals :[
+          
+        ],
         head:[],
         dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
+        approvalFields:{text:"description",value:"_id"},
         head_fields:{groupBy:'parent_head',text:"name",value:"_id"},
         
 			}
 		},
 		async mounted() {
+      axios.get(`${apiUrl}`+`approvals/preApp/get/all`,{withCredentials:true}).then((res) => {
+        this.approvals = res.data
+      });
       axios.get(`${apiUrl}`+`vendor/get/all`,{withCredentials:true}).then((res) => {
         this.vendors = res.data
       });
       axios.get(`${apiUrl}`+`po/get/all`,{withCredentials:true}).then((res) => {
         this.purchase_orders = res.data
       });
-      axios.get(`${apiUrl}`+`/department/dept/get`,{withCredentials:true}).then((res) => {
+      axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.department = res.data
       })
-      axios.get(`${apiUrl}`+`/head/head/get`,{withCredentials:true}).then((res) => {
+      axios.get(`${apiUrl}`+`head/head/get`,{withCredentials:true}).then((res) => {
         console.log(res.data);
         this.head = res.data
       })
@@ -672,6 +718,50 @@ Vue.use(TextBoxPlugin);
           axios.get(`${apiUrl}`+`po/get/all`,{withCredentials:true}).then((res) => {
           this.purchase_orders = res.data
         });
+        },
+        changeFields(args) {
+          axios.get(`${apiUrl}`+`approvals/preApp/get/one/`+`${args.target.value}`,{withCredentials:true}).then((res) => {
+            console.log(res.data)
+            if(res.data==null) {
+              toast({
+                type: VueNotifications.types.error,
+                title: 'Error!!!',
+                message: 'Invalid Approval Code'
+              })
+            }
+            else{
+              this.month = [ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"}]
+              this.verified = true
+              this.input.transaction_type = res.data.approval_type
+              this.input.head = res.data.budget_head
+              this.input.month = res.data.month
+              this.month = this.month.splice(res.data.month)
+              this.boundaryAmount = res.data.amount
+              this.is_po_raised = res.data.request_for_quote
+              if(res.data.imprest_required != null) {
+                this.category.push("Imperest/Advance")
+              }
+              else{
+                this.category = [
+                        "Purchase Order","Bill","Invoice","Reimburstement"
+                      ]
+              }
+            }
+          })
+        },
+        validateAmount(args) {
+          console.log(args)
+          if(args.value>this.boundaryAmount || args.value<0) {
+            this.input.amount = this.boundaryAmount
+          }
+        },
+        prevent(args) {
+          this.changeFields(args)
+        },
+        changeVerified(args) {
+          if(!args) {
+            this.verified = false
+          }
         }
       
     }
