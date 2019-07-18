@@ -32,7 +32,7 @@
 
               <b-form style="width:50%" v-on:submit.prevent="sendData">
               <b-col sm="15">
-                <ejs-dropdownlist  floatLabelType="Auto" v-model="input.fin_year_start_month"   :allowFiltering="true" id='department' :dataSource='month'  :fields='month_fields'  popupHeight='300' :placeholder="$ml.get('pholdfysm')"></ejs-dropdownlist>
+                <ejs-dropdownlist floatLabelType="Auto" v-model="input.fin_year_start_month" :allowFiltering="true" id='department' :dataSource='month'  :fields='month_fields'  popupHeight='300' :placeholder="$ml.get('pholdfysm')"></ejs-dropdownlist>
               </b-col>
               <br>
               <!-- <b-col sm="15">
@@ -56,11 +56,33 @@
             :horizontal="true"
             >
             <b-form-group>
+            
             <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLevel1" :uncheckedValue="false" :checkedValue="true"/>
             </b-form-group>
           <div v-if="isLevel1">
             <b-form-group>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbydesig')"></label>
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isDesig1" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isDesig1">
+                  <br>
             <ejs-dropdownlist v-model="input.level1.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+          </b-col>
+        </b-row>
+            </b-form-group>
+            <b-form-group>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLabel1" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isLabel1">
+                  <br>
+            <ejs-dropdownlist :enabled="islabel" v-model="input.level1.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+          </b-col>
+        </b-row>
             </b-form-group>
             <b-form-group>
             <ejs-textbox v-model="input.level1.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
@@ -82,7 +104,28 @@
             </b-form-group>
           <div v-if="isLevel2">
             <b-form-group>
-            <ejs-dropdownlist v-model="input.level2.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbydesig')"></label>
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isDesig2" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isDesig2">
+                  <br>
+            <ejs-dropdownlist  v-model="input.level2.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+          </b-col>
+            </b-row>
+            </b-form-group>
+            <b-form-group>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLabel2" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isLabel2">
+                  <br>
+            <ejs-dropdownlist :enabled="islabel" v-model="input.level2.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+          </b-col>
+        </b-row>
             </b-form-group>
             <b-form-group>
             <ejs-textbox v-model="input.level2.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
@@ -105,7 +148,28 @@
             </b-form-group>
           <div v-if="isLevel3">
             <b-form-group>
-            <ejs-dropdownlist v-model="input.level3.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbydesig')"></label>
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isDesig3" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isDesig3">
+                  <br>
+            <ejs-dropdownlist  v-model="input.level3.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+          </b-col>
+        </b-row>
+            </b-form-group>
+            <b-form-group>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLabel3" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isLabel3">
+                  <br>
+            <ejs-dropdownlist :enabled="islabel" v-model="input.level3.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+          </b-col>
+        </b-row>
             </b-form-group>
             <b-form-group>
             <ejs-textbox v-model="input.level3.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
@@ -128,7 +192,28 @@
             </b-form-group>
           <div v-if="isLevel4">
             <b-form-group>
-            <ejs-dropdownlist v-model="input.level4.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbydesig')"></label>
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isDesig4" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isDesig4">
+                  <br>
+            <ejs-dropdownlist  v-model="input.level4.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+          </b-col>
+        </b-row>
+            </b-form-group>
+            <b-form-group>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLabel4" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isLabel4">
+                  <br>
+            <ejs-dropdownlist :enabled="islabel" v-model="input.level4.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+          </b-col>
+        </b-row>
             </b-form-group>
             <b-form-group>
             <ejs-textbox v-model="input.level4.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
@@ -151,7 +236,28 @@
             </b-form-group>
           <div v-if="isLevel5">
             <b-form-group>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbydesig')"></label>
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isDesig5" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isDesig5">
+                  <br>
             <ejs-dropdownlist v-model="input.level5.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+          </b-col>
+        </b-row>
+            </b-form-group>
+            <b-form-group>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLabel5" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isLabel5">
+                  <br>
+            <ejs-dropdownlist :enabled="islabel" v-model="input.level5.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+          </b-col>
+        </b-row>
             </b-form-group>
             <b-form-group>
             <ejs-textbox v-model="input.level5.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
@@ -251,6 +357,8 @@ export default {
         amount:null,
       }
     },
+    islabel:true,
+    label1:null,
     options:[
       "Monthly",
       "Quarterly"
@@ -281,6 +389,7 @@ export default {
       {name:"December",value:"Dec"},
     ],
     month_fields:{text:"name",value:"value"},
+    label_fields:{text:"label_name",value:"_id"},
     switch : {
       smtp : false,
       sms : false,
@@ -298,11 +407,24 @@ export default {
       labelTxt: {
         dataOn: 'yes',
         dataOff: 'no'
-      }
+      },
+      isDesig1:false,
+      isDesig2:false,
+      isDesig3:false,
+      isDesig4:false,
+      isDesig5:false,
+      isLabel1:false,
+      isLabel2:false,
+      isLabel3:false,
+      isLabel4:false,
+      isLabel5:false
     }
 
   },
    async mounted (){
+    api.get(`${apiUrl}`+`label/label/find/context/Designation`).then((res) => {
+      this.label1 = res.data
+    });
     api.get(`${apiUrl}`+`designation/desig/get/all`).then((response) =>{
       this.designations = response.data
     });
@@ -312,13 +434,63 @@ export default {
   	});
   },
   watch:{
-    'isLevel1' : function() {
-
+    'isDesig1' : function(args) {
+      if(args) {
+        this.isLabel1 = false
+      }
+    },
+    'isDesig2' : function(args) {
+      if(args) {
+        this.isLabel2 = false
+      }
+    },
+    'isDesig3' : function(args) {
+      if(args) {
+        this.isLabel3 = false
+      }
+    },
+    'isDesig4' : function(args) {
+      if(args) {
+        this.isLabel4 = false
+      }
+    },
+    'isDesig5' : function(args) {
+      if(args) {
+        this.isLabel5 = false
+      }
+    },
+    'isLabel1' : function(args) {
+      if(args) {
+        this.isDesig1 = false
+      }
+    },
+    'isLabel2' : function(args) {
+      if(args) {
+        this.isDesig2 = false
+      }
+    },
+    'isLabel3' : function(args) {
+      if(args) {
+        this.isDesig3 = false
+      }
+    },
+    'isLabel4' : function(args) {
+      if(args) {
+        this.isDesig4 = false
+      }
+    },
+    'isLabel5' : function(args) {
+      if(args) {
+        this.isDesig5 = false
+      }
     }
   },
   methods : {
     settingRoute(val) {
       this.$router.push(`/settings/${val}`);
+    },
+    sendData() {
+      console.log(this.input)
     }
   }
 };

@@ -12,7 +12,7 @@
              <div class="control-section">
                 
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
-                :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler" :load='load'>
+                :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
                     <e-column field='vendor.vendor_company' headerText='Vendor'  :filter='filter' ></e-column>
                     <e-column field='status' headerText='Status'  :filter='filter' ></e-column>
@@ -99,7 +99,7 @@ const options = {
 Vue.use(VueNotifications, options)
 
 export default {
-    name: 'Communication Log',
+    name: 'TransactionList',
     components: {
       ClientTable,
       Event,
@@ -279,12 +279,6 @@ export default {
                     this.datasrc = response.data;
                 })
             
-        },
-        computed: {
-            getTradeData: async function () {
-                this.data = this.datasrc.slice(0)
-                return this.data
-            }
         }
 };
 </script>

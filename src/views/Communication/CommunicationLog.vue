@@ -4,7 +4,7 @@
         <div class="content-wrapper">
              <div class="control-section">
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :showColumnMenu='true' :allowResizing='true'  :showColumnChooser='true'  id='overviewgrid'  :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true'
-                :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler" :load='load'>
+                :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
                     <e-column type='checkbox' :allowFiltering='false' :allowSorting='false'  ></e-column>
                     <e-column field='context'  headerText='Context' :filter='filter' :isPrimaryKey='true'></e-column>
@@ -81,7 +81,7 @@ const options = {
 Vue.use(VueNotifications, options)
 
 export default {
-    name: 'Communication Log',
+    name: 'CommunicationLog',
     components: {
       ClientTable,
       Event,
@@ -275,11 +275,7 @@ export default {
             
         },
         computed: {
-            getTradeData: async function () {
-                
-                this.data = this.datasrc.slice(0)
-                return this.data
-            }
+            
         }
 };
 </script>

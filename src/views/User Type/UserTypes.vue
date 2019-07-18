@@ -93,7 +93,7 @@ var api = axios.create({
   withCredentials :true
 })
 export default {
-    name: "UserType List",
+    name: "UserTypeList",
     components :  {
       addRecord,
         TreeGridPlugin,ToolbarPlugin,ExcelExport,PdfExport, Edit,CommandColumn, Filter, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page
@@ -376,15 +376,6 @@ export default {
             this.rowHeight = 60;
         }
       },
-    //    rowDataBound(args) {
-    //             let value = this.$refs.rows.ej2Instances.value;
-    //             let rowval = getValue('taskID', args.data );
-    //             if (value.indexOf(rowval) !== -1) {
-    //                 addClass([args.row as Element], 'disableRow');
-    //             } else {
-    //                 removeClass([args.row as Element], 'disableRow');
-    //             }
-    //         },
   },
   
         

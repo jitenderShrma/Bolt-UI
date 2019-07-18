@@ -74,23 +74,19 @@ export default {
       tab : true,
       data : [],
       ssnCompany : {
-        _id : "",
-        company_name : ""
-      }
+        }
       }
   },
   async mounted() {
-    await axios.get(`${apiUrl}`+`company/list`,{withCredentials : true})
+    axios.get(`${apiUrl}`+`company/list`,{withCredentials : true})
     .then(response => {
       this.data = response.data
-      this.ssnCompany = this.data[0];
+      this.ssnCompany = this.data[0]
       axios.get(`${apiUrl}`+`company/${this.ssnCompany._id}`,{withCredentials : true})
       .then(response => {
       this.$session.set('company',response.data._id);
-      console.log(this.ssnCompany);
       console.log(this.ssnCompany)})
-
-      console.log(this.data)})
+    })
   },
   // async updated() {
   //   this.$nextTick(function () {

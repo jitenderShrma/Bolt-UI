@@ -17,7 +17,7 @@
              <div class="control-section">
                 
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' 
-                :height="height" :enableHover='false' :load='load'>
+                :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='context' headerText='Context'  :filter='filter' ></e-column>
                     <e-column field='label_name' :template="labelTemplate" headerText='Name'  :filter='filter' ></e-column>     
@@ -434,12 +434,6 @@ export default {
                     this.datasrc = response.data;
                 })
             
-        },
-        computed: {
-            getTradeData: async function () {
-                this.data = this.datasrc.slice(0)
-                return this.data
-            }
         }
 };
 </script>

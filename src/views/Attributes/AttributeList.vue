@@ -26,7 +26,7 @@
   Vue.use(ClientTable)
 
   export default {
-    name: 'DataTable',
+    name: 'AttributeList',
     components: {
       ClientTable,
       Event

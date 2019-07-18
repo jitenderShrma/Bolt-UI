@@ -12,7 +12,7 @@
              <div class="control-section">
                 
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
-                :height="height" :enableHover='false' :load='load'>
+                :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='ref_id' :template="uniqueTemplate" headerText='Reference ID'  :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column>
@@ -94,7 +94,7 @@ const options = {
 Vue.use(VueNotifications, options)
 
 export default {
-    name: 'LabelList',
+    name: 'ApprovalList',
     components: {
       ClientTable,
       Event,

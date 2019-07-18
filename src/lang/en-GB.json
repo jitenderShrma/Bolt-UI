@@ -190,6 +190,8 @@
     "budgetmgmt" : "Budget Management",
     "threshholdamount" : "Threshhold Amount",
     "alerttime" : "Alert Time in Minutes",
-    "pholdautorejection" : "Enter Auto-Rejection Time in Minutes"
-
+    "pholdautorejection" : "Enter Auto-Rejection Time (in Minutes)",
+    "pholdlabel" : "Select a Label",
+    "approvedbydesig" : "Approved By Designation",
+    "approvedbylabel" : "Approved By Label"
 }
