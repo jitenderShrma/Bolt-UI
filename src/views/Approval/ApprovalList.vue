@@ -51,7 +51,7 @@ import {
   FieldList,
   IDataSet
 } from "@syncfusion/ej2-vue-pivotview";
-import {addRecord,PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
+import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     
     Vue.use(PivotViewPlugin);
@@ -99,7 +99,7 @@ export default {
       ClientTable,
       Event,
       ToolbarPlugin,
-      addRecord,
+      
       GridPlugin, Filter, Selection, Sort, VirtualScroll,
         Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
         NumericTextBoxPlugin,

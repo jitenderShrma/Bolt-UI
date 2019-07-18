@@ -14,7 +14,7 @@
               <e-item id="expand" :text="$ml.get('expandall')"></e-item>
             </e-items>
           </ejs-toolbar>
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight' :dataSource='data' 
             idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_department' :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
@@ -27,8 +27,18 @@
                     <e-column isPrimaryKey="true" field='department_name' headerText='Department Name' width='170' ></e-column>
                     <e-column headerText='Manage Designations' width='140' :commands='command1'></e-column>
                      <e-column headerText='Manage Heads' width='140' :commands='command2'></e-column>
+                     <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
             </ejs-treegrid>
+            <b-modal :title="$ml.get('adddept')" class="modal-primary" v-model="modal" @ok="modal = false" hide-footer>
+              <div class="justify-content-center">
+                <b-form v-on:submit.prevent="adddept">
+                  <b-form-group>
+                  <div class="e-float-input e-control-wrapper"><input v-model="input.department_name" class="e-field e-defaultcell" type="text" value="" e-mappinguid="grid-column1" id="_gridcontroldepartment_name" name="department_name" style="text-align:undefined" aria-labelledby="label__gridcontroldepartment_name"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontroldepartment_name" for="_gridcontroldepartment_name">Department Name</label></div>
+                </b-form-group>
+                <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
+                </div>
+            </b-modal>
         </div>
     </div>
 </template>
@@ -38,7 +48,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import apiUrl from '@/apiUrl'
-import { addRecord,deleteRecord,actionComplete, ExcelExport,PdfExport,TreeGridPlugin, Edit, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
+import { addRecord,actionComplete, ExcelExport,PdfExport,TreeGridPlugin, Edit, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
 import { addClass, removeClass, getValue } from '@syncfusion/ej2-base';
 // import { addRecord } from "@syncfusion/ej2-vue-grids";
 import { ToolbarPlugin,ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
@@ -57,6 +67,11 @@ export default {
     },
     data : function() {
         return {
+          link:"",
+          key:"",
+          input:{
+          },
+          modal:false,
              command1: [
                  { type:"Designations",tooltipText : "Double click", buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat',click:this.onClickDes } },
                     ],
@@ -77,7 +92,6 @@ export default {
             ],
             selectionSettings : {type:"Single"},
             data: []
-            
    };
   },
   async mounted() {
@@ -86,41 +100,48 @@ export default {
       this.data = response.data
       })
     },
-  // computed : {
-  //     async getData () {
-  //     await api.get(`${apiUrl}`+`usertype/permission/view/all`).then((response)=>{
-  //       console.log(response.data);
-  //       this.data = response.data;
-  //        api.get(`${apiUrl}`+`super/group/subgroup/getall/`).then((response)=> {
-  //             console.log(response.data)
-  //             this.subdata = response.data;
-  //             for(var i=0;i<this.data.length;i++) { 
-  //               for(var j=0;j<this.subdata.length;j++) {
-  //                   if(this.data[i]._id == this.subdata[j].parent_group) {
-  //                     this.data[i].sub_groups= this.subdata[j]
-  //                   }
-  //               }
-  //             }
-  //             console.log(this.data)
-  //           });
-  //     });
-  //   }
-  // },
   provide: {
       treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
-    
-      actionBegin(args) {
-        if (args.e && args.e.type === 'keydown' && args.e.keyCode === 13) { 
-            args.e.preventDefault(); 
-        } 
-        if(args.requestType==="save") {
-          let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-          console.log(args.data);
+      adddept(args) {
+        console.log(args)
+        var parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
           if(parent.length == 0) {
             this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Normal' }
-            let dept = {
+              
+            api.post(`${apiUrl}`+`department/dept/create`,this.input).then((response) => {
+                api.get(`${apiUrl}`+`department/dept/get`)
+                .then((response) => {
+                  this.data = response.data
+                  });
+                this.$refs.treegrid.collapseAll()
+                this.$refs.treegrid.expandAll()            
+                });
+            this.modal=false
+            this.input = {}
+
+          }
+          else {
+            this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Child' }
+            this.input.parent_department = parent[0]._id
+              
+            api.post(`${apiUrl}`+`department/dept/create`,this.input).then((response) => {
+              api.get(`${apiUrl}`+`department/dept/get`)
+                .then((response) => {
+                  this.data = response.data
+                  });
+            });
+            this.input = {}
+            this.modal=false
+          }
+      },
+      actionBegin(args) {
+        if(args.requestType==="save") {
+          let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
+          if(parent.length == 0) {
+            this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Normal' }
+              var dept = {
               department_name : args.data.department_name,
             }
             api.post(`${apiUrl}`+`department/dept/create`,dept).then((response) => {
@@ -145,11 +166,9 @@ export default {
                   });
             });
           }
-        }
-      },
-      actionComplete: function(args) {
-        if(args.requestType==="save") {
-          console.log("savecomplete")
+      }
+        if(args.requestType=="beginEdit") {
+         console.log("edit")
         }
       },
        onClickDes(args) {
@@ -162,14 +181,45 @@ export default {
             console.log(data);
             this.$router.push(`/department/`+`head/${data[0]._id}`)
        },
-       
+      endEdit(args) {
+        if(args.requestType=="beginEdit") {
+          console.log(args)
+          api.put(`${apiUrl}`+`head/head/update/one/`+`${args.data.head_key}`,sendData).then((response) => {
+            console.log(response.data)
+          });
+        }
+      },
+       onClick(args) {
+            let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
+            console.log(data);
+            if(data[0].user_type == "SuperAdmin" || 
+               data[0].user_type == "Staff" || 
+               data[0].user_type == "Vendor" ||
+               data[0].user_type == "Student" || 
+               data[0].user_type == "Guest") {
+                this.$router.push(`/usertype/per/`+`${data[0].user_type}`)
+            }
+            else {
+                this.$router.push(`/usertype/`+`${data[0].parentItem.user_type}/per/`+`${data[0]._id}`)
+            }
+       },
+
+       Add(args) {
+           let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
+            console.log(data);
+            if(data.user_type == "SuperAdmin" || 
+                        data.user_type == "Staff" || 
+                        data.user_type == "Vendor" ||
+                        data.user_type == "Student" || 
+                        data.user_type == "Guest") {
+            }
+       },
        failure: function(args) {
         debugger;
       },
       clickHandler(args){
         if(args.item.id === 'add') {
-              this.$refs.treegrid.addRecord()
-            
+              this.modal = true
           }
           if(args.item.id == 'collapse') {
             this.$refs.treegrid.collapseAll()
@@ -181,9 +231,11 @@ export default {
                     if(this.$refs.treegrid.getSelectedRecords().length>0) {
                       var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
                               api.delete(`${apiUrl}`+`department/dept/delete/`+`${data[0]._id}`).then((res) => {
-                                console.log(res.data)
+                                api.get(`${apiUrl}`+`department/dept/get`)
+                                .then((response) => {
+                                  this.data = response.data
+                                  })
                               });
-                              this.$refs.treegrid.deleteRecord(data[0])
                               this.$refs.treegrid.collapseAll()
                               this.$refs.treegrid.expandAll()
                     }

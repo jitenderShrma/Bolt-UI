@@ -137,6 +137,7 @@
     "transaccategory" : "Category",
     "pholdtransaccategory" : "Select Transaction Category",
     "department" : "Department",
+    "adddept" : "Add Department",
     "pholddept":"Select a Department",
     "pholdsubdept":"Select a Sub-Department",
     "po" : "Purchase Order",
