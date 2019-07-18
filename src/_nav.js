@@ -10,25 +10,7 @@ var items = [
       variant: 'primary',
       text: 'NEW'
     }
-  },
-  {
-    name: 'Login Pages',
-    url: '/login',
-    icon: 'icon-star',
-    children: [
-      {
-        name: 'SuperUserLogin',
-        url: '/login',
-        icon: 'icon-star'
-      },
-      {
-        name: 'UserLogin',
-        url: '/login/user',
-        icon: 'icon-star'
-      },
-    ]
-  },
-  
+  },  
   {
     name: 'Users',
     url: '/user/list',

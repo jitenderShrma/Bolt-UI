@@ -133,6 +133,7 @@ export default {
         axios.post(`${apiUrl}`+`user/subuser/logout`,{withCredentials :true}).then((response) =>{
               Auth.logout();
               this.$session.destroy();
+              delete sessionStorage['vue-session-key'];
               console.log(Auth.loggedIn);            
               this.$router.push('/login/user');
             })
@@ -144,6 +145,7 @@ export default {
         axios.get(`${apiUrl}`+`auth/super/logout`,{withCredentials :true}).then((response) =>{
               Auth.logout();
               this.$session.destroy();
+              delete sessionStorage['vue-session-key'];
               console.log(Auth.loggedIn);            
               this.$router.push('/login');
             })

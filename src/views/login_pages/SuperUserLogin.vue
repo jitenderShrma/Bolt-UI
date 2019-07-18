@@ -117,12 +117,7 @@ export default {
               Auth.login();
               this.$session.set('user',response.data.user)
               console.log(Auth.loggedIn);
-              if(!this.$route.query) {
-                this.$router.replace(this.$route.query.redirect)
-              }
-              else {
-                this.$router.push('/dashboard');
-              }
+              this.$router.push(this.$route.query.redirect || '/dashboard')
             })
             .catch(function(error) {
                 toast({
