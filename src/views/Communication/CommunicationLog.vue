@@ -11,7 +11,7 @@
                     <e-column field='plugin' headerText='Plugin'  :filter='filter' ></e-column>
                     <e-column field='to' headerText='Recipient' :filter='filter'  ></e-column>
                     <e-column field='from' headerText='Sender' :filter='filter'></e-column>
-                    <e-column field='status' headerText='Status' :template="statusTemplate" :filter='filter'></e-column>
+                    <e-column field='status' headerText='Status' :filter='filter'></e-column>
                     <e-column field='created_date' headerText='Created Date'  :filter='filter' ></e-column>
                     <e-column field='sent_date' headerText='Sent Date'  :filter='filter' ></e-column>
                 </e-columns>

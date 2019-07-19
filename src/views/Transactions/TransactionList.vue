@@ -24,7 +24,7 @@
                     <e-column field='department.department_name' headerText='Department' :filter='filter'  ></e-column>
                     <e-column field='head.name' headerText='Head' :filter='filter'></e-column>
                     <e-column field='amount' headerText='Amount' :filter='filter'></e-column>
-                    <e-column field='month' headerText='Month' :template="monthTemplate" :filter='filter' ></e-column>
+                    <e-column field='month' headerText='Month' :filter='filter' ></e-column>
                 </e-columns>
                 </ejs-grid>
                  </div>

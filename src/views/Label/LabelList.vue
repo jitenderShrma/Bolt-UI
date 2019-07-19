@@ -9,7 +9,7 @@
                  <e-item id="delete" :text="$ml.get('delete')"></e-item>
                  <e-item  id="excelexport" :text="$ml.get('exportexcel')"></e-item>
                   <e-item  id="pdfexport" :text="$ml.get('exportpdf')"></e-item>
-                  <e-item align="right" id="search" @change="searchValues" :template="searchTemplate"></e-item>
+                  <e-item align="right" id="search" @change="searchValues"></e-item>
                   <e-item id="small" prefixIcon='e-small-icon' ></e-item>
                   <e-item id="medium" prefixIcon='e-medium-icon' ></e-item>
                   <e-item  id="big" prefixIcon='e-big-icon' ></e-item>                </e-items>
@@ -20,7 +20,7 @@
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='context' headerText='Context'  :filter='filter' ></e-column>
-                    <e-column field='label_name' :template="labelTemplate" headerText='Name'  :filter='filter' ></e-column>     
+                    <e-column field='label_name'  headerText='Name'  :filter='filter' ></e-column>     
                     <e-column field='color' :visible="false" headerText='Name'  :filter='filter' ></e-column>
                     <e-column field='description' :visible="false" headerText='Name'  :filter='filter' ></e-column> 
                 </e-columns>

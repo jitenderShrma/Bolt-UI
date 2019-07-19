@@ -4,7 +4,7 @@
         <div class="content-wrapper">
             <ejs-toolbar :clicked="addEditHandler">
                 <e-items>
-                  <e-item  id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
+                  <e-item  id="add" :text="$ml.get('add')"></e-item>
                   <e-item  id="excelexport" :text="$ml.get('exportexcel')"></e-item>
                   <e-item  id="pdfexport" :text="$ml.get('exportpdf')"></e-item>
                 </e-items>
@@ -14,12 +14,12 @@
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
                 :height="height" :enableHover='false'>
                 <e-columns>
-                    <e-column field='ref_id' :template="uniqueTemplate" headerText='Reference ID'  :filter='filter' ></e-column>
+                    <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column>
                     <e-column field='recurring_rate' headerText='Recurring Rate'  :filter='filter' ></e-column>
                     <e-column field='budget_head.name' headerText='Head'  :filter='filter' ></e-column>
                     <e-column field='department.department_name' headerText='Department'  :filter='filter' ></e-column>
-                    <e-column field='month' headerText='Month' :template="monthTemplate" :filter='filter' ></e-column>
+                    <e-column field='month' headerText='Month' :filter='filter' ></e-column>
                     <e-column field='description' headerText='Description'  :filter='filter' ></e-column>
                 </e-columns>
                 </ejs-grid>
@@ -260,22 +260,7 @@ export default {
                     console.log(args)
                     this.$router.push('/approval/add');
                 }
-                // if(args.item.id == "edit") {
-                //     var selected = this.$refs.overviewgrid.getSelectedRecords()
-                //     if(selected.length>0) {
-                //         this.$router.push('/approval/edit/'+`${selected[0]._id}`);
-                //     }
-                // }
-                // if(args.item.id == "delete") {
-                //     var selected = this.$refs.overviewgrid.getSelectedRecords()
-                //     if(selected.length>0) {
-                //         axios.delete(`${apiUrl}`+`transaction/delete/`+`${selected[0]._id}`,{withCredentials:true}).then((response) => {
-                //                 axios.get(`${apiUrl}`+`transaction/get/all`,{withCredentials:true}).then((response) => {
-                //             this.datasrc = response.data;
-                //         })
-                //     })
-                //     }
-                // }
+                
             },
             alertDlgBtnClick() {
                     this.$refs.alertDialog.hide();
@@ -286,7 +271,6 @@ export default {
                 api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
                     this.datasrc = response.data;
                 })
-            
         },
         computed: {
             getTradeData: async function () {

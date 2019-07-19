@@ -28,7 +28,7 @@
                     <!-- <e-column :visible=false field='_id'  headerText='Context'></e-column> -->
                     
                     <e-column field='user_type' headerText='User Groups' ></e-column>
-                    <e-column field='labels.label_name' :allowEditing="false" :template="labelTemplate" headerText='Label' ></e-column>
+                    <e-column field='labels.label_name' :allowEditing="false" headerText='Label' ></e-column>
                      <e-column headerText='Manage Permissions'  :commands='commands'></e-column>
                 </e-columns>
             </ejs-treegrid>
@@ -95,8 +95,6 @@ var api = axios.create({
 export default {
     name: "UserTypeList",
     components :  {
- biosdd		
-      
         TreeGridPlugin,ToolbarPlugin,ExcelExport,PdfExport, Edit,CommandColumn, Filter, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page
     },
     data : function() {
