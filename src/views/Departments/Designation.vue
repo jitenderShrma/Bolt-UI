@@ -26,7 +26,7 @@
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column :isPrimaryKey="true" field='name' headerText='Designation Name' ></e-column>
-                    <e-column :isPrimaryKey="true" field='department' headerText='Department' width='170' ></e-column>
+                    <e-column :isPrimaryKey="true" :template="groupTemplate" field='department' headerText='Department' width='170' ></e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
             </ejs-treegrid>
@@ -50,6 +50,25 @@ Vue.use(ToolbarPlugin)
 var api = axios.create({
   withCredentials :true
 })
+var groupVue = Vue.component("groupTemplate", {
+    template: `<strong>{{val1}}</strong>`,
+    data() {
+      return {
+        data: {
+
+        },
+        val1:""
+      };
+    },
+    mounted() {
+      if(this.data.department !=null) {
+      axios.get(`${apiUrl}`+`department/dept/get/`+`${this.data.department}`,{withCredentials:true}).then((res) => {
+        console.log(res.data)
+        this.val1 = res.data.department_name
+      });
+    }
+    }
+  });
 export default {
     name: "HeadList",
     components :  {
@@ -58,6 +77,11 @@ export default {
     },
     data : function() {
         return {
+          groupTemplate: function () {
+              return {
+                  template: groupVue
+              }
+          },
           link:"",
           key:"",
              commands: [
@@ -99,10 +123,11 @@ export default {
           if(parent.length == 0) {
             this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Normal' }
               var sendData = {
-                name:args.data.name
+                name:args.data.name,
+                department : this.key
               }
               api.post(`${apiUrl}`+`designation/desig/create`,sendData).then((response) => {
-                api.get(`${apiUrl}`+`designation/desig/get`)
+                api.get(`${apiUrl}`+`designation/desig/find/`+`${this.key}`)
                 .then((response) => {
                   this.data = response.data
                   });
@@ -117,7 +142,7 @@ export default {
                 parent_designation_id:parent[0]._id
               }
           api.post(`${apiUrl}`+`designation/desig/create`,sendData).then((response) => {
-            api.get(`${apiUrl}`+`designation/desig/get`)
+            api.get(`${apiUrl}`+`designation/desig/find/`+`${this.key}`)
                 .then((response) => {
                   this.data = response.data
                   });

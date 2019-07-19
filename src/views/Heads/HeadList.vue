@@ -29,7 +29,7 @@
                     <e-column :isPrimaryKey="true" field='head_key' headerText='Head Key' ></e-column>
                     <e-column field='accounting_head' headerText='Account Head' ></e-column>
                     <e-column field='notes' headerText='Notes'></e-column>
-                    <e-column :isPrimaryKey="true" field='department' headerText='Department' width='170' ></e-column>
+                    <e-column :isPrimaryKey="true" :template="groupTemplate" field='department' headerText='Department' width='170' ></e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
             </ejs-treegrid>
@@ -53,6 +53,26 @@ Vue.use(ToolbarPlugin)
 var api = axios.create({
   withCredentials :true
 })
+
+var groupVue = Vue.component("groupTemplate", {
+    template: `<strong>{{val1}}</strong>`,
+    data() {
+      return {
+        data: {
+
+        },
+        val1:""
+      };
+    },
+    mounted() {
+      if(this.data.department !=null) {
+      axios.get(`${apiUrl}`+`department/dept/get/`+`${this.data.department}`,{withCredentials:true}).then((res) => {
+        console.log(res.data)
+        this.val1 = res.data.department_name
+      });
+    }
+    }
+  });
 export default {
     name: "HeadList",
     components :  {
@@ -61,6 +81,11 @@ export default {
     },
     data : function() {
         return {
+          groupTemplate: function () {
+              return {
+                  template: groupVue
+              }
+          },
           link:"",
           key:"",
              commands: [

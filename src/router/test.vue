@@ -15,10 +15,10 @@
 
     <div v-if="selected=='Month'">
       
-        <ejs-pivotview :height="height" :dataSourceSettings="dataSourceSettings1" :allowCalculatedField="allowCalculatedField"> </ejs-pivotview>
+        <ejs-pivotview :height="height" :dataSource="dataSourceSettings1" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
           </div>
     <div v-else>
-      <ejs-pivotview :height="height" :dataSourceSettings="dataSourceSettings2" :allowCalculatedField="allowCalculatedField"> </ejs-pivotview>
+      <ejs-pivotview :height="height" :dataSource="dataSourceSettings2" :allowCalculatedField="allowCalculatedField"> </ejs-pivotview>
     </div>
   </div>
   <b-modal :title="$ml.get('upload')" size="sm" class="modal-primary" v-model="browseModal" @ok="browseModal = false" hide-footer>
@@ -185,14 +185,14 @@ export default {
         }
     },
     methods:{
+      async load(args){
+        await api.get(`${apiUrl}`+`csv/read/M/${company}`).then((res)=>{
+        args.dataSource.data = res.data
+        args.dataSource.data = res.data
+        console.log(res.data);
+      });
+      },
       onProgress(args) {
-        let li = this.$refs.uploadObj;
-        console.log(li)
-            
-            let progressValue = Math.round((args.e.loaded / args.e.total) * 100);
-            if (!isNaN(progressValue)) {
-                li.getElementsByTagName('progress')[0].value = progressValue;
-            }
       },
        onUploadSuccess: function (args) {
           var formData = new FormData();
@@ -202,7 +202,7 @@ export default {
           console.log(formData);
           this.upload = true
           console.log("req called");
-          api.post(`${apiUrl}`+`csv/read/`,formData,{headers:{'Content-Type':'multipart/form-data'}},{withCredentials : true}).then((res)=>{
+          api.post(`${apiUrl}`+`csv/read/`,formData,{headers:{'Content-Type':'multipart/form-data'}}).then((res)=>{
             console.log(res);
           	console.log("res")
           	// this.dataSourceSettings.dataSource = res.data[0];

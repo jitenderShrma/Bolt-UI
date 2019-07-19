@@ -26,7 +26,7 @@
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column :isPrimaryKey="true" field='name' headerText='Designation Name' ></e-column>
-                    <e-column :isPrimaryKey="true" field='department' headerText='Department' width='170' ></e-column>
+                    <e-column :isPrimaryKey="true" :template="groupTemplate" field='department' headerText='Department' width='170' ></e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
             </ejs-treegrid>
@@ -50,6 +50,26 @@ Vue.use(ToolbarPlugin)
 var api = axios.create({
   withCredentials :true
 })
+var groupVue = Vue.component("groupTemplate", {
+    template: `<strong>{{val1}}</strong>`,
+    data() {
+      return {
+        data: {
+
+        },
+        val1:""
+      };
+    },
+    mounted() {
+      if(this.data.department !=null) {
+      axios.get(`${apiUrl}`+`department/dept/get/`+`${this.data.department}`,{withCredentials:true}).then((res) => {
+        console.log(res.data)
+        this.val1 = res.data.department_name
+      });
+    }
+    }
+  });
+
 export default {
     name: "HeadList",
     components :  {
@@ -58,6 +78,11 @@ export default {
     },
     data : function() {
         return {
+          groupTemplate: function () {
+              return {
+                  template: groupVue
+              }
+          },
           link:"",
           key:"",
              commands: [
@@ -100,12 +125,10 @@ export default {
                 name:args.data.name
               }
               api.post(`${apiUrl}`+`designation/desig/create`,sendData).then((response) => {
-                api.get(`${apiUrl}`+`designation/desig/get`)
-                .then((response) => {
-                  this.data = response.data
-                  });
-                this.$refs.treegrid.collapseAll()
-                this.$refs.treegrid.expandAll()            
+                api.get(`${apiUrl}`+`designation/desig/get/all`)
+                .then((res) => {
+                  this.data = res.data
+                  });           
                 });
         }
           else {
@@ -115,9 +138,9 @@ export default {
                 parent_designation_id:parent[0]._id
               }
           api.post(`${apiUrl}`+`designation/desig/create`,sendData).then((response) => {
-            api.get(`${apiUrl}`+`designation/desig/get`)
-                .then((response) => {
-                  this.data = response.data
+            api.get(`${apiUrl}`+`designation/desig/get/all`)
+                .then((res) => {
+                  this.data = res.data
                   });
           });
         }
