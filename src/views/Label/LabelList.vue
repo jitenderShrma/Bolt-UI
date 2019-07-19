@@ -20,7 +20,7 @@
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='context' headerText='Context'  :filter='filter' ></e-column>
-                    <e-column field='label_name'  headerText='Name'  :filter='filter' ></e-column>     
+                    <e-column field='label_name' :template="labelTemplate" headerText='Name'  :filter='filter' ></e-column>     
                     <e-column field='color' :visible="false" headerText='Name'  :filter='filter' ></e-column>
                     <e-column field='description' :visible="false" headerText='Name'  :filter='filter' ></e-column> 
                 </e-columns>

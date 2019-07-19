@@ -4,7 +4,7 @@
         <div class="content-wrapper">
             <ejs-toolbar :clicked="addEditHandler">
                 <e-items>
-                  <e-item  id="add" :text="$ml.get('add')"></e-item>
+                  <e-item  id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
                   <e-item  id="excelexport" :text="$ml.get('exportexcel')"></e-item>
                   <e-item  id="pdfexport" :text="$ml.get('exportpdf')"></e-item>
                 </e-items>
@@ -19,7 +19,7 @@
                     <e-column field='recurring_rate' headerText='Recurring Rate'  :filter='filter' ></e-column>
                     <e-column field='budget_head.name' headerText='Head'  :filter='filter' ></e-column>
                     <e-column field='department.department_name' headerText='Department'  :filter='filter' ></e-column>
-                    <e-column field='month' headerText='Month' :filter='filter' ></e-column>
+                    <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' ></e-column>
                     <e-column field='description' headerText='Description'  :filter='filter' ></e-column>
                 </e-columns>
                 </ejs-grid>

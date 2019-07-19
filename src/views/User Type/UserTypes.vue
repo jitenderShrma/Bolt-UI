@@ -28,7 +28,7 @@
                     <!-- <e-column :visible=false field='_id'  headerText='Context'></e-column> -->
                     
                     <e-column field='user_type' headerText='User Groups' ></e-column>
-                    <e-column field='labels.label_name' :allowEditing="false" headerText='Label' ></e-column>
+                    <e-column field='labels.label_name' :template="labelTemplate" :allowEditing="false" headerText='Label' ></e-column>
                      <e-column headerText='Manage Permissions'  :commands='commands'></e-column>
                 </e-columns>
             </ejs-treegrid>
