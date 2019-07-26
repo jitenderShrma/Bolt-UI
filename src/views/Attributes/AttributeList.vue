@@ -1,5 +1,5 @@
 <template>
-  <div className="animated fadeIn">
+ <div class="animated slideInLeft" style="animation-duration:100ms">
     <b-card>
       <b-card-header>
         <span v-text="$ml.get('customattributes')"></span>

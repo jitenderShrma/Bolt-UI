@@ -9,7 +9,7 @@ export default {
 </script>
 
 <style lang="scss">
-
+  @import '../node_modules/animate.css/animate.css';
   // CoreUI Icons Set
   @import '~@coreui/icons/css/coreui-icons.min.css';
   /* Import Font Awesome Icons Set */

@@ -1,5 +1,6 @@
 <template>
-<div class="animated fadeIn">
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+
     <b-row>
     <b-col sm="4" v-for="(run,i) in data" :key="i">
     <b-card no-body style="padding:0 !important" :class="data[i].plugin_color">

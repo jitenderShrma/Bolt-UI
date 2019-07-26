@@ -1,5 +1,5 @@
 <template>
- <div className="animated fadeIn">
+ <div class="animated slideInLeft" style="animation-duration:100ms">
      <div class="col-lg-15 control-section">
         <div class="content-wrapper">
             <ejs-toolbar :clicked="addEditHandler">
@@ -21,6 +21,7 @@
                     <e-column field='department.department_name' headerText='Department'  :filter='filter' ></e-column>
                     <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' ></e-column>
                     <e-column field='description' headerText='Description'  :filter='filter' ></e-column>
+                    <e-column field='amount' headerText='Amount'  :filter='filter' ></e-column>
                 </e-columns>
                 </ejs-grid>
                  </div>

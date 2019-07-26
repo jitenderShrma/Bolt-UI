@@ -1,4 +1,6 @@
 <template>
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+
 	<b-row>
       <b-col md="12">
         <b-card>
@@ -403,6 +405,7 @@
             </b-form>
           </b-modal>
     </b-row>
+  </div>
 </template>
 
 <script>

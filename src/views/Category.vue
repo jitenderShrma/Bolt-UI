@@ -1,5 +1,6 @@
 <template>
-  <div className="animated fadeIn">
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+  
     <b-card>
       <b-card-header>
         <i class="icon-menu mr-1"></i> <span v-text="$ml.get('usergroups')"></span>

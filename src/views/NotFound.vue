@@ -1,4 +1,6 @@
 <template>
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+
   <div class="app flex-row align-items-center">
     <div class="container">
       <b-card>
@@ -217,6 +219,7 @@
 </b-card>
   </div>
   </div>
+</div>
 </template>
 
 <script>

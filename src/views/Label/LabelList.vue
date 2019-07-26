@@ -1,4 +1,6 @@
 <template>
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+
  <div id="target" className="animated fadeIn">
      <div class="col-lg-15 control-section">
         <div class="content-wrapper">
@@ -94,6 +96,7 @@
         </ejs-dialog>
   </div>
  </div>
+</div>
 </template>
 <script>
 import apiUrl from '@/apiUrl'

@@ -1,5 +1,6 @@
 <template>
- <div className="animated fadeIn">
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+ 
      <div class="col-lg-15 control-section">
         <div class="content-wrapper">
             <ejs-toolbar :clicked="addEditHandler">

@@ -1,4 +1,6 @@
 <template>
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+
     <div class="col-lg-12 control-section">
         <div>
           <ejs-toolbar :clicked="clickHandler">
@@ -18,29 +20,38 @@
             idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_department' :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
-            :actionBegin="actionBegin"
             :enableCollapseAll="false"
+            :recordDoubleClick="beginEdit"
             :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' >
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <e-column :visible="false" field='_id'></e-column>
-                    <e-column isPrimaryKey="true" field='department_name' headerText='Department Name' width='170' ></e-column>
+                    <e-column field='department_name' headerText='Department Name' width='170' ></e-column>
                     <e-column headerText='Manage Designations' width='140' :commands='command1'></e-column>
                      <e-column headerText='Manage Heads' width='140' :commands='command2'></e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
             </ejs-treegrid>
             <b-modal :title="$ml.get('adddept')" class="modal-primary" v-model="modal" @ok="modal = false" hide-footer>
-              <div class="justify-content-center">
                 <b-form v-on:submit.prevent="adddept">
                   <b-form-group>
                   <div class="e-float-input e-control-wrapper"><input v-model="input.department_name" class="e-field e-defaultcell" type="text" value="" e-mappinguid="grid-column1" id="_gridcontroldepartment_name" name="department_name" style="text-align:undefined" aria-labelledby="label__gridcontroldepartment_name"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontroldepartment_name" for="_gridcontroldepartment_name">Department Name</label></div>
                 </b-form-group>
                 <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
-                </div>
+                
+            </b-modal>
+            <b-modal :title="$ml.get('editdept')" class="modal-primary" v-model="editmodal" @ok="editmodal = false" hide-footer>
+               <b-form v-on:submit.prevent="editdept">
+                  <b-form-group style="padding:5%">
+                    <div class="e-float-input e-control-wrapper"><input v-model="editinput.department_name" class="e-field e-defaultcell" type="text" value="asdasddas" e-mappinguid="grid-column843" id="_gridcontroldepartment_name" name="department_name" style="text-align:undefined" aria-labelledby="label__gridcontroldepartment_name"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontroldepartment_name" for="_gridcontroldepartment_name">Department Name</label></div>
+                    <ejs-dropdownlist floatLabelType="Auto" v-model="editinput.parent_department" :groupTemplate="groupTemplate1"  :allowFiltering="true" id='department' :dataSource='data'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholdparentdept')"></ejs-dropdownlist>
+                  </b-form-group>
+                  <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+                </b-form>
             </b-modal>
         </div>
     </div>
+  </div>
 </template>
 
 
@@ -48,30 +59,57 @@
 import Vue from 'vue'
 import axios from 'axios'
 import apiUrl from '@/apiUrl'
-import { addRecord,actionComplete, ExcelExport,PdfExport,TreeGridPlugin, Edit, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
+import { ExcelExport,PdfExport,TreeGridPlugin, Edit, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
 import { addClass, removeClass, getValue } from '@syncfusion/ej2-base';
-// import { addRecord } from "@syncfusion/ej2-vue-grids";
 import { ToolbarPlugin,ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
 // import mydata from './datasrc';
+  import { MultiSelectPlugin, DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
+  Vue.use(DropDownListPlugin);
 Vue.use(TreeGridPlugin)
 Vue.use(ToolbarPlugin)
 
 var api = axios.create({
   withCredentials :true
 })
+
+var groupVue1 = Vue.component("groupTemplate1", {
+    template: `<strong>{{val1}}</strong>`,
+    data() {
+      return {
+        data: {
+
+        },
+        val1:""
+      };
+    },
+    mounted() {
+      api.get(`${apiUrl}`+`department/dept/get/`+`${this.data.parent_department}`).then((res) => {
+        console.log(res.data)
+        this.val1 = res.data.department_name
+      });
+    
+    }
+  });
 export default {
     name: "DepartmentList",
     components :  {
-      addRecord,
+      
         TreeGridPlugin,ToolbarPlugin,ExcelExport,PdfExport, Edit,CommandColumn, Filter, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page
     },
     data : function() {
         return {
+          groupTemplate1: function () {
+              return {
+                  template: groupVue1
+              }
+            },
+              editinput:{},
           link:"",
           key:"",
           input:{
           },
           modal:false,
+          editmodal:false,
              command1: [
                  { type:"Designations",tooltipText : "Double click", buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat',click:this.onClickDes } },
                     ],
@@ -81,17 +119,12 @@ export default {
                 height : window.innerHeight*0.65,
              filterSettings: { type: "Menu" },
              pageSettings: { pageSize: 15},
-             editSettings: { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Child' },
+             editSettings: { allowDeleting: true,mode: 'Dialog',allowAdding: true, newRowPosition: 'Child' },
              rowHeight: 30,
-              toolbar: [     
-          'Add', 'Delete', 'Update', 'Cancel',
-          'ExcelExport','PdfExport',
-                { prefixIcon: 'e-big-icon', id: 'small', align: 'Left', tooltipText: 'Small' },
-                { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Left', tooltipText: 'Medium' },
-                { prefixIcon: 'e-small-icon', id: 'big', align: 'Left', tooltipText: 'Large' }
-            ],
+              
             selectionSettings : {type:"Single"},
-            data: []
+            data: [],
+            dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
    };
   },
   async mounted() {
@@ -105,11 +138,8 @@ export default {
    },
    methods:{
       adddept(args) {
-        console.log(args)
         var parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
           if(parent.length == 0) {
-            this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Normal' }
-              
             api.post(`${apiUrl}`+`department/dept/create`,this.input).then((response) => {
                 api.get(`${apiUrl}`+`department/dept/get`)
                 .then((response) => {
@@ -123,7 +153,6 @@ export default {
 
           }
           else {
-            this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Child' }
             this.input.parent_department = parent[0]._id
               
             api.post(`${apiUrl}`+`department/dept/create`,this.input).then((response) => {
@@ -136,62 +165,33 @@ export default {
             this.modal=false
           }
       },
-      actionBegin(args) {
-        if(args.requestType==="save") {
-          let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-          if(parent.length == 0) {
-            this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Normal' }
-              var dept = {
-              department_name : args.data.department_name,
-            }
-            api.post(`${apiUrl}`+`department/dept/create`,dept).then((response) => {
-                api.get(`${apiUrl}`+`department/dept/get`)
-                .then((response) => {
-                  this.data = response.data
-                  });
-                this.$refs.treegrid.collapseAll()
-                this.$refs.treegrid.expandAll()            
-                });
-          }
-          else {
-            this.$refs.treegrid.ej2Instances.editSettings = { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Child' }
-            var sendData = {
-                department_name:args.data.department_name,
-                parent_department:parent[0]._id
-              }
-            api.post(`${apiUrl}`+`department/dept/create`,sendData).then((response) => {
-              api.get(`${apiUrl}`+`department/dept/get`)
-                .then((response) => {
-                  this.data = response.data
-                  });
-            });
-          }
-      }
-        if(args.requestType=="beginEdit") {
-         console.log("edit")
+      editdept() {
+        var sendData = {
+          department_name:this.editinput.department_name,
+          parent_department:this.editinput.parent_department
         }
+        api.put(`${apiUrl}`+`department/dept/edit/`+`${this.editinput._id}`,sendData).then((res)=>{
+            api.get(`${apiUrl}`+`department/dept/get`)
+                .then((response) => {
+                  this.data = response.data
+              });
+          });
+        this.editmodal=false
       },
+        
        onClickDes(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-            console.log(data);
+           
             this.$router.push(`/department/`+`designation/${data[0]._id}`)
        },
        onClickHead(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-            console.log(data);
+           
             this.$router.push(`/department/`+`head/${data[0]._id}`)
        },
-      endEdit(args) {
-        if(args.requestType=="beginEdit") {
-          console.log(args)
-          api.put(`${apiUrl}`+`head/head/update/one/`+`${args.data.head_key}`,sendData).then((response) => {
-            console.log(response.data)
-          });
-        }
-      },
        onClick(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-            console.log(data);
+            
             if(data[0].user_type == "SuperAdmin" || 
                data[0].user_type == "Staff" || 
                data[0].user_type == "Vendor" ||
@@ -203,16 +203,19 @@ export default {
                 this.$router.push(`/usertype/`+`${data[0].parentItem.user_type}/per/`+`${data[0]._id}`)
             }
        },
-
        Add(args) {
            let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-            console.log(data);
+            
             if(data.user_type == "SuperAdmin" || 
                         data.user_type == "Staff" || 
                         data.user_type == "Vendor" ||
                         data.user_type == "Student" || 
                         data.user_type == "Guest") {
             }
+       },
+       beginEdit(args) {
+        this.editinput = args.rowData
+        this.editmodal = true
        },
        failure: function(args) {
         debugger;
@@ -239,9 +242,7 @@ export default {
                               this.$refs.treegrid.collapseAll()
                               this.$refs.treegrid.expandAll()
                     }
-                    
                 }
-
         if (args.item.id === 'exportPdf') {
             this.$refs.treegrid.pdfExport({hierarchyExportMode: 'All'});
         }
@@ -260,6 +261,19 @@ export default {
             this.rowHeight = 60;
         }
       },
+      cellSave(args) {
+        if(args.action == "edit") {
+          var sendData = {
+            department_name : args.data.department_name
+          }
+          api.put(`${apiUrl}`+`department/dept/edit/`+`${args.data._id}`,sendData).then((res)=>{
+            api.get(`${apiUrl}`+`department/dept/get`)
+                .then((response) => {
+                  this.data = response.data
+                  })
+          })
+        }
+      }
     //    rowDataBound(args) {
     //             let value = this.$refs.rows.ej2Instances.value;
     //             let rowval = getValue('taskID', args.data );

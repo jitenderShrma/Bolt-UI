@@ -1,5 +1,6 @@
 <template>
-  <div className="animated fadeIn">
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+  
       <b-row>
           <b-col sm="3">
               <h4><strong>Module Name</strong></h4>

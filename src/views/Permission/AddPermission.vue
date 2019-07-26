@@ -1,4 +1,6 @@
 <template>
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+
   <b-row>
       <b-col md="12">
         <b-card>
@@ -51,6 +53,7 @@
         </b-card>
         </b-col>
     </b-row>
+  </div>
 </template>
 
 <script>

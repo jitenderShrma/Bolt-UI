@@ -11,8 +11,10 @@ import './ml'
 import { GridPlugin } from '@syncfusion/ej2-vue-grids';
 import VueSession from 'vue-session'
 import { TreeGridPlugin } from '@syncfusion/ej2-vue-treegrid';
-Vue.config.productionTip = false
+import VeeValidate from 'vee-validate';
 
+Vue.use(require('vue-moment'));
+Vue.use(VeeValidate);
 Vue.use(TreeGridPlugin);
 Vue.use(VueSession);
 Vue.use(GridPlugin);
@@ -20,6 +22,8 @@ Vue.use(BootstrapVue)
 Vue.use(VueSelect, {
   theme: 'bootstrap' // "bootstrap" or 'material-design'
 });
+
+Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({

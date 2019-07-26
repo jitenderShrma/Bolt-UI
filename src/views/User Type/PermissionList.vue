@@ -1,5 +1,6 @@
 <template>
- <div className="animated fadeIn">
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+ 
     
      <!-- <b-card no-body style="padding:0.5rem; margin:0px;">
          <b-row>

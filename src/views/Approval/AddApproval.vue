@@ -1,4 +1,5 @@
 <template>
+  <div class="animated slideInLeft" style="animation-duration:100ms">
 	<b-row>
       <b-col md="12">
         <b-card>
@@ -15,12 +16,14 @@
             <b-row>
             <b-col sm="4">
             <cool-select
-                
+                v-validate="'required'"
                 v-model="input.approval_type"
                 :items="types"
-                :placeholder="$ml.get('pholdtransactype')"
+                name="ApprovalType"
+                :placeholder="$ml.get('pholdapprovaltype')"
                >
               </cool-select>
+              <span id="errors">{{ errors.first('ApprovalType') }}</span>
             </b-col>
           </b-row>
           </b-form-group>
@@ -48,6 +51,8 @@
               <b-row>
               <b-col sm="4">
               <cool-select
+                v-validate="'required'"
+                name="Month"
                 v-model="input.month"
                 :items="month"
                 item-text="name"
@@ -55,6 +60,7 @@
                 :placeholder="$ml.get('pholdmonth')"
                >
               </cool-select>
+              <span id="errors">{{ errors.first('Month') }}</span>
             </b-col>
           </b-row>
             </b-form-group>
@@ -76,7 +82,8 @@
               :horizontal="true">
               <b-row>
                 <b-col sm="4">
-                  <ejs-dropdownlist @change="changeFields" v-model="input.budget_head" :dataSource='head' :fields='head_fields' :allowFiltering="true" :groupTemplate="groupTemplate2" popupHeight='300' :placeholder="$ml.get('pholdhead')"></ejs-dropdownlist>
+                  <ejs-dropdownlist name="Head" v-validate="'required'" @change="changeFields" v-model="input.budget_head" :dataSource='head' :fields='head_fields' :allowFiltering="true" :groupTemplate="groupTemplate2" popupHeight='300' :placeholder="$ml.get('pholdhead')"></ejs-dropdownlist>
+                  <span id="errors">{{ errors.first('Head') }}</span>
                 </b-col>
               </b-row>
             </b-form-group>
@@ -88,7 +95,7 @@
               :horizontal="true">
               <b-row>
               <b-col sm="2">
-              <ejs-textbox type="number" :max="boundaryAmount" @change="validateAmount" floatLabelType="Auto" v-model="input.amount"  :placeholder="$ml.get('pholdapprovalamount')"></ejs-textbox>
+              <ejs-textbox type="number" :max="boundaryAmount" @change="validateAmount" floatLabelType="Auto" v-model="input.amount"  :placeholder="$ml.get('pholdapprovalamount')" :required="validate"></ejs-textbox>
             </b-col>
             <b-col sm="2">
               <br>
@@ -96,8 +103,6 @@
               &nbsp;
               &nbsp;
               &nbsp;
-              <label v-text="$ml.get('maxamount')"></label>&nbsp;:&nbsp;
-              <span v-text="boundaryAmount"></span>
             </b-col>
           </b-row>
             </b-form-group>
@@ -144,6 +149,7 @@
 
         </b-col>
     </b-row>
+  </div>
 </template>
 
 <script>
@@ -289,6 +295,7 @@ Vue.use(TextBoxPlugin);
           isPurchased:false,
           purchase_order:""
         },
+        validate:true,
         purchase_orders:[],
         purchase_order:{},
         poModal:false,
@@ -345,11 +352,19 @@ Vue.use(TextBoxPlugin);
             e.updateData(department, query);
         },
         sendData() {
-          console.log(this.input)
-          axios.post(`${apiUrl}`+`approvals/preApp/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
-             this.loader = true
-          })
-          setTimeout(function(){window.location.href = ('#/approval/list')},2000)
+          this.$validator.validate().then(valid => {
+            if (!valid) {
+
+            }
+            else{
+              console.log(this.input)
+              axios.post(`${apiUrl}`+`approvals/preApp/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
+                 this.loader = true
+              })
+              setTimeout(function(){window.location.href = ('#/approval/list')},2000)
+              
+            }
+          });
           },
         validateAmount(args) {
           if(args.value>this.boundaryAmount || args.value<0) {
@@ -376,6 +391,11 @@ Vue.use(TextBoxPlugin);
 </script>
 
 <style>
+
+#errors {
+  color:red;
+}
+
   .e-ddl .e-dropdownbase .e-fixed-head {
   visibility: hidden;
 }

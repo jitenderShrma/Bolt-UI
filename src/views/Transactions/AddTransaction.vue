@@ -1,4 +1,6 @@
 <template>
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+
 	<b-row>
       <b-col md="12">
         <b-card>
@@ -117,8 +119,10 @@
               &nbsp;
               &nbsp;
               &nbsp;
+              <div v-if="visible">
               <label v-text="$ml.get('maxamount')"></label>&nbsp;:&nbsp;
               <span v-text="boundaryAmount"></span>
+            </div>
             </b-col>
           </b-row>
             </b-form-group>
@@ -447,6 +451,7 @@
             </b-form>
           </b-modal>
     </b-row>
+  </div>
 </template>
 
 <script>
@@ -553,7 +558,7 @@ Vue.use(TextBoxPlugin);
 					
 					po_required:false,
 					po_raised:null,
-					boundaryAmount:null,
+					boundaryAmount:999999999,
           status:"Pending",
           isApproved:false,
           approvalCode:"",
@@ -619,6 +624,7 @@ Vue.use(TextBoxPlugin);
           
         ],
         head:[],
+        visible : false,
         dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
         approvalFields:{text:"description",value:"_id"},
         head_fields:{groupBy:'parent_head',text:"name",value:"_id"},
@@ -626,6 +632,12 @@ Vue.use(TextBoxPlugin);
 			}
 		},
 		async mounted() {
+      if(this.$session.has('subuser')) {
+        this.visible = false
+      };
+      if(this.$session.has('user')) {
+        this.visible = true
+      }
       axios.get(`${apiUrl}`+`approvals/preApp/get/all`,{withCredentials:true}).then((res) => {
         this.approvals = res.data
       });
@@ -736,7 +748,9 @@ Vue.use(TextBoxPlugin);
               this.input.head = res.data.budget_head
               this.input.month = res.data.month
               this.month = this.month.splice(res.data.month)
-              this.boundaryAmount = res.data.amount
+              if(this.$session.has('user')){
+                this.boundaryAmount = res.data.amount
+              } 
               this.is_po_raised = res.data.request_for_quote
               if(res.data.imprest_required != null) {
                 this.category.push("Imperest/Advance")

@@ -1,4 +1,6 @@
 <template>
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+
 	<b-card>
           <div slot="header">
             <p v-text="$ml.get('settings')"></p>
@@ -28,9 +30,9 @@
               <template slot="title">
                 <i class="icon-envelope "></i> {{tabs[1]}}
               </template>
-                <b-row class="justify-content-center">
+                <b-row style="margin:20px 0 20px 0">
 
-              <b-form style="width:50%" v-on:submit.prevent="sendData">
+              <b-form style="width:90%" v-on:submit.prevent="sendData">
               <b-col sm="15">
                 <ejs-dropdownlist floatLabelType="Auto" v-model="input.fin_year_start_month" :allowFiltering="true" id='department' :dataSource='month'  :fields='month_fields'  popupHeight='300' :placeholder="$ml.get('pholdfysm')"></ejs-dropdownlist>
               </b-col>
@@ -68,7 +70,12 @@
                 </b-col>
                 <b-col sm="8" v-if="isDesig1">
                   <br>
-            <ejs-dropdownlist v-model="input.level1.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+              <div v-if="!clicked1">
+              <ejs-dropdownlist @close="switchNow1" v-model="input.level1.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+            </div>
+            <div v-else>
+              <ejs-dropdownlist v-model="input.level1.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+            </div>
           </b-col>
         </b-row>
             </b-form-group>
@@ -111,7 +118,12 @@
                 </b-col>
                 <b-col sm="8" v-if="isDesig2">
                   <br>
-            <ejs-dropdownlist  v-model="input.level2.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+                  <div v-if="!clicked2">
+            <ejs-dropdownlist @close="switchNow2" v-model="input.level2.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+          </div>
+          <div v-else>
+            <ejs-dropdownlist v-model="input.level2.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+          </div>
           </b-col>
             </b-row>
             </b-form-group>
@@ -155,7 +167,12 @@
                 </b-col>
                 <b-col sm="8" v-if="isDesig3">
                   <br>
-            <ejs-dropdownlist  v-model="input.level3.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+                  <div v-if="!clicked">
+            <ejs-dropdownlist @close="switchNow" v-model="input.level3.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+          </div>
+          <div v-else>
+            <ejs-dropdownlist v-model="input.level3.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+          </div> 
           </b-col>
         </b-row>
             </b-form-group>
@@ -167,7 +184,9 @@
                 </b-col>
                 <b-col sm="8" v-if="isLabel3">
                   <br>
-            <ejs-dropdownlist :enabled="islabel" v-model="input.level3.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+            
+              <ejs-dropdownlist :enabled="islabel" v-model="input.level3.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+
           </b-col>
         </b-row>
             </b-form-group>
@@ -199,7 +218,12 @@
                 </b-col>
                 <b-col sm="8" v-if="isDesig4">
                   <br>
-            <ejs-dropdownlist  v-model="input.level4.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+                  <div v-if="!clicked3">
+            <ejs-dropdownlist @close="switchNow3" v-model="input.level4.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+          </div>
+          <div v-else>
+            <ejs-dropdownlist  v-model="input.level4.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+          </div>
           </b-col>
         </b-row>
             </b-form-group>
@@ -243,7 +267,12 @@
                 </b-col>
                 <b-col sm="8" v-if="isDesig5">
                   <br>
-            <ejs-dropdownlist v-model="input.level5.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+                  <div v-if="!clicked4">
+            <ejs-dropdownlist @close="switchNow4" v-model="input.level5.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+          </div>
+          <div v-else>
+            <ejs-dropdownlist v-model="input.level5.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+          </div>
           </b-col>
         </b-row>
             </b-form-group>
@@ -279,6 +308,7 @@
           </b-tabs>
      
         </b-card>
+      </div>
 </template>
 
 <script>
@@ -296,10 +326,10 @@ Vue.use(TextBoxPlugin);
 var api = axios.create({
   withCredentials:true
 });
-
+var designation = []
 var d = new Date();
 var groupVue = Vue.component("groupTemplate", {
-    template: `<strong>{{val1}}</strong>`,
+    template: `<strong>{{data.parent_designation_id}}</strong>`,
     data() {
       return {
         data: {
@@ -308,11 +338,16 @@ var groupVue = Vue.component("groupTemplate", {
         val1:""
       };
     },
-    mounted() {
-      api.get(`${apiUrl}`+`designation/desig/get/one/`+`${this.data.parent_designation_id}`).then((res) => {
+    async mounted() {
+      if(this.data.parent_designation_id!=null) {
+      await api.get(`${apiUrl}`+`designation/desig/get/one/`+`${this.data.parent_designation_id}`).then((res) => {
         console.log(res.data)
-        this.val1 = res.data.name
-      });
+        this.data.parent_designation_id = res.data.name
+        designation.push(this.data)
+      }).catch((error) => {
+        console.log("asda");
+      })
+    }
     }
   });
 
@@ -363,7 +398,27 @@ export default {
       "Monthly",
       "Quarterly"
     ],
-    designations:[],
+    clicked:false,
+    clicked1:false,
+    clicked2:false,
+    clicked3:false,
+    clicked4:false,
+    designations:[{
+      _id:"LM1",
+      name:"Line Manager 1"
+    },{
+      _id:"LM2",
+      name:"Line Manager 2"
+    },{
+      _id:"LM3",
+      name:"Line Manager 3"
+    },{
+      _id:"LM4",
+      name:"Line Manager 4"
+    },{
+      _id:"LM5",
+      name:"Line Manager 5"
+    }],
     groupTemplate: function () {
               return {
                   template: groupVue
@@ -426,12 +481,18 @@ export default {
       this.label1 = res.data
     });
     api.get(`${apiUrl}`+`designation/desig/get/all`).then((response) =>{
-      this.designations = response.data
+      for(var i =0;i<response.data.length;i++) {
+        this.designations.push(response.data[i])
+      }
     });
   	api.get(`${apiUrl}`+`super/com/view`).then((response) =>{
       this.data = response.data
       console.log(response.data);
   	});
+    api.get(`${apiUrl}/super/settings/budget/budSet/get`,{withCredentials:true}).then((res) => {
+      this.input = res.data
+      console.log(res.data)
+    });
   },
   watch:{
     'isDesig1' : function(args) {
@@ -489,8 +550,26 @@ export default {
     settingRoute(val) {
       this.$router.push(`/settings/${val}`);
     },
-    sendData() {
-      console.log(this.input)
+    async sendData() {
+      await api.put(`${apiUrl}`+`super/settings/budget/budSet/update`,this.input).then((res)=> {
+        console.log(res.data)
+      })
+    },
+    switchNow1 () {
+      this.clicked1 = true
+      this.designations = designations
+    },
+    switchNow2 () {
+      this.clicked2 = true
+      this.designations = designations
+    },
+    switchNow3 () {
+      this.clicked3 = true
+      this.designations = designations
+    },
+    switchNow4 () {
+      this.clicked4 = true
+      this.designations = designations
     }
   }
 };

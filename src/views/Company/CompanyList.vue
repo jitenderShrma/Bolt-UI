@@ -1,5 +1,6 @@
 <template>
-  <div className="animated">
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+  
         <router-link :to="{ name: 'Add Company' }">
           <b-btn variant="primary" v-text="$ml.get('addcompany')"></b-btn>
         </router-link>
@@ -15,7 +16,7 @@
         </router-link>
     
   </div>
-  
+  </div>
 </template>
 
 <script>

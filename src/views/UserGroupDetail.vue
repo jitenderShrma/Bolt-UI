@@ -1,5 +1,6 @@
 <template>
-  <div className="animated fadeIn">
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+  
           <b-card no-body>
           <b-tabs card pills vertical nav-wrapper-class="w-40" v-model="tabIndex[1]">
             <b-tab active>

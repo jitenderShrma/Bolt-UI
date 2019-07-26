@@ -1,4 +1,6 @@
 <template>
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+
   <div class="app flex-row align-items-center">
     <div class="container">
         
@@ -60,6 +62,7 @@
       </b-row>
     </div>
   </div>
+</div>
 </template>
 
 <script>

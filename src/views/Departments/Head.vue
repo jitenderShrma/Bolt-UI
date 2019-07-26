@@ -1,4 +1,6 @@
 <template>
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+
     <div class="col-lg-12 control-section">
         <div>
           <ejs-toolbar :clicked="clickHandler">
@@ -35,6 +37,7 @@
             </ejs-treegrid>
         </div>
     </div>
+  </div>
 </template>
 
 

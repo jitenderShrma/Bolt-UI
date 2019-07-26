@@ -1,5 +1,6 @@
 <template>
-    <div>
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+    
         <div v-if="key == 'smtp'">
             <b-card>
           <div slot="header">

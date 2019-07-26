@@ -1,4 +1,6 @@
 <template>
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+
     <div id="target" class="col-lg-12 control-section">
         <div >
           <ejs-toolbar :clicked="clickHandler">
@@ -15,7 +17,7 @@
               <e-item id="label" :text="$ml.get('label')"></e-item>
             </e-items>
           </ejs-toolbar>
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight' idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_group' :dataSource='data' 
             childMapping='sub_groups' :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
@@ -26,8 +28,8 @@
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <!-- <e-column :visible=false field='_id'  headerText='Context'></e-column> -->
-                    
-                    <e-column field='user_type' headerText='User Groups' ></e-column>
+                    <e-column field='user_type' headerText='User Type' ></e-column>
+                    <e-column field='user_group_name' headerText='User Groups' ></e-column>
                     <e-column field='labels.label_name' :template="labelTemplate" :allowEditing="false" headerText='Label' ></e-column>
                      <e-column headerText='Manage Permissions'  :commands='commands'></e-column>
                 </e-columns>
@@ -62,6 +64,7 @@
         </ejs-dialog>
         </div>
     </div>
+  </div>
 </template>
 
 
@@ -146,7 +149,7 @@ export default {
    };
   },
   async mounted() {
-     api.get(`${apiUrl}`+`my/path/get`)
+     api.get(`${apiUrl}`+`super/group/subgroup/getall`)
     .then((response) => {
       this.data = response.data
       console.log(this.data)
@@ -156,7 +159,7 @@ export default {
     },
     watch : {
       'label' : function() {
-        api.get(`${apiUrl}`+`my/path/get`)
+        api.get(`${apiUrl}`+`super/group/subgroup/getall`)
         .then((response) => {
           this.data = response.data
           console.log(this.data)

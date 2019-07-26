@@ -1,5 +1,6 @@
 <template>
- <div className="animated fadeIn">
+ <div class="animated slideInLeft" style="animation-duration:100ms">
+ 
      <ejs-toolbar :clicked="addEditHandler">
     <e-items>
              <e-item  id="add" :text="$ml.get('add')"></e-item>
