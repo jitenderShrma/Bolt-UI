@@ -34,7 +34,7 @@
 
               <b-form style="width:90%" v-on:submit.prevent="sendData">
               <b-col sm="15">
-                <ejs-dropdownlist floatLabelType="Auto" v-model="input.fin_year_start_month" :allowFiltering="true" id='department' :dataSource='month'  :fields='month_fields'  popupHeight='300' :placeholder="$ml.get('pholdfysm')"></ejs-dropdownlist>
+                <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="input.fin_year_start_month" :allowFiltering="true" id='department' :dataSource='month'  :fields='month_fields'  popupHeight='300' :placeholder="$ml.get('pholdfysm')"></ejs-dropdownlist>
               </b-col>
               <br>
               <!-- <b-col sm="15">
@@ -43,7 +43,7 @@
             <br>
             <b-col sm="15">
               <span id="contentText" style="font-size:18px" >Budget Management
-            <ejs-dropdownlist id='employee' :dataSource='options' :popupHeight='height' :width='width' cssClass='inlinecss' :popupWidth='popupWidth' value='Monthly' :placeholder="$ml.get('pholdimport')">
+            <ejs-dropdownlist :showClearButton="true" id='employee' :dataSource='options' :popupHeight='height' :width='width' cssClass='inlinecss' :popupWidth='popupWidth' value='Monthly' :placeholder="$ml.get('pholdimport')">
             </ejs-dropdownlist></span>
           </b-col>
           <br>
@@ -71,10 +71,10 @@
                 <b-col sm="8" v-if="isDesig1">
                   <br>
               <div v-if="!clicked1">
-              <ejs-dropdownlist @close="switchNow1" v-model="input.level1.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+              <ejs-dropdownlist :showClearButton="true" @close="switchNow1" v-model="input.level1.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
             </div>
             <div v-else>
-              <ejs-dropdownlist v-model="input.level1.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+              <ejs-dropdownlist :showClearButton="true" v-model="input.level1.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
             </div>
           </b-col>
         </b-row>
@@ -87,7 +87,7 @@
                 </b-col>
                 <b-col sm="8" v-if="isLabel1">
                   <br>
-            <ejs-dropdownlist :enabled="islabel" v-model="input.level1.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level1.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
           </b-col>
         </b-row>
             </b-form-group>
@@ -119,10 +119,10 @@
                 <b-col sm="8" v-if="isDesig2">
                   <br>
                   <div v-if="!clicked2">
-            <ejs-dropdownlist @close="switchNow2" v-model="input.level2.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" @close="switchNow2" v-model="input.level2.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
           </div>
           <div v-else>
-            <ejs-dropdownlist v-model="input.level2.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" v-model="input.level2.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
           </div>
           </b-col>
             </b-row>
@@ -135,7 +135,7 @@
                 </b-col>
                 <b-col sm="8" v-if="isLabel2">
                   <br>
-            <ejs-dropdownlist :enabled="islabel" v-model="input.level2.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level2.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
           </b-col>
         </b-row>
             </b-form-group>
@@ -168,10 +168,10 @@
                 <b-col sm="8" v-if="isDesig3">
                   <br>
                   <div v-if="!clicked">
-            <ejs-dropdownlist @close="switchNow" v-model="input.level3.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" @close="switchNow" v-model="input.level3.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
           </div>
           <div v-else>
-            <ejs-dropdownlist v-model="input.level3.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" v-model="input.level3.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
           </div> 
           </b-col>
         </b-row>
@@ -185,7 +185,7 @@
                 <b-col sm="8" v-if="isLabel3">
                   <br>
             
-              <ejs-dropdownlist :enabled="islabel" v-model="input.level3.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+              <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level3.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
 
           </b-col>
         </b-row>
@@ -219,10 +219,10 @@
                 <b-col sm="8" v-if="isDesig4">
                   <br>
                   <div v-if="!clicked3">
-            <ejs-dropdownlist @close="switchNow3" v-model="input.level4.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" @close="switchNow3" v-model="input.level4.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
           </div>
           <div v-else>
-            <ejs-dropdownlist  v-model="input.level4.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true"  v-model="input.level4.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
           </div>
           </b-col>
         </b-row>
@@ -235,7 +235,7 @@
                 </b-col>
                 <b-col sm="8" v-if="isLabel4">
                   <br>
-            <ejs-dropdownlist :enabled="islabel" v-model="input.level4.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level4.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
           </b-col>
         </b-row>
             </b-form-group>
@@ -268,10 +268,10 @@
                 <b-col sm="8" v-if="isDesig5">
                   <br>
                   <div v-if="!clicked4">
-            <ejs-dropdownlist @close="switchNow4" v-model="input.level5.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" @close="switchNow4" v-model="input.level5.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
           </div>
           <div v-else>
-            <ejs-dropdownlist v-model="input.level5.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" v-model="input.level5.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
           </div>
           </b-col>
         </b-row>
@@ -284,7 +284,7 @@
                 </b-col>
                 <b-col sm="8" v-if="isLabel5">
                   <br>
-            <ejs-dropdownlist :enabled="islabel" v-model="input.level5.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level5.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
           </b-col>
         </b-row>
             </b-form-group>

@@ -121,7 +121,7 @@ export default {
                 height : window.innerHeight*0.65,
              filterSettings: { type: "Menu" },
              pageSettings: { pageSize: 15},
-             editSettings: { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Child' },
+             editSettings: { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true},
              rowHeight: 20,
               toolbar: [     
           'Add', 'Delete', 'Update', 'Cancel',
@@ -194,23 +194,6 @@ export default {
         this.$refs.dialogObj.hide();
         let val = this.$refs.treegrid.getSelectedRecords()
         console.log(this.formdata)
-        if(val[0].user_type == "SuperAdmin" || 
-            val[0].user_type == "Staff" || 
-            val[0].user_type == "Vendor" ||
-            val[0].user_type == "Student" || 
-            val[0].user_type == "Guest") {
-              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((response) => {
-                console.log(response.data);
-                var id = {
-                  labels :  response.data._id
-                }
-                api.put(`${apiUrl}`+`usertype/label/push/`+`${val[0].user_type}`,id).then((response) => {
-                  console.log(response.data)
-                  this.label++;
-                });
-              });
-            }
-            else {
               api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((response) => {
                 console.log(response.data);
                 var id = {
@@ -220,43 +203,40 @@ export default {
                   console.log(response.data)
                   this.label++;
                 });
+                this.formdata=null
               });
-            }
+            
       },
       onChange(args) {
         this.formdata.color = args.currentValue.hex;
       },   
        actionBegin(args) {
         if(args.requestType==="save") {
-          let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-          console.log(args.data);
-          if(parent[0].user_type == "SuperAdmin" || 
-               parent[0].user_type == "Staff" || 
-               parent[0].user_type == "Vendor" ||
-               parent[0].user_type == "Student" || 
-               parent[0].user_type == "Guest") {
-              api.post(`${apiUrl}`+`super/group/subgroup/add`,args.data).then((response) => {
-                  console.log(response.data)
-                  let id = {sub_groups:response.data._id};
-                  console.log(id)
-                  api.put(`${apiUrl}`+`/usertype/subgroup/push/one/`+`${parent[0].user_type[0]}`,id).then((res) => {
-                    console.log(res.data);
-                    this.$refs.treegrid.collapseAll()
-                    this.$refs.treegrid.expandAll()
-                  })
-                });
-            }
+          var selected = this.$refs.treegrid.ej2Instances.getSelectedRecords()
+          if(selected.length>0) {
+          args.data.labels = undefined
+          args.data.parent_group = selected[0]._id
           api.post(`${apiUrl}`+`super/group/subgroup/add`,args.data).then((response) => {
             console.log(response.data)
-            let id = {sub_groups:response.data._id};
-            console.log(id)
-            api.put(`${apiUrl}`+`super/group/subgroup/push/`+`${parent[0]._id}`,id).then((res) => {
-              console.log(res.data);
-              this.$refs.treegrid.collapseAll()
-              this.$refs.treegrid.expandAll()
-              this.LabelModal = false
-            })
+            api.get(`${apiUrl}`+`super/group/subgroup/getall`)
+            .then((response) => {
+              this.data = response.data
+              console.log(this.data)
+              })
           });
+        }
+        else {
+          args.data.labels = undefined
+          args.data.parent_group = null
+          api.post(`${apiUrl}`+`super/group/subgroup/add`,args.data).then((response) => {
+            console.log(response.data)
+            api.get(`${apiUrl}`+`super/group/subgroup/getall`)
+            .then((response) => {
+              this.data = response.data
+              console.log(this.data)
+              })
+          });
+        }
 
         }
       },
@@ -296,12 +276,9 @@ export default {
       },
       clickHandler(args){
         if(args.item.id === 'add') {
-          if(this.$refs.treegrid.getSelectedRecords().length<=0) {
-                  alert("please select a user type before adding");
-                }
-          else { 
-              this.$refs.treegrid.addRecord()
-            }
+          
+                              this.$refs.treegrid.addRecord()
+            
           }
           if(args.item.id == 'collapse') {
             this.$refs.treegrid.collapseAll()
@@ -318,44 +295,15 @@ export default {
             }
           }
         if(args.item.id == 'delete') {
-                    if(this.$refs.treegrid.getSelectedRecords().length>0) {
-                      let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-                      if(data[0].user_type == "SuperAdmin" || 
-                        data[0].user_type == "Staff" || 
-                        data[0].user_type == "Vendor" ||
-                        data[0].user_type == "Student" || 
-                        data[0].user_type == "Guest") {
-                          alert('Cannot Delete User Types');
-                        }
-                        else {
-                          let deleterows = this.$refs.treegrid.ej2Instances.getSelectedRows();
-                          console.log(deleterows[0])
-                          let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-                          let id = parent[0].parentItem._id
-                          let delElem = {
-                            sub_groups : parent[0]._id
-                          }
-                          console.log(parent[0].parentItem.user);
-
-                          if(parent[0].parentItem.user_type == "SuperAdmin" || 
-                          parent[0].parentItem.user_type == "Staff" || 
-                          parent[0].parentItem.user_type == "Vendor" ||
-                          parent[0].parentItem.user_type == "Student" || 
-                          parent[0].parentItem.user_type == "Guest") {
-                            api.put(`${apiUrl}`+`usertype/subgroup/pop/one/`+`${parent[0].parentItem.user_type[0]}`,delElem).then((response) => {
-                                console.log(response.data)
-                                this.$refs.treegrid.collapseAll()
-                                this.$refs.treegrid.expandAll()
-                              })
-                          }
-                          else{
-                          api.put(`${apiUrl}`+`super/group/subgroup/pop/`+`${id}`,delElem).then((response) => {
-                            console.log(response.data)
-                            this.$refs.treegrid.collapseAll()
-                            this.$refs.treegrid.expandAll()
+          let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
+                    if(data.length>0) {
+                      api.delete(`${apiUrl}`+`super/group/subgroup/delete/`+`${data[0]._id}`).then((res) => {
+                        api.get(`${apiUrl}`+`super/group/subgroup/getall`)
+                          .then((response) => {
+                          this.data = response.data
+                          console.log(this.data)
                           })
-                        }
-                      }
+                      })
                     }
                     
                 }

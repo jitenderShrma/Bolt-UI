@@ -35,8 +35,10 @@
             </ejs-treegrid>
             <b-modal :title="$ml.get('adddesig')" class="modal-primary" v-model="modal" @ok="modal = false" hide-footer>
               <div>
-                <b-form v-on:submit.prevent="addDesig">
+                <b-form v-on:keydown.enter.prevent="prevent" v-on:submit.prevent="addDesig">
                   <b-form-group style="padding:5%">
+                    <b-tabs>
+                      <b-tab :title="$ml.get('designation')" active>
                   <div class="e-float-input e-control-wrapper">
                   <input v-validate="'required'" v-model="input.name" class="e-field e-defaultcell" type="text" value="" e-mappinguid="grid-column1" id="_gridcontrolname" name="Designation Name" style="text-align:undefined" aria-labelledby="label__gridcontrolname">
                   <span class="e-float-line"></span>
@@ -46,14 +48,20 @@
                     <br>
                     <div v-if="!selected">
                       <div v-if="!clicked">
-                      <ejs-dropdownlist @close="switchNow" floatLabelType="Auto" v-model="input.department" :groupTemplate="groupTemplate1"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
+                      <ejs-dropdownlist :showClearButton="true" @close="switchNow" floatLabelType="Auto" v-model="input.department" :groupTemplate="groupTemplate1"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
                     </div>
                     <div v-else>
-                      <ejs-dropdownlist floatLabelType="Auto" v-model="input.department"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
+                      <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="input.department"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
                     </div>
                   </div>
-                  <br>
-                  <label v-text="$ml.get('permissions')"></label>
+                </b-tab>
+                <b-tab :title="$ml.get('permissions')">
+                  <b-form-group>
+                    <label v-text="$ml.get('modulename')"></label>
+                  <ejs-dropdownlist :showClearButton="true" v-on:keydown.enter='changeFields' floatLabelType="Auto" v-model="module"  :allowFiltering="true" id='department' :dataSource='modules'  :fields='module_fields'  popupHeight='300' :placeholder="$ml.get('pholdmodule')"></ejs-dropdownlist>
+                </b-form-group>
+                <b-form-group v-for="(run,index) in permissions" :key="index">
+                  <label v-text="permissions[index].module_name"></label>
                   <b-row>
                     <b-col sm="3">
                       <label v-text="$ml.get('read')"></label>
@@ -76,6 +84,9 @@
                       <c-switch class="mx-1" color="primary" unchecked name="read" v-model="permissions.delete"  :uncheckedValue="false" :checkedValue="true"/>
                     </b-col>
                   </b-row>
+                </b-form-group>
+                </b-tab>
+              </b-tabs>
                 </b-form-group>
                 <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
                 </div>
@@ -127,7 +138,7 @@ var groupVue1 = Vue.component("groupTemplate1", {
     }
   });
 var departmentVue = Vue.component("departmentTemplate", {
-  template: `<ejs-dropdownlist @close="switchNow" v-model="data.department" :groupTemplate="groupTemplate1" @change="changedept"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>`,
+  template: `<ejs-dropdownlist :showClearButton="true" @close="switchNow" v-model="data.department" :groupTemplate="groupTemplate1" @change="changedept"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>`,
     data() {
       return {
         groupTemplate1: function () {
@@ -227,7 +238,16 @@ export default {
             selected:false,
           dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
           permissions:{},
-          clicked:false 
+          clicked:false,
+          modules:[
+            {value:"company",text:"Company"},{value:"subuser",text:"User"},
+            {value:"subgroup",text:"User Group"},{value:"dept",text:"Department"},
+            {value:"desig",text:"Designation"},{value:"head",text:"Head"},
+            {value:"label",text:"Label"},{value:"preApp",text:"Approval"},
+            {value:"budSet",text:"Budget Settings"},
+            {value:"staff",text:"Staff"}
+          ],
+          module_fields:{text:"text",value:"value"} 
    };
   },
   async mounted() {
@@ -243,7 +263,9 @@ export default {
       treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
-    
+      changeFields(args) {
+        console.log(args)
+      },
       addDesig(args) {
         this.$validator.validate().then(valid => {
             if (!valid) {
@@ -254,7 +276,7 @@ export default {
               this.permissions.module_name = "subgroup"
               var user_group = {
                 user_type:"Staff",
-                user_group:this.input.name,
+                user_group_name:this.input.name,
                 permissions:[this.permissions]
               }
               let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
@@ -268,7 +290,7 @@ export default {
                 this.input = {}
                 });
               api.post(`${apiUrl}`+`super/group/subgroup/add`,user_group).then((res) => {
-                console.log(res.data)
+                this.permissions = {}
               })
         }
           else {
@@ -331,11 +353,19 @@ export default {
        failure: function(args) {
         debugger;
       },
+      prevent(args) {
+          this.changeFields(args)
+      },
       clickHandler(args){
+        var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
         if(args.item.id === 'add') {
-              this.modal = true
-              departments=[]
+          if(data.length>0) {
+            this.$router.push(`/designation/add/${data[0]._id}`)
           }
+          else {
+            this.$router.push(`/designation/add/`)
+          }
+        }
           if(args.item.id == 'collapse') {
             this.$refs.treegrid.collapseAll()
           }
@@ -343,8 +373,8 @@ export default {
             this.$refs.treegrid.expandAll()
           }
         if(args.item.id == 'delete') {
-                            var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
-                              api.delete(`${apiUrl}`+`designation/desig/delete/`+`${data[0]._id}`).then((res) => {
+          if(data.length>0)
+            api.delete(`${apiUrl}`+`designation/desig/delete/`+`${data[0]._id}`).then((res) => {
                                 api.get(`${apiUrl}`+`designation/desig/get/all`)
                                 .then((res) => {
                                   this.data = res.data

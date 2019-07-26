@@ -87,6 +87,8 @@ const HeadList = () => import('@/views/Heads/HeadList');
 
 //Designation Routes
 const DesignationList = () => import('@/views/Designations/DesignationList');
+const AddDesignation = () => import('@/views/Designations/AddDesignation');
+const EditDesignation = () => import('@/views/Designations/EditDesignation');
 
 //Error Pages
 
@@ -391,7 +393,7 @@ var router = new Router({
                       component: Head
                     },
                     {
-                      name : `Designations`,
+                      name : `Designation`,
                       meta : { requiresAuth : true },
                       path : '/department/designation/:deptId',
                       component: Designation
@@ -428,6 +430,24 @@ var router = new Router({
                       path : '/designation/list',
                       component: DesignationList
                     },
+                    {
+                      name:"Add Designation",
+                      meta : { requiresAuth : true },
+                      path : '/designation/add',
+                      component: AddDesignation
+                    },
+                    {
+                      name:"Add Designation",
+                      meta : { requiresAuth : true },
+                      path : '/designation/add/:id',
+                      component: AddDesignation
+                    },
+                    {
+                      name:"Edit Designation",
+                      meta : { requiresAuth : true },
+                      path : '/designation/edit/:id',
+                      component: EditDesignation
+                    }
                   ]
                 },
                 {
