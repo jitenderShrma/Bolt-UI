@@ -16,6 +16,7 @@
                 <e-columns>
                     <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column>
+                    <e-column field='status' headerText='Status'  :filter='filter' ></e-column>
                     <e-column field='recurring_rate' headerText='Recurring Rate'  :filter='filter' ></e-column>
                     <e-column field='budget_head.name' headerText='Head'  :filter='filter' ></e-column>
                     <e-column field='department.department_name' headerText='Department'  :filter='filter' ></e-column>
