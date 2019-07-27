@@ -19,7 +19,7 @@
           </b-col>
           <b-col sm="6">
             <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-            <ejs-dropdownlist name="User Type" v-validate="'required'" floatLabelType="Auto" v-model="input.onType" :allowFiltering="true" :dataSource='items' popupHeight='300' :placeholder="$ml.get('placeholderusertype')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" name="User Type" v-validate="'required'" floatLabelType="Auto" v-model="input.onType" :allowFiltering="true" :dataSource='items' popupHeight='300' :placeholder="$ml.get('placeholderusertype')"></ejs-dropdownlist>
             <span id="errors">{{ errors.first('User Type') }}</span>
           </b-col>
         </b-row>
@@ -30,7 +30,7 @@
           </b-col>
           <b-col sm="6">
             <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-            <ejs-dropdownlist name="User Group" floatLabelType="Auto" v-model="input.user_group" :allowFiltering="true" :dataSource='user_groups' popupHeight='300' :placeholder="$ml.get('pholdusergroup')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" :enabled="!isStaff" name="User Group" floatLabelType="Auto" v-model="input.user_group" :allowFiltering="true" :dataSource='user_groups' popupHeight='300' :placeholder="$ml.get('pholdusergroup')"></ejs-dropdownlist>
           </b-col>
         </b-row>
           </b-form-group>
@@ -58,7 +58,7 @@
         </b-row>
         <b-row>
               <b-col sm="4">
-                <ejs-dropdownlist floatLabelType="Auto" v-model="input.blood_group" :allowFiltering="true" :dataSource='bloodgroup' popupHeight='300' :placeholder="$ml.get('bloodgroup')"></ejs-dropdownlist>
+                <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="input.blood_group" :allowFiltering="true" :dataSource='bloodgroup' popupHeight='300' :placeholder="$ml.get('bloodgroup')"></ejs-dropdownlist>
               </b-col>
               <b-col sm="4">
                 <br>
@@ -100,7 +100,7 @@
             <ejs-textbox v-model="addresslist.zip" floatLabelType="Auto" :placeholder="$ml.get('postalcode')"></ejs-textbox>
           </b-col>
           <b-col sm="4">
-            <ejs-dropdownlist floatLabelType="Auto" v-model="addresslist.country" :allowFiltering="true" :fields="country_fields" :dataSource='countrylist' popupHeight='200' :placeholder="$ml.get('country')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="addresslist.country" :allowFiltering="true" :fields="country_fields" :dataSource='countrylist' popupHeight='200' :placeholder="$ml.get('country')"></ejs-dropdownlist>
           </b-col>
           </b-row>
           </b-form-group>
@@ -213,10 +213,10 @@
               >
                 <b-row>
                   <b-col sm="6">
-                    <ejs-dropdownlist v-model="staff.department" :groupTemplate="groupTemplate1"  :allowFiltering="true" :dataSource='department'  :fields='dept_fields'  popupHeight='200' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
+                    <ejs-dropdownlist :showClearButton="true" v-model="staff.department" :groupTemplate="groupTemplate1"  :allowFiltering="true" :dataSource='department'  :fields='dept_fields'  popupHeight='200' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
                   </b-col>
                   <b-col sm="6">
-                    <ejs-dropdownlist v-model="staff.designation" :groupTemplate="groupTemplate2"  :allowFiltering="true" :dataSource='designation'  :fields='desig_fields'  popupHeight='200' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+                    <ejs-dropdownlist :showClearButton="true" :change="setUserGroup" v-model="staff.designation" :groupTemplate="groupTemplate2"  :allowFiltering="true" :dataSource='designation'  :fields='desig_fields'  popupHeight='200' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
                   </b-col>
                 </b-row>
 
@@ -323,7 +323,7 @@
     <b-modal :title="$ml.get('addidentifications')" size="sm" class="modal-primary" v-model="idmodal" @ok="idmodal = false" hide-footer>
       <b-form v-on:submit.prevent="addId">
       <b-form-group>
-        <ejs-dropdownlist v-model="identification.id_type" :allowFiltering="true" :dataSource='idtype' popupHeight='200' :placeholder="$ml.get('idtype')"></ejs-dropdownlist>
+        <ejs-dropdownlist :showClearButton="true" v-model="identification.id_type" :allowFiltering="true" :dataSource='idtype' popupHeight='200' :placeholder="$ml.get('idtype')"></ejs-dropdownlist>
         <div v-if="identification.id_type=='Others'">
           <ejs-textbox v-model="identification.type" floatLabelType="Auto" :placeholder="$ml.get('idtype')"></ejs-textbox>
         </div>
@@ -377,6 +377,9 @@ Vue.use(VueNotifications, options)
 Vue.use(TextBoxPlugin);
 Vue.use(DropDownListPlugin);
 
+var api = axios.create({
+  withCredentials:true
+})
 
 var groupVue1 = Vue.component("groupTemplate1", {
     template: `<strong>{{val1}}</strong>`,
@@ -435,7 +438,7 @@ export default {
                   template: groupVue2
               }
           },
-          user_groups:['Basic'],
+          user_groups:[],
           staff:{
             education:[
             {},{},{},{}
@@ -603,6 +606,14 @@ export default {
       console.log(this.attribute);
       axios.post(`${apiUrl}`+`super/attrib/add`,this.attribute,{withCredentials : true}).then((response) => {
         console.log(response);
+      })
+    },
+    setUserGroup(args) {
+      var user_group = {
+        user_group_name : args.itemData._id
+      }
+      api.get(`${apiUrl}`+`super/group/subgroup/find/by/name`,user_group).then((res) => {
+        this.input.user_group = res.data._id
       })
     },
     sendData(args) {

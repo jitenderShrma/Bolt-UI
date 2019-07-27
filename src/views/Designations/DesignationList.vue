@@ -138,7 +138,7 @@ var groupVue1 = Vue.component("groupTemplate1", {
     }
   });
 var departmentVue = Vue.component("departmentTemplate", {
-  template: `<ejs-dropdownlist :showClearButton="true" @close="switchNow" v-model="data.department" :groupTemplate="groupTemplate1" @change="changedept"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>`,
+  template: `<ejs-dropdownlist :showClearButton="true" :close="switchNow" v-model="data.department" :groupTemplate="groupTemplate1" :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>`,
     data() {
       return {
         groupTemplate1: function () {

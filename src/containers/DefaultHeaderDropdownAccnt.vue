@@ -78,6 +78,7 @@ export default {
       }
   },
   async mounted() {
+    if(this.$session.has('user')) {
     axios.get(`${apiUrl}`+`company/list`,{withCredentials : true})
     .then(response => {
       this.data = response.data
@@ -87,6 +88,17 @@ export default {
       this.$session.set('company',response.data._id);
       console.log(this.ssnCompany)})
     })
+  }
+  if(this.$session.has('Subuser')) {
+    var user = this.$session.get('Subuser')
+    console.log(user)
+      axios.get(`${apiUrl}`+`company/${user.company}`,{withCredentials : true})
+      .then(response => {
+        this.data = [response.data]
+      this.ssnCompany = response.data
+      this.$session.set('company',response.data._id);
+      console.log(this.ssnCompany)})
+  }
   },
   // async updated() {
   //   this.$nextTick(function () {
@@ -125,7 +137,7 @@ export default {
       console.log(this.ssnCompany)})
     },
     async Logout() {
-      if(this.$session.has('subuser')) {
+      if(this.$session.has('Subuser')) {
         axios.post(`${apiUrl}`+`user/subuser/logout`,{withCredentials :true}).then((response) =>{
               Auth.logout();
               this.$session.destroy();

@@ -4,43 +4,19 @@
                 <b-form v-on:submit.prevent="addDesig">
                     <b-tabs>
                       <b-tab :title="$ml.get('designation')" active>
-                      	<b-form-group style="padding:2%">
-                      		<b-col sm="6">
-                      			<ejs-textbox v-model="input.name" floatLabelType="Auto" :placeholder="$ml.get('designation')"></ejs-textbox>
-                      		</b-col>
+                      	<b-form-group style="padding:5%">
+                      		<ejs-textbox v-model="input.name" floatLabelType="Auto" :placeholder="$ml.get('designation')"></ejs-textbox>
                       		<div v-if="!clicked">
-                      			<b-col sm="6">
-                  				<ejs-dropdownlist :change="changeDesig" :showClearButton="true"  v-model="input.parent_designation_id" floatLabelType="Auto" :groupTemplate="desigTemplate" :allowFiltering="true" :dataSource='data' :fields='desig_fields' popupHeight='300' :placeholder="$ml.get('pholdparentdesig')" ></ejs-dropdownlist>
-                  			</b-col>
+                  				<ejs-dropdownlist :change="changeDesig" :showClearButton="true"  v-model="input.parent_designation_id" floatLabelType="Auto" :groupTemplate="desigTemplate" :allowFiltering="true" :dataSource='data' :fields='desig_fields' popupHeight='300' :placeholder="$ml.get('pholdparentdesig')"></ejs-dropdownlist>
                   			</div>
                   			<div v-else>
-                  				<b-col sm="6">
-                  				<ejs-dropdownlist :change="changeDesig" :showClearButton="true" v-model="input.parent_designation_id" :allowFiltering="true" :dataSource='data' :fields='desig_fields'  popupHeight='300' :placeholder="$ml.get('pholdparentdesig')" ></ejs-dropdownlist>
-                  			</b-col>
+                  				<ejs-dropdownlist :change="changeDesig" :showClearButton="true" v-model="input.parent_designation_id" :allowFiltering="true" :dataSource='data' :fields='desig_fields'  popupHeight='300' :placeholder="$ml.get('pholdparentdesig')"></ejs-dropdownlist>
                   			</div>
                   			<div v-if="!clicked1">
-                  				<b-col sm="8">
-                  					<b-row>
-                  						<b-col sm="9">
-                  				<ejs-dropdownlist :change="changeDept" :close="switchNow1" :showClearButton="true" v-model="input.department" floatLabelType="Auto" :groupTemplate="groupTemplate1" :allowFiltering="true" :dataSource='department' :fields='dept_fields' popupHeight='300' :placeholder="$ml.get('pholddept')" :footerTemplate="addDesignation"></ejs-dropdownlist>
-                  			</b-col>
-                  			<b-col sm="1">
-                  				<b-button variant="primary" @click="refreshDept" style=" margin-top:10px;"><i class="fa fa-refresh"></i></b-button>
-                  			</b-col>
-                  		</b-row>
-                  			</b-col>
+                  				<ejs-dropdownlist :change="changeDept" :close="switchNow1" :showClearButton="true" v-model="input.department" floatLabelType="Auto" :groupTemplate="groupTemplate1" :allowFiltering="true" :dataSource='department' :fields='dept_fields' popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
                   			</div>
 	                  		<div v-else>
-	                  			<b-col sm="8">
-                  					<b-row>
-                  						<b-col sm="9">
-	                  			<ejs-dropdownlist :change="changeDept" v-model="input.department" :showClearButton="true" floatLabelType="Auto"  :allowFiltering="true" :dataSource='department' :fields='dept_fields' popupHeight='300' :placeholder="$ml.get('pholddept')" :footerTemplate="addDesignation"></ejs-dropdownlist>
-	                  			</b-col>
-                  			<b-col sm="1">
-                  				<b-button variant="primary" @click="refreshDept" style=" margin-top:10px;"><i class="fa fa-refresh"></i></b-button>
-                  			</b-col>
-                  		</b-row>
-	                  		</b-col>
+	                  			<ejs-dropdownlist :change="changeDept" v-model="input.department" :showClearButton="true" floatLabelType="Auto"  :allowFiltering="true" :dataSource='department' :fields='dept_fields' popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
 	                  		</div>
 				  		</b-form-group>
 				  	  </b-tab>
@@ -176,58 +152,6 @@ var desigVue = Vue.component("desigTemplate", {
     }
     }
   });
-var addDesigVue = Vue.component("addDesignation", {
-    template: `<div><b-button type="button" size="md" style="width:100%" variant="primary" @click="modal = true"  class="mr-1" v-text="$ml.get('adddesig')"></b-button>
-    	<b-modal :title="$ml.get('adddesig')" class="modal-primary" v-model="modal" @ok="modal = false" hide-footer>
-              <div>
-                <b-form v-on:submit.prevent="addDept">
-                  <b-form-group style="padding:5%">
-                  <ejs-textbox v-model="input.department_name" floatLabelType="Auto" :placeholder="$ml.get('department')"></ejs-textbox>
-                <br>
-                <div v-if="!clicked">
-                <ejs-dropdownlist floatLabelType="Auto" :showClearButton="true" :close="switchNow" v-model="input.parent_department" :groupTemplate="groupTemplate1"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholdparentdept')"></ejs-dropdownlist>
-                </div>
-                <div v-else>
-                	<ejs-dropdownlist floatLabelType="Auto" :showClearButton="true" v-model="input.parent_department"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholdparentdept')"></ejs-dropdownlist>
-                </div>
-                </b-form-group>
-                <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
-                </div>
-            </b-modal>
-    </div>`,
-    data() {
-      return {
-      	groupTemplate1 : function(){
-      		return  {
-      			template:groupVue1
-      		}
-      	},
-        data: {
-
-        },
-        clicked:false,
-        modal:false,
-        input:{},
-        department:[],
-        dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
-      };
-    },
-    mounted(){
-    	api.get(`${apiUrl}`+`department/dept/get`).then((res) => {
-        this.department = res.data
-      })
-    },
-    methods:{
-    	switchNow() {
-    		this.clicked = true
-    	},
-    	addDept() {
-    		api.post(`${apiUrl}`+`department/dept/create`,this.input).then((response) => {
-    			this.modal = false
-    		})
-    	}
-    }
-  });
 
 
 export default {
@@ -248,11 +172,6 @@ export default {
     },
     data : function() {
         return {
-       		addDesignation : function() {
-       			return {
-       			template : addDesigVue
-       		}
-       		},
           groupTemplate1: function () {
               return {
                   template: groupVue1
@@ -286,7 +205,7 @@ export default {
             selectionSettings : {type:"Single"},
             data: [],
             datasrc:[
-            	{module_name:"company",text:"Company",read:true,write:false,edit:false,delete:false},{module_name:"subuser",text:"User",read:false,write:false,edit:false,delete:false},
+            	{module_name:"company",text:"Company",read:false,write:false,edit:false,delete:false},{module_name:"subuser",text:"User",read:false,write:false,edit:false,delete:false},
 	            {module_name:"subgroup",text:"User Group",read:false,write:false,edit:false,delete:false},{module_name:"dept",text:"Department",read:false,write:false,edit:false,delete:false},
 	            {module_name:"desig",text:"Designation",read:false,write:false,edit:false,delete:false},{module_name:"head",text:"Head",read:false,write:false,edit:false,delete:false},
 	            {module_name:"label",text:"Label",read:false,write:false,edit:false,delete:false},{module_name:"preApp",text:"Approval",read:false,write:false,edit:false,delete:false},
@@ -332,7 +251,7 @@ export default {
    	},
       changeDept(args) {
       	if(args.e!=null) {
-      		if(args.itemData!=null) {
+      		console.log(args.itemData._id)
       		api.get(`${apiUrl}`+`designation/desig/find/`+`${args.itemData._id}`).then((res) => {
       			if(this.input.parent_designation_id !=null) {
       				console.log("ASdasd")
@@ -342,13 +261,6 @@ export default {
       			this.data = res.data
       		})
       	}
-      		else {
-      			api.get(`${apiUrl}`+`designation/desig/get/all`)
-			    .then((response) => {
-			      this.data = response.data
-			      });
-      		}
-      	}
       },
       addDesig(args) {
         this.$validator.validate().then(valid => {
@@ -356,25 +268,19 @@ export default {
 
             }
             else{
-              
+              var user_group = {
+                user_type:"Staff",
+                user_group_name:this.input.name,
+                permissions:this.datasrc
+              }
           //     let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
           // if(parent.length == 0) {
-             api.post(`${apiUrl}`+`designation/desig/create`,this.input).then((response) => {
-              		var user_group = {
-		                user_type:"Staff",
-		                user_group_name:response.data[0]._id,
-		                permissions:this.datasrc
-		              }
-	                api.get(`${apiUrl}`+`designation/desig/get/all`)
-	                .then((res) => {
-	                  this.data = res.data
-		              api.post(`${apiUrl}`+`super/group/subgroup/add`,user_group).then((res) => {
-		              	console.log(res.data)
-		              })
-	                  });
-                	this.input = {}
+              api.post(`${apiUrl}`+`designation/desig/create`,this.input).then((response) => {
+                this.input = {}
                 });
-              
+              api.post(`${apiUrl}`+`super/group/subgroup/add`,user_group).then((res) => {
+              	console.log(res.data)
+              })
         // }
         //   else {
         //       this.input.parent_designation_id = parent[0]._id
@@ -385,8 +291,7 @@ export default {
         //           });
         //         this.input = {}
         //   });
-        // // }
-        	this.$router.push('/designation/list')
+        // }
             }
           })
       
@@ -429,11 +334,6 @@ export default {
       	if(args.e!=null){
       		this.input.department = args.itemData.department
       	}
-      },
-      refreshDept() {
-      	api.get(`${apiUrl}`+`department/dept/get`).then((res) => {
-	        this.department = res.data
-	      })
       },
       clickHandler(args){
         if(args.item.id === 'add') {

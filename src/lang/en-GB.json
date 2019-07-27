@@ -143,6 +143,7 @@
     "department" : "Department",
     "adddept" : "Add Department",
     "pholddept":"Select a Department",
+    "pholdparentdept":"Select a Parent Department",
     "pholdsubdept":"Select a Sub-Department",
     "po" : "Purchase Order",
     "porequired":"Purchase Order Required?",

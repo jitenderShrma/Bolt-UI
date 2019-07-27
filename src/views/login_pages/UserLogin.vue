@@ -138,9 +138,8 @@ export default {
       async sendData() {
             axios.post(`${apiUrl}`+`user/subuser/login`,this.login_details, {withCredentials : true}).then((response) =>{
               console.log(response.data)
-              Auth.login()
-              this.$session.set('subuser',response.data._id)
-              this.$router.push("/dashboard");
+              this.$session.set('Subuser',response.data.user)
+              this.$router.push(this.$route.query.redirect || '/dashboard')
             })
             .catch(function(error) {
               console.log(error)
