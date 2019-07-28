@@ -1,7 +1,7 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
 
-    <div class="col-lg-12 control-section">
+    <div id="target" class="col-lg-12 control-section">
         <div>
           <ejs-toolbar :clicked="clickHandler">
             <e-items>
@@ -14,6 +14,7 @@
               <e-item id="big" prefixIcon='e-big-icon' ></e-item>
               <e-item id="collapse" :text="$ml.get('collapseall')"></e-item>
               <e-item id="expand" :text="$ml.get('expandall')"></e-item>
+              <e-item id="label" :text="$ml.get('label')"></e-item>
             </e-items>
           </ejs-toolbar>
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
@@ -31,6 +32,7 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
                     <e-column field='head_key' headerText='Head Key' ></e-column>
+                    <e-column field='labels' :template="labelTemplate" headerText='Labels' ></e-column>
                     <e-column field='accounting_head' headerText='Account Head' ></e-column>
                     <e-column field='notes' headerText='Notes'></e-column>
                     <e-column :allowEditing="true" :template="groupTemplate" field='department' headerText='Department' width='170' ></e-column>
@@ -39,6 +41,34 @@
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
             </ejs-treegrid>
+            <ejs-dialog id='dialog' height="auto" header='Add A Label' showCloseIcon='true' :isModal='LabelModal' :animationSettings='animationSettings' width='285px' ref='dialogObj'
+            target='#target' >
+            <b-form v-on:submit.prevent="addLabel">
+        <div class="content-wrapper textbox-default">
+        <div class="row">
+        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
+        </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+              <p>Label Color</p>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                    <ejs-colorpicker :modeSwitcher="false" value="#000" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
+            </div>
+        </div>
+        <br>
+        <div class="multiline_wrapper">
+            <ejs-textbox v-model="formdata.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
+        </div>
+        </div>
+        <div slot="footer">
+              <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+          </div>
+          </b-form>
+        </ejs-dialog>
             <b-modal :title="$ml.get('addhead')" class="modal-primary" v-model="modal" @ok="modal = false" hide-footer>
               <div>
                 <b-form v-on:submit.prevent="addHead">
@@ -98,13 +128,19 @@ import { ExcelExport,PdfExport,TreeGridPlugin, Edit, Filter,CommandColumn, Toolb
 import { addClass, removeClass, getValue } from '@syncfusion/ej2-base';
 // import { addRecord } from "@syncfusion/ej2-vue-grids";
 import { ToolbarPlugin,ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
-// import mydata from './datasrc';
+import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
+import { NumericTextBoxPlugin,ColorPickerPlugin } from "@syncfusion/ej2-vue-inputs";
+import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
+
   import { MultiSelectPlugin, DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
   Vue.use(DropDownListPlugin);
+Vue.use(TextBoxPlugin);
 
 Vue.use(TreeGridPlugin)
 Vue.use(ToolbarPlugin)
-
+Vue.use(DialogPlugin)
+Vue.use(NumericTextBoxPlugin);
+Vue.use(ColorPickerPlugin);
 var api = axios.create({
   withCredentials :true
 })
@@ -153,6 +189,24 @@ export default {
     },
     data : function() {
         return {
+          labelTemplate: function () {
+              return {
+                  template: Vue.component('labelTemplate', {
+                      template: `<div ><b-badge style="font-weight:100;margin:3px" v-for="label in data.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
+                  data: function() {
+                          return {
+                              data: {},
+                          }
+                      }
+                })
+              }
+          },
+          formdata: {
+                  label_name : "",
+                  color : "#fff",
+                  context : "Heads",
+                  description : ""
+                },
           editinput:{},
           editmodal:false,
           groupTemplate: function () {
@@ -165,6 +219,8 @@ export default {
                   template: groupVue1
               }
           },
+          LabelModal:false,
+          animationSettings: { effect: 'Zoom' },
           modal:false,
           link:"",
           key:"",
@@ -191,14 +247,20 @@ export default {
             input:{
 
             },
-            isRoot:false
+            module:null,
+            isRoot:false,
+            squarePalettesColn: 7,
+        circlePaletteColors: {'custom': ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#2196f3', '#03a9f4', '#00bcd4',
+                    '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
             
    };
   },
   async mounted() {
+    this.$refs.dialogObj.hide();
      api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
       this.data = response.data
+      console.log(response.data)
       });
      axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.department = res.data
@@ -208,6 +270,27 @@ export default {
       treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
+    addLabel (args) {
+        this.$refs.dialogObj.hide();
+        let val = this.$refs.treegrid.getSelectedRecords()
+              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((response) => {
+                var id = {
+                  labels :  response.data._id
+                }
+                api.put(`${apiUrl}`+`head/head/push/label/`+`${val[0]._id}`,id).then((response) => {
+                  console.log(response.data)
+                    api.get(`${apiUrl}`+`head/head/get`)
+                    .then((response) => {
+                      this.data = response.data
+                      });
+                });
+                this.formdata=null
+              });
+            
+      },
+    onChange(args) {
+        this.formdata.color = args.currentValue.hex.slice(1);
+      }, 
       addHead() {
         this.$validator.validate().then(valid => {
             if (!valid) {
@@ -281,10 +364,7 @@ export default {
           }
           api.put(`${apiUrl}`+`head/head/update/one/`+`${id}`,sendData).then((response) => {
             console.log(response.data)
-            api.get(`${apiUrl}`+`head/head/get`)
-                .then((response) => {
-                  this.data = response.data
-              });
+            this.$router.go(0)
           });
         }
       },
@@ -353,7 +433,14 @@ export default {
          if (args.item.id === 'exportExcel') {
             this.$refs.treegrid.excelExport();
         }
-        
+        if(args.item.id == 'label') {
+            if(this.$refs.treegrid.getSelectedRecords().length>0) {
+              this.$refs.dialogObj.show();
+            }
+            else { 
+              alert("Please select a record to label it");
+            }
+          }
         if (args.item.id === 'small') {
             this.rowHeight = 20;
             }
@@ -392,7 +479,54 @@ export default {
 @import "../../styles/ej2-vue-inputs/styles/material.css";
 </style>
 <style>
-
+  .badge-f44336 {
+    background-color:#f44336;
+    color:white;
+  }
+  .badge-e91e63{
+    background-color:#e91e63;
+    color:white;
+  }
+  .badge-9c27b0{
+    background-color:#9c27b0;
+    color:white;
+  }
+  .badge-673ab7{
+    background-color:#673ab7;
+    color:white;
+  }
+  .badge-2196f3{
+    background-color:#2196f3;
+    color:white;
+  }
+  .badge-03a9f4{
+    background-color:#03a9f4;
+    color:white;
+  }
+  .badge-00bcd4{
+    background-color:#00bcd4;
+    color:white;
+  }
+  .badge-009688{
+    background-color:#009688;
+    color:white;
+  }
+  .badge-8bc34a{
+    background-color:#8bc34a;
+    color:white;
+  }
+  .badge-cddc39{
+    background-color:#cddc39;
+    color:black;
+  }
+  .badge-ffeb3b{
+    background-color:#ffeb3b;
+    color:black;
+  }
+  .badge-ffc107{
+    background-color:#ffc107;
+    color:black;
+  }
     @font-face {
 font-family: 'e-grid-rowheight';
 src:

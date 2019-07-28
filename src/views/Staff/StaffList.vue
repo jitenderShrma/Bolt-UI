@@ -18,7 +18,7 @@
             </e-items>
           </ejs-toolbar>
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_designation_id' :height='height' :allowReordering='true' :allowFiltering='true'
+            idMapping='designation' :treeColumnIndex='1' parentIdMapping='department' :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -27,100 +27,12 @@
             :enableCollapseAll="false"
             :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' >
                 <e-columns>
-                    <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
-                    <e-column :visible="false" field='_id'></e-column>
-                    <e-column  field='name' headerText='Designation Name' ></e-column>
-                    <e-column  field='labels' :template="labelTemplate" headerText='Labels' ></e-column>
-                    <e-column :template="groupTemplate" field='department' :editTemplate="departmentTemplate" headerText='Department' width='170' ></e-column>
-                     <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
+                  <e-column field='department' headerText='department'  :filter='filter' ></e-column>
+                  <e-column field='designation' headerText='designation'  :filter='filter' ></e-column>
+                  <e-column field='user.username' headerText='User Name'  :filter='filter' ></e-column>
+                  <e-column field='user.personal_details.name' headerText='Name'  :filter='filter' ></e-column>
                 </e-columns>
             </ejs-treegrid>
-            <ejs-dialog id='dialog' height="auto" header='Add A Label' showCloseIcon='true' :isModal='LabelModal' :animationSettings='animationSettings' width='285px' ref='dialogObj'
-            target='#target' >
-            <b-form v-on:submit.prevent="addLabel">
-        <div class="content-wrapper textbox-default">
-        <div class="row">
-        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
-        </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-              <p>Label Color</p>
-            </div>
-            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                    <ejs-colorpicker :modeSwitcher="false" value="#000" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
-            </div>
-        </div>
-        <br>
-        <div class="multiline_wrapper">
-            <ejs-textbox v-model="formdata.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
-        </div>
-        </div>
-        <div slot="footer">
-              <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
-          </div>
-          </b-form>
-        </ejs-dialog>
-            <b-modal :title="$ml.get('adddesig')" class="modal-primary" v-model="modal" @ok="modal = false" hide-footer>
-              <div>
-                <b-form v-on:keydown.enter.prevent="prevent" v-on:submit.prevent="addDesig">
-                  <b-form-group style="padding:5%">
-                    <b-tabs>
-                      <b-tab :title="$ml.get('designation')" active>
-                  <div class="e-float-input e-control-wrapper">
-                  <input v-validate="'required'" v-model="input.name" class="e-field e-defaultcell" type="text" value="" e-mappinguid="grid-column1" id="_gridcontrolname" name="Designation Name" style="text-align:undefined" aria-labelledby="label__gridcontrolname">
-                  <span class="e-float-line"></span>
-                  <span id="errors">{{ errors.first('Designation Name') }}</span>
-                  <label class="e-float-text e-label-top" id="label__gridcontrolname" for="_gridcontrolname">Designation Name</label>
-                </div>
-                    <br>
-                    <div v-if="!selected">
-                      <div v-if="!clicked">
-                      <ejs-dropdownlist :showClearButton="true" @close="switchNow" floatLabelType="Auto" v-model="input.department" :groupTemplate="groupTemplate1"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
-                    </div>
-                    <div v-else>
-                      <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="input.department"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
-                    </div>
-                  </div>
-                </b-tab>
-                <b-tab :title="$ml.get('permissions')">
-                  <b-form-group>
-                    <label v-text="$ml.get('modulename')"></label>
-                  <ejs-dropdownlist :showClearButton="true" v-on:keydown.enter='changeFields' floatLabelType="Auto" v-model="module"  :allowFiltering="true" id='department' :dataSource='modules'  :fields='module_fields'  popupHeight='300' :placeholder="$ml.get('pholdmodule')"></ejs-dropdownlist>
-                </b-form-group>
-                <b-form-group v-for="(run,index) in permissions" :key="index">
-                  <label v-text="permissions[index].module_name"></label>
-                  <b-row>
-                    <b-col sm="3">
-                      <label v-text="$ml.get('read')"></label>
-                      <br>
-                      <c-switch class="mx-1" color="primary" unchecked name="read" v-model="permissions.read"  :uncheckedValue="false" :checkedValue="true"/>
-                    </b-col>
-                    <b-col sm="3">
-                      <label v-text="$ml.get('write')"></label>
-                      <br>
-                      <c-switch class="mx-1" color="primary" unchecked name="read" v-model="permissions.write"  :uncheckedValue="false" :checkedValue="true"/>
-                    </b-col>
-                    <b-col sm="3">
-                      <label v-text="$ml.get('edit')"></label>
-                      <br>
-                      <c-switch class="mx-1" color="primary" unchecked name="read" v-model="permissions.edit"  :uncheckedValue="false" :checkedValue="true"/>
-                    </b-col>
-                    <b-col sm="3">
-                      <label v-text="$ml.get('delete')"></label>
-                      <br>
-                      <c-switch class="mx-1" color="primary" unchecked name="read" v-model="permissions.delete"  :uncheckedValue="false" :checkedValue="true"/>
-                    </b-col>
-                  </b-row>
-                </b-form-group>
-                </b-tab>
-              </b-tabs>
-                </b-form-group>
-                <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
-                </div>
-            </b-modal>
         </div>
     </div>
   </div>
@@ -312,7 +224,6 @@ export default {
    };
   },
   async mounted() {
-    this.$refs.dialogObj.hide();
     api.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.department = res.data
       })

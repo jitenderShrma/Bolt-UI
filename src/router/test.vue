@@ -8,19 +8,20 @@
       </e-items>
     </ejs-toolbar>
     <b-card>
-      <!--  <div v-if="selected == 'Month'">
-        <b-col sm="4" style="float:right">
-        <ejs-dropdownlist v-model="selected2" :dataSource='options2' :placeholder="$ml.get('pholdpivotdataview')"></ejs-dropdownlist>
+      <b-col sm="4" style="float:left">
+    <ejs-dropdownlist v-model="selected3" :dataSource='options3' :placeholder="$ml.get('pholdswitchbudget')"></ejs-dropdownlist>
       </b-col>
-      </div> -->
       <b-col sm="4" style="float:right">
     <ejs-dropdownlist v-model="selected" :dataSource='options' :placeholder="$ml.get('pholdpivotdataview')"></ejs-dropdownlist>
       </b-col>
-
     </b-card>
 
     <div v-if="selected=='Month'">
-      <div v-if="selected2 == 'Feb' ">
+      <div v-if="selected3=='Total Budget'">
+        <div v-if="selected2 == 'Jan'">
+        <ejs-pivotview :height="height" :dataSource="dataSourceSettings1" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
+      </div>
+        <div v-if="selected2 == 'Feb' ">
         <ejs-pivotview :height="height" :dataSource="dataSourceSettings3" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
       </div>
        <div v-if="selected2 == 'Mar' ">
@@ -53,10 +54,53 @@
        <div v-if="selected2 == 'Dec' ">
         <ejs-pivotview :height="height" :dataSource="dataSourceSettings13" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
       </div>
-        <ejs-pivotview :height="height" :dataSource="dataSourceSettings1" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
-    </div>
-    <div v-if = "selected == 'Quarter'">
+          </div>
+          <div v-else>
+             <div v-if="selected2 == 'Jan' ">
+            <ejs-pivotview :height="height" :dataSource="dataSourceSettings14" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
+          </div>
+            <div v-if="selected2 == 'Feb' ">
+        <ejs-pivotview :height="height" :dataSource="dataSourceSettings16" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
+      </div>
+       <div v-if="selected2 == 'Mar' ">
+        <ejs-pivotview :height="height" :dataSource="dataSourceSettings17" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
+      </div>
+       <div v-if="selected2 == 'Apr' ">
+        <ejs-pivotview :height="height" :dataSource="dataSourceSettings18" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
+      </div>
+      <div v-if="selected2 == 'May' ">
+        <ejs-pivotview :height="height" :dataSource="dataSourceSettings19" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
+      </div>
+      <div v-if="selected2 == 'Jun' ">
+        <ejs-pivotview :height="height" :dataSource="dataSourceSettings20" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
+      </div>
+        <div v-if="selected2 == 'Jul' ">
+        <ejs-pivotview :height="height" :dataSource="dataSourceSettings21" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
+      </div>
+        <div v-if="selected2 == 'Aug' ">
+        <ejs-pivotview :height="height" :dataSource="dataSourceSettings22" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
+      </div>
+       <div v-if="selected2 == 'Sep' ">
+        <ejs-pivotview :height="height" :dataSource="dataSourceSettings23" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
+      </div>
+       <div v-if="selected2 == 'Oct' ">
+        <ejs-pivotview :height="height" :dataSource="dataSourceSettings24" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
+      </div>
+       <div v-if="selected2 == 'Nov' ">
+        <ejs-pivotview :height="height" :dataSource="dataSourceSettings25" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
+      </div>
+       <div v-if="selected2 == 'Dec' ">
+        <ejs-pivotview :height="height" :dataSource="dataSourceSettings26" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
+      </div>
+          </div>
+        </div>
+    <div v-else>
+      <div v-if="selected2=='Total Budget'">
       <ejs-pivotview :height="height" :dataSource="dataSourceSettings2" :allowCalculatedField="allowCalculatedField"> </ejs-pivotview>
+    </div>
+    <div v-else>
+      <ejs-pivotview :height="height" :dataSource="dataSourceSettings15" :allowCalculatedField="allowCalculatedField"> </ejs-pivotview>
+    </div>
     </div>
   </div>
   <b-modal :title="$ml.get('upload')" size="sm" class="modal-primary" v-model="browseModal" @ok="browseModal = false" hide-footer>
@@ -117,6 +161,11 @@ let remoteData = new DataManager({
   adaptor: new WebApiAdaptor(),
   crossDomain: true
 });
+let secondData = new DataManager({
+  url: `${apiUrl}`+`csv/read/M/amount_left/${company}`,
+  adaptor: new WebApiAdaptor(),
+  crossDomain: true
+});
 export default {
   name:"test",
   components: {
@@ -124,7 +173,6 @@ export default {
   },
   
     data: function(){
-      console.log(remoteData.dataSource);
         return {
           dataSourceSettings1: {
         columns: [{ name: "Year" }],
@@ -200,7 +248,7 @@ export default {
              formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
           }]
       },
-      dataSourceSettings3: {
+       dataSourceSettings3: {
         columns: [{ name: "Year" }],
         values: [
           { name: "Feb", caption: "Feb" },
@@ -650,7 +698,530 @@ export default {
              formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
           }]
       },
-
+       dataSourceSettings16: {
+        columns: [{ name: "Year" }],
+        values: [
+          { name: "Feb", caption: "Feb" },
+          { name: "Mar", caption: "Mar" },
+          { name: "Apr", caption: "Apr" },
+          { name: "May", caption: "May" },
+          { name: "Jun", caption: "Jun" },
+          { name: "Jul", caption: "Jul" },
+          { name: "Aug", caption: "Aug" },
+          { name: "Sep", caption: "Sep" },
+          { name: "Oct", caption: "Oct" },
+          { name: "Nov", caption: "Nov" },
+          { name: "Dec", caption: "Dec" },
+          { name: "Jan", caption: "Jan "+`${new Date().getFullYear()+1}` },
+          { name: 'Total', caption: 'Total Units', type: 'CalculatedField' }
+        ],
+        dataSource: secondData,
+        expandAll: true,
+        rows: [{ name: "tree_id" }, { name: "name" }],
+        showColumnGrandTotals:false,
+        calculatedFieldSettings: [{
+             name: 'Q1',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"'
+          },
+          {
+             name: 'Q2',
+             formula: '"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"'
+          },
+          {
+             name: 'Q3',
+             formula: '"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"'
+          },
+            {
+             name: 'Q4',
+             formula: '"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          },{
+             name: 'Total',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          }]
+      },
+      dataSourceSettings17: {
+        columns: [{ name: "Year" }],
+        values: [
+          { name: "Mar", caption: "Mar" },
+          { name: "Apr", caption: "Apr" },
+          { name: "May", caption: "May" },
+          { name: "Jun", caption: "Jun" },
+          { name: "Jul", caption: "Jul" },
+          { name: "Aug", caption: "Aug" },
+          { name: "Sep", caption: "Sep" },
+          { name: "Oct", caption: "Oct" },
+          { name: "Nov", caption: "Nov" },
+          { name: "Dec", caption: "Dec" },
+          { name: "Jan", caption: "Jan" },
+          { name: "Feb", caption: "Feb" },
+          { name: 'Total', caption: 'Total Units', type: 'CalculatedField' }
+        ],
+        dataSource: secondData,
+        expandAll: true,
+        rows: [{ name: "tree_id" }, { name: "name" }],
+        showColumnGrandTotals:false,
+        calculatedFieldSettings: [{
+             name: 'Q1',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"'
+          },
+          {
+             name: 'Q2',
+             formula: '"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"'
+          },
+          {
+             name: 'Q3',
+             formula: '"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"'
+          },
+            {
+             name: 'Q4',
+             formula: '"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          },{
+             name: 'Total',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          }]
+      },
+      dataSourceSettings18: {
+        columns: [{ name: "Year" }],
+        values: [
+          { name: "Apr", caption: "Apr" },
+          { name: "May", caption: "May" },
+          { name: "Jun", caption: "Jun" },
+          { name: "Jul", caption: "Jul" },
+          { name: "Aug", caption: "Aug" },
+          { name: "Sep", caption: "Sep" },
+          { name: "Oct", caption: "Oct" },
+          { name: "Nov", caption: "Nov" },
+          { name: "Dec", caption: "Dec" },
+          { name: "Jan", caption: "Jan" },
+          { name: "Feb", caption: "Feb" },
+          { name: "Mar", caption: "Mar" },
+          { name: 'Total', caption: 'Total Units', type: 'CalculatedField' }
+        ],
+        dataSource: secondData,
+        expandAll: true,
+        rows: [{ name: "tree_id" }, { name: "name" }],
+        showColumnGrandTotals:false,
+        calculatedFieldSettings: [{
+             name: 'Q1',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"'
+          },
+          {
+             name: 'Q2',
+             formula: '"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"'
+          },
+          {
+             name: 'Q3',
+             formula: '"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"'
+          },
+            {
+             name: 'Q4',
+             formula: '"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          },{
+             name: 'Total',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          }]
+      },
+      dataSourceSettings19: {
+        columns: [{ name: "Year" }],
+        values: [
+          { name: "May", caption: "May" },
+          { name: "Jun", caption: "Jun" },
+          { name: "Jul", caption: "Jul" },
+          { name: "Aug", caption: "Aug" },
+          { name: "Sep", caption: "Sep" },
+          { name: "Oct", caption: "Oct" },
+          { name: "Nov", caption: "Nov" },
+          { name: "Dec", caption: "Dec" },
+          { name: "Jan", caption: "Jan" },
+          { name: "Feb", caption: "Feb" },
+          { name: "Mar", caption: "Mar" },
+          { name: "Apr", caption: "Apr" },
+          { name: 'Total', caption: 'Total Units', type: 'CalculatedField' }
+        ],
+        dataSource: secondData,
+        expandAll: true,
+        rows: [{ name: "tree_id" }, { name: "name" }],
+        showColumnGrandTotals:false,
+        calculatedFieldSettings: [{
+             name: 'Q1',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"'
+          },
+          {
+             name: 'Q2',
+             formula: '"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"'
+          },
+          {
+             name: 'Q3',
+             formula: '"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"'
+          },
+            {
+             name: 'Q4',
+             formula: '"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          },{
+             name: 'Total',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          }]
+      },
+      dataSourceSettings20: {
+        columns: [{ name: "Year" }],
+        values: [
+          { name: "Jun", caption: "Jun" },
+          { name: "Jul", caption: "Jul" },
+          { name: "Aug", caption: "Aug" },
+          { name: "Sep", caption: "Sep" },
+          { name: "Oct", caption: "Oct" },
+          { name: "Nov", caption: "Nov" },
+          { name: "Dec", caption: "Dec" },
+          { name: "Jan", caption: "Jan" },
+          { name: "Feb", caption: "Feb" },
+          { name: "Mar", caption: "Mar" },
+          { name: "Apr", caption: "Apr" },
+          { name: "May", caption: "May" },
+          { name: 'Total', caption: 'Total Units', type: 'CalculatedField' }
+        ],
+        dataSource: secondData,
+        expandAll: true,
+        rows: [{ name: "tree_id" }, { name: "name" }],
+        showColumnGrandTotals:false,
+        calculatedFieldSettings: [{
+             name: 'Q1',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"'
+          },
+          {
+             name: 'Q2',
+             formula: '"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"'
+          },
+          {
+             name: 'Q3',
+             formula: '"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"'
+          },
+            {
+             name: 'Q4',
+             formula: '"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          },{
+             name: 'Total',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          }]
+      },
+      dataSourceSettings21: {
+        columns: [{ name: "Year" }],
+        values: [
+          { name: "Jul", caption: "Jul" },
+          { name: "Aug", caption: "Aug" },
+          { name: "Sep", caption: "Sep" },
+          { name: "Oct", caption: "Oct" },
+          { name: "Nov", caption: "Nov" },
+          { name: "Dec", caption: "Dec" },
+          { name: "Jan", caption: "Jan" },
+          { name: "Feb", caption: "Feb" },
+          { name: "Mar", caption: "Mar" },
+          { name: "Apr", caption: "Apr" },
+          { name: "May", caption: "May" },
+          { name: "Jun", caption: "Jun" },
+          { name: 'Total', caption: 'Total Units', type: 'CalculatedField' }
+        ],
+        dataSource: secondData,
+        expandAll: true,
+        rows: [{ name: "tree_id" }, { name: "name" }],
+        showColumnGrandTotals:false,
+        calculatedFieldSettings: [{
+             name: 'Q1',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"'
+          },
+          {
+             name: 'Q2',
+             formula: '"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"'
+          },
+          {
+             name: 'Q3',
+             formula: '"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"'
+          },
+            {
+             name: 'Q4',
+             formula: '"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          },{
+             name: 'Total',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          }]
+      },dataSourceSettings22: {
+        columns: [{ name: "Year" }],
+        values: [
+          { name: "Aug", caption: "Aug" },
+          { name: "Sep", caption: "Sep" },
+          { name: "Oct", caption: "Oct" },
+          { name: "Nov", caption: "Nov" },
+          { name: "Dec", caption: "Dec" },
+          { name: "Jan", caption: "Jan" },
+          { name: "Feb", caption: "Feb" },
+          { name: "Mar", caption: "Mar" },
+          { name: "Apr", caption: "Apr" },
+          { name: "May", caption: "May" },
+          { name: "Jun", caption: "Jun" },
+          { name: "Jul", caption: "Jul" },
+          { name: 'Total', caption: 'Total Units', type: 'CalculatedField' }
+        ],
+        dataSource: secondData,
+        expandAll: true,
+        rows: [{ name: "tree_id" }, { name: "name" }],
+        showColumnGrandTotals:false,
+        calculatedFieldSettings: [{
+             name: 'Q1',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"'
+          },
+          {
+             name: 'Q2',
+             formula: '"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"'
+          },
+          {
+             name: 'Q3',
+             formula: '"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"'
+          },
+            {
+             name: 'Q4',
+             formula: '"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          },{
+             name: 'Total',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          }]
+      },
+      dataSourceSettings23: {
+        columns: [{ name: "Year" }],
+        values: [
+          { name: "Sep", caption: "Sep" },
+          { name: "Oct", caption: "Oct" },
+          { name: "Nov", caption: "Nov" },
+          { name: "Dec", caption: "Dec" },
+          { name: "Jan", caption: "Jan" },
+          { name: "Feb", caption: "Feb" },
+          { name: "Mar", caption: "Mar" },
+          { name: "Apr", caption: "Apr" },
+          { name: "May", caption: "May" },
+          { name: "Jun", caption: "Jun" },
+          { name: "Jul", caption: "Jul" },
+          { name: "Aug", caption: "Aug" },
+          { name: 'Total', caption: 'Total Units', type: 'CalculatedField' }
+        ],
+        dataSource: secondData,
+        expandAll: true,
+        rows: [{ name: "tree_id" }, { name: "name" }],
+        showColumnGrandTotals:false,
+        calculatedFieldSettings: [{
+             name: 'Q1',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"'
+          },
+          {
+             name: 'Q2',
+             formula: '"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"'
+          },
+          {
+             name: 'Q3',
+             formula: '"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"'
+          },
+            {
+             name: 'Q4',
+             formula: '"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          },{
+             name: 'Total',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          }]
+      },
+      dataSourceSettings24: {
+        columns: [{ name: "Year" }],
+        values: [
+          { name: "Oct", caption: "Oct" },
+          { name: "Nov", caption: "Nov" },
+          { name: "Dec", caption: "Dec" },
+          { name: "Jan", caption: "Jan" },
+          { name: "Feb", caption: "Feb" },
+          { name: "Mar", caption: "Mar" },
+          { name: "Apr", caption: "Apr" },
+          { name: "May", caption: "May" },
+          { name: "Jun", caption: "Jun" },
+          { name: "Jul", caption: "Jul" },
+          { name: "Aug", caption: "Aug" },
+          { name: "Sep", caption: "Sep" },
+          { name: 'Total', caption: 'Total Units', type: 'CalculatedField' }
+        ],
+        dataSource: secondData,
+        expandAll: true,
+        rows: [{ name: "tree_id" }, { name: "name" }],
+        showColumnGrandTotals:false,
+        calculatedFieldSettings: [{
+             name: 'Q1',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"'
+          },
+          {
+             name: 'Q2',
+             formula: '"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"'
+          },
+          {
+             name: 'Q3',
+             formula: '"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"'
+          },
+            {
+             name: 'Q4',
+             formula: '"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          },{
+             name: 'Total',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          }]
+      },
+        dataSourceSettings25: {
+        columns: [{ name: "Year" }],
+        values: [
+          { name: "Nov", caption: "Nov" },
+          { name: "Dec", caption: "Dec" },
+          { name: "Jan", caption: "Jan" },
+          { name: "Feb", caption: "Feb" },
+          { name: "Mar", caption: "Mar" },
+          { name: "Apr", caption: "Apr" },
+          { name: "May", caption: "May" },
+          { name: "Jun", caption: "Jun" },
+          { name: "Jul", caption: "Jul" },
+          { name: "Aug", caption: "Aug" },
+          { name: "Sep", caption: "Sep" },
+          { name: "Oct", caption: "Oct" },
+          { name: 'Total', caption: 'Total Units', type: 'CalculatedField' }
+        ],
+        dataSource: secondData,
+        expandAll: true,
+        rows: [{ name: "tree_id" }, { name: "name" }],
+        showColumnGrandTotals:false,
+        calculatedFieldSettings: [{
+             name: 'Q1',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"'
+          },
+          {
+             name: 'Q2',
+             formula: '"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"'
+          },
+          {
+             name: 'Q3',
+             formula: '"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"'
+          },
+            {
+             name: 'Q4',
+             formula: '"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          },{
+             name: 'Total',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          }]
+      },
+        dataSourceSettings26: {
+        columns: [{ name: "Year" }],
+        values: [
+          { name: "Dec", caption: "Dec" },
+          { name: "Jan", caption: "Jan" },
+          { name: "Feb", caption: "Feb" },
+          { name: "Mar", caption: "Mar" },
+          { name: "Apr", caption: "Apr" },
+          { name: "May", caption: "May" },
+          { name: "Jun", caption: "Jun" },
+          { name: "Jul", caption: "Jul" },
+          { name: "Aug", caption: "Aug" },
+          { name: "Sep", caption: "Sep" },
+          { name: "Oct", caption: "Oct" },
+          { name: "Nov", caption: "Nov" },
+          { name: 'Total', caption: 'Total Units', type: 'CalculatedField' }
+        ],
+        dataSource: secondData,
+        expandAll: true,
+        rows: [{ name: "tree_id" }, { name: "name" }],
+        showColumnGrandTotals:false,
+        calculatedFieldSettings: [{
+             name: 'Q1',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"'
+          },
+          {
+             name: 'Q2',
+             formula: '"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"'
+          },
+          {
+             name: 'Q3',
+             formula: '"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"'
+          },
+            {
+             name: 'Q4',
+             formula: '"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          },{
+             name: 'Total',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          }]
+      },
+      dataSourceSettings14: {
+        columns: [{ name: "Year" }],
+        values: [
+          { name: "Jan", caption: "Jan" },
+          { name: "Feb", caption: "Feb" },
+          { name: "Mar", caption: "Mar" },
+          { name: "Apr", caption: "Apr" },
+          { name: "May", caption: "May" },
+          { name: "Jun", caption: "Jun" },
+          { name: "Jul", caption: "Jul" },
+          { name: "Aug", caption: "Aug" },
+          { name: "Sep", caption: "Sep" },
+          { name: "Oct", caption: "Oct" },
+          { name: "Nov", caption: "Nov" },
+          { name: "Dec", caption: "Dec" },
+          { name: 'Total', caption: 'Total Units', type: 'CalculatedField' }
+        ],
+        dataSource: secondData,
+        expandAll: true,
+        rows: [{ name: "tree_id" }, { name: "name" }],
+        showColumnGrandTotals:false,
+        calculatedFieldSettings: [{
+             name: 'Q1',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"'
+          },
+          {
+             name: 'Q2',
+             formula: '"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"'
+          },
+          {
+             name: 'Q3',
+             formula: '"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"'
+          },
+            {
+             name: 'Q4',
+             formula: '"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          },{
+             name: 'Total',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          }]
+      },
+      dataSourceSettings15: {
+        columns: [{ name: "Year" }],
+        values: [
+          { name: 'Q1', caption: 'Quarter 1', type: 'CalculatedField' },
+          { name: 'Q2', caption: 'Quarter 2', type: 'CalculatedField' },
+          { name: 'Q3', caption: 'Quarter 3', type: 'CalculatedField' },
+          { name: 'Q4', caption: 'Quarter 4', type: 'CalculatedField' },
+          { name: 'Total', caption: 'Total Units', type: 'CalculatedField' }
+        ],
+        dataSource: secondData,
+        expandAll: true,
+        rows: [{ name: "tree_id" }, { name: "name" }],
+        showColumnGrandTotals:false,
+        calculatedFieldSettings: [{
+             name: 'Q1',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"'
+          },
+          {
+             name: 'Q2',
+             formula: '"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"'
+          },
+          {
+             name: 'Q3',
+             formula: '"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"'
+          },
+            {
+             name: 'Q4',
+             formula: '"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          },{
+             name: 'Total',
+             formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
+          }]
+      },
       browseModal:false,
       allowCalculatedField:true,
           complete:false,
@@ -671,6 +1242,8 @@ export default {
         },
         selected:"Month",
         options:["Month","Quarter"],
+        options3:["Total Budget","Approved Budget"],
+        selected3 : "Total Budget",
         selected2:"Apr",
         options2:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
         height: 530
@@ -709,10 +1282,12 @@ export default {
             this.selected2 = "Jan";
           }
         
-      }); 
-        // args.dataSource.data = res.data
+      });
+        args.dataSource.data = res.data
+        args.dataSource.data = res.data
         console.log(res.data);
-      }); },
+      });
+      },
       onProgress(args) {
       },
        onUploadSuccess: function (args) {

@@ -18,6 +18,7 @@
                     <e-column field='vendor.vendor_company' headerText='Vendor'  :filter='filter' ></e-column>
                     <e-column field='status' headerText='Status'  :filter='filter' ></e-column>
                     <e-column field='user.user_name' headerText='Requested By'  :filter='filter' ></e-column>
+                    <e-column field='approvalCode' headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
                     <e-column field='po_raised.purchase_id' headerText='PO Number'  :filter='filter' ></e-column>
                     <e-column field='approvalCode' headerText='Approval Code'  :filter='filter' ></e-column>
                     <e-column field='transaction_type'  headerText='Type' :filter='filter' :isPrimaryKey='true'></e-column>
@@ -121,7 +122,27 @@ export default {
         },
     data: function () {
       return {
-            fields: { text: 'text', value: 'value' },
+        labelTemplate: function() {
+          return {
+            template:Vue.component('labelTemplate', {
+                      template: `<div><b-badge style="font-weight:100;margin:3px" v-for="label in labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
+                  data: function() {
+                          return {
+                              data: {},
+                              labels:[]
+                          }
+                      },
+                      mounted() {
+                        axios.get(`${apiUrl}`+`approvals/preApp/get/one/${this.data.approvalCode}`,{withCredentials:true}).then((res) => {
+                          console.log(res.data)
+                            if(res.data !=null) {
+                              this.labels = res.data.labels
+                            }
+                        })
+                      }
+                })
+          }
+        },
             dropdownValue: 'Top',
             datasrc: [],
             editSettings: { allowEditing: true, allowAdding: true, allowDeleting: true,mode:'Dialog'},
@@ -185,7 +206,6 @@ export default {
                 dReady: false,
                 showCloseIcon: false,
                 isDataChanged: true,
-                fields: { text: 'text', value: 'value' },
                 
                 filterOptions: {
                     type: 'Menu'
@@ -288,6 +308,57 @@ export default {
 
 <style>
 
+#label {
+    font-size: 12px;
+}
+    .badge-f44336 {
+    background-color:#f44336;
+    color:white;
+  }
+  .badge-e91e63{
+    background-color:#e91e63;
+    color:white;
+  }
+  .badge-9c27b0{
+    background-color:#9c27b0;
+    color:white;
+  }
+  .badge-673ab7{
+    background-color:#673ab7;
+    color:white;
+  }
+  .badge-2196f3{
+    background-color:#2196f3;
+    color:white;
+  }
+  .badge-03a9f4{
+    background-color:#03a9f4;
+    color:white;
+  }
+  .badge-00bcd4{
+    background-color:#00bcd4;
+    color:white;
+  }
+  .badge-009688{
+    background-color:#009688;
+    color:white;
+  }
+  .badge-8bc34a{
+    background-color:#8bc34a;
+    color:white;
+  }
+  .badge-cddc39{
+    background-color:#cddc39;
+    color:black;
+  }
+  .badge-ffeb3b{
+    background-color:#ffeb3b;
+    color:black;
+  }
+  .badge-ffc107{
+    background-color:#ffc107;
+    color:black;
+  }
 .container-fluid {
     width: 100%;
     padding-right: 0px !important;

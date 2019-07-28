@@ -227,5 +227,8 @@
     "graduate" : "Graduate",
     "doctorate" : "Doctorate",
     "addidentifications" : "Add Identifications",
-    "idnumber" : "Identification Number"
+    "idnumber" : "Identification Number",
+    "accept" : "Accept",
+    "reject" : "Reject",
+    "pholdswitchbudget" : "Switch Budget"
 }

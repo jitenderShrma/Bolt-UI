@@ -22,6 +22,7 @@
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionBegin="actionBegin"
+            :actionComplete="actionComplete"
             :enableCollapseAll="false"
             :autoFitColumns="true"
             :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' >
@@ -30,7 +31,7 @@
                     <!-- <e-column :visible=false field='_id'  headerText='Context'></e-column> -->
                     <e-column field='user_type' headerText='User Type' ></e-column>
                     <e-column field='user_group_name' headerText='User Groups' ></e-column>
-                    <e-column field='labels.label_name' :template="labelTemplate" :allowEditing="false" headerText='Label' ></e-column>
+                    <e-column field='labels' :template="labelTemplate" :allowEditing="false" headerText='Label' ></e-column>
                      <e-column headerText='Manage Permissions'  :commands='commands'></e-column>
                 </e-columns>
             </ejs-treegrid>
@@ -49,7 +50,7 @@
               <p>Label Color</p>
             </div>
             <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                    <ejs-colorpicker value="#000" :change="onChange" id="color-picker"></ejs-colorpicker>
+                    <ejs-colorpicker :modeSwitcher="false" value="#000" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
             </div>
         </div>
         <br>
@@ -102,6 +103,9 @@ export default {
     },
     data : function() {
         return {
+          squarePalettesColn: 7,
+        circlePaletteColors: {'custom': ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#2196f3', '#03a9f4', '#00bcd4',
+                    '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
           formatSettings : {type:'json'},
                 label : 0,
                 formdata: {
@@ -135,7 +139,7 @@ export default {
             labelTemplate: function () {
               return {
                   template: Vue.component('labelTemplate', {
-                      template: `<div ><b-badge v-for="label in data.labels" id="label" v-b-tooltip.hover :title="label.description" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
+                      template: `<div ><b-badge style="font-weight:100;margin:3px" v-for="label in data.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
                   data: function() {
                           return {
                               data: {},
@@ -156,15 +160,6 @@ export default {
       })
     this.$refs.dialogObj.hide();
 
-    },
-    watch : {
-      'label' : function() {
-        api.get(`${apiUrl}`+`super/group/subgroup/getall`)
-        .then((response) => {
-          this.data = response.data
-          console.log(this.data)
-          })
-      }
     },
   // computed : {
   //     async getData () {
@@ -193,25 +188,24 @@ export default {
       addLabel (args) {
         this.$refs.dialogObj.hide();
         let val = this.$refs.treegrid.getSelectedRecords()
-        console.log(this.formdata)
               api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((response) => {
                 console.log(response.data);
                 var id = {
                   labels :  response.data._id
                 }
                 api.put(`${apiUrl}`+`super/group/subgroup/push/label/`+`${val[0]._id}`,id).then((response) => {
-                  console.log(response.data)
-                  this.label++;
+                  this.$router.go(0)
                 });
                 this.formdata=null
               });
             
       },
       onChange(args) {
-        this.formdata.color = args.currentValue.hex;
+        this.formdata.color = args.currentValue.hex.slice(1);
       },   
        actionBegin(args) {
-        if(args.requestType==="save") {
+        console.log(args)
+        if(args.requestType==="save" && args.action!="edit") {
           var selected = this.$refs.treegrid.ej2Instances.getSelectedRecords()
           if(selected.length>0) {
           args.data.labels = undefined
@@ -241,8 +235,18 @@ export default {
         }
       },
       actionComplete: function(args) {
-        if(args.requestType==="save") {
-          console.log("savecomplete")
+        if(args.action=="edit") {
+          var sendData = {
+            user_type : args.data.user_type,
+            user_group_name : args.data.user_group_name
+          }
+          api.put(`${apiUrl}`+`super/group/subgroup/edit/${args.data._id}`,sendData).then((res) => {
+            api.get(`${apiUrl}`+`super/group/subgroup/getall`)
+            .then((response) => {
+              this.data = response.data
+              console.log(this.data)
+              })
+          })
         }
       },
        onClick(args) {
@@ -331,8 +335,6 @@ export default {
         
 };
 </script>
-
-
 <style>
 @import '../../styles/ejs-vue-base.css';
 @import "../../styles/ej2-vue-richtexteditor/styles/material.css";
@@ -344,6 +346,54 @@ export default {
 @import "../../styles/ej2-vue-inputs/styles/material.css";
 </style>
 <style>
+  .badge-f44336 {
+    background-color:#f44336;
+    color:white;
+  }
+  .badge-e91e63{
+    background-color:#e91e63;
+    color:white;
+  }
+  .badge-9c27b0{
+    background-color:#9c27b0;
+    color:white;
+  }
+  .badge-673ab7{
+    background-color:#673ab7;
+    color:white;
+  }
+  .badge-2196f3{
+    background-color:#2196f3;
+    color:white;
+  }
+  .badge-03a9f4{
+    background-color:#03a9f4;
+    color:white;
+  }
+  .badge-00bcd4{
+    background-color:#00bcd4;
+    color:white;
+  }
+  .badge-009688{
+    background-color:#009688;
+    color:white;
+  }
+  .badge-8bc34a{
+    background-color:#8bc34a;
+    color:white;
+  }
+  .badge-cddc39{
+    background-color:#cddc39;
+    color:black;
+  }
+  .badge-ffeb3b{
+    background-color:#ffeb3b;
+    color:black;
+  }
+  .badge-ffc107{
+    background-color:#ffc107;
+    color:black;
+  }
 
     @font-face {
 font-family: 'e-grid-rowheight';

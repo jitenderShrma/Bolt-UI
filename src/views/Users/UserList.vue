@@ -1,6 +1,6 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
-     <div class="col-lg-15 control-section">
+     <div id="target" class="col-lg-15 control-section">
         <div class="content-wrapper">
             <ejs-toolbar :clicked="addEditHandler">
                 <e-items>
@@ -19,6 +19,7 @@
                     <e-column field='personal_details.name' headerText='Name'  :filter='filter' ></e-column>
                     <e-column field='user_name' headerText='Username'  :filter='filter' ></e-column>
                     <e-column field='user_type.designation.name' headerText='Designation'  :filter='filter' ></e-column>
+                    <e-column field='user_type.designation.labels' :template="labelTemplate" headerText='Labels '  :filter='filter' ></e-column>
                     <e-column field='user_type.department.department_name' headerText='Department'  :filter='filter' ></e-column>
                     <e-column field='department.department_name' headerText='Department'  :filter='filter' ></e-column>
                     <e-column field='user_group.user_type' headerText='User Group' :filter='filter' ></e-column>
@@ -40,12 +41,19 @@ import Vue from 'vue'
 import { Browser } from '@syncfusion/ej2-base';
 import {ClientTable, Event} from 'vue-tables-2'
 import { ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
-import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import VueNotifications from 'vue-notifications'
 import { DatePickerPlugin } from "@syncfusion/ej2-vue-calendars";
-import { NumericTextBox } from "@syncfusion/ej2-inputs";
-import { NumericTextBoxPlugin } from "@syncfusion/ej2-vue-inputs";
+import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
+import { NumericTextBoxPlugin,ColorPickerPlugin } from "@syncfusion/ej2-vue-inputs";
+import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
+  import { MultiSelectPlugin, DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
+  Vue.use(DropDownListPlugin);
+Vue.use(ToolbarPlugin)
+Vue.use(DialogPlugin)
+Vue.use(TextBoxPlugin)
+Vue.use(NumericTextBoxPlugin);
+Vue.use(ColorPickerPlugin);
 import miniToastr from 'mini-toastr' 
 import {
   PivotViewPlugin,
@@ -55,16 +63,11 @@ import {
 
 } from "@syncfusion/ej2-vue-pivotview";
 import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Group } from "@syncfusion/ej2-vue-grids";
-    import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     
-    Vue.use(PivotViewPlugin);
     Vue.use(GridPlugin);
-    Vue.use(ToolbarPlugin);
 
-    Vue.use(DialogPlugin);
     Vue.use(DropDownListPlugin);
     Vue.use(DatePickerPlugin);
-    Vue.use(NumericTextBoxPlugin)
 var api = axios.create({
   withCredentials :true
 })
@@ -117,6 +120,30 @@ export default {
         },
     data: function () {
       return {
+        labelTemplate: function () {
+              return {
+                  template: Vue.component('labelTemplate', {
+                      template: `<div ><b-badge style="font-weight:100;margin:3px" v-for="label in data.user_type.designation.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
+                  data: function() {
+                          return {
+                              data: {},
+                          }
+                      }
+                })
+              }
+          },
+          module:null,
+          formdata: {
+                  label_name : "",
+                  color : "#fff",
+                  context : "Designations",
+                  description : ""
+                },
+          LabelModal:false,
+          animationSettings: { effect: 'Zoom' },
+          squarePalettesColn: 7,
+        circlePaletteColors: {'custom': ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#2196f3', '#03a9f4', '#00bcd4',
+                    '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
             fields: { text: 'text', value: 'value' },
             dropdownValue: 'Top',
             datasrc: [],
@@ -322,8 +349,11 @@ export default {
             
         },
         async mounted () { 
+          
                 axios.get(`${apiUrl}`+`user/subuser/see/all`,{ withCredentials : true})
-              .then(response => {this.datasrc = response.data})
+              .then(response => {
+                console.log(response.data)
+                this.datasrc = response.data})
         },
         computed: {
             getTradeData: async function () {
@@ -383,11 +413,55 @@ export default {
         outline: none;
     }
 
-.badge-red {
-  background-color: red;
-  color:white;
+#label {
+    font-size: 12px;
 }
-.badge-#ff000 {
-  background-color: red;
-}
+    .badge-f44336 {
+    background-color:#f44336;
+    color:white;
+  }
+  .badge-e91e63{
+    background-color:#e91e63;
+    color:white;
+  }
+  .badge-9c27b0{
+    background-color:#9c27b0;
+    color:white;
+  }
+  .badge-673ab7{
+    background-color:#673ab7;
+    color:white;
+  }
+  .badge-2196f3{
+    background-color:#2196f3;
+    color:white;
+  }
+  .badge-03a9f4{
+    background-color:#03a9f4;
+    color:white;
+  }
+  .badge-00bcd4{
+    background-color:#00bcd4;
+    color:white;
+  }
+  .badge-009688{
+    background-color:#009688;
+    color:white;
+  }
+  .badge-8bc34a{
+    background-color:#8bc34a;
+    color:white;
+  }
+  .badge-cddc39{
+    background-color:#cddc39;
+    color:black;
+  }
+  .badge-ffeb3b{
+    background-color:#ffeb3b;
+    color:black;
+  }
+  .badge-ffc107{
+    background-color:#ffc107;
+    color:black;
+  }
 </style>

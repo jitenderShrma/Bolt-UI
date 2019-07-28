@@ -53,7 +53,7 @@ const AddCompany = () => import('@/views/Company/AddCompany');
 const UserDetails = () => import('@/views/Users/UserDetails');
 const UserList = () => import('@/views/Users/UserList');
 const AddUser = () => import('@/views/Users/AddUser');
-
+const StaffList = () => import('@/views/Staff/StaffList'); 
 
 
 //Transaction Routes
@@ -174,7 +174,23 @@ var router = new Router({
                   meta : { requiresAuth : true },
                   name: 'User Details',
                   component: UserDetails
-                },
+                }
+              ]
+            },
+            {
+              path:'/staff',
+              redirect:'/staff/list',
+              meta:{requiresAuth : true},
+              component : {
+                render(c) {return c('router-view')}
+              },
+              children:[
+                {
+                  name : `Staff`,
+                  meta : { requiresAuth : true },
+                  path : `/staff/list`,
+                  component : StaffList
+                }
               ]
             },
             // {
@@ -531,7 +547,6 @@ var router = new Router({
             },
             {
               path : "/budget",
-              meta : { requiresAuth : true },
               component : {
                 render (c) { return c('router-view') }
               },
@@ -539,14 +554,7 @@ var router = new Router({
                 {
                   name:"Budget",
                   path : "/budget",
-                  meta : { requiresAuth : true },
                   component : test
-                },
-                {
-                	name:"csv",
-                	path: "/test/import",
-                  meta : { requiresAuth : true },
-                	component: csvimport
                 }
               ]
             },

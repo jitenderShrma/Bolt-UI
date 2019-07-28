@@ -612,7 +612,7 @@ export default {
       var user_group = {
         user_group_name : args.itemData._id
       }
-      api.get(`${apiUrl}`+`super/group/subgroup/find/by/name`,user_group).then((res) => {
+      api.post(`${apiUrl}`+`super/group/subgroup/find/by/name`,user_group).then((res) => {
         this.input.user_group = res.data._id
       })
     },
@@ -680,10 +680,11 @@ export default {
       }
       if(this.input.onType=="Staff") {
         axios.post(`${apiUrl}`+`staff/staff/create`,this.staff,{withCredentials:true}).then((response)=> {
-          console.log(response);
           this.input.user_type = response.data._id
           axios.post(`${apiUrl}`+`user/subuser/add`,this.input, {withCredentials : true}).then((response) =>{
-              console.log(response);
+            var update = {
+              user : response.data._id
+            }
               if(response.data.limit == "exceeded") {
                 toast({
                     type: VueNotifications.types.warn,
@@ -700,6 +701,10 @@ export default {
                   console.log(response)
               }
               else {
+                axios.put(`${apiUrl}`+`staff/staff/update/one/${this.input.user_type}`,update,{withCredentials : true}).then((res) => {
+                    console.log(update)
+                    console.log(res.data)
+                  })
                 toast({
                     type: VueNotifications.types.success,
                     title: 'Success',

@@ -1,12 +1,14 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
-     <div class="col-lg-15 control-section">
+     <div id="target" class="col-lg-15 control-section">
         <div class="content-wrapper">
             <ejs-toolbar :clicked="addEditHandler">
                 <e-items>
                   <e-item  id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
                   <e-item  id="excelexport" :text="$ml.get('exportexcel')"></e-item>
                   <e-item  id="pdfexport" :text="$ml.get('exportpdf')"></e-item>
+              <e-item id="label" :text="$ml.get('label')"></e-item>
+
                 </e-items>
                 </ejs-toolbar>
              <div class="control-section">
@@ -16,6 +18,7 @@
                 <e-columns>
                     <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column>
+                    <e-column field='labels' headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
                     <e-column field='status' headerText='Status'  :filter='filter' ></e-column>
                     <e-column field='recurring_rate' headerText='Recurring Rate'  :filter='filter' ></e-column>
                     <e-column field='budget_head.name' headerText='Head'  :filter='filter' ></e-column>
@@ -23,10 +26,39 @@
                     <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' ></e-column>
                     <e-column field='description' headerText='Description'  :filter='filter' ></e-column>
                     <e-column field='amount' headerText='Amount'  :filter='filter' ></e-column>
+                    <e-column headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
                 </e-columns>
                 </ejs-grid>
                  </div>
         </div>
+        <ejs-dialog id='dialog' height="auto" header='Add A Label' showCloseIcon='true' :isModal='LabelModal' :animationSettings='animationSettings' width='285px' ref='dialogObj'
+            target='#target' >
+            <b-form v-on:submit.prevent="addLabel">
+        <div class="content-wrapper textbox-default">
+        <div class="row">
+        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
+        </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+              <p>Label Color</p>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                    <ejs-colorpicker :modeSwitcher="false" value="#000" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
+            </div>
+        </div>
+        <br>
+        <div class="multiline_wrapper">
+            <ejs-textbox v-model="formdata.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
+        </div>
+        </div>
+        <div slot="footer">
+              <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+          </div>
+          </b-form>
+        </ejs-dialog>
         <ejs-dialog :buttons='alertDlgButtons' ref="alertDialog" v-bind:visible="false" :header='alertHeader' :animationSettings='animationSettings' :content='alertContent' :showCloseIcon='showCloseIcon' :target='target'
             :width='alertWidth'>
         </ejs-dialog>
@@ -40,12 +72,9 @@ import Vue from 'vue'
 import { Browser } from '@syncfusion/ej2-base';
 import {ClientTable, Event} from 'vue-tables-2'
 import { ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
-import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import VueNotifications from 'vue-notifications'
 import { DatePickerPlugin } from "@syncfusion/ej2-vue-calendars";
-import { NumericTextBox } from "@syncfusion/ej2-inputs";
-import { NumericTextBoxPlugin } from "@syncfusion/ej2-vue-inputs";
 import miniToastr from 'mini-toastr' 
 import {
   PivotViewPlugin,
@@ -55,11 +84,15 @@ import {
 } from "@syncfusion/ej2-vue-pivotview";
 import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
-    
+    import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
+import { NumericTextBoxPlugin,ColorPickerPlugin } from "@syncfusion/ej2-vue-inputs";
+import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
+
+Vue.use(TextBoxPlugin)
+Vue.use(ColorPickerPlugin);
     Vue.use(PivotViewPlugin);
     Vue.use(GridPlugin);
     Vue.use(ToolbarPlugin);
-
     Vue.use(DialogPlugin);
     Vue.use(DropDownListPlugin);
     Vue.use(DatePickerPlugin);
@@ -116,6 +149,57 @@ export default {
         },
     data: function () {
       return {
+        buttonTemplate: function () {
+              return {
+                  template: Vue.component('buttonTemplate', {
+                      template: `<div>
+                                  <b-button @click="acceptReq" type="submit" size="sm" variant="primary" v-text="$ml.get('accept')"><i class="fa fa-dot-circle-o"></i></b-button>
+                                  <b-button @click="rejectReq" type="submit" size="sm" variant="danger" v-text="$ml.get('reject')"><i class="fa fa-dot-circle-o"></i></b-button>
+                                </div>`,
+                  data: function() {
+                          return {
+                              data: {},
+                          }
+                      },
+                      methods : {
+                        acceptReq() {
+                          axios.get(`${apiUrl}`+`/approval/level1/accept/${this.data.approvalCode}`).then((res) => {
+                            console.log(res.data)
+                          })
+                        },
+                        rejectReq() {
+                          axios.get(`${apiUrl}`+`/approval/level1/reject/${this.data.approvalCode}`).then((res) => {
+                            console.log(res.data)
+                          })
+                        }
+                      }
+                })
+              }
+          },
+        labelTemplate: function () {
+              return {
+                  template: Vue.component('labelTemplate', {
+                      template: `<div ><b-badge style="font-weight:100;margin:3px" v-for="label in data.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
+                  data: function() {
+                          return {
+                              data: {},
+                          }
+                      }
+                })
+              }
+          },
+          module:null,
+          formdata: {
+                  label_name : "",
+                  color : "#fff",
+                  context : "Approval",
+                  description : ""
+                },
+          LabelModal:false,
+          animationSettings: { effect: 'Zoom' },
+          squarePalettesColn: 7,
+        circlePaletteColors: {'custom': ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#2196f3', '#03a9f4', '#00bcd4',
+                    '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
             fields: { text: 'text', value: 'value' },
             dropdownValue: 'Top',
             datasrc: [],
@@ -215,22 +299,24 @@ export default {
                 console.log(args)
             },
             
-            load: function() {
-                let proxy = this;
-                this.$refs.overviewgrid.$el.ej2_instances[0].on('data-ready', function () {
-                    proxy.dReady =  true;
-                 })
-                this.$refs.overviewgrid.$el.addEventListener('DOMSubtreeModified', function () {
-                    if (proxy.dReady && proxy.stTime && proxy.isDataChanged) {
-                        let e = performance.now() - proxy.stTime;
-                        proxy.loadTime = "Load Time: <b>" + e.toFixed(0) + "</b><b>ms</b>";
-                        proxy.stTime = null;
-                        proxy.dReady = false;
-                        proxy.isDataChanged = false;
-                        proxy.$refs.msgelement.classList.remove('e-hide');
-                    }
-                })
-            },
+            addLabel (args) {
+        this.$refs.dialogObj.hide();
+        let val = this.$refs.overviewgrid.getSelectedRecords()
+              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((response) => {
+                var id = {
+                  labels :  response.data._id
+                }
+                api.put(`${apiUrl}`+`approvals/preApp/push/label/`+`${val[0]._id}`,id).then((response) => {
+                  console.log(response.data)
+                    this.$router.go(0)
+                });
+                this.formdata=null
+              });
+            
+      },
+    onChange(args) {
+        this.formdata.color = args.currentValue.hex.slice(1);
+      }, 
             clickHandler (args) {
                     if(this.$refs.overviewgrid.getSelectedRecords().length>0){
                     let withHeader = false;
@@ -244,6 +330,7 @@ export default {
                  if (args.item.id === 'small') {
                     this.rowHeight = 20;
                 }
+
                 if (args.item.id === 'medium') {
                     this.rowHeight = 40;
                 }
@@ -258,6 +345,14 @@ export default {
                 }
             },
             addEditHandler(args) {
+              if(args.item.id == 'label') {
+                  if(this.$refs.overviewgrid.getSelectedRecords().length>0) {
+                    this.$refs.dialogObj.show();
+                  }
+                  else { 
+                    alert("Please select a record to label it");
+                  }
+                }
                 if(args.item.id == "add") {
                     console.log(args)
                     this.$router.push('/approval/add');
@@ -270,6 +365,7 @@ export default {
             
         },
         async mounted () { 
+                this.$refs.dialogObj.hide();
                 api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
                     this.datasrc = response.data;
                 })
@@ -285,7 +381,57 @@ export default {
 
 
 <style>
-
+#label {
+    font-size: 12px;
+}
+    .badge-f44336 {
+    background-color:#f44336;
+    color:white;
+  }
+  .badge-e91e63{
+    background-color:#e91e63;
+    color:white;
+  }
+  .badge-9c27b0{
+    background-color:#9c27b0;
+    color:white;
+  }
+  .badge-673ab7{
+    background-color:#673ab7;
+    color:white;
+  }
+  .badge-2196f3{
+    background-color:#2196f3;
+    color:white;
+  }
+  .badge-03a9f4{
+    background-color:#03a9f4;
+    color:white;
+  }
+  .badge-00bcd4{
+    background-color:#00bcd4;
+    color:white;
+  }
+  .badge-009688{
+    background-color:#009688;
+    color:white;
+  }
+  .badge-8bc34a{
+    background-color:#8bc34a;
+    color:white;
+  }
+  .badge-cddc39{
+    background-color:#cddc39;
+    color:black;
+  }
+  .badge-ffeb3b{
+    background-color:#ffeb3b;
+    color:black;
+  }
+  .badge-ffc107{
+    background-color:#ffc107;
+    color:black;
+  }
 .container-fluid {
     width: 100%;
     padding-right: 0px !important;
