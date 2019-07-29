@@ -1,6 +1,16 @@
+import apiUrl from '@/apiUrl'
+import axios from 'axios'
 
+var pendingCount;
 
-
+// async function getCount() {
+//   var val
+//   await axios.get(`${apiUrl}`+`approvals/preApp/view/requests`,{withCredentials:true}).then((res) => {
+//       val = res.data.length
+//       console.log(res.data)
+//     })
+//   return val
+// }
 var items = [
   {
     name: 'Dashboard',
@@ -13,8 +23,19 @@ var items = [
   },  
   {
     name: 'Users',
-    url: '/user/list',
-    icon: 'icon-star',
+    icon: 'icon-user',
+    children:[
+      {
+        name: 'All Users',
+        url: '/user/list',
+        icon: 'icon-user'
+      },
+      {
+        name: 'Staff',
+        url: '/staff',
+        icon: 'icon-user'
+      }
+    ]
   },
   {
     name: 'User Groups',
@@ -76,7 +97,24 @@ var items = [
   {
     name:"Approval",
     url:"/approval",
-    icon:"icon-calculator"
+    icon:"icon-calculator",
+    children : [
+      {
+        name:"All Approvals",
+        url:"/approval/view/all",
+        icon:'icon-calculator'
+      },
+      {
+        name:'Approval Requests',
+        url: '/approval/view/pending',
+        icon:'icon-calculator',
+        badge: {
+          variant: 'danger',
+          text: pendingCount
+        }
+      }
+
+    ]
   },
   {
     name:"Label",

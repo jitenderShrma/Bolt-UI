@@ -9,6 +9,21 @@ export default {
 </script>
 
 <style lang="scss">
+.e-grid .e-groupcaption, .e-grid .e-indentcell, .e-grid .e-recordplusexpand, .e-grid .e-recordpluscollapse {
+    background-color: white !important;
+    color: #000 !important;
+}
+.e-grid .e-groupcaption, .e-grid .e-indentcell, .e-grid .e-recordplusexpand, .e-grid .e-recordpluscollapse {
+    background-color: white !important;
+    color: #000 !important;
+}
+.e-grid .e-rowcell, .e-grid .e-groupcaption, .e-grid .e-indentcell, .e-grid .e-recordplusexpand, .e-grid .e-recordpluscollapse, .e-grid .e-detailrowcollapse, .e-grid .e-detailrowexpand, .e-grid .e-detailindentcell, .e-grid .e-detailcell {
+    border-color: white !important;
+    border-top-color: white !important;
+    border-right-color: white !important;
+    border-bottom-color: white !important; 
+    border-left-color: white !important;
+}
   @import '../node_modules/animate.css/animate.css';
   // CoreUI Icons Set
   @import '~@coreui/icons/css/coreui-icons.min.css';

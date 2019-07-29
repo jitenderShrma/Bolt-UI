@@ -1,6 +1,6 @@
 <template>
   <div class="animated slideInLeft" style="animation-duration:100ms">
-	<b-row>
+  <b-row>
       <b-col md="12">
         <b-card>
           <div slot="header">
@@ -227,15 +227,15 @@ Vue.use(TextBoxPlugin);
   });
 
 
-	export default {
-		name : 'AddTransaction',
-		components : {
+  export default {
+    name : 'AddTransaction',
+    components : {
       CoolSelect,
       cSwitch,
       MultiSelectPlugin
-		},
-		data: function() {
-			return {
+    },
+    data: function() {
+      return {
         groupTemplate1: function () {
               return {
                   template: groupVue1
@@ -250,8 +250,8 @@ Vue.use(TextBoxPlugin);
           quotes:[
           ],
           verified:false,
-				input:{
-					department:null,
+        input:{
+          department:null,
           approval_type:"",
           recurring_rate:"",
           budget_head:null,
@@ -259,7 +259,7 @@ Vue.use(TextBoxPlugin);
           amount:"",
           request_for_quote:"",
           description:""
-				},
+        },
         addresslist : {
         compAdd : "",
         country : "",
@@ -301,13 +301,13 @@ Vue.use(TextBoxPlugin);
         poModal:false,
         quoteModal :false,
         vendorModal:false,
-				types:[
+        types:[
           "One Time","Recurring"
-				],
+        ],
         disableCategory:false,
-				category:[
-					"Purchase Order","Bill","Invoice","Reimburstement"
-				],
+        category:[
+          "Purchase Order","Bill","Invoice","Reimburstement"
+        ],
         month:[ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"}
         
         
@@ -322,9 +322,9 @@ Vue.use(TextBoxPlugin);
         approvalFields:{text:"description",value:"_id"},
         head_fields:{groupBy:'parent_head',text:"name",value:"_id"},
         loader:false
-			}
-		},
-		async mounted() {
+      }
+    },
+    async mounted() {
       axios.get(`${apiUrl}`+`approvals/preApp/get/all`,{withCredentials:true}).then((res) => {
         this.approvals = res.data
       });
@@ -341,8 +341,8 @@ Vue.use(TextBoxPlugin);
         console.log(res.data);
         this.head = res.data
       })
-		},
-		methods : {
+    },
+    methods : {
        filtering(e) {
         var department = this.department
            var query = new Query();
@@ -361,7 +361,7 @@ Vue.use(TextBoxPlugin);
               axios.post(`${apiUrl}`+`approvals/preApp/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
                  this.loader = true
               })
-              setTimeout(function(){window.location.href = ('#/approval/list')},2000)
+              setTimeout(function(){window.location.href = ('#/approval/view/all')},2000)
               
             }
           });
@@ -387,7 +387,7 @@ Vue.use(TextBoxPlugin);
         }
       
     }
-	};
+  };
 </script>
 
 <style>

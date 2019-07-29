@@ -18,6 +18,7 @@
                 <e-columns>
                     <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column>
+                    <e-column field='request_by.user_name' headerText='Requested By'  :filter='filter' ></e-column>
                     <e-column field='labels' headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
                     <e-column field='status' headerText='Status'  :filter='filter' ></e-column>
                     <e-column field='recurring_rate' headerText='Recurring Rate'  :filter='filter' ></e-column>
@@ -26,7 +27,7 @@
                     <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' ></e-column>
                     <e-column field='description' headerText='Description'  :filter='filter' ></e-column>
                     <e-column field='amount' headerText='Amount'  :filter='filter' ></e-column>
-                    <e-column headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
+                    <e-column :visible="pending" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
                 </e-columns>
                 </ejs-grid>
                  </div>
@@ -163,12 +164,12 @@ export default {
                       },
                       methods : {
                         acceptReq() {
-                          axios.get(`${apiUrl}`+`/approval/level1/accept/${this.data.approvalCode}`).then((res) => {
+                          axios.get(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
                             console.log(res.data)
                           })
                         },
                         rejectReq() {
-                          axios.get(`${apiUrl}`+`/approval/level1/reject/${this.data.approvalCode}`).then((res) => {
+                          axios.get(`${apiUrl}`+`/approval/level1/reject/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
                             console.log(res.data)
                           })
                         }
@@ -261,6 +262,9 @@ export default {
                     })
               }
           },
+          link:'',
+          key:'',
+          pending:false,
            height : window.innerHeight*0.695,
           toolbar: [
           'ExcelExport','PdfExport',
@@ -364,11 +368,40 @@ export default {
                 },
             
         },
-        async mounted () { 
-                this.$refs.dialogObj.hide();
+        watch:{
+            $route (to, from){
+              if(to.params.id == 'pending') {
+                api.get(`${apiUrl}`+`approvals/preApp/view/requests`).then((response) => {
+                    this.datasrc = response.data;
+                })
+                this.pending = true
+              }
+              else {
                 api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
                     this.datasrc = response.data;
                 })
+                this.pending = false
+              }
+            }
+        }, 
+        async mounted () { 
+                this.$refs.dialogObj.hide();
+                this.link = window.location.href;
+                this.key = this.link.split('view/').pop()
+                if(this.key == 'all') {
+                  this.pending = false
+                api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
+                  console.log(response.data)
+                    this.datasrc = response.data;
+                })
+              }
+              else{
+                this.pending = true
+                api.get(`${apiUrl}`+`approvals/preApp/view/requests`).then((response) => {
+                    this.datasrc = response.data;
+                    console.log(response.data)
+                })
+              }
         },
         computed: {
             getTradeData: async function () {

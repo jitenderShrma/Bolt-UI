@@ -679,6 +679,7 @@ export default {
         })
       }
       if(this.input.onType=="Staff") {
+        this.input.address = [this.addresslist];
         axios.post(`${apiUrl}`+`staff/staff/create`,this.staff,{withCredentials:true}).then((response)=> {
           this.input.user_type = response.data._id
           axios.post(`${apiUrl}`+`user/subuser/add`,this.input, {withCredentials : true}).then((response) =>{

@@ -576,7 +576,7 @@ var router = new Router({
             {
               path: '/approval',
               meta : { requiresAuth : true },
-              redirect:'/Approval/list',
+              redirect:'/approval/view/pending',
               name:'Approval List',
               component : {
                 render(c) { return c('router-view') }
@@ -589,14 +589,16 @@ var router = new Router({
                   component : AddApproval
                 },
                 {
-                  path:'/approval/list',
-                  component : ApprovalList
-                },
-                {
                   path:'/approval/edit/:id',
                   meta : { requiresAuth : true },
                   name:'Edit Approval',
                   component : EditApproval
+                },
+                {
+                  path:'/approval/view/:id',
+                  meta : { requiresAuth : true },
+                  name:'Approval List',
+                  component : ApprovalList
                 }
               ]
             }

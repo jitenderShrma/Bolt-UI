@@ -13,7 +13,7 @@
                 </ejs-toolbar>
              <div class="control-section">
                 
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowGrouping='true' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :gridLines="Default" :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='personal_details.name' headerText='Name'  :filter='filter' ></e-column>
@@ -97,6 +97,18 @@ const options = {
 }
 //  VueNotifications.setPluginOptions(options)
 
+var captionVue = Vue.component('captionTemplate',{
+  template:`<div><strong>{{data.key}} - {{data.headerText}}<strong></div>`,
+  data: function(){
+    return {
+      data:{}
+    }
+  },
+  mounted() {
+    console.log(this.data)
+  }
+})
+
 Vue.use(VueNotifications, options)
 
 export default {
@@ -166,7 +178,7 @@ export default {
                 dateTemplate: function () {
               return {
                   template: Vue.component("dateTemplate", {
-                      template: `<span>{{ data.created_date | moment("dddd, MMMM Do YYYY") }}<span>`,
+                      template: `<span>{{ data.created_date | moment("dddd, MMMM Do YYYY") }}</span>`,
                       data() {
                         return {
                           data: {
@@ -244,6 +256,12 @@ export default {
                     })
               }
           },
+          groupOptions: { showDropArea: false, columns: ['user_type.department.department_name', 'user_type.designation.name'],
+          captionTemplate: function() {
+            return {
+              template : captionVue
+            }
+          } },
            height : window.innerHeight*0.695,
           toolbar: [
           'ExcelExport','PdfExport',
@@ -464,4 +482,19 @@ export default {
     background-color:#ffc107;
     color:black;
   }
+  .e-grid .e-groupcaption, .e-grid .e-indentcell, .e-grid .e-recordplusexpand, .e-grid .e-recordpluscollapse {
+    background-color: white;
+    color: #000;
+}
+.e-grid .e-groupcaption, .e-grid .e-indentcell, .e-grid .e-recordplusexpand, .e-grid .e-recordpluscollapse {
+    background-color: white;
+    color: #000;
+}
+.e-grid .e-rowcell, .e-grid .e-groupcaption, .e-grid .e-indentcell, .e-grid .e-recordplusexpand, .e-grid .e-recordpluscollapse, .e-grid .e-detailrowcollapse, .e-grid .e-detailrowexpand, .e-grid .e-detailindentcell, .e-grid .e-detailcell {
+    border-color: white;
+    border-top-color: white;
+    border-right-color: white;
+    border-bottom-color: white;
+    border-left-color: white;
+}
 </style>
