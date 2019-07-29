@@ -27,10 +27,10 @@
             :enableCollapseAll="false"
             :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' >
                 <e-columns>
-                  <e-column field='department' headerText='department'  :filter='filter' ></e-column>
-                  <e-column field='designation' headerText='designation'  :filter='filter' ></e-column>
-                  <e-column field='user.username' headerText='User Name'  :filter='filter' ></e-column>
-                  <e-column field='user.personal_details.name' headerText='Name'  :filter='filter' ></e-column>
+                  <e-column field='designation' headerText='Designation' ></e-column>
+                  <e-column field='department' headerText='Department' ></e-column>
+                  <e-column field='user.user_name' headerText='User Name' ></e-column>
+                  <e-column field='user.personal_details.name' headerText='Name' ></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
@@ -227,9 +227,10 @@ export default {
     api.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.department = res.data
       })
-     api.get(`${apiUrl}`+`designation/desig/get/all`)
+     api.get(`${apiUrl}`+`/staff/staff/get/all`)
     .then((response) => {
       this.data = response.data
+      console.log(response.data)
       });
     },
   provide: {

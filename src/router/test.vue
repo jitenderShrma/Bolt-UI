@@ -9,10 +9,10 @@
     </ejs-toolbar>
     <b-card>
       <b-col sm="4" style="float:left">
-    <ejs-dropdownlist v-model="selected3" :dataSource='options3' :placeholder="$ml.get('pholdswitchbudget')"></ejs-dropdownlist>
+    <ejs-dropdownlist :change="changeView" v-model="selected3" :value="selected3" :enablePersistence="true" :dataSource='options3' :placeholder="$ml.get('pholdswitchbudget')"></ejs-dropdownlist>
       </b-col>
       <b-col sm="4" style="float:right">
-    <ejs-dropdownlist v-model="selected" :dataSource='options' :placeholder="$ml.get('pholdpivotdataview')"></ejs-dropdownlist>
+    <ejs-dropdownlist v-model="selected" :value="selected" :enablePersistence="true" :dataSource='options' :placeholder="$ml.get('pholdpivotdataview')"></ejs-dropdownlist>
       </b-col>
     </b-card>
 
@@ -95,11 +95,11 @@
           </div>
         </div>
     <div v-else>
-      <div v-if="selected2=='Total Budget'">
-      <ejs-pivotview :height="height" :dataSource="dataSourceSettings2" :allowCalculatedField="allowCalculatedField"> </ejs-pivotview>
+      <div v-if="selected3 == 'Total Budget'">
+      <ejs-pivotview :height="height" :dataSource="dataSourceSettings2" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
     </div>
     <div v-else>
-      <ejs-pivotview :height="height" :dataSource="dataSourceSettings15" :allowCalculatedField="allowCalculatedField"> </ejs-pivotview>
+      <ejs-pivotview :height="height" :dataSource="dataSourceSettings15" :allowCalculatedField="allowCalculatedField" :load="load"> </ejs-pivotview>
     </div>
     </div>
   </div>
@@ -162,7 +162,7 @@ let remoteData = new DataManager({
   crossDomain: true
 });
 let secondData = new DataManager({
-  url: `${apiUrl}`+`csv/read/M/amount_left/${company}`,
+  url: `${apiUrl}`+`csv/read/M/amount/left/${company}`,
   adaptor: new WebApiAdaptor(),
   crossDomain: true
 });
@@ -1250,7 +1250,13 @@ export default {
         }
     },
     methods:{
+      changeView() {
+        if(this.selected3 == 'Approved Budget') {
+          this.selected = 'Quarter'
+        }
+      },
       async load(args){
+        if(this.selected3 == "Total Budget") {
         await api.get(`${apiUrl}`+`csv/read/M/${company}`).then((res)=>{
         args.dataSource.data = res.data;
         api.get(`${apiUrl}`+`/super/settings/budget/budSet/get`).then((resp)=>{
@@ -1287,6 +1293,45 @@ export default {
         args.dataSource.data = res.data
         console.log(res.data);
       });
+      }
+      else{
+        await api.get(`${apiUrl}`+`csv/read/M/amount/left/${company}`).then((res)=>{
+        args.dataSource.data = res.data;
+        api.get(`${apiUrl}`+`/super/settings/budget/budSet/get`).then((resp)=>{
+          if(resp.data.fin_year_start_month == "Jan"){
+            this.selected2 = "Jan";
+          }else if(resp.data.fin_year_start_month == "Feb"){
+            this.selected2 = "Feb";
+          }else if(resp.data.fin_year_start_month == "Mar"){
+            this.selected2 = "Mar";
+          }else if(resp.data.fin_year_start_month == "Apr"){
+            this.selected2 = "Apr";
+          }else if(resp.data.fin_year_start_month == "May"){
+            this.selected2 = "May";
+          }else if(resp.data.fin_year_start_month == "Jun"){
+            this.selected2 = "Jun";
+          }else if(resp.data.fin_year_start_month == "Jul"){
+            this.selected2 = "Jul";
+          }else if(resp.data.fin_year_start_month == "Aug"){
+            this.selected2 = "Aug";
+          }else if(resp.data.fin_year_start_month == "Sep"){
+            this.selected2 = "Sep";
+          }else if(resp.data.fin_year_start_month == "Oct"){
+            this.selected2 = "Oct";
+          }else if(resp.data.fin_year_start_month == "Nov"){
+            this.selected2 = "Nov";
+          }else if(resp.data.fin_year_start_month == "Dec"){
+            this.selected2 = "Dec";
+          }else{
+            this.selected2 = "Jan";
+          }
+        
+      });
+        args.dataSource.data = res.data
+        args.dataSource.data = res.data
+        console.log(res.data);
+      });
+      }
       },
       onProgress(args) {
       },

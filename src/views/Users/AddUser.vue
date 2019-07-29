@@ -79,10 +79,10 @@
             </b-row>
         <b-row>
           <b-col sm="6">
-            <ejs-textbox type="email" v-model="addresslist.email" floatLabelType="Auto" :placeholder="$ml.get('email')"></ejs-textbox>
+            <ejs-textbox type="email" v-model="input.email" floatLabelType="Auto" :placeholder="$ml.get('email')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
-            <ejs-textbox type="number" v-model="addresslist.email" floatLabelType="Auto" :placeholder="$ml.get('phone')"></ejs-textbox>
+            <ejs-textbox type="number" v-model="addresslist.phone" floatLabelType="Auto" :placeholder="$ml.get('phone')"></ejs-textbox>
           </b-col>
         </b-row>
           </b-form-group>
