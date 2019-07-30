@@ -24,7 +24,19 @@
         <strong v-text="$ml.get('settings')"></strong>
       </b-dropdown-header> -->
       <!-- <b-dropdown-item><i class="fa fa-user" /> <span  v-text="$ml.get('profile')"></span></b-dropdown-item> -->
-      <b-dropdown-item @click = "Settings"><i class="fa fa-wrench" /> <span  v-text="$ml.get('settings')"></span></b-dropdown-item>
+      
+      <div v-if="isUser">
+      <b-dropdown-item @click = "userDetails">
+        <b-card style="border:none">
+          <b-row>
+          <b-col sm="2"><i class="fa fa-user font-2xl"/></b-col>
+          <b-col sm="6"><span v-text="user.user_name"></span>
+          </b-col>
+        </b-row>
+        </b-card>
+      </b-dropdown-item>
+    </div>
+    <b-dropdown-item @click = "Settings"><i class="fa fa-wrench" /> <span  v-text="$ml.get('settings')"></span></b-dropdown-item>
       <!-- <b-dropdown-item><i class="fa fa-usd" /> <span  v-text="$ml.get('payments')"></span> -->
         
       <!-- </b-dropdown-item> -->
@@ -74,8 +86,11 @@ export default {
       tab : true,
       data : [],
       ssnCompany : {
-        }
-      }
+        },
+      
+      user:null,
+      isUser : false
+      };
   },
   async mounted() {
     if(this.$session.has('user')) {
@@ -91,6 +106,8 @@ export default {
   }
   if(this.$session.has('Subuser')) {
     var user = this.$session.get('Subuser')
+    this.user = user
+    this.isUser = true
     console.log(user)
       axios.get(`${apiUrl}`+`company/${user.company}`,{withCredentials : true})
       .then(response => {
@@ -113,6 +130,9 @@ export default {
   // })
   // },
   methods : {
+    userDetails() {
+      this.$router.push(`user/details/${this.user._id}`);
+    },
     Settings(){
       console.log("settings");
       this.$router.push("/settings");

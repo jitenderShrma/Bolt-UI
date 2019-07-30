@@ -5,7 +5,7 @@
       <b-col md="12">
         <b-card>
           <div slot="header">
-            <strong v-text="$ml.get('add')"></strong>&nbsp;<span v-text="$ml.get('user')"></span>
+            <strong v-text="$ml.get('edit')"></strong>&nbsp;<span v-text="$ml.get('user')"></span>
           </div>
           <b-form action="UserList" v-on:submit.prevent="sendData">
           <b-form-group
@@ -19,7 +19,7 @@
           </b-col>
           <b-col sm="6">
             <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-            <ejs-dropdownlist name="User Type" v-validate="'required'" floatLabelType="Auto" v-model="input.onType" :allowFiltering="true" :dataSource='items' popupHeight='300' :placeholder="$ml.get('placeholderusertype')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" name="User Type" v-validate="'required'" floatLabelType="Auto" v-model="input.onType" :allowFiltering="true" :dataSource='items' popupHeight='300' :placeholder="$ml.get('placeholderusertype')"></ejs-dropdownlist>
             <span id="errors">{{ errors.first('User Type') }}</span>
           </b-col>
         </b-row>
@@ -30,7 +30,7 @@
           </b-col>
           <b-col sm="6">
             <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-            <ejs-dropdownlist name="User Group" floatLabelType="Auto" v-model="input.user_group" :allowFiltering="true" :dataSource='user_groups' popupHeight='300' :placeholder="$ml.get('pholdusergroup')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" :enabled="!isStaff" name="User Group" floatLabelType="Auto" v-model="input.user_group" :allowFiltering="true" :dataSource='user_groups' popupHeight='300' :placeholder="$ml.get('pholdusergroup')"></ejs-dropdownlist>
           </b-col>
         </b-row>
           </b-form-group>
@@ -58,7 +58,7 @@
         </b-row>
         <b-row>
               <b-col sm="4">
-                <ejs-dropdownlist floatLabelType="Auto" v-model="input.blood_group" :allowFiltering="true" :dataSource='bloodgroup' popupHeight='300' :placeholder="$ml.get('bloodgroup')"></ejs-dropdownlist>
+                <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="input.blood_group" :allowFiltering="true" :dataSource='bloodgroup' popupHeight='300' :placeholder="$ml.get('bloodgroup')"></ejs-dropdownlist>
               </b-col>
               <b-col sm="4">
                 <br>
@@ -79,10 +79,10 @@
             </b-row>
         <b-row>
           <b-col sm="6">
-            <ejs-textbox type="email" v-model="addresslist.email" floatLabelType="Auto" :placeholder="$ml.get('email')"></ejs-textbox>
+            <ejs-textbox type="email" v-model="input.email" floatLabelType="Auto" :placeholder="$ml.get('email')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
-            <ejs-textbox type="number" v-model="addresslist.email" floatLabelType="Auto" :placeholder="$ml.get('phone')"></ejs-textbox>
+            <ejs-textbox type="number" v-model="addresslist.phone" floatLabelType="Auto" :placeholder="$ml.get('phone')"></ejs-textbox>
           </b-col>
         </b-row>
           </b-form-group>
@@ -100,7 +100,7 @@
             <ejs-textbox v-model="addresslist.zip" floatLabelType="Auto" :placeholder="$ml.get('postalcode')"></ejs-textbox>
           </b-col>
           <b-col sm="4">
-            <ejs-dropdownlist floatLabelType="Auto" v-model="addresslist.country" :allowFiltering="true" :fields="country_fields" :dataSource='countrylist' popupHeight='200' :placeholder="$ml.get('country')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="addresslist.country" :allowFiltering="true" :fields="country_fields" :dataSource='countrylist' popupHeight='200' :placeholder="$ml.get('country')"></ejs-dropdownlist>
           </b-col>
           </b-row>
           </b-form-group>
@@ -213,10 +213,10 @@
               >
                 <b-row>
                   <b-col sm="6">
-                    <ejs-dropdownlist v-model="staff.department" :groupTemplate="groupTemplate1"  :allowFiltering="true" :dataSource='department'  :fields='dept_fields'  popupHeight='200' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
+                    <ejs-dropdownlist :showClearButton="true" v-model="staff.department" :groupTemplate="groupTemplate1"  :allowFiltering="true" :dataSource='department'  :fields='dept_fields'  popupHeight='200' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
                   </b-col>
                   <b-col sm="6">
-                    <ejs-dropdownlist v-model="staff.designation" :groupTemplate="groupTemplate2"  :allowFiltering="true" :dataSource='designation'  :fields='desig_fields'  popupHeight='200' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
+                    <ejs-dropdownlist :showClearButton="true" :change="setUserGroup" v-model="staff.designation" :groupTemplate="groupTemplate2"  :allowFiltering="true" :dataSource='designation'  :fields='desig_fields'  popupHeight='200' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
                   </b-col>
                 </b-row>
 
@@ -323,7 +323,7 @@
     <b-modal :title="$ml.get('addidentifications')" size="sm" class="modal-primary" v-model="idmodal" @ok="idmodal = false" hide-footer>
       <b-form v-on:submit.prevent="addId">
       <b-form-group>
-        <ejs-dropdownlist v-model="identification.id_type" :allowFiltering="true" :dataSource='idtype' popupHeight='200' :placeholder="$ml.get('idtype')"></ejs-dropdownlist>
+        <ejs-dropdownlist :showClearButton="true" v-model="identification.id_type" :allowFiltering="true" :dataSource='idtype' popupHeight='200' :placeholder="$ml.get('idtype')"></ejs-dropdownlist>
         <div v-if="identification.id_type=='Others'">
           <ejs-textbox v-model="identification.type" floatLabelType="Auto" :placeholder="$ml.get('idtype')"></ejs-textbox>
         </div>
@@ -377,6 +377,9 @@ Vue.use(VueNotifications, options)
 Vue.use(TextBoxPlugin);
 Vue.use(DropDownListPlugin);
 
+var api = axios.create({
+  withCredentials:true
+})
 
 var groupVue1 = Vue.component("groupTemplate1", {
     template: `<strong>{{val1}}</strong>`,
@@ -424,8 +427,6 @@ export default {
       identification:{
 
       },
-      link:"",
-      key:"",
       groupTemplate1: function () {
               return {
                   template: groupVue1
@@ -437,7 +438,7 @@ export default {
                   template: groupVue2
               }
           },
-          user_groups:['Basic'],
+          user_groups:[],
           staff:{
             education:[
             {},{},{},{}
@@ -481,6 +482,8 @@ export default {
         phone : "",
         email : ""
       },
+      link:"",
+      key:"",
       idtype:['Aadhar Card','Passport','Voter ID','Driving Licence','Others'],
       vendor : {
         vendor_company:"",
@@ -518,26 +521,18 @@ export default {
   async mounted() {
     this.link = window.location.href
     this.key = this.link.split('details/').pop()
-    axios.get(`${apiUrl}/user/subuser/get/${this.key}`,{withCredentials:true}).then((res) => {
+    await axios.get(`${apiUrl}`+`user/subuser/get/${this.key}`,{withCredentials:true}).then((res) => {
       this.input = res.data
-    })
-    axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+      console.log(this.input)
+      axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.department = res.data
       })
       axios.get(`${apiUrl}`+`designation/desig/get/all`,{withCredentials:true}).then((res) => {
         this.designation = res.data
       })
-    axios.get(`${apiUrl}`+`super/attrib/view/`,{ withCredentials:true })
-    .then(
-      response => {
-        this.data = response.data
-        for(var i=0;i<this.data.length;i++) {
-          if(this.data[i].context == "User") {
-            this.addattr.push(this.data[i]);
-          }
-        }
-        console.log(this.addattr)
-      })
+    })
+    
+    
   },
   watch : {
       'input.onType': function() { 
@@ -612,6 +607,14 @@ export default {
         console.log(response);
       })
     },
+    setUserGroup(args) {
+      var user_group = {
+        user_group_name : args.itemData._id
+      }
+      api.post(`${apiUrl}`+`super/group/subgroup/find/by/name`,user_group).then((res) => {
+        this.input.user_group = res.data._id
+      })
+    },
     sendData(args) {
       this.$validator.validate().then(valid => {
             if (!valid) {
@@ -675,11 +678,15 @@ export default {
         })
       }
       if(this.input.onType=="Staff") {
+        // var sfd = new FormData();
+        // var sfd.append()
+        this.input.address = [this.addresslist];
         axios.post(`${apiUrl}`+`staff/staff/create`,this.staff,{withCredentials:true}).then((response)=> {
-          console.log(response);
           this.input.user_type = response.data._id
           axios.post(`${apiUrl}`+`user/subuser/add`,this.input, {withCredentials : true}).then((response) =>{
-              console.log(response);
+            var update = {
+              user : response.data._id
+            }
               if(response.data.limit == "exceeded") {
                 toast({
                     type: VueNotifications.types.warn,
@@ -696,6 +703,10 @@ export default {
                   console.log(response)
               }
               else {
+                axios.put(`${apiUrl}`+`staff/staff/update/one/${this.input.user_type}`,update,{withCredentials : true}).then((res) => {
+                    console.log(update)
+                    console.log(res.data)
+                  })
                 toast({
                     type: VueNotifications.types.success,
                     title: 'Success',

@@ -23,6 +23,7 @@ var items = [
   },  
   {
     name: 'Users',
+    url:"/user",
     icon: 'icon-user',
     children:[
       {
@@ -86,8 +87,20 @@ var items = [
   },
   {
     name: "Budget",
-    url : "/budget",
-    icon:"icon-star"
+    icon:"icon-star",
+    url:"/budget",
+    children : [
+      {
+        name:"Total Budget",
+        url:"/budget/total",
+        icon:"icon-star"
+      },
+      {
+        name:"Approved Budget",
+        url:"/budget/approved",
+        icon:"icon-star"
+      }
+    ]
   },
   {
     name:"Transaction",

@@ -87,7 +87,7 @@
                 </b-col>
                 <b-col sm="8" v-if="isLabel1">
                   <br>
-            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level1.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level1.designation_label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
           </b-col>
         </b-row>
             </b-form-group>
@@ -135,7 +135,7 @@
                 </b-col>
                 <b-col sm="8" v-if="isLabel2">
                   <br>
-            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level2.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level2.designation_label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
           </b-col>
         </b-row>
             </b-form-group>
@@ -185,7 +185,7 @@
                 <b-col sm="8" v-if="isLabel3">
                   <br>
             
-              <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level3.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+              <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level3.designation_label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
 
           </b-col>
         </b-row>
@@ -235,7 +235,7 @@
                 </b-col>
                 <b-col sm="8" v-if="isLabel4">
                   <br>
-            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level4.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level4.designation_label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
           </b-col>
         </b-row>
             </b-form-group>
@@ -284,7 +284,7 @@
                 </b-col>
                 <b-col sm="8" v-if="isLabel5">
                   <br>
-            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level5.label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input.level5.designation_label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
           </b-col>
         </b-row>
             </b-form-group>
@@ -477,7 +477,7 @@ export default {
 
   },
    async mounted (){
-    api.get(`${apiUrl}`+`label/label/find/context/Designation`).then((res) => {
+    api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
       this.label1 = res.data
     });
     api.get(`${apiUrl}`+`designation/desig/get/all`).then((response) =>{
@@ -552,8 +552,11 @@ export default {
     },
     async sendData() {
       await api.put(`${apiUrl}`+`super/settings/budget/budSet/update`,this.input).then((res)=> {
-        console.log(res.data)
+        if(res.data!=null) {
+          this.$router.push('/dashboard')
+        }
       })
+
     },
     switchNow1 () {
       this.clicked1 = true

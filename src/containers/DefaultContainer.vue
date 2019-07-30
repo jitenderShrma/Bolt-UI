@@ -3,22 +3,22 @@
     <AppHeader fixed>
       <SidebarToggler class="d-lg-none" display="md" mobile />
       <b-link class="navbar-brand" to="#">
-        <img style="position:relative; top:-5%;" src="favicon-16x16.png" alt="">
+        <i class="icon-energy font-2xl" style="margin-top:-6px;"></i>
         &nbsp;
         <h3  style="color:black">BOLT</h3>
        <!-- <img class="navbar-brand-full" src="favicon-16x16.png" width="89" height="25" alt="CoreUI Logo">
         <img class="navbar-brand-minimized" src="favicon-16x16.png" width="30" height="30" alt="CoreUI Logo"> -->
       </b-link>
       <SidebarToggler class="d-md-down-none" display="lg" />
-      <b-navbar-nav class="d-md-down-none ml-auto">
+      <b-navbar-nav class="ml-auto">
         <b-nav-item class="d-md-down-none">
           <DefaultHeaderDropdown/>
         </b-nav-item>
-        <b-nav-item class="d-md-down-none">
+        <b-nav-item class="">
           <DefaultHeaderDropdownAccnt/>
         </b-nav-item>
-      </b-navbar-nav>
-      <AsideToggler class="d-none d-lg-block" />
+      </b-navbar-nav>&nbsp;
+      <!-- <AsideToggler class="d-none d-lg-block" /> -->
     </AppHeader>
     <div class="app-body">
       <AppSidebar fixed>
@@ -143,13 +143,13 @@ export default {
     margin-right: 0;
     margin-left: 0;
 }
-@media (min-width: 992px) {
+/*@media (min-width: 992px) {
 .header-fixed .app-body {
     margin-top: 50px;
 }
 }
 .app-header  {
   height:50px;
-}
+}*/
 
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<div class="animated slideInLeft" style="animation-duration:100ms">
 		<b-card>
-                <b-form v-on:submit.prevent="addDesig">
+                <b-form v-on:submit.prevent="editDesig">
                     <b-tabs>
                       <b-tab :title="$ml.get('designation')" active>
                       	<b-form-group style="padding:5%">
@@ -228,11 +228,15 @@ export default {
   },
   async mounted() {
   	this.link = window.location.href
-  	this.key = this.link.split('add/').pop()
-  	this.input.parent_designation_id = this.key
+  	this.key = this.link.split('edit/').pop()
   	api.get(`${apiUrl}`+`designation/desig/get/one/${this.key}`).then((res) =>{
   		this.input.department = res.data.department
+      this.input.parent_designation_id = res.data.parent_designation_id
+      this.input.name = res.data.name
   	})
+    api.get(`${apiUrl}/super/group/subgroup/find/by/${this.key}`).then((res) => {
+      this.datasrc = res.data.permissions
+    })
     api.get(`${apiUrl}`+`department/dept/get`).then((res) => {
         this.department = res.data
       })
@@ -252,35 +256,33 @@ export default {
       changeDept(args) {
       	if(args.e!=null) {
       		console.log(args.itemData._id)
-      		api.get(`${apiUrl}`+`designation/desig/find/`+`${args.itemData._id}`).then((res) => {
-      			if(this.input.parent_designation_id !=null) {
-      				console.log("ASdasd")
-      			this.input.parent_designation_id = null
-      			this.data.shift()
-      		}
-      			this.data = res.data
-      		})
+      		// api.get(`${apiUrl}`+`designation/desig/find/`+`${args.itemData._id}`).then((res) => {
+      		// 	if(this.input.parent_designation_id !=null) {
+      		// 		console.log("ASdasd")
+      		// 	this.input.parent_designation_id = null
+      		// 	this.data.shift()
+      		// }
+      		// 	this.data = res.data
+      		// })
       	}
       },
-      addDesig(args) {
+      editDesig(args) {
         this.$validator.validate().then(valid => {
             if (!valid) {
 
             }
             else{
               var user_group = {
-                user_type:"Staff",
-                user_group_name:this.input.name,
                 permissions:this.datasrc
               }
-          //     let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-          // if(parent.length == 0) {
-              api.post(`${apiUrl}`+`designation/desig/create`,this.input).then((response) => {
-                this.input = {}
+              console.log(this.input)
+              api.put(`${apiUrl}`+`designation/desig/update/${this.key}`,this.input).then((response) => {
+                console.log(response.data)
+                    api.put(`${apiUrl}`+`super/group/subgroup/edit/by/${this.key}`,user_group).then((res) => {
+                        
+                    })
                 });
-              api.post(`${apiUrl}`+`super/group/subgroup/add`,user_group).then((res) => {
-              	console.log(res.data)
-              })
+              
         // }
         //   else {
         //       this.input.parent_designation_id = parent[0]._id
@@ -293,6 +295,7 @@ export default {
         //   });
         // }
             }
+            this.$router.push('/designation/list')
           })
       
       },
@@ -332,7 +335,6 @@ export default {
       },
       changeDesig(args) {
       	if(args.e!=null){
-      		this.input.department = args.itemData.department
       	}
       },
       clickHandler(args){

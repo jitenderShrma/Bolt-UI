@@ -79,7 +79,9 @@
             </b-row>
         <b-row>
           <b-col sm="6">
-            <ejs-textbox type="email" v-model="input.email" floatLabelType="Auto" :placeholder="$ml.get('email')"></ejs-textbox>
+            <span style="color:red;float:right;height:2px;font-size:20px">*</span>
+            <ejs-textbox v-validate="'required'" name="Email" type="email" v-model="input.email" floatLabelType="Auto" :placeholder="$ml.get('email')"></ejs-textbox>
+            <span id="errors">{{ errors.first('Email') }}</span>
           </b-col>
           <b-col sm="6">
             <ejs-textbox type="number" v-model="addresslist.phone" floatLabelType="Auto" :placeholder="$ml.get('phone')"></ejs-textbox>
@@ -679,6 +681,8 @@ export default {
         })
       }
       if(this.input.onType=="Staff") {
+        // var sfd = new FormData();
+        // var sfd.append()
         this.input.address = [this.addresslist];
         axios.post(`${apiUrl}`+`staff/staff/create`,this.staff,{withCredentials:true}).then((response)=> {
           this.input.user_type = response.data._id

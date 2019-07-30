@@ -23,20 +23,23 @@
             :allowExcelExport='true'
             :enableCollapseAll="false"
             :recordDoubleClick="beginEdit"
-            :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' >
+            :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='department_name' headerText='Department Name' width='170' ></e-column>
                     <e-column field='labels' :template="labelTemplate" headerText='Labels'></e-column>
-                    <e-column headerText='Manage Designations' width='140' :commands='command1'></e-column>
-                     <e-column headerText='Manage Heads' width='140' :commands='command2'></e-column>
+                    <e-column :template="buttonDesig" width='80' headerText='Manage Designations' ></e-column>
+                     <e-column :template="buttonHead" width='80' headerText='Manage Heads' ></e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
             </ejs-treegrid>
-            <ejs-dialog id='dialog' height="auto" header='Add A Label' showCloseIcon='true' :isModal='LabelModal' :animationSettings='animationSettings' width='285px' ref='dialogObj'
+            <ejs-dialog header='Add A Label' showCloseIcon='true' :isModal='LabelModal' :animationSettings='animationSettings' width='285px' ref='dialogObj'
             target='#target' >
+            <b-tabs>
+                <b-tab :title="$ml.get('label')" active>
             <b-form v-on:submit.prevent="addLabel">
+
         <div class="content-wrapper textbox-default">
         <div class="row">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
@@ -61,6 +64,16 @@
               <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
           </div>
           </b-form>
+        </b-tab>
+        <b-tab :title="$ml.get('pholdlabel')">
+          <b-form v-on:submit.prevent = "selectLabel">
+            <ejs-dropdownlist :showClearButton="true" v-model="selectedLabel" :allowFiltering="true" :dataSource='labels' :fields='label_fields' popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+            <div slot="footer">
+              <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+          </div>
+          </b-form>
+        </b-tab>
+      </b-tabs>
         </ejs-dialog>
             <b-modal :title="$ml.get('adddept')" class="modal-primary" v-model="modal" @ok="modal = false" hide-footer>
                 <b-form v-on:submit.prevent="adddept">
@@ -117,8 +130,8 @@ var groupVue1 = Vue.component("groupTemplate1", {
         val1:""
       };
     },
-    mounted() {
-      api.get(`${apiUrl}`+`department/dept/get/`+`${this.data.parent_department}`).then((res) => {
+    async mounted() {
+      await api.get(`${apiUrl}`+`department/dept/get/`+`${this.data.parent_department}`).then((res) => {
         console.log(res.data)
         this.val1 = res.data.department_name
       });
@@ -132,6 +145,40 @@ export default {
     },
     data : function() {
         return {
+          buttonHead : function() {
+            return {
+              template : Vue.component('buttonHead',{
+                template:`<div class="e-unboundcelldiv" style="display: inline-block;float:right"><button @click="gotoPage" id="_gridcontrolDesignations_0" type="button" title="Designations" class="e-lib e-btn e-control e-flat e-icon-btn"><span class="e-btn-icon  e-icons e-edit"></span></button></div>`,
+                data : function() {
+                  return {
+                    data:{}
+                  }
+                },
+                methods:{
+                  gotoPage() {
+                    window.location.href = `#/department/`+`head/${this.data._id}`
+                  }
+                }
+              })
+            }
+          },
+          buttonDesig : function() {
+            return {
+              template : Vue.component('buttonDesig',{
+                template:`<div style="float:right" class="e-unboundcelldiv" style="display: inline-block;float:right"><button @click="gotoPage" id="_gridcontrolDesignations_0" type="button" title="Designations" class="e-lib e-btn e-control e-flat e-icon-btn"><span class="e-btn-icon  e-icons e-edit"></span></button></div>`,
+                data : function() {
+                  return {
+                    data:{}
+                  }
+                },
+                methods:{
+                  gotoPage() {
+                    window.location.href = `#/department/`+`designation/${this.data._id}`
+                  }
+                }
+              })
+            }
+          },
           labelTemplate: function () {
               return {
                   template: Vue.component('labelTemplate', {
@@ -145,6 +192,7 @@ export default {
               }
           },
           module:null,
+          selectedLabel:null,
           formdata: {
                   label_name : "",
                   color : "#fff",
@@ -154,6 +202,8 @@ export default {
           LabelModal:false,
           animationSettings: { effect: 'Zoom' },
           squarePalettesColn: 7,
+          labels:[],
+        label_fields:{text:"label_name",value:"_id"},
         circlePaletteColors: {'custom': ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#2196f3', '#03a9f4', '#00bcd4',
                     '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
           groupTemplate1: function () {
@@ -187,20 +237,44 @@ export default {
   },
   async mounted() {
     this.$refs.dialogObj.hide();
-     api.get(`${apiUrl}`+`department/dept/get`)
+     await api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
       this.data = response.data
-      console.log(this.data)
+      })
+    await api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
+        this.labels = res.data
       })
     },
   provide: {
       treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
+   watch: {
+    '$route' : async function(){
+      await api.get(`${apiUrl}`+`department/dept/get`)
+    .then((response) => {
+      this.data = response.data
+      console.log(this.data)
+      })
+    await api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
+        this.labels = res.data
+      })
+    }
+   },
    methods:{
+    async load(args) {
+      await api.get(`${apiUrl}`+`department/dept/get`)
+    .then((response) => {
+      this.data = response.data
+      console.log(this.data)
+      })
+    await api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
+        this.labels = res.data
+      })
+    },
     addLabel (args) {
         this.$refs.dialogObj.hide();
         let val = this.$refs.treegrid.getSelectedRecords()
-              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((response) => {
+              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((response)=>{
                 var id = {
                   labels :  response.data._id
                 }
@@ -218,7 +292,7 @@ export default {
       adddept(args) {
         var parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
           if(parent.length == 0) {
-            api.post(`${apiUrl}`+`department/dept/create`,this.input).then((response) => {
+            api.post(`${apiUrl}`+`department/dept/create`,this.input).then((response)=>{
                 api.get(`${apiUrl}`+`department/dept/get`)
                 .then((response) => {
                   this.data = response.data
@@ -233,8 +307,8 @@ export default {
           else {
             this.input.parent_department = parent[0]._id
               
-            api.post(`${apiUrl}`+`department/dept/create`,this.input).then((response) => {
-              api.get(`${apiUrl}`+`department/dept/get`)
+             api.post(`${apiUrl}`+`department/dept/create`,this.input).then((response)=>{
+               api.get(`${apiUrl}`+`department/dept/get`)
                 .then((response) => {
                   this.data = response.data
                   });
@@ -249,6 +323,7 @@ export default {
           parent_department:this.editinput.parent_department
         }
         api.put(`${apiUrl}`+`department/dept/edit/`+`${this.editinput._id}`,sendData).then((res)=>{
+          console.log(res.data)
             api.get(`${apiUrl}`+`department/dept/get`)
                 .then((response) => {
                   this.data = response.data
@@ -319,7 +394,7 @@ export default {
         if(args.item.id == 'delete') {
                     if(this.$refs.treegrid.getSelectedRecords().length>0) {
                       var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
-                              api.delete(`${apiUrl}`+`department/dept/delete/`+`${data[0]._id}`).then((res) => {
+                              api.delete(`${apiUrl}`+`department/dept/delete/`+`${data[0]._id}`).then((res)=>{
                                 api.get(`${apiUrl}`+`department/dept/get`)
                                 .then((response) => {
                                   this.data = response.data
@@ -346,6 +421,16 @@ export default {
         if (args.item.id === 'big') {
             this.rowHeight = 60;
         }
+      },
+      selectLabel() {
+        let val = this.$refs.treegrid.getSelectedRecords()
+        var id = {
+                  labels :  this.selectedLabel
+                }
+        api.put(`${apiUrl}`+`department/dept/push/label/`+`${val[0]._id}`,id).then((response) => {
+                  
+                    this.$router.go(0)
+                });
       },
       cellSave(args) {
         if(args.action == "edit") {

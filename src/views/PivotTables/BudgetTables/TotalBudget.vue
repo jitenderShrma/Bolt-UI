@@ -8,9 +8,9 @@
       </e-items>
     </ejs-toolbar>
     <b-card>
-      <b-col sm="4" style="float:left">
+      <!-- <b-col sm="4" style="float:left">
     <ejs-dropdownlist :change="changeView" v-model="selected3" :value="selected3" :enablePersistence="true" :dataSource='options3' :placeholder="$ml.get('pholdswitchbudget')"></ejs-dropdownlist>
-      </b-col>
+      </b-col> -->
       <b-col sm="4" style="float:right">
     <ejs-dropdownlist v-model="selected" :value="selected" :enablePersistence="true" :dataSource='options' :placeholder="$ml.get('pholdpivotdataview')"></ejs-dropdownlist>
       </b-col>
@@ -1378,12 +1378,12 @@ export default {
 </style>
 
 <style>
-@import '../styles/ejs-vue-base.css';
-@import "../styles/ej2-vue-richtexteditor/styles/material.css";
-@import "../styles/ej2-vue-lists/styles/material.css";
-@import "../styles/ej2-vue-navigations/styles/material.css";
-@import "../styles/ej2-vue-popups/styles/material.css";
-@import "../styles/ej2-vue-splitbuttons/styles/material.css";
-@import "../styles/ej2-vue-buttons/styles/material.css";
-@import "../styles/ej2-vue-inputs/styles/material.css";
+@import '../../../styles/ejs-vue-base.css';
+@import "../../../styles/ej2-vue-richtexteditor/styles/material.css";
+@import "../../../styles/ej2-vue-lists/styles/material.css";
+@import "../../../styles/ej2-vue-navigations/styles/material.css";
+@import "../../../styles/ej2-vue-popups/styles/material.css";
+@import "../../../styles/ej2-vue-splitbuttons/styles/material.css";
+@import "../../../styles/ej2-vue-buttons/styles/material.css";
+@import "../../../styles/ej2-vue-inputs/styles/material.css";
 </style>

@@ -25,19 +25,22 @@
             :rowSelected="rowSelected"
             :rowDeselecting="rowDeselecting"
             :enableCollapseAll="false"
-            :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' >
+            :allowSorting='true' :recordDoubleClick="editPage" :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column  field='name' headerText='Designation Name' ></e-column>
-                    <e-column  field='labels' :template="labelTemplate" headerText='Labels' ></e-column>
+                    <e-column  field='labels' :allowEditing="false" :template="labelTemplate" headerText='Labels' ></e-column>
                     <e-column :template="groupTemplate" field='department' :editTemplate="departmentTemplate" headerText='Department' width='170' ></e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
             </ejs-treegrid>
-            <ejs-dialog id='dialog' height="auto" header='Add A Label' showCloseIcon='true' :isModal='LabelModal' :animationSettings='animationSettings' width='285px' ref='dialogObj'
+            <ejs-dialog header='Add A Label' showCloseIcon='true' :isModal='LabelModal' :animationSettings='animationSettings' width='285px' ref='dialogObj'
             target='#target' >
+            <b-tabs>
+                <b-tab :title="$ml.get('label')" active>
             <b-form v-on:submit.prevent="addLabel">
+
         <div class="content-wrapper textbox-default">
         <div class="row">
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
@@ -62,6 +65,16 @@
               <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
           </div>
           </b-form>
+        </b-tab>
+        <b-tab :title="$ml.get('pholdlabel')">
+          <b-form v-on:submit.prevent = "selectLabel">
+            <ejs-dropdownlist :showClearButton="true" v-model="selectedLabel" :allowFiltering="true" :dataSource='labels' :fields='label_fields' popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+            <div slot="footer">
+              <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+          </div>
+          </b-form>
+        </b-tab>
+      </b-tabs>
         </ejs-dialog>
             <b-modal :title="$ml.get('adddesig')" class="modal-primary" v-model="modal" @ok="modal = false" hide-footer>
               <div>
@@ -167,7 +180,6 @@ var groupVue1 = Vue.component("groupTemplate1", {
     async mounted() {
       if(this.data.parent_department!=null) {
       await api.get(`${apiUrl}`+`department/dept/get/`+`${this.data.parent_department}`).then((res) => {
-        console.log(res.data)
         this.data.parent_department = res.data.department_name
         departments.push(this.data)
       });
@@ -175,7 +187,7 @@ var groupVue1 = Vue.component("groupTemplate1", {
     }
   });
 var departmentVue = Vue.component("departmentTemplate", {
-  template: `<ejs-dropdownlist :showClearButton="true" :close="switchNow" v-model="data.department" :groupTemplate="groupTemplate1" :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>`,
+  template: `<ejs-dropdownlist :showClearButton="true" v-model="data.department" :groupTemplate="groupTemplate1" :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>`,
     data() {
       return {
         groupTemplate1: function () {
@@ -206,6 +218,7 @@ var departmentVue = Vue.component("departmentTemplate", {
       }
     }
 });
+
 var groupVue = Vue.component("groupTemplate", {
     template: `<strong>{{val1}}</strong>`,
     data() {
@@ -219,7 +232,6 @@ var groupVue = Vue.component("groupTemplate", {
     async mounted() {
       if(this.data.department !=null) {
       await axios.get(`${apiUrl}`+`department/dept/get/`+`${this.data.department}`,{withCredentials:true}).then((res) => {
-        console.log(res.data)
         this.val1 = res.data.department_name
       });
     }
@@ -227,7 +239,7 @@ var groupVue = Vue.component("groupTemplate", {
   });
 
 export default {
-    name: "HeadList",
+    name: "DesignationList",
     components :  {
       cSwitch,
         TreeGridPlugin,ToolbarPlugin,ExcelExport,PdfExport, Edit,CommandColumn, Filter, Toolbar, TreeGridComponent, Sort, Reorder,Resize, Page
@@ -273,6 +285,8 @@ export default {
               template: departmentVue
             }
           },
+        labels:[],
+        label_fields:{text:"label_name",value:"_id"},
           selected:false,
           link:"",
           key:"",
@@ -308,43 +322,119 @@ export default {
             {value:"budSet",text:"Budget Settings"},
             {value:"staff",text:"Staff"}
           ],
-          module_fields:{text:"text",value:"value"} 
+          module_fields:{text:"text",value:"value"},
+          selectedLabel:null, 
    };
   },
-  async mounted() {
-    this.$refs.dialogObj.hide();
-    api.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+  watch : {
+    '$route' : async function() {
+      await api.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.department = res.data
       })
-     api.get(`${apiUrl}`+`designation/desig/get/all`)
+    if(this.$route.path == '/designation/list') {
+    await api.get(`${apiUrl}`+`designation/desig/get/all`)
     .then((response) => {
       this.data = response.data
       });
+  }
+  else{
+    await api.get(`${apiUrl}`+`designation/desig/find/${this.key}`)
+    .then((response) => {
+      this.data = response.data
+      for(var i =0;i<this.data.length;i++) {
+        if(!(this.data.some(item => this.data[i].parent_designation_id == item._id))) {
+          this.data[i].parent_designation_id = undefined
+        }
+      }
+      });
+  }
+    await api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
+        this.labels = res.data
+      })
+    }
+  },
+  async mounted() {
+    this.$refs.dialogObj.hide();
+    this.link = window.location.href;
+     this.key = this.link.split(`designation/`).pop()
+    await api.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+        this.department = res.data
+      })
+    if(this.$route.path == '/designation/list') {
+    await api.get(`${apiUrl}`+`designation/desig/get/all`)
+    .then((response) => {
+      this.data = response.data
+      });
+  }
+  else{
+    await api.get(`${apiUrl}`+`designation/desig/find/${this.key}`)
+    .then((response) => {
+      console.log(response.data)
+      this.data = response.data
+      for(var i =0;i<this.data.length;i++) {
+        if(!(this.data.some(item => this.data[i].parent_designation_id == item._id))) {
+          this.data[i].parent_designation_id = undefined
+        }
+      }
+      });
+  }
+    await api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
+        this.labels = res.data
+      })
     },
   provide: {
       treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
+    async load(args) {
+      
+      await api.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+        this.department = res.data
+      })
+     if(this.$route.path == '/designation/list') {
+    await api.get(`${apiUrl}`+`designation/desig/get/all`)
+    .then((response) => {
+      this.data = response.data
+      });
+  }
+  else{
+    await api.get(`${apiUrl}`+`designation/desig/find/${this.key}`)
+    .then((response) => {
+      this.data = response.data
+      for(var i =0;i<this.data.length;i++) {
+        if(!(this.data.some(item => this.data[i].parent_designation_id == item._id))) {
+          this.data[i].parent_designation_id = undefined
+        }
+      }
+      });
+  }
+    await api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
+        this.labels = res.data
+      })
+    },
     addLabel (args) {
         this.$refs.dialogObj.hide();
         let val = this.$refs.treegrid.getSelectedRecords()
               api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((response) => {
+                
                 var id = {
                   labels :  response.data._id
                 }
                 api.put(`${apiUrl}`+`designation/desig/push/label/`+`${val[0]._id}`,id).then((response) => {
-                  console.log(response.data)
+                  
                     this.$router.go(0)
                 });
-                this.formdata=null
               });
             
+      },
+      editPage(args) {
+        this.$router.push(`/designation/edit/${args.rowData._id}`)
       },
       onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
       }, 
       changeFields(args) {
-        console.log(args)
+       
       },
       addDesig(args) {
         this.$validator.validate().then(valid => {
@@ -352,7 +442,7 @@ export default {
 
             }
             else{
-              console.log(this.permissions)
+              
               this.permissions.module_name = "subgroup"
               var user_group = {
                 user_type:"Staff",
@@ -388,9 +478,19 @@ export default {
           })
       
       },
+      selectLabel() {
+        let val = this.$refs.treegrid.getSelectedRecords()
+        var id = {
+                  labels :  this.selectedLabel
+                }
+        api.put(`${apiUrl}`+`designation/desig/push/label/`+`${val[0]._id}`,id).then((response) => {
+                  
+                    this.$router.go(0)
+                });
+      },
       actionComplete(args) {
         if(args.action=="edit") {
-          console.log(args.data)
+          
           var id = args.data._id
           var sendData = {
             name:args.data.name,
@@ -407,7 +507,7 @@ export default {
       },
        onClick(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-            console.log(data);
+            
             if(data[0].user_type == "SuperAdmin" || 
                data[0].user_type == "Staff" || 
                data[0].user_type == "Vendor" ||
@@ -422,7 +522,7 @@ export default {
 
        Add(args) {
            let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-            console.log(data);
+            
             if(data.user_type == "SuperAdmin" || 
                         data.user_type == "Staff" || 
                         data.user_type == "Vendor" ||
@@ -494,11 +594,11 @@ export default {
       },
       rowSelected(args) {
         this.selected = true
-        console.log(this.selected)
+        
       },
       rowDeselecting(args) {
         this.selected = false
-        console.log(this.selected)
+        
       },
     //    rowDataBound(args) {
     //             let value = this.$refs.rows.ej2Instances.value;

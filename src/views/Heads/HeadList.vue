@@ -26,7 +26,7 @@
             :rowSelected="rowSelected"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' >
+            :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <e-column :visible="false" field='_id'></e-column>
@@ -41,7 +41,7 @@
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
             </ejs-treegrid>
-            <ejs-dialog id='dialog' height="auto" header='Add A Label' showCloseIcon='true' :isModal='LabelModal' :animationSettings='animationSettings' width='285px' ref='dialogObj'
+            <ejs-dialog id='dialog' height="400" style="max-height:fit-content !important" header='Add A Label' showCloseIcon='true' :isModal='LabelModal' :animationSettings='animationSettings' width='285px' ref='dialogObj'
             target='#target' >
             <b-form v-on:submit.prevent="addLabel">
         <div class="content-wrapper textbox-default">
@@ -106,7 +106,7 @@
             <b-modal :title="$ml.get('edithead')" class="modal-primary" v-model="editmodal" @ok="editmodal = false" hide-footer>
               <b-form v-on:submit.prevent="editHead">
                 <b-form-group>
-                  <div class="e-float-input e-control-wrapper"><input v-model="editinput.name" class="e-field e-defaultcell" type="text" e-mappinguid="grid-column168" id="_gridcontrolname" name="name" style="text-align:undefined" aria-labelledby="label__gridcontrolname"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolname" for="_gridcontrolname">Head Name</label></div><div class="e-float-input e-control-wrapper"><input v-model="editinput.head_key" class="e-field e-defaultcell" type="text"  e-mappinguid="grid-column169" id="_gridcontrolhead_key" name="head_key" style="text-align:undefined" aria-labelledby="label__gridcontrolhead_key"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolhead_key" for="_gridcontrolhead_key">Head Key</label></div><div class="e-float-input e-control-wrapper"><input v-model="editinput.accounting_head" class="e-field e-defaultcell" type="text" e-mappinguid="grid-column170" id="_gridcontrolaccounting_head" name="accounting_head" style="text-align:undefined" aria-labelledby="label__gridcontrolaccounting_head"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolaccounting_head" for="_gridcontrolaccounting_head">Account Head</label></div><div class="e-float-input e-control-wrapper"><input v-model="editinput.notes" class="e-field e-defaultcell" type="text"  e-mappinguid="grid-column171" id="_gridcontrolnotes" name="notes" style="text-align:undefined" aria-labelledby="label__gridcontrolnotes"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolnotes" for="_gridcontrolnotes">Notes</label></div>
+                  <div class="e-float-input e-control-wrapper"><input v-model="editinput.name" class="e-field e-defaultcell" type="text" e-mappinguid="grid-column168" id="_gridcontrolname" name="name" style="text-align:undefined" aria-labelledby="label__gridcontrolname"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolname" for="_gridcontrolname">Head Name</label></div><div class="e-float-input e-control-wrapper"><input v-model="editinput.accounting_head" class="e-field e-defaultcell" type="text" e-mappinguid="grid-column170" id="_gridcontrolaccounting_head" name="accounting_head" style="text-align:undefined" aria-labelledby="label__gridcontrolaccounting_head"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolaccounting_head" for="_gridcontrolaccounting_head">Account Head</label></div><div class="e-float-input e-control-wrapper"><input v-model="editinput.notes" class="e-field e-defaultcell" type="text"  e-mappinguid="grid-column171" id="_gridcontrolnotes" name="notes" style="text-align:undefined" aria-labelledby="label__gridcontrolnotes"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolnotes" for="_gridcontrolnotes">Notes</label></div>
                   <div v-if="isRoot">
                     <ejs-dropdownlist floatLabelType="Auto" v-model="editinput.department" :groupTemplate="groupTemplate1"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
                   </div>
@@ -155,9 +155,8 @@ var groupVue1 = Vue.component("groupTemplate1", {
         val1:""
       };
     },
-    mounted() {
-      axios.get(`${apiUrl}`+`department/dept/get/`+`${this.data.parent_department}`,{withCredentials:true}).then((res) => {
-        console.log(res.data)
+    async mounted() {
+      await axios.get(`${apiUrl}`+`department/dept/get/`+`${this.data.parent_department}`,{withCredentials:true}).then((res) => {
         this.val1 = res.data.department_name
       });
     }
@@ -173,10 +172,9 @@ var groupVue = Vue.component("groupTemplate", {
         val1:""
       };
     },
-    mounted() {
+    async mounted() {
       if(this.data.department !=null) {
-      axios.get(`${apiUrl}`+`department/dept/get/`+`${this.data.department}`,{withCredentials:true}).then((res) => {
-        console.log(res.data)
+      await axios.get(`${apiUrl}`+`department/dept/get/`+`${this.data.department}`,{withCredentials:true}).then((res) => {
         this.val1 = res.data.department_name
       });
     }
@@ -255,14 +253,42 @@ export default {
             
    };
   },
-  async mounted() {
-    this.$refs.dialogObj.hide();
-     api.get(`${apiUrl}`+`head/head/get`)
+  watch:{
+    '$route' : async function() {
+      if(this.$route.path == '/heads/list') {
+        await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
       this.data = response.data
-      console.log(response.data)
       });
-     axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+     }
+     else{
+      await api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
+        .then((response) => {
+          this.data = response.data
+          });
+     }
+     await axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+        this.department = res.data
+      })
+    }
+  },
+  async mounted() {
+    this.$refs.dialogObj.hide();
+    this.link = window.location.href;
+     this.key = this.link.split(`head/`).pop()
+     if(this.$route.path == '/heads/list') {
+        await api.get(`${apiUrl}`+`head/head/get`)
+    .then((response) => {
+      this.data = response.data
+      });
+     }
+     else{
+      await api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
+        .then((response) => {
+          this.data = response.data
+          });
+     }
+     await axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.department = res.data
       })
     },
@@ -270,16 +296,33 @@ export default {
       treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
-    addLabel (args) {
+    async load(args) {
+      console.log("create")
+      if(this.$route.path == '/heads/list') {
+        await api.get(`${apiUrl}`+`head/head/get`)
+    .then((response) => {
+      this.data = response.data
+      });
+     }
+     else{
+      await api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
+        .then((response) => {
+          this.data = response.data
+          });
+     }
+     await axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+        this.department = res.data
+      })
+    },
+    async addLabel (args) {
         this.$refs.dialogObj.hide();
         let val = this.$refs.treegrid.getSelectedRecords()
-              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((response) => {
+              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then(async function(response)  {
                 var id = {
                   labels :  response.data._id
                 }
-                api.put(`${apiUrl}`+`head/head/push/label/`+`${val[0]._id}`,id).then((response) => {
-                  console.log(response.data)
-                    api.get(`${apiUrl}`+`head/head/get`)
+                await api.put(`${apiUrl}`+`head/head/push/label/`+`${val[0]._id}`,id).then(async function(response) {
+                    await api.get(`${apiUrl}`+`head/head/get`)
                     .then((response) => {
                       this.data = response.data
                       });
@@ -291,8 +334,8 @@ export default {
     onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
       }, 
-      addHead() {
-        this.$validator.validate().then(valid => {
+      async addHead() {
+        this.$validator.validate().then(async function(valid)  {
             if (!valid) {
 
             }
@@ -300,8 +343,8 @@ export default {
               let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
               if(parent.length == 0) {
                 
-                  api.post(`${apiUrl}`+`head/head/create`,this.input).then((response) => {
-                    api.get(`${apiUrl}`+`head/head/get`)
+                  await api.post(`${apiUrl}`+`head/head/create`,this.input).then(async function(response) {
+                    await api.get(`${apiUrl}`+`head/head/get`)
                     .then((response) => {
                       this.data = response.data
                       });
@@ -313,8 +356,8 @@ export default {
               else {
                 
                 this.input.parent_head=parent[0]._id
-              api.post(`${apiUrl}`+`head/head/create`,this.input).then((response) => {
-                api.get(`${apiUrl}`+`head/head/get`)
+              await api.post(`${apiUrl}`+`head/head/create`,this.input).then(async function(response) {
+                await api.get(`${apiUrl}`+`head/head/get`)
                     .then((response) => {
                       this.data = response.data
                       });
@@ -327,7 +370,7 @@ export default {
             }
           });
       },
-      editHead() {
+      async editHead() {
         var sendData = {
           name:this.editinput.name,
           head_key:this.editinput.head_key,
@@ -335,8 +378,7 @@ export default {
           notes:this.editinput.notes,
           department:this.editinput.department
         }
-        api.put(`${apiUrl}`+`head/head/update/one/`+`${this.editinput._id}`,sendData).then((response) => {
-            console.log(response.data)
+        await api.put(`${apiUrl}`+`head/head/update/one/`+`${this.editinput._id}`,sendData).then(async function(response) {
             api.get(`${apiUrl}`+`head/head/get`)
                 .then((response) => {
                   this.data = response.data
@@ -346,13 +388,11 @@ export default {
       },
       rowSelected(args) {
         this.selected = true
-        console.log(this.selected)
       },
       rowDeselecting(args) {
         this.selected = false
-        console.log(this.selected)
       },
-      actionComplete(args) {
+      async actionComplete(args) {
         if(args.action=="edit") {
           var id=args.data._id
           var sendData = {
@@ -362,8 +402,7 @@ export default {
             department:args.data.department,
             head_key:args.data.head_key
           }
-          api.put(`${apiUrl}`+`head/head/update/one/`+`${id}`,sendData).then((response) => {
-            console.log(response.data)
+          await api.put(`${apiUrl}`+`head/head/update/one/`+`${id}`,sendData).then((response) => {
             this.$router.go(0)
           });
         }
@@ -375,12 +414,11 @@ export default {
         else{
           this.isRoot = false
         }
-        this.editmodal =true,
+        this.editmodal =true
         this.editinput = args.rowData
       },
        onClick(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-            console.log(data);
             if(data[0].user_type == "SuperAdmin" || 
                data[0].user_type == "Staff" || 
                data[0].user_type == "Vendor" ||
@@ -395,7 +433,6 @@ export default {
 
        Add(args) {
            let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-            console.log(data);
             if(data.user_type == "SuperAdmin" || 
                         data.user_type == "Staff" || 
                         data.user_type == "Vendor" ||
@@ -406,7 +443,7 @@ export default {
        failure: function(args) {
         debugger;
       },
-      clickHandler(args){
+      async clickHandler(args){
         if(args.item.id === 'add') {
           this.modal =true
           }
@@ -418,8 +455,8 @@ export default {
           }
         if(args.item.id == 'delete') {
                             var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
-                              api.delete(`${apiUrl}`+`head/head/delete/one/`+`${data[0].head_key}`).then((res) => {
-                                  api.get(`${apiUrl}`+`head/head/get`)
+                              await api.delete(`${apiUrl}`+`head/head/delete/one/`+`${data[0].head_key}`).then(async function(res) {
+                                  await api.get(`${apiUrl}`+`head/head/get`)
                                     .then((response) => {
                                       this.data = response.data
                                   });

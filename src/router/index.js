@@ -77,8 +77,11 @@ const Settings = () => import('@/views/settings');
 
 //Department Routes
 const DepartmentList = () => import('@/views/Departments/DepartmentList');
-const Head = () => import('@/views/Departments/Head');
-const Designation = () => import('@/views/Departments/Designation');
+
+
+//Pivot Routes
+const TotalBudget = () => import('@/views/PivotTables/BudgetTables/TotalBudget');
+const ApprovedBudget = () => import('@/views/PivotTables/BudgetTables/ApprovedBudget');
 
 
 //Head Routes
@@ -406,13 +409,13 @@ var router = new Router({
                       name : `Heads`,
                       meta : { requiresAuth : true },
                       path : '/department/head/:deptId',
-                      component: Head
+                      component: HeadList
                     },
                     {
                       name : `Designation`,
                       meta : { requiresAuth : true },
                       path : '/department/designation/:deptId',
-                      component: Designation
+                      component: DesignationList
                     }
                   ]
                 },
@@ -552,9 +555,14 @@ var router = new Router({
               },
               children : [
                 {
-                  name:"Budget",
-                  path : "/budget",
-                  component : test
+                  name:"Total Budget",
+                  path : "/budget/total",
+                  component : TotalBudget
+                },
+                {
+                  name:"Approved Budget",
+                  path : "/budget/approved",
+                  component : ApprovedBudget
                 }
               ]
             },

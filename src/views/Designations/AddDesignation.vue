@@ -332,22 +332,22 @@ export default {
    	},
       changeDept(args) {
       	if(args.e!=null) {
-      		if(args.itemData!=null) {
-      		api.get(`${apiUrl}`+`designation/desig/find/`+`${args.itemData._id}`).then((res) => {
-      			if(this.input.parent_designation_id !=null) {
-      				console.log("ASdasd")
-      			this.input.parent_designation_id = null
-      			this.data.shift()
-      		}
-      			this.data = res.data
-      		})
-      	}
-      		else {
-      			api.get(`${apiUrl}`+`designation/desig/get/all`)
-			    .then((response) => {
-			      this.data = response.data
-			      });
-      		}
+      	// 	if(args.itemData!=null) {
+      	// 	api.get(`${apiUrl}`+`designation/desig/find/`+`${args.itemData._id}`).then((res) => {
+      	// 		if(this.input.parent_designation_id !=null) {
+      	// 			console.log("ASdasd")
+      	// 		this.input.parent_designation_id = null
+      	// 		this.data.shift()
+      	// 	}
+      	// 		this.data = res.data
+      	// 	})
+      	// }
+      	// 	else {
+      	// 		api.get(`${apiUrl}`+`designation/desig/get/all`)
+			    // .then((response) => {
+			    //   this.data = response.data
+			    //   });
+      	// 	}
       	}
       },
       addDesig(args) {
