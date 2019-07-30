@@ -4,18 +4,18 @@
         <div class="content-wrapper">
             <ejs-toolbar :clicked="addEditHandler">
                 <e-items>
-                  <e-item  id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
-                  <e-item  id="excelexport" :text="$ml.get('exportexcel')"></e-item>
-                  <e-item  id="pdfexport" :text="$ml.get('exportpdf')"></e-item>
+                  <e-item id="add" :template="addTemplate" :text="$ml.get('add')"></e-item
+                  <e-item id="excelexport" :text="$ml.get('exportexcel')"></e-item>
+                  <e-item id="pdfexport" :text="$ml.get('exportpdf')"></e-item>
               <e-item id="label" :text="$ml.get('label')"></e-item>
 
                 </e-items>
                 </ejs-toolbar>
              <div class="control-section">
-                
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
                 :height="height" :enableHover='false'>
                 <e-columns>
+                    <e-column :visible="pending" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
                     <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column>
                     <e-column field='request_by.user_name' headerText='Requested By'  :filter='filter' ></e-column>
@@ -27,7 +27,7 @@
                     <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' ></e-column>
                     <e-column field='description' headerText='Description'  :filter='filter' ></e-column>
                     <e-column field='amount' headerText='Amount'  :filter='filter' ></e-column>
-                    <e-column :visible="pending" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
+                    
                 </e-columns>
                 </ejs-grid>
                  </div>
@@ -166,11 +166,13 @@ export default {
                         acceptReq() {
                           axios.get(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
                             console.log(res.data)
+                            window.location.href="#/approval/view/all"
                           })
                         },
                         rejectReq() {
                           axios.get(`${apiUrl}`+`/approval/level1/reject/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
                             console.log(res.data)
+                            window.location.href="#/approval/view/all"
                           })
                         }
                       }

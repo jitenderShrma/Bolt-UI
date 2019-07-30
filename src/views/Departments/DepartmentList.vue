@@ -235,8 +235,20 @@ export default {
             dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
    };
   },
+  watch: {
+    '$route' : async function(){
+      await api.get(`${apiUrl}`+`department/dept/get`)
+    .then((response) => {
+      this.data = response.data
+      })
+    await api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
+        this.labels = res.data
+      })
+    }
+   },
   async mounted() {
     this.$refs.dialogObj.hide();
+    this.$refs.treegrid.refresh()
      await api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
       this.data = response.data
@@ -248,24 +260,11 @@ export default {
   provide: {
       treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
-   watch: {
-    '$route' : async function(){
-      await api.get(`${apiUrl}`+`department/dept/get`)
-    .then((response) => {
-      this.data = response.data
-      console.log(this.data)
-      })
-    await api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
-        this.labels = res.data
-      })
-    }
-   },
    methods:{
     async load(args) {
       await api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
       this.data = response.data
-      console.log(this.data)
       })
     await api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
         this.labels = res.data
