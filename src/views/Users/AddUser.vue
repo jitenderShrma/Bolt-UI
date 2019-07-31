@@ -614,7 +614,8 @@ export default {
       var user_group = {
         user_group_name : args.itemData._id
       }
-      api.post(`${apiUrl}`+`super/group/subgroup/find/by/name`,user_group).then((res) => {
+      api.get(`${apiUrl}`+`super/group/subgroup/find/by/${args.itemData._id}`).then((res) => {
+        console.log(res.data)
         this.input.user_group = res.data._id
       })
     },
@@ -681,8 +682,6 @@ export default {
         })
       }
       if(this.input.onType=="Staff") {
-        // var sfd = new FormData();
-        // var sfd.append()
         this.input.address = [this.addresslist];
         axios.post(`${apiUrl}`+`staff/staff/create`,this.staff,{withCredentials:true}).then((response)=> {
           this.input.user_type = response.data._id
