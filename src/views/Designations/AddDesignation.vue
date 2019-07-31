@@ -351,6 +351,9 @@ export default {
       	}
       },
       addDesig(args) {
+        if(this.input.parent_designation_id == "") {
+          this.input.parent_designation_id = undefined
+        }
         this.$validator.validate().then(valid => {
             if (!valid) {
 
@@ -359,20 +362,21 @@ export default {
               
           //     let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
           // if(parent.length == 0) {
+            console.log(this.input)
              api.post(`${apiUrl}`+`designation/desig/create`,this.input).then((response) => {
               		var user_group = {
 		                user_type:"Staff",
 		                user_group_name:response.data[0]._id,
 		                permissions:this.datasrc
 		              }
+                  console.log(response.data)
 	                api.get(`${apiUrl}`+`designation/desig/get/all`)
 	                .then((res) => {
 	                  this.data = res.data
-		              api.post(`${apiUrl}`+`super/group/subgroup/add`,user_group).then((res) => {
-		              	console.log(res.data)
-		              })
+  		              api.post(`${apiUrl}`+`super/group/subgroup/add`,user_group).then((res) => {
+  		              	console.log(res.data)
+  		              })
 	                  });
-                	this.input = {}
                 });
               
         // }
