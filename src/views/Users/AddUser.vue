@@ -80,11 +80,11 @@
         <b-row>
           <b-col sm="6">
             <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-            <ejs-textbox v-validate="'required'" name="Email" type="email" v-model="input.email" floatLabelType="Auto" :placeholder="$ml.get('email')"></ejs-textbox>
-            <span id="errors">{{ errors.first('Email') }}</span>
+            <ejs-textbox required name="Email" type="email" v-model="input.email" floatLabelType="Auto" :placeholder="$ml.get('email')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
-            <ejs-textbox type="number" v-model="addresslist.phone" floatLabelType="Auto" :placeholder="$ml.get('phone')"></ejs-textbox>
+            <span style="color:red;float:right;height:2px;font-size:20px">*</span>
+            <ejs-textbox required type="number" v-model="addresslist.phone" floatLabelType="Auto" :placeholder="$ml.get('phone')"></ejs-textbox>
           </b-col>
         </b-row>
           </b-form-group>
