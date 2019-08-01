@@ -118,8 +118,12 @@ export default {
             axios.post(`${apiUrl}`+`auth/super/login/`,this.login_details, {withCredentials : true}).then((response) =>{
               this.response = response;
               Auth.login();
-              this.$session.set('user',response.data.user)
-              console.log(Auth.loggedIn);
+              if(response.data.auth) {
+                this.$session.set('user',response.data.user)
+              }
+              else {
+                this.$session.set('Subuser',response.data.user)
+              }
               this.$router.push(this.$route.query.redirect || '/dashboard')
             })
             .catch(function(error) {

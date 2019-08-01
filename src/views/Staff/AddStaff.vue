@@ -28,7 +28,7 @@
             <ejs-textbox required name="Password" v-validate="'required'" type="password" v-model="input.password" floatLabelType="Auto" :placeholder="$ml.get('password')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
-            <span style="color:red;float:right;z-index:1000;height:5px;font-size:20px;">*</span>
+            <span style="color:red;float:right;height:20px;font-size:20px;">*</span>
               <treeselect :placeholder="$ml.get('pholddesig')" v-model="staff.designation" @select="setUserGroup" :multiple="false" :options="designation" />
           </b-col>
         </b-row>

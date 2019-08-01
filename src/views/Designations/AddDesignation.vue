@@ -366,7 +366,7 @@ export default {
              api.post(`${apiUrl}`+`designation/desig/create`,this.input).then((response) => {
               		var user_group = {
 		                user_type:"Staff",
-		                user_group_name:response.data[0]._id,
+		                user_group_name:response.data._id,
 		                permissions:this.datasrc
 		              }
                   console.log(response.data)

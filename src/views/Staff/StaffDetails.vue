@@ -5,7 +5,7 @@
       <b-col md="12">
         <b-card>
           <div slot="header">
-            <strong v-text="$ml.get('add')"></strong>&nbsp;<span v-text="$ml.get('staff')"></span>
+            <strong v-text="$ml.get('edit')"></strong>&nbsp;<strong style="font-size:17px;color:darkgreen" v-text="this.input.user_name"></strong>
           </div>
           <b-form action="UserList" v-on:submit.prevent="sendData">
           <b-form-group
@@ -24,11 +24,11 @@
         </b-row>
         <b-row>
           <b-col sm="6">
-            <span style="color:red;float:right;height:20px;font-size:20px">*</span>
-            <ejs-textbox required name="Password" v-validate="'required'" type="password" v-model="input.password" floatLabelType="Auto" :placeholder="$ml.get('password')"></ejs-textbox>
+            <span style="color:red;float:right;height:5px;font-size:20px">*</span>
+            <ejs-textbox required :enabled="false" name="Password" v-validate="'required'" type="password" v-model="input.password" floatLabelType="Auto" :placeholder="$ml.get('password')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
-            <span style="color:red;float:right;z-index:1000;height:5px;font-size:20px;">*</span>
+            <span style="color:red;float:right;height:20px;font-size:20px;">*</span>
               <treeselect :placeholder="$ml.get('pholddesig')" v-model="staff.designation" @select="setUserGroup" :multiple="false" :options="designation" />
           </b-col>
         </b-row>
@@ -40,17 +40,17 @@
             <b-row>
               <b-col sm="6">
                 <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-            <ejs-textbox required name="Name" v-model="input.name" floatLabelType="Auto" :placeholder="$ml.get('pholdname')"></ejs-textbox>
+            <ejs-textbox required name="Name" v-model="input.personal_details.name" floatLabelType="Auto" :placeholder="$ml.get('pholdname')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
             <label for="street" v-text="$ml.get('profilepic')"></label>
-            <b-form-file v-model="input.profile_picture" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" ></b-form-file>
+            <b-form-file v-model="input.personal_details.profile_picture" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" ></b-form-file>
           </b-col>
         </b-row>
         <b-row>
           <b-col sm="6">
             <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-            <ejs-textbox required name="Email" type="email" v-model="input.email" floatLabelType="Auto" :placeholder="$ml.get('email')"></ejs-textbox>
+            <ejs-textbox required name="Email" type="email" v-model="input.personal_details.email" floatLabelType="Auto" :placeholder="$ml.get('email')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
             <span style="color:red;float:right;height:2px;font-size:20px">*</span>
@@ -119,29 +119,29 @@
               :horizontal="true">
         <b-row>
           <b-col sm="6">
-            <ejs-textbox v-model="input.mothers_name" floatLabelType="Auto" :placeholder="$ml.get('fathersname')"></ejs-textbox>
+            <ejs-textbox v-model="input.personal_details.mothers_name" floatLabelType="Auto" :placeholder="$ml.get('fathersname')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
-            <ejs-textbox v-model="input.fathers_name" floatLabelType="Auto" :placeholder="$ml.get('mothersname')"></ejs-textbox>
+            <ejs-textbox v-model="input.personal_details.fathers_name" floatLabelType="Auto" :placeholder="$ml.get('mothersname')"></ejs-textbox>
           </b-col>
         </b-row>
         <b-row>
               <b-col sm="4">
-                <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="input.blood_group" :allowFiltering="true" :dataSource='bloodgroup' popupHeight='300' :placeholder="$ml.get('bloodgroup')"></ejs-dropdownlist>
+                <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="input.personal_details.blood_group" :allowFiltering="true" :dataSource='bloodgroup' popupHeight='300' :placeholder="$ml.get('bloodgroup')"></ejs-dropdownlist>
               </b-col>
               <b-col sm="4">
                 <br>
                 <b-button type="button" size="sm" variant="primary" @click="idmodal = true"  class="mr-1" v-text="$ml.get('addidentifications')"></b-button>
               </b-col>
-              <b-col v-if="input.identification.length!=0" sm="2">
+              <b-col v-if="input.personal_details.identification.length!=0" sm="2">
                 <br>
-                <div v-for="(run,index) in input.identification" :key="index">
+                <div v-for="(run,index) in input.personal_details.identification" :key="index">
                 <div class="e-input-group">
-                    <input class="e-input" type="text" :value="input.identification[index].id_type" readonly="">
+                    <input class="e-input" type="text" :value="input.personal_details.identification[index].id_type" readonly="">
                 </div>
               </div>
               </b-col>
-              <b-col v-if="input.identification.length!=0" sm="2">
+              <b-col v-if="input.personal_details.identification.length!=0" sm="2">
                 <br>
                 <b-button type="button" size="sm" variant="danger" @click="deleteId"  class="mr-1"><i class="fa fa-trash-o"></i></b-button>
               </b-col>
@@ -393,12 +393,6 @@ export default {
       data :[],
       field_types : ['Text','Email','Phone','TexArea'],
       input : {
-            user_name : "",
-            password : "",
-            onType : "Staff",
-            user_type:"",
-            address : [this.addresslist],
-            identification:[]
         },
         idmodal:false,
         taxx : {
@@ -454,24 +448,17 @@ export default {
     axios.get(`${apiUrl}/user/subuser/get/${this.key}`,{withCredentials:true}).then((res) => {
       console.log(res.data)
       this.input = res.data
-      this.input.identification = this.input.personal_details.identification
+      this.addresslist = this.input.personal_details.address[0]
+      axios.get(`${apiUrl}staff/staff/get/one/${this.input.user_type}`,{withCredentials:true}).then((resp) => {
+        this.staff = resp.data
+      })
     })
+
     axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.department = this.list_to_tree_dept(res.data)
       })
       axios.get(`${apiUrl}`+`designation/desig/get/all`,{withCredentials:true}).then((res) => {
         this.designation = this.list_to_tree_desig(res.data)
-      })
-    axios.get(`${apiUrl}`+`super/attrib/view/`,{ withCredentials:true })
-    .then(
-      response => {
-        this.data = response.data
-        for(var i=0;i<this.data.length;i++) {
-          if(this.data[i].context == "User") {
-            this.addattr.push(this.data[i]);
-          }
-        }
-        console.log(this.addattr)
       })
   },
   
@@ -565,31 +552,14 @@ export default {
     sendData(args) {
       this.$validator.validate().then(valid => {
             if (!valid) {
-              console.log(this.$validator)
+              
             } 
      else {
-      if(this.input.onType=="Vendor") {
-        this.vendor.address = this.addresslist;
+      if(this.input.onType=="Staff") {
         this.input.address = [this.addresslist];
-        var vfd = new FormData();
-        vfd.append('vendor_company',this.vendor.vendor_company);
-        vfd.append('address',this.vendor.address);
-        vfd.append('pan',this.vendor.pan)
-        vfd.append('gst',this.vendor.gst)
-        vfd.append('turnover',this.vendor.turnover)
-        vfd.append('kcp_name',this.vendor.kcp_name)
-        vfd.append('kcp_phone',this.vendor.kcp_phone)
-        vfd.append('acc_no',this.vendor.acc_no)
-        vfd.append('ifsc',this.vendor.ifsc)
-        vfd.append('bank_name',this.vendor.bank_name)
-        console.log(this.vendor.pan_copy,this.vendor.gst_certi);
-        vfd.append('pan_copy',this.vendor.pan_copy)
-        vfd.append('gst_certi',this.vendor.gst_certi)
-        axios.post(`${apiUrl}`+`vendor/create`,vfd,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((response)=> {
-          console.log(response);
-          this.input.user_type=response.data._id
-          axios.post(`${apiUrl}`+`user/subuser/add`,this.input, {withCredentials : true}).then((response) =>{
-              console.log(response);
+        axios.put(`${apiUrl}`+`staff/staff/update/one/${this.input.user_type}`,this.staff,{withCredentials:true}).then((response)=> {
+          axios.put(`${apiUrl}`+`user/subuser/edit/${this.input._id}`,this.input, {withCredentials : true}).then((response) =>{
+            console.log(response.data)
               if(response.data.limit == "exceeded") {
                 toast({
                     type: VueNotifications.types.warn,
@@ -612,52 +582,6 @@ export default {
                     message: 'User Created Successfully'
                     })
                 this.$router.push("/staff");
-              }
-            })
-            .catch( function (error){
-              console.log(error)
-              toast({
-                    type: VueNotifications.types.error,
-                    title: 'Oops!',
-                    message: 'Something went wrong.'
-                    })
-            });
-        })
-      }
-      if(this.input.onType=="Staff") {
-        this.input.address = [this.addresslist];
-        axios.post(`${apiUrl}`+`staff/staff/create`,this.staff,{withCredentials:true}).then((response)=> {
-          this.input.user_type = response.data._id
-          axios.post(`${apiUrl}`+`user/subuser/add`,this.input, {withCredentials : true}).then((response) =>{
-            var update = {
-              user : response.data._id
-            }
-              if(response.data.limit == "exceeded") {
-                toast({
-                    type: VueNotifications.types.warn,
-                    title: 'Limit Exceeded',
-                    message: 'Please Upgrade your License.'
-                    })
-              }
-              else if(response.data.auth == false) {
-                toast({
-                    type: VueNotifications.types.error,
-                    title: 'User Unauthenticated',
-                    message: 'Please Login.'
-                    })
-                  console.log(response)
-              }
-              else {
-                axios.put(`${apiUrl}`+`staff/staff/update/one/${this.input.user_type}`,update,{withCredentials : true}).then((res) => {
-                    console.log(update)
-                    console.log(res.data)
-                  })
-                toast({
-                    type: VueNotifications.types.success,
-                    title: 'Success',
-                    message: 'User Created Successfully'
-                    })
-                this.$router.push("/user");
               }
             })
             .catch( function (error){

@@ -163,7 +163,7 @@ export default {
               this.$session.destroy();
               delete sessionStorage['vue-session-key'];
               console.log(Auth.loggedIn);            
-              this.$router.push('/login/user');
+              this.$router.push('/login');
             })
             .catch(function(error) {
               console.log(error);

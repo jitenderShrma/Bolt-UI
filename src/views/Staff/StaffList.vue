@@ -5,13 +5,13 @@
             <ejs-toolbar :clicked="addEditHandler">
                 <e-items>
                   <e-item  id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
-                  <e-item  id="edit" :template="editTemplate" :text="$ml.get('edit')"></e-item>
                   <e-item  id="delete" :template="deleteTemplate" :text="$ml.get('delete')"></e-item>
                 </e-items>
                 </ejs-toolbar>
              <div class="control-section">
                 
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :groupSettings='groupOptions' :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :gridLines="Default" :allowFiltering='true' :filterSettings='filterOptions'  :allowGrouping='true' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
+            :recordDoubleClick="editStaff"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='personal_details.name' headerText='Name'  :filter='filter' ></e-column>
@@ -340,6 +340,11 @@ export default {
                 if (args.item.text === 'PDF Export') {
                     this.$refs.overviewgrid.pdfExport()
                 }
+            },
+            editStaff(args) {
+              console.log(args)
+
+              this.$router.push(`/staff/details/${args.rowData._id}`);
             },
             addEditHandler(args) {
               var selected = this.$refs.overviewgrid.getSelectedRecords()
