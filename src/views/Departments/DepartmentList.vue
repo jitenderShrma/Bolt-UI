@@ -231,42 +231,70 @@ export default {
              rowHeight: 30,
               
             selectionSettings : {type:"Single"},
-            data: [],
+            data:null,
             dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
    };
   },
+  async created () {
+    await api.get(`${apiUrl}`+`department/dept/get`)
+    .then((response) => {
+      console.log(response.data)
+      this.data = response.data
+      })
+    await api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
+        this.labels = res.data
+      })
+  },
   watch: {
-    '$route' : async function(){
-      await api.get(`${apiUrl}`+`department/dept/get`)
+    '$route' : function(){
+      api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
       this.data = response.data
       })
-    await api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
+    api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
         this.labels = res.data
       })
     }
    },
   async mounted() {
     this.$refs.dialogObj.hide();
-    this.$refs.treegrid.refresh()
      await api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
+      console.log(response.data)
       this.data = response.data
       })
     await api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
         this.labels = res.data
       })
+    this.list_to_tree(this.data)
     },
   provide: {
       treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
+   list_to_tree(list) {
+      var map = {}, node, roots = [], i;
+      for (i = 0; i < list.length; i += 1) {
+          map[list[i]._id] = i; // initialize the map
+          list[i].children = []; // initialize the children
+      }
+      for (i = 0; i < list.length; i += 1) {
+          node = list[i];
+          if (node.parent_department != undefined ) {
+              // if you have dangling branches check that map[node.parentId] exists
+              list[map[node.parent_department]].children.push(node);
+          } else {
+              roots.push(node);
+          }
+      }
+      return roots;
+  },
     async load(args) {
       await api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
       this.data = response.data
       })
-    await api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
+    await api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
         this.labels = res.data
       })
     },

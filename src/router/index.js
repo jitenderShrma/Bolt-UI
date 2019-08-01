@@ -12,6 +12,8 @@ const Dashboard = () => import('@/views/Dashboard');
 const AttributeList = () => import('@/views/Attributes/AttributeList');
 const AttributeEdit = () => import('@/views/Attributes/AttributeEdit');
 
+
+const test = () => import('@/views/test');
 // Login Pages
 const SuperUserLogin = () => import('@/views/login_pages/SuperUserLogin');
 const UserLogin = () => import('@/views/login_pages/UserLogin');
@@ -41,8 +43,7 @@ const PermissionDetails = () => import('@/views/Permission/PermissionDetails');
 //Communication
 const  PluginList = () => import('@/views/Communication/Plugin');
 const CommunicationLog = () => import('@/views/Communication/CommunicationLog');
-const test = () => import('./test');
-const csvimport = () =>import('./csvMonth');
+
 // Company Routes
 
 const CompanyList = () => import('@/views/Company/CompanyList');
@@ -54,6 +55,8 @@ const UserDetails = () => import('@/views/Users/UserDetails');
 const UserList = () => import('@/views/Users/UserList');
 const AddUser = () => import('@/views/Users/AddUser');
 const StaffList = () => import('@/views/Staff/StaffList'); 
+const AddStaff = () => import('@/views/Staff/AddStaff');
+const StaffDetails = () => import('@/views/Staff/StaffDetails');
 
 
 //Transaction Routes
@@ -182,6 +185,7 @@ var router = new Router({
             },
             {
               path:'/staff',
+              name : `Staff`,
               redirect:'/staff/list',
               meta:{requiresAuth : true},
               component : {
@@ -189,34 +193,25 @@ var router = new Router({
               },
               children:[
                 {
-                  name : `Staff`,
+                  
                   meta : { requiresAuth : true },
                   path : `/staff/list`,
                   component : StaffList
+                },
+                {
+                  path: '/staff/add',
+                  meta : { requiresAuth : true },
+                  name: 'Add Staff',
+                  component: AddStaff
+                },
+                {
+                  path: '/staff/details/:staffId',
+                  meta : { requiresAuth : true },
+                  name: 'Staff Details',
+                  component: StaffDetails
                 }
               ]
             },
-            // {
-            //   path: '/usergroups',
-            //   meta : { requiresAuth : true },
-            //   component: {
-            //     render (c) { return c('router-view') }
-            //   },
-            //   children: [
-            //     {
-            //       name : `UserGroups`,
-            //       meta : { requiresAuth : true },
-            //       path : `/usergroups/:userType`,
-            //       component : UserGroups
-            //     },
-            //     {
-            //       name : `User Group Edit`,
-            //       meta : { requiresAuth : true },
-            //       path : `/usergroupsdetails/:userType`,
-            //       component : UserGroupsDetails
-            //     }
-            //   ]
-            // },
             {
               path :'/attribute',
               meta : { requiresAuth : true },
@@ -519,7 +514,17 @@ var router = new Router({
                 },
                 
               ]
+            },{
+            path : '/test',
+            component: {
+              render(c) {return c('router-view')},
             },
+            children : [
+              {
+                path:'',
+                component :test
+              }
+            ]},
             {
               path: '/transaction',
               meta : { requiresAuth : true },

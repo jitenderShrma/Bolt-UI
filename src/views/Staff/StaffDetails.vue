@@ -5,7 +5,7 @@
       <b-col md="12">
         <b-card>
           <div slot="header">
-            <strong v-text="$ml.get('add')"></strong>&nbsp;<span v-text="$ml.get('user')"></span>
+            <strong v-text="$ml.get('add')"></strong>&nbsp;<span v-text="$ml.get('staff')"></span>
           </div>
           <b-form action="UserList" v-on:submit.prevent="sendData">
           <b-form-group
@@ -18,19 +18,18 @@
             <ejs-textbox required name="User Name" v-model="input.user_name" floatLabelType="Auto" :placeholder="$ml.get('username')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
-            <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-            <ejs-dropdownlist :showClearButton="true" name="User Type" v-validate="'required'" floatLabelType="Auto" v-model="input.onType" :allowFiltering="true" :dataSource='items' popupHeight='300' :placeholder="$ml.get('placeholderusertype')"></ejs-dropdownlist>
-            <span id="errors">{{ errors.first('User Type') }}</span>
+            <br>
+            <treeselect :placeholder="$ml.get('pholddept')" v-model="staff.department" :multiple="false" :options="department" />
           </b-col>
         </b-row>
         <b-row>
           <b-col sm="6">
-            <span style="color:red;float:right;height:2px;font-size:20px">*</span>
+            <span style="color:red;float:right;height:20px;font-size:20px">*</span>
             <ejs-textbox required name="Password" v-validate="'required'" type="password" v-model="input.password" floatLabelType="Auto" :placeholder="$ml.get('password')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
-            <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-            <ejs-dropdownlist :showClearButton="true" :enabled="!isStaff" name="User Group" floatLabelType="Auto" v-model="input.user_group" :allowFiltering="true" :dataSource='user_groups' popupHeight='300' :placeholder="$ml.get('pholdusergroup')"></ejs-dropdownlist>
+            <span style="color:red;float:right;z-index:1000;height:5px;font-size:20px;">*</span>
+              <treeselect :placeholder="$ml.get('pholddesig')" v-model="staff.designation" @select="setUserGroup" :multiple="false" :options="designation" />
           </b-col>
         </b-row>
           </b-form-group>
@@ -58,92 +57,8 @@
             <ejs-textbox required type="number" v-model="addresslist.phone" floatLabelType="Auto" :placeholder="$ml.get('phone')"></ejs-textbox>
           </b-col>
         </b-row>
-         <b-btn style="float:right" size="sm" href="#" v-b-toggle.personaldetails variant="info"><i class="cui-chevron-bottom"></i></b-btn>
-        <b-collapse id="personaldetails" accordion="my-accordion">
-        <b-row>
-          <b-col sm="6">
-            <ejs-textbox v-model="input.mothers_name" floatLabelType="Auto" :placeholder="$ml.get('fathersname')"></ejs-textbox>
-          </b-col>
-          <b-col sm="6">
-            <ejs-textbox v-model="input.fathers_name" floatLabelType="Auto" :placeholder="$ml.get('mothersname')"></ejs-textbox>
-          </b-col>
-        </b-row>
-        <b-row>
-              <b-col sm="4">
-                <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="input.blood_group" :allowFiltering="true" :dataSource='bloodgroup' popupHeight='300' :placeholder="$ml.get('bloodgroup')"></ejs-dropdownlist>
-              </b-col>
-              <b-col sm="4">
-                <br>
-                <b-button type="button" size="sm" variant="primary" @click="idmodal = true"  class="mr-1" v-text="$ml.get('addidentifications')"></b-button>
-              </b-col>
-              <b-col v-if="input.identification.length!=0" sm="2">
-                <br>
-                <div v-for="(run,index) in input.identification" :key="index">
-                <div class="e-input-group">
-                    <input class="e-input" type="text" :value="input.identification[index].id_type" readonly="">
-                </div>
-              </div>
-              </b-col>
-              <b-col v-if="input.identification.length!=0" sm="2">
-                <br>
-                <b-button type="button" size="sm" variant="danger" @click="deleteId"  class="mr-1"><i class="fa fa-trash-o"></i></b-button>
-              </b-col>
-            </b-row>
-          </b-collapse>
-          </b-form-group>
-          <div v-if="isVendor">
-            <b-form-group
-              :label="$ml.get('vendordetails')"
-              label-for="basicName"
-              :label-cols="3"
-              :horizontal="true"
-              >
-              <b-row>
-                <b-col sm="4">
-                  <ejs-textbox v-model="vendor.vendor_company" floatLabelType="Auto" :placeholder="$ml.get('vendorcompany')"></ejs-textbox>
-                </b-col>
-                <b-col sm="4">
-                  <ejs-textbox type="number" v-model="vendor.gst" floatLabelType="Auto" :placeholder="$ml.get('gst')"></ejs-textbox>
-                </b-col>
-                <b-col sm="4">
-                  <label v-text="$ml.get('gstcerti')"></label>
-                  <b-form-file v-model="vendor.gst_certi" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" ></b-form-file>
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col sm="4">
-                  <ejs-textbox type="number" v-model="vendor.turnover" floatLabelType="Auto" :placeholder="$ml.get('turnover')"></ejs-textbox>
-                </b-col>
-                <b-col sm="4">
-                  <ejs-textbox v-model="vendor.kcp_name" floatLabelType="Auto" :placeholder="$ml.get('kcpname')"></ejs-textbox>
-                </b-col>
-                <b-col sm="4">
-                  <ejs-textbox type="number" v-model="vendor.kcp_phone" floatLabelType="Auto" :placeholder="$ml.get('kcpno')"></ejs-textbox>
-                </b-col>
-              </b-row>
-            </b-form-group>
-          </div>
-          <div v-else>
-          </div>
-          <div v-if="isStaff">
-            <b-form-group
-              :label="$ml.get('staffdetails')"
-              label-for="basicName"
-              :label-cols="3"
-              :horizontal="true"
-              >
-                <b-row>
-                  <b-col sm="6">
-                    <ejs-dropdownlist :showClearButton="true" v-model="staff.department" :groupTemplate="groupTemplate1" floatLabelType="Auto"  :allowFiltering="true" :dataSource='department'  :fields='dept_fields'  popupHeight='200' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
-                  </b-col>
-                  <b-col sm="6">
-                    <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-                    <ejs-dropdownlist :showClearButton="true" :change="setUserGroup" v-model="staff.designation" floatLabelType="Auto" :groupTemplate="groupTemplate2"  :allowFiltering="true" :dataSource='designation'  :fields='desig_fields'  popupHeight='200' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
-                  </b-col>
-                </b-row>
-
-              </b-form-group>
-              <b-form-group
+      </b-form-group>
+        <b-form-group
               :label="$ml.get('educationqual')"
               label-for="basicName"
               :label-cols="3"
@@ -195,9 +110,44 @@
                   </b-col>
                 </b-row>
               </b-form-group>
-          </div>
-          <div v-else>
-          </div>
+         <b-btn style="float:right;" size="sm" href="#" v-b-toggle.personaldetails variant="info"><i class="cui-chevron-bottom"></i></b-btn>
+        <b-collapse id="personaldetails" accordion="my-accordion">
+        <b-form-group
+        label=""
+              label-for="basicName"
+              :label-cols="3"
+              :horizontal="true">
+        <b-row>
+          <b-col sm="6">
+            <ejs-textbox v-model="input.mothers_name" floatLabelType="Auto" :placeholder="$ml.get('fathersname')"></ejs-textbox>
+          </b-col>
+          <b-col sm="6">
+            <ejs-textbox v-model="input.fathers_name" floatLabelType="Auto" :placeholder="$ml.get('mothersname')"></ejs-textbox>
+          </b-col>
+        </b-row>
+        <b-row>
+              <b-col sm="4">
+                <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="input.blood_group" :allowFiltering="true" :dataSource='bloodgroup' popupHeight='300' :placeholder="$ml.get('bloodgroup')"></ejs-dropdownlist>
+              </b-col>
+              <b-col sm="4">
+                <br>
+                <b-button type="button" size="sm" variant="primary" @click="idmodal = true"  class="mr-1" v-text="$ml.get('addidentifications')"></b-button>
+              </b-col>
+              <b-col v-if="input.identification.length!=0" sm="2">
+                <br>
+                <div v-for="(run,index) in input.identification" :key="index">
+                <div class="e-input-group">
+                    <input class="e-input" type="text" :value="input.identification[index].id_type" readonly="">
+                </div>
+              </div>
+              </b-col>
+              <b-col v-if="input.identification.length!=0" sm="2">
+                <br>
+                <b-button type="button" size="sm" variant="danger" @click="deleteId"  class="mr-1"><i class="fa fa-trash-o"></i></b-button>
+              </b-col>
+            </b-row>
+            </b-form-group>
+          </b-collapse>          
           <b-row class="justify-content-center">
           <b-button size="md" href="#" v-b-toggle.expand variant="info"><i class="cui-chevron-bottom"></i>Expand</b-button>
         </b-row>
@@ -363,6 +313,8 @@
 <script>
 import axios from 'axios';
 import ml from '@/ml';
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import countries from '@/resources/countries'
 import apiUrl from '@/apiUrl'
   import { Switch as cSwitch } from '@coreui/vue'
@@ -401,63 +353,22 @@ var api = axios.create({
   withCredentials:true
 })
 
-var groupVue1 = Vue.component("groupTemplate1", {
-    template: `<strong>{{val1}}</strong>`,
-    data() {
-      return {
-        data: {
 
-        },
-        val1:""
-      };
-    },
-    mounted() {
-      axios.get(`${apiUrl}`+`department/dept/get/`+`${this.data.parent_department}`,{withCredentials:true}).then((res) => {
-        console.log(res.data)
-        this.val1 = res.data.department_name
-      });
-    }
-  });
-  var groupVue2 = Vue.component("groupTemplate2", {
-    template: `<strong>{{val2}}</strong>`,
-    data() {
-      return {
-        data: {
-
-        },
-        val2:""
-      };
-    },
-    async mounted() {
-      axios.get(`${apiUrl}`+`designation/desig/get/one/`+`${this.data.parent_designation_id}`,{withCredentials:true}).then((res) => {
-        this.val2 = res.data.name
-      });
-    
-    }
-  });
 
 export default {
   name: 'Add User',
   components : {
     CoolSelect,
       cSwitch,
+      Treeselect,
   },
   data: function () {
     return {
       identification:{
 
       },
-      groupTemplate1: function () {
-              return {
-                  template: groupVue1
-              }
-          },
-          idmodal:true,
-          groupTemplate2: function () {
-              return {
-                  template: groupVue2
-              }
-          },
+      link:"",
+      key:"",
           user_groups:[],
           staff:{
             education:[
@@ -484,7 +395,7 @@ export default {
       input : {
             user_name : "",
             password : "",
-            onType : "",
+            onType : "Staff",
             user_type:"",
             address : [this.addresslist],
             identification:[]
@@ -537,11 +448,19 @@ export default {
     }
   },
   async mounted() {
+    this.isStaff = true
+    this.link = window.location.href
+    this.key = this.link.split('details/').pop()
+    axios.get(`${apiUrl}/user/subuser/get/${this.key}`,{withCredentials:true}).then((res) => {
+      console.log(res.data)
+      this.input = res.data
+      this.input.identification = this.input.personal_details.identification
+    })
     axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
-        this.department = res.data
+        this.department = this.list_to_tree_dept(res.data)
       })
       axios.get(`${apiUrl}`+`designation/desig/get/all`,{withCredentials:true}).then((res) => {
-        this.designation = res.data
+        this.designation = this.list_to_tree_desig(res.data)
       })
     axios.get(`${apiUrl}`+`super/attrib/view/`,{ withCredentials:true })
     .then(
@@ -555,60 +474,66 @@ export default {
         console.log(this.addattr)
       })
   },
-  watch : {
-      'input.onType': function() { 
-        var value = this.input.onType
-        if(value == "Vendor") {
-          this.isVendor=true
-          this.isAdmin = false
-          this.isGuest = false
-          this.isGuardian = false
-          this.isStaff = false
-          this.isStudent = false
-        }
-        if(value=="Admin") {
-          this.isVendor=false
-          this.isAdmin = true
-          this.isGuest = false
-          this.isGuardian = false
-          this.isStaff = false
-          this.isStudent = false
-        }
-        if(value=="Staff") {
-          this.isVendor=false
-          this.isAdmin = false
-          this.isGuest = false
-          this.isGuardian = false
-          this.isStaff = true
-          this.isStudent = false
-        }
-        if(value=="Student") {
-          this.isVendor=false
-          this.isAdmin = false
-          this.isGuest = false
-          this.isGuardian = false
-          this.isStaff = false
-          this.isStudent = true
-        }
-        if(value=="Guardian") {
-          this.isVendor=false
-          this.isAdmin = false
-          this.isGuest = false
-          this.isGuardian = true
-          this.isStaff = false
-          this.isStudent = false
-        }
-        if(value=="Guest") {
-          this.isVendor=false
-          this.isAdmin = false
-          this.isGuest = true
-          this.isGuardian = false
-          this.isStaff = false
-          this.isStudent = false
-        }
-      }
-      },
+  
   methods : {
+    list_to_tree_desig(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_designation_id != undefined ) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_designation_id]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataDesig(roots)
+          return roots
+      },
+      list_to_tree_dept(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_department != undefined ) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_department]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataDept(roots)
+          return roots
+      },
+      convertDataDept(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataDept(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].department_name;
+        delete roots[i]._id;
+        delete roots[i].department_name;
+        }
+      },
+      convertDataDesig(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataDesig(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].name;
+        delete roots[i]._id;
+        delete roots[i].name;
+          }
+      },
     deleteId() {
       this.input.identification.pop()
     },
@@ -629,10 +554,7 @@ export default {
       })
     },
     setUserGroup(args) {
-      var user_group = {
-        user_group_name : args.itemData._id
-      }
-      api.get(`${apiUrl}`+`super/group/subgroup/find/by/${args.itemData._id}`).then((res) => {
+      api.get(`${apiUrl}`+`super/group/subgroup/find/by/${args.id}`).then((res) => {
         console.log(res.data)
         this.input.user_group = res.data._id
       })
@@ -689,7 +611,7 @@ export default {
                     title: 'Success',
                     message: 'User Created Successfully'
                     })
-                this.$router.push("/user");
+                this.$router.push("/staff");
               }
             })
             .catch( function (error){

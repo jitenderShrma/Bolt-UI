@@ -269,7 +269,7 @@ export default {
       editDesig(args) {
         this.$validator.validate().then(valid => {
             if (!valid) {
-
+              console.log(valid)
             }
             else{
               var user_group = {
@@ -279,23 +279,12 @@ export default {
               api.put(`${apiUrl}`+`designation/desig/update/${this.key}`,this.input).then((response) => {
                 console.log(response.data)
                     api.put(`${apiUrl}`+`super/group/subgroup/edit/by/${this.key}`,user_group).then((res) => {
-                        
+                        console.log(res)
+                        this.$router.push('/designation/list')
                     })
-                });
-              
-        // }
-        //   else {
-        //       this.input.parent_designation_id = parent[0]._id
-        //   api.post(`${apiUrl}`+`designation/desig/create`,this.input).then((response) => {
-        //     api.get(`${apiUrl}`+`designation/desig/get/all`)
-        //         .then((res) => {
-        //           this.data = res.data
-        //           });
-        //         this.input = {}
-        //   });
-        // }
+                })
             }
-            this.$router.push('/designation/list')
+            
           })
       
       },

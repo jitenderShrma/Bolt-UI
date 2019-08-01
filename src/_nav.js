@@ -23,7 +23,6 @@ var items = [
   },  
   {
     name: 'Users',
-    url:"/user",
     icon: 'icon-user',
     children:[
       {

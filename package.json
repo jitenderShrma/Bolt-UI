@@ -32,6 +32,7 @@
     "@coreui/coreui-pro": "^2.1.6",
     "@coreui/icons": "0.3.0",
     "@coreui/vue": "^2.1.2",
+    "@riophae/vue-treeselect": "0.0.38",
     "@syncfusion/ej2": "^16.2.48",
     "@syncfusion/ej2-base": "^16.2.48",
     "@syncfusion/ej2-buttons": "^16.2.48",

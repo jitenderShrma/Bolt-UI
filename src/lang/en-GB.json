@@ -230,5 +230,6 @@
     "idnumber" : "Identification Number",
     "accept" : "Accept",
     "reject" : "Reject",
-    "pholdswitchbudget" : "Switch Budget"
+    "pholdswitchbudget" : "Switch Budget",
+    "staff" : "Staff"
 }

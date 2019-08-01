@@ -345,11 +345,11 @@ export default {
               var selected = this.$refs.overviewgrid.getSelectedRecords()
                 if(args.item.id == "add") {
                     console.log(args)
-                    this.$router.push('/user/add');
+                    this.$router.push('/staff/add');
                 }
                 if(selected.length>0) {
                 if(args.item.id == "edit") {
-                    this.$router.push(`/user/details/${selected[0]._id}`);
+                    this.$router.push(`/staff/details/${selected[0]._id}`);
                 }
                 if(args.item.id == "delete") {
                     axios.delete(`${apiUrl}/user/subuser/delete/${selected[0]._id}`,{withCredentials:true}).then((res) => {

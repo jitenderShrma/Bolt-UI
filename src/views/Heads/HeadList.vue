@@ -314,15 +314,15 @@ export default {
         this.department = res.data
       })
     },
-    async addLabel (args) {
+    addLabel (args) {
         this.$refs.dialogObj.hide();
         let val = this.$refs.treegrid.getSelectedRecords()
-              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then(async function(response)  {
+              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((response) =>{
                 var id = {
                   labels :  response.data._id
                 }
-                await api.put(`${apiUrl}`+`head/head/push/label/`+`${val[0]._id}`,id).then(async function(response) {
-                    await api.get(`${apiUrl}`+`head/head/get`)
+                api.put(`${apiUrl}`+`head/head/push/label/`+`${val[0]._id}`,id).then((response)=>{
+                    api.get(`${apiUrl}`+`head/head/get`)
                     .then((response) => {
                       this.data = response.data
                       });
@@ -334,8 +334,8 @@ export default {
     onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
       }, 
-      async addHead() {
-        this.$validator.validate().then(async function(valid)  {
+      addHead() {
+        this.$validator.validate().then((valid) =>{
             if (!valid) {
 
             }
@@ -343,8 +343,8 @@ export default {
               let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
               if(parent.length == 0) {
                 
-                  await api.post(`${apiUrl}`+`head/head/create`,this.input).then(async function(response) {
-                    await api.get(`${apiUrl}`+`head/head/get`)
+                  api.post(`${apiUrl}`+`head/head/create`,this.input).then((response)=>{
+                    api.get(`${apiUrl}`+`head/head/get`)
                     .then((response) => {
                       this.data = response.data
                       });
@@ -356,8 +356,8 @@ export default {
               else {
                 
                 this.input.parent_head=parent[0]._id
-              await api.post(`${apiUrl}`+`head/head/create`,this.input).then(async function(response) {
-                await api.get(`${apiUrl}`+`head/head/get`)
+              api.post(`${apiUrl}`+`head/head/create`,this.input).then((response) =>{
+                api.get(`${apiUrl}`+`head/head/get`)
                     .then((response) => {
                       this.data = response.data
                       });
@@ -370,7 +370,7 @@ export default {
             }
           });
       },
-      async editHead() {
+      editHead() {
         var sendData = {
           name:this.editinput.name,
           head_key:this.editinput.head_key,
@@ -378,7 +378,7 @@ export default {
           notes:this.editinput.notes,
           department:this.editinput.department
         }
-        await api.put(`${apiUrl}`+`head/head/update/one/`+`${this.editinput._id}`,sendData).then(async function(response) {
+        api.put(`${apiUrl}`+`head/head/update/one/`+`${this.editinput._id}`,sendData).then((response)=>{
             api.get(`${apiUrl}`+`head/head/get`)
                 .then((response) => {
                   this.data = response.data
@@ -392,7 +392,7 @@ export default {
       rowDeselecting(args) {
         this.selected = false
       },
-      async actionComplete(args) {
+      actionComplete(args) {
         if(args.action=="edit") {
           var id=args.data._id
           var sendData = {
@@ -402,7 +402,7 @@ export default {
             department:args.data.department,
             head_key:args.data.head_key
           }
-          await api.put(`${apiUrl}`+`head/head/update/one/`+`${id}`,sendData).then((response) => {
+          api.put(`${apiUrl}`+`head/head/update/one/`+`${id}`,sendData).then((response) => {
             this.$router.go(0)
           });
         }
@@ -443,7 +443,7 @@ export default {
        failure: function(args) {
         debugger;
       },
-      async clickHandler(args){
+      clickHandler(args){
         if(args.item.id === 'add') {
           this.modal =true
           }
@@ -455,8 +455,8 @@ export default {
           }
         if(args.item.id == 'delete') {
                             var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
-                              await api.delete(`${apiUrl}`+`head/head/delete/one/`+`${data[0].head_key}`).then(async function(res) {
-                                  await api.get(`${apiUrl}`+`head/head/get`)
+                               api.delete(`${apiUrl}`+`head/head/delete/one/`+`${data[0].head_key}`).then((res)=>{
+                                   api.get(`${apiUrl}`+`head/head/get`)
                                     .then((response) => {
                                       this.data = response.data
                                   });
