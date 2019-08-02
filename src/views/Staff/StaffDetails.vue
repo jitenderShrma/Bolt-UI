@@ -18,7 +18,7 @@
             <ejs-textbox required name="User Name" v-model="input.user_name" floatLabelType="Auto" :placeholder="$ml.get('username')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
-            <br>
+            <label v-text="$ml.get('department')"></label>
             <treeselect :placeholder="$ml.get('pholddept')" v-model="staff.department" :multiple="false" :options="department" />
           </b-col>
         </b-row>
@@ -28,8 +28,9 @@
             <ejs-textbox required :enabled="false" name="Password" v-validate="'required'" type="password" v-model="input.password" floatLabelType="Auto" :placeholder="$ml.get('password')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
-            <span style="color:red;float:right;height:20px;font-size:20px;">*</span>
-              <treeselect :placeholder="$ml.get('pholddesig')" v-model="staff.designation" @select="setUserGroup" :multiple="false" :options="designation" />
+            <span style="color:red;float:right;height:5px;font-size:20px;">*</span>
+            <label class="e-label-top" v-text="$ml.get('designation')"></label>
+              <treeselect required :placeholder="$ml.get('pholddesig')" v-model="staff.designation" @select="setUserGroup" :multiple="false" :options="designation" />
           </b-col>
         </b-row>
           </b-form-group>
@@ -43,8 +44,8 @@
             <ejs-textbox required name="Name" v-model="input.personal_details.name" floatLabelType="Auto" :placeholder="$ml.get('pholdname')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
-            <label for="street" v-text="$ml.get('profilepic')"></label>
-            <b-form-file v-model="input.personal_details.profile_picture" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" ></b-form-file>
+            <span style="color:red;float:right;height:2px;font-size:20px">*</span>
+            <ejs-textbox :maxlength="9" required type="number" v-model="addresslist.phone" floatLabelType="Auto" :placeholder="$ml.get('phone')"></ejs-textbox>
           </b-col>
         </b-row>
         <b-row>
@@ -52,11 +53,40 @@
             <span style="color:red;float:right;height:2px;font-size:20px">*</span>
             <ejs-textbox required name="Email" type="email" v-model="input.personal_details.email" floatLabelType="Auto" :placeholder="$ml.get('email')"></ejs-textbox>
           </b-col>
+          
+        </b-row>
+        <b-btn id="expandBtn" style="float:right;" size="sm" href="#" v-b-toggle.personaldetails variant="primary"><i class="cui-chevron-bottom"></i></b-btn>
+        <b-collapse id="personaldetails" accordion="my-accordion">
+        <b-row>
           <b-col sm="6">
-            <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-            <ejs-textbox required type="number" v-model="addresslist.phone" floatLabelType="Auto" :placeholder="$ml.get('phone')"></ejs-textbox>
+            <ejs-textbox v-model="input.personal_details.mothers_name" floatLabelType="Auto" :placeholder="$ml.get('fathersname')"></ejs-textbox>
+          </b-col>
+          <b-col sm="6">
+            <ejs-textbox v-model="input.personal_details.fathers_name" floatLabelType="Auto" :placeholder="$ml.get('mothersname')"></ejs-textbox>
           </b-col>
         </b-row>
+        <b-row>
+              <b-col sm="4">
+                <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="input.personal_details.blood_group" :allowFiltering="true" :dataSource='bloodgroup' popupHeight='300' :placeholder="$ml.get('bloodgroup')"></ejs-dropdownlist>
+              </b-col>
+              <b-col sm="4">
+                <br>
+                <b-button type="button" size="sm" variant="primary" @click="idmodal = true"  class="mr-1" v-text="$ml.get('addidentifications')"></b-button>
+              </b-col>
+              <b-col v-if="input.personal_details.identification.length!=0" sm="2">
+                <br>
+                <div v-for="(run,index) in input.personal_details.identification" :key="index">
+                <div class="e-input-group">
+                    <input class="e-input" type="text" :value="input.personal_details.identification[index].id_type" readonly="">
+                </div>
+              </div>
+              </b-col>
+              <b-col v-if="input.personal_details.identification.length!=0" sm="2">
+                <br>
+                <b-button type="button" size="sm" variant="danger" @click="deleteId"  class="mr-1"><i class="fa fa-trash-o"></i></b-button>
+              </b-col>
+            </b-row>
+          </b-collapse>
       </b-form-group>
         <b-form-group
               :label="$ml.get('educationqual')"
@@ -110,49 +140,12 @@
                   </b-col>
                 </b-row>
               </b-form-group>
-         <b-btn style="float:right;" size="sm" href="#" v-b-toggle.personaldetails variant="info"><i class="cui-chevron-bottom"></i></b-btn>
-        <b-collapse id="personaldetails" accordion="my-accordion">
-        <b-form-group
-        label=""
-              label-for="basicName"
-              :label-cols="3"
-              :horizontal="true">
-        <b-row>
-          <b-col sm="6">
-            <ejs-textbox v-model="input.personal_details.mothers_name" floatLabelType="Auto" :placeholder="$ml.get('fathersname')"></ejs-textbox>
-          </b-col>
-          <b-col sm="6">
-            <ejs-textbox v-model="input.personal_details.fathers_name" floatLabelType="Auto" :placeholder="$ml.get('mothersname')"></ejs-textbox>
-          </b-col>
-        </b-row>
-        <b-row>
-              <b-col sm="4">
-                <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="input.personal_details.blood_group" :allowFiltering="true" :dataSource='bloodgroup' popupHeight='300' :placeholder="$ml.get('bloodgroup')"></ejs-dropdownlist>
-              </b-col>
-              <b-col sm="4">
-                <br>
-                <b-button type="button" size="sm" variant="primary" @click="idmodal = true"  class="mr-1" v-text="$ml.get('addidentifications')"></b-button>
-              </b-col>
-              <b-col v-if="input.personal_details.identification.length!=0" sm="2">
-                <br>
-                <div v-for="(run,index) in input.personal_details.identification" :key="index">
-                <div class="e-input-group">
-                    <input class="e-input" type="text" :value="input.personal_details.identification[index].id_type" readonly="">
-                </div>
-              </div>
-              </b-col>
-              <b-col v-if="input.personal_details.identification.length!=0" sm="2">
-                <br>
-                <b-button type="button" size="sm" variant="danger" @click="deleteId"  class="mr-1"><i class="fa fa-trash-o"></i></b-button>
-              </b-col>
-            </b-row>
-            </b-form-group>
-          </b-collapse>          
+                   
           <b-row class="justify-content-center">
-          <b-button size="md" href="#" v-b-toggle.expand variant="info"><i class="cui-chevron-bottom"></i>Expand</b-button>
+          <b-btn id="expandBtn" size="md" href="#" v-b-toggle.expand variant="primary"><i class="cui-chevron-bottom"></i>&nbsp;<span v-text="$ml.get('more')"></span></b-btn>
         </b-row>
           <b-collapse id="expand">
-          <b-btn style="float:right" size="sm" href="#" v-b-toggle.address variant="info"><i class="cui-chevron-bottom"></i></b-btn>
+          <b-btn id="expandBtn" style="float:right" size="sm" href="#" v-b-toggle.address variant="primary"><i class="cui-chevron-bottom"></i></b-btn>
           <b-form-group
             :label="$ml.get('address')"
             label-for="basicName"
@@ -173,7 +166,7 @@
           </b-row>
           </b-collapse>
           </b-form-group>
-          <b-btn style="float:right" size="sm" href="#" v-b-toggle.bankdetails variant="info"><i class="cui-chevron-bottom"></i></b-btn>
+          <b-btn id="expandBtn" style="float:right" size="sm" href="#" v-b-toggle.bankdetails variant="primary"><i class="cui-chevron-bottom"></i></b-btn>
           <b-form-group
             :label="$ml.get('bankaccountdetails')"
             label-for="basicName"
@@ -201,7 +194,7 @@
             </b-row>
           </b-collapse>
           </b-form-group>
-          <b-btn style="float:right" size="sm" href="#" v-b-toggle.pandetails variant="info"><i class="cui-chevron-bottom"></i></b-btn>
+          <b-btn id="expandBtn" style="float:right" size="sm" href="#" v-b-toggle.pandetails variant="primary"><i class="cui-chevron-bottom"></i></b-btn>
           <b-form-group
             :label="$ml.get('pandetails')"
             label-for="basicName"
@@ -620,7 +613,7 @@ export default {
                 toast({
                     type: VueNotifications.types.success,
                     title: 'Success',
-                    message: 'User Created Successfully'
+                    message: 'User Edited Successfully'
                     })
                 this.$router.push("/user");
               }
@@ -646,6 +639,11 @@ export default {
 <style>
 #errors {
   color:red;
+}
+.btn:focus, .btn.focus {
+    outline: 0;
+    -webkit-box-shadow: 0 0 0 0.2rem rgba(32, 168, 216, 0.25);
+    box-shadow: 0 0 0 0rem rgba(32, 168, 216, 0.25);
 }
 @import '../../styles/ejs-vue-base.css';
 @import "../../styles/ej2-vue-richtexteditor/styles/material.css";

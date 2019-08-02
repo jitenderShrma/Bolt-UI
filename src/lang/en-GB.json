@@ -231,5 +231,6 @@
     "accept" : "Accept",
     "reject" : "Reject",
     "pholdswitchbudget" : "Switch Budget",
-    "staff" : "Staff"
+    "staff" : "Staff",
+    "more" : "More"
 }
