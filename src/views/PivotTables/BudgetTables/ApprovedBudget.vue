@@ -2,17 +2,17 @@
   <div>
   <div class="control-section">
     <div class="content-wrapper">
-    <ejs-toolbar :clicked="addEditHandler">
+    <ejs-toolbar id="toolbarpivot" :clicked="addEditHandler">
       <e-items>
-               <e-item  id="upload" :text="$ml.get('upload')"></e-item>
+               <e-item align="right" id="upload" :template="uploadTemplate" :text="$ml.get('upload')"></e-item>
       </e-items>
     </ejs-toolbar>
-    <b-card>
-      <!-- ../ -->
-      <b-col sm="4" style="float:right">
+    <ejs-toolbar :items="toolbar">
+
+    </ejs-toolbar>
+      <b-col sm="2" style="position: absolute; top: 9%; right: 12%;">
     <ejs-dropdownlist v-model="selected" :value="selected" :enablePersistence="true" :dataSource='options' :placeholder="$ml.get('pholdpivotdataview')"></ejs-dropdownlist>
       </b-col>
-    </b-card>
 
     <div v-if="selected=='Month'">
       <div v-if="selected3=='Total Budget'">
@@ -130,7 +130,7 @@ import apiUrl from '@/apiUrl'
 import axios from 'axios'
 import { UploaderPlugin } from '@syncfusion/ej2-vue-inputs';
 import { CheckBoxPlugin } from "@syncfusion/ej2-vue-buttons";
-import { PivotViewPlugin, IDataSet } from "@syncfusion/ej2-vue-pivotview";
+import { PivotViewPlugin, IDataSet,ExcelExport,PdfExport } from "@syncfusion/ej2-vue-pivotview";
 import { extend, enableRipple } from '@syncfusion/ej2-base';
 import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import { MultiSelectPlugin, DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
@@ -169,9 +169,21 @@ export default {
   components: {
       PivotViewPlugin,UploaderPlugin,CheckBoxPlugin
   },
-  
     data: function(){
         return {
+          uploadTemplate: function () {
+              return {
+                  template: Vue.component("uploadTemplate", {
+                      template: `<b-badge id="label1" variant="primary" ><i class="fa fa-upload"></i>&nbsp<span id="hide" v-text="$ml.get('upload')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
           dataSourceSettings1: {
         columns: [{ name: "Year" }],
         values: [
@@ -369,6 +381,10 @@ export default {
              formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
           }]
       },
+      toolbar: [
+            {prefixIcon : 'e-csv-icon', id:'excelexport',text:"CSV Export"},
+            {prefixIcon : 'e-pdf-icon', id:'pdfexport',text:"PDF Export"}
+            ],
       dataSourceSettings6: {
         columns: [{ name: "Year" }],
         values: [
@@ -1373,6 +1389,26 @@ export default {
   width: 100%;
   height:100vh;
 }
+.e-csv-icon:before {
+  content:'\e241';
+}
+.e-pdf-icon:before {
+  content:'\e240';
+}
+.e-small-icon::before {
+        font-family: 'e-grid-rowheight';
+        content: '\e707';
+    }
+
+   .e-medium-icon::before {
+        font-family: 'e-grid-rowheight';
+        content: '\e701';
+    }
+
+    .e-big-icon::before {
+        font-family: 'e-grid-rowheight';
+        content: '\e702';
+    }
 </style>
 
 <style>

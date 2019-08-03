@@ -653,7 +653,7 @@ export default {
                     title: 'Success',
                     message: 'User Created Successfully'
                     })
-                this.$router.push("/staff");
+                this.$router.push("/staff/list");
               }
             })
             .catch( function (error){
@@ -699,7 +699,7 @@ export default {
                     title: 'Success',
                     message: 'User Created Successfully'
                     })
-                this.$router.push("/user");
+                this.$router.push("/staff");
               }
             })
             .catch( function (error){

@@ -2,17 +2,10 @@
  <div class="animated slideInLeft" style="animation-duration:100ms">
     <div id="target" class="col-lg-12 control-section">
         <div>
-          <ejs-toolbar :clicked="clickHandler">
+          <ejs-toolbar id="toolbar" :clicked="clickHandler">
             <e-items>
-              <e-item  id="add" :text="$ml.get('add')"></e-item>
-              <e-item id="delete" :text="$ml.get('delete')"></e-item>
-              <e-item id="exportPdf" :text="$ml.get('exportpdf')"></e-item>
-              <e-item id="exportExcel" :text="$ml.get('exportexcel')"></e-item>
-              <e-item id="small" prefixIcon='e-small-icon' ></e-item>
-              <e-item id="medium" prefixIcon='e-medium-icon' ></e-item>
-              <e-item id="big" prefixIcon='e-big-icon' ></e-item>
-              <e-item id="collapse" :text="$ml.get('collapseall')"></e-item>
-              <e-item id="expand" :text="$ml.get('expandall')"></e-item>
+              <e-item align="right" id="add" :text="$ml.get('add')" :template="addTemplate" ></e-item>
+              <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item>
             </e-items>
           </ejs-toolbar>
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight' :dataSource='data' 
@@ -21,7 +14,7 @@
             :allowExcelExport='true'
             :enableCollapseAll="false"
             :recordDoubleClick="beginEdit"
-            :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :load="load">
+            :allowSorting='true' :toolbar="toolbar" :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :load="load">
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <e-column :visible="false" field='_id'></e-column>
@@ -162,6 +155,68 @@ export default {
               })
             }
           },
+          excelTemplate : function() {
+          return {
+            template:Vue.component('excelTemplate', {
+              template:`<b-badge id="label1" variant="primary" ><img :src="images.csv"></img>&nbsp<span id="hide" v-text="$ml.get('csv')"></span></b-badge>`,
+            data : function() {
+              return {
+                data:{},
+                images: {
+                    csv: require('../../assets/images/csv.png')
+                },
+              }
+            }
+          })
+          }
+        },
+        pdfTemplate : function() {
+          return {
+            template:Vue.component('pdfTemplate', {
+              template:`<b-badge id="label1" variant="primary" ><img :src="images.pdf"></img>&nbsp<span id="hide" v-text="$ml.get('pdf')"></span></b-badge>`,
+            data : function() {
+              return {
+                data:{},
+                images: {
+                    pdf: require('../../assets/images/pdf.png')
+                },
+              }
+            }
+          })
+          }
+        },
+        toolbar: [
+          'CsvExport','PdfExport',
+            { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
+            { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
+            { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
+            ],
+        addTemplate: function () {
+              return {
+                  template: Vue.component("addTemplate", {
+                      template: `<b-badge id="label1" variant="success" ><i class="fa fa-plus"></i>&nbsp<span id="hide" v-text="$ml.get('add')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
+                deleteTemplate: function () {
+              return {
+                  template: Vue.component("deleteTemplate", {
+                      template: `<b-badge id="label1" variant="primary" ><i class="fa fa-trash-o"></i>&nbsp<span id="hide" v-text="$ml.get('delete')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
           addModal:false,
           buttonDesig : function() {
             return {
@@ -594,4 +649,8 @@ font-style: normal;
         font-family: 'e-grid-rowheight';
         content: '\e702';
     }
+    #label1 {
+  font-size:17px;
+  font-weight: 1;
+}
 </style>

@@ -1,10 +1,10 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
  
-     <ejs-toolbar :clicked="addEditHandler">
+     <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
     <e-items>
-             <e-item  id="add" :text="$ml.get('add')"></e-item>
-             <e-item id="edit" :text="$ml.get('edit')"></e-item>
+             <e-item align="right" id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
+             <e-item align="right" id="edit" :template="editTemplate" :text="$ml.get('edit')"></e-item>
           </e-items>
     </ejs-toolbar>
      <!-- <b-card no-body style="padding:0.5rem; margin:0px;">
@@ -118,6 +118,32 @@ export default {
         },
     data: function () {
       return {
+        editTemplate: function () {
+              return {
+                  template: Vue.component("editTemplate", {
+                      template: `<b-badge id="label1" variant="primary" ><i class="fa fa-edit"></i>&nbsp<span id="hide" v-text="$ml.get('edit')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
+                addTemplate: function () {
+              return {
+                  template: Vue.component("addTemplate", {
+                      template: `<b-badge id="label1" variant="success" ><i class="fa fa-plus"></i>&nbsp<span id="hide" v-text="$ml.get('add')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
            newRowPositionDataSource: [{ value: 'Top', text: 'Top' }, { value: 'Bottom', text: 'Bottom' }],
             fields: { text: 'text', value: 'value' },
             dropdownValue: 'Top',
@@ -128,14 +154,11 @@ export default {
             editparams: { params: { popupHeight: '300px' }},
            rowHeight: 40,
           toolbar: [
-              'Update','Cancel',
-              'ColumnChooser',
-          "Search",
-            { text: 'Copy', tooltipText: 'Copy', prefixIcon: 'e-copy', id: 'copy' },
+            'CsvExport','PdfExport',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
-            { text: 'Copy With Header', tooltipText: 'Copy With Header', prefixIcon: 'e-copy', id: 'copyHeader' }],
+            ],
           pageSettings: { pageSizes: [12,50,100,200], pageCount: 4 },
         ddData: [{ value: 1000, text: '1,000 Rows and 11 Columns' }, { value: 10000, text: '10,000 Rows and 11 Columns' }],
                 ddValue: 1000,

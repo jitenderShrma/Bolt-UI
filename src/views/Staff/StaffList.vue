@@ -2,10 +2,10 @@
  <div class="animated slideInLeft" style="animation-duration:100ms">
      <div id="target" class="col-lg-15 control-section">
         <div class="content-wrapper">
-            <ejs-toolbar :clicked="addEditHandler">
+            <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
                 <e-items>
-                  <e-item  id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
-                  <e-item  id="delete" :template="deleteTemplate" :text="$ml.get('delete')"></e-item>
+                  <e-item align="right" id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
+                  <e-item align="right" id="delete" :template="deleteTemplate" :text="$ml.get('delete')"></e-item>
                 </e-items>
                 </ejs-toolbar>
              <div class="control-section">
@@ -155,7 +155,7 @@ export default {
            addTemplate: function () {
               return {
                   template: Vue.component("addTemplate", {
-                      template: `<b-badge id="label1" variant="primary" v-text="$ml.get('add')"></b-badge>`,
+                      template: `<b-badge id="label1" variant="success" ><i class="fa fa-plus"></i>&nbsp<span v-text="$ml.get('add')"></span></b-badge>`,
                       data() {
                         return {
                           data: {
@@ -181,7 +181,7 @@ export default {
                 editTemplate: function () {
               return {
                   template: Vue.component("editTemplate", {
-                      template: `<b-badge id="label1" variant="primary" v-text="$ml.get('edit')"></b-badge>`,
+                      template: `<b-badge id="label1" variant="primary" ><i class="fa fa-edit"></i>&nbsp<span v-text="$ml.get('edit')"></span></b-badge>`,
                       data() {
                         return {
                           data: {
@@ -194,7 +194,7 @@ export default {
                 deleteTemplate: function () {
               return {
                   template: Vue.component("deleteTemplate", {
-                      template: `<b-badge id="label1" variant="primary" v-text="$ml.get('delete')"></b-badge>`,
+                      template: `<b-badge id="label1" variant="primary" ><i class="fa fa-trash-o"></i>&nbsp<span v-text="$ml.get('delete')"></span></b-badge>`,
                       data() {
                         return {
                           data: {

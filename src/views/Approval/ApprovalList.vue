@@ -2,16 +2,14 @@
  <div class="animated slideInLeft" style="animation-duration:100ms">
      <div id="target" class="col-lg-15 control-section">
         <div class="content-wrapper">
-            <ejs-toolbar :clicked="addEditHandler">
+            <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
               <e-items>
-                <e-item id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
-                <e-item id="excelexport" :text="$ml.get('exportexcel')"></e-item>
-                <e-item id="pdfexport" :text="$ml.get('exportpdf')"></e-item>
-                <e-item id="label" :text="$ml.get('label')"></e-item>
+                <e-item  align="right" id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
+                <e-item align="right" id="label" :text="$ml.get('label')"></e-item>
               </e-items>
             </ejs-toolbar>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :clickHandler="clickHandler"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column :visible="pending" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
@@ -173,6 +171,37 @@ export default {
       return {
         labels:[],
         addModal:false,
+        excelTemplate : function() {
+          return {
+            template:Vue.component('excelTemplate', {
+              template:`<button class="e-tbar-btn e-tbtn-txt e-control e-btn e-lib" type="button" id="overviewgrid_excelexport" tabindex="-1" style="width: auto;"><span id="hide" class="e-btn-icon e-csv-icon e-icons e-icon-left"></span><div class="e-tbar-btn-text">Excel Export</div></button>`,
+            data : function() {
+              return {
+                data:{},
+                images: {
+                    csv: require('../../assets/images/csv.png')
+                },
+              }
+            }
+          })
+          }
+        },
+        pdfTemplate : function() {
+          return {
+            template:Vue.component('pdfTemplate', {
+              template:`<b-badge id="label1" variant="primary" ><img :src="images.pdf"></img>&nbsp<span id="hide" v-text="$ml.get('pdf')"></span></b-badge>`,
+            data : function() {
+              return {
+                data:{},
+                images: {
+                    pdf: require('../../assets/images/pdf.png')
+                },
+              }
+            }
+          })
+          }
+        },
+        
         buttonTemplate: function () {
               return {
                   template: Vue.component('buttonTemplate', {
@@ -236,7 +265,7 @@ export default {
            addTemplate: function () {
               return {
                   template: Vue.component("addTemplate", {
-                      template: `<b-badge id="label1" variant="primary" v-text="$ml.get('add')"></b-badge>`,
+                      template: `<b-badge id="label1" variant="success" ><i class="fa fa-plus"></i>&nbsp<span id="hide" v-text="$ml.get('add')"></span></b-badge>`,
                       data() {
                         return {
                           data: {
@@ -293,7 +322,7 @@ export default {
           pending:false,
            height : window.innerHeight*0.695,
           toolbar: [
-          'ExcelExport','PdfExport',
+          'CsvExport','PdfExport',
             
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
@@ -422,6 +451,9 @@ export default {
             
         },
         watch:{
+            'someval' : function() {
+              console.log(this.someval);
+            },
             $route (to, from){
               if(to.params.id == 'pending') {
                 api.get(`${apiUrl}`+`approvals/preApp/view/requests`).then((response) => {
@@ -527,6 +559,10 @@ export default {
   font-size:17px;
   font-weight: 1;
 }
+#ddown_primary {
+  font-size:17px;
+  font-weight: 1;
+}
 #customization {
         display: table;
         margin: 0 auto;
@@ -558,7 +594,10 @@ export default {
         color:#0078d6;
         outline: none;
     }
-
+.btn-primary:focus, .btn-primary.focus {
+     -webkit-box-shadow: 0 0 0 0.2rem rgba(65, 181, 222, 0.5); 
+     box-shadow: 0 0 0 0.0;
+}
 .badge-red {
   background-color: red;
   color:white;

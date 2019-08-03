@@ -4,21 +4,16 @@
  <div id="target" className="animated fadeIn">
      <div class="col-lg-15 control-section">
         <div class="content-wrapper">
-            <ejs-toolbar :clicked="addEditHandler">
+            <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
                 <e-items >
-                 <e-item  id="add" :text="$ml.get('add')"></e-item>
-                 <e-item id="edit" :text="$ml.get('edit')"></e-item>
-                 <e-item id="delete" :text="$ml.get('delete')"></e-item>
-                 <e-item  id="excelexport" :text="$ml.get('exportexcel')"></e-item>
-                  <e-item  id="pdfexport" :text="$ml.get('exportpdf')"></e-item>
-                  <e-item align="right" id="search" @change="searchValues"></e-item>
-                  <e-item id="small" prefixIcon='e-small-icon' ></e-item>
-                  <e-item id="medium" prefixIcon='e-medium-icon' ></e-item>
-                  <e-item  id="big" prefixIcon='e-big-icon' ></e-item>                </e-items>
+                 <e-item align="right" id="add" :text="$ml.get('add')" :template="addTemplate"></e-item>
+                 <e-item align="right" id="edit" :text="$ml.get('edit')" :template="editTemplate"></e-item>
+                 <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item>
+                </e-items>
                 </ejs-toolbar>
              <div class="control-section">
                 
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' 
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' 
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='context' headerText='Context'  :filter='filter' ></e-column>
@@ -179,6 +174,75 @@ export default {
         },
     data: function () {
       return {
+        excelTemplate : function() {
+          return {
+            template:Vue.component('excelTemplate', {
+              template:`<b-badge id="label1" variant="primary" ><img :src="images.csv"></img>&nbsp<span id="hide" v-text="$ml.get('csv')"></span></b-badge>`,
+            data : function() {
+              return {
+                data:{},
+                images: {
+                    csv: require('../../assets/images/csv.png')
+                },
+              }
+            }
+          })
+          }
+        },
+        pdfTemplate : function() {
+          return {
+            template:Vue.component('pdfTemplate', {
+              template:`<b-badge id="label1" variant="primary" ><img :src="images.pdf"></img>&nbsp<span id="hide" v-text="$ml.get('pdf')"></span></b-badge>`,
+            data : function() {
+              return {
+                data:{},
+                images: {
+                    pdf: require('../../assets/images/pdf.png')
+                },
+              }
+            }
+          })
+          }
+        },
+        addTemplate: function () {
+              return {
+                  template: Vue.component("addTemplate", {
+                      template: `<b-badge id="label1" variant="success" ><i class="fa fa-plus"></i>&nbsp<span id="hide" v-text="$ml.get('add')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
+                deleteTemplate: function () {
+              return {
+                  template: Vue.component("deleteTemplate", {
+                      template: `<b-badge id="label1" variant="primary" ><i class="fa fa-trash-o"></i>&nbsp<span id="hide" v-text="$ml.get('delete')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
+                editTemplate: function () {
+              return {
+                  template: Vue.component("editTemplate", {
+                      template: `<b-badge id="label1" variant="primary" ><i class="fa fa-edit"></i>&nbsp<span id="hide" v-text="$ml.get('edit')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
         labelTemplate: function () {
               return {
                   template: Vue.component('labelTemplate', {
@@ -259,7 +323,7 @@ export default {
           label:0,
            height : window.innerHeight*0.695,
           toolbar: [
-          'ExcelExport','PdfExport',
+          'CsvExport','PdfExport',
             
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },

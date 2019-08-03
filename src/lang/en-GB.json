@@ -104,6 +104,8 @@
     "communicationlog" : "Communication Log",
     "edit" : "Edit",
     "exportpdf" : "Export Pdf",
+    "pdf" : "PDF",
+    "csv" : "CSV",
     "exportexcel" : "Export Excel",
     "collapseall" : "Collapse All",
     "expandall" : "Expand All",
@@ -236,5 +238,6 @@
     "more" : "More",
     "parentdept" : "Parent Department",
     "labels" : "Labels",
+    "export" : "Export",
     "parentdesig" : "Parent Designation"
 }

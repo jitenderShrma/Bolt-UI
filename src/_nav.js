@@ -32,16 +32,16 @@ var items = [
       }
     ]
   },
-  {
-    name: 'User Groups',
-    url: '/usertype/list',
-    icon: 'icon-star',
-  },
-  {
-    name: 'Custom Attributes',
-    url: '/attribute',
-    icon: 'icon-star',
-  },
+  // {
+  //   name: 'User Groups',
+  //   url: '/usertype/list',
+  //   icon: 'icon-star',
+  // },
+  // {
+  //   name: 'Custom Attributes',
+  //   url: '/attribute',
+  //   icon: 'icon-star',
+  // },
   {
     name : "Templates",
     url : '/templates',

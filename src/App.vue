@@ -9,6 +9,33 @@ export default {
 </script>
 
 <style lang="scss">
+@media (max-width: 992px) {
+  #hide {
+  display:none;
+}
+}
+#label1 {
+  font-size:17px;
+  font-weight: 1;
+}
+#toolbargrid {
+    position: absolute;
+    right: 0%;
+    top: -7%;
+    height: 38px !important;
+}
+#toolbar {
+    position: absolute;
+    right: 0%;
+    top: -7.3%;
+    height: 38px !important;
+}
+#toolbarpivot {
+    position: absolute;
+    right: 0%;
+    top: 8.5%;
+    height: 38px !important;
+}
 .e-grid .e-groupcaption, .e-grid .e-indentcell, .e-grid .e-recordplusexpand, .e-grid .e-recordpluscollapse {
     background-color: white !important;
     color: #000 !important;

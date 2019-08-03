@@ -2,19 +2,17 @@
   <div>
   <div class="control-section">
     <div class="content-wrapper">
-    <ejs-toolbar :clicked="addEditHandler">
+    <ejs-toolbar id="toolbarpivot" :clicked="addEditHandler">
       <e-items>
-               <e-item  id="upload" :text="$ml.get('upload')"></e-item>
+               <e-item align="right" id="upload" :template="uploadTemplate" :text="$ml.get('upload')"></e-item>
       </e-items>
     </ejs-toolbar>
-    <b-card>
-      <!-- <b-col sm="4" style="float:left">
-    <ejs-dropdownlist :change="changeView" v-model="selected3" :value="selected3" :enablePersistence="true" :dataSource='options3' :placeholder="$ml.get('pholdswitchbudget')"></ejs-dropdownlist>
-      </b-col> -->
-      <b-col sm="4" style="float:right">
-    <ejs-dropdownlist v-model="selected" :value="selected" :enablePersistence="true" :dataSource='options' :placeholder="$ml.get('pholdpivotdataview')"></ejs-dropdownlist>
+    <ejs-toolbar :items="toolbar">
+
+    </ejs-toolbar>
+      <b-col sm="2" style="position: absolute; top: 9%; right: 12%;">
+        <ejs-dropdownlist v-model="selected" :value="selected" :enablePersistence="true" :dataSource='options' :placeholder="$ml.get('pholdpivotdataview')"></ejs-dropdownlist>
       </b-col>
-    </b-card>
 
     <div v-if="selected=='Month'">
       <div v-if="selected3=='Total Budget'">
@@ -174,6 +172,19 @@ export default {
   
     data: function(){
         return {
+          uploadTemplate: function () {
+              return {
+                  template: Vue.component("uploadTemplate", {
+                      template: `<b-badge id="label1" variant="primary" ><i class="fa fa-upload"></i>&nbsp<span id="hide" v-text="$ml.get('upload')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
           dataSourceSettings1: {
         columns: [{ name: "Year" }],
         values: [
@@ -215,6 +226,10 @@ export default {
              formula: '"Sum(Jan)"+"Sum(Feb)"+"Sum(Mar)"+"Sum(Apr)"+"Sum(May)"+"Sum(Jun)"+"Sum(Jul)"+"Sum(Aug)"+"Sum(Sep)"+"Sum(Oct)"+"Sum(Nov)"+"Sum(Dec)"'
           }]
       },
+      toolbar: [
+            {prefixIcon : 'e-csv-icon', id:'excelexport',text:"CSV Export"},
+            {prefixIcon : 'e-pdf-icon', id:'pdfexport',text:"PDF Export"}
+            ],
       dataSourceSettings2: {
         columns: [{ name: "Year" }],
         values: [
@@ -1374,6 +1389,12 @@ export default {
 #pivotview {
   width: 100%;
   height:100vh;
+}
+.e-csv-icon:before {
+  content:'\e241';
+}
+.e-pdf-icon:before {
+  content:'\e240';
 }
 </style>
 

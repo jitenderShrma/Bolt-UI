@@ -99,13 +99,12 @@ export default {
             editparams: { params: { popupHeight: '300px' }},
            rowHeight: 40,
            height : window.innerHeight*0.695,
-          toolbar: ['ColumnChooser',
+          toolbar: [
           "Search",
-            { text: 'Copy', tooltipText: 'Copy', prefixIcon: 'e-copy', id: 'copy' },
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
-            { text: 'Copy With Header', tooltipText: 'Copy With Header', prefixIcon: 'e-copy', id: 'copyHeader' }],
+            ],
           pageSettings: { pageSizes: [12,50,100,200], pageCount: 4 },
         ddData: [{ value: 1000, text: '1,000 Rows and 11 Columns' }, { value: 10000, text: '10,000 Rows and 11 Columns' }],
                 ddValue: 1000,
@@ -275,7 +274,11 @@ export default {
 
 
 <style>
-
+.e-search {
+    position: absolute;
+    top: -94.5%;
+    width: 130px !important;
+}
 .container-fluid {
     width: 100%;
     padding-right: 0px !important;

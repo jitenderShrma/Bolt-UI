@@ -124,12 +124,13 @@ export default {
   margin:0px!important;
 }
    .breadcrumb {
-         display: -webkit-box;
+    margin-bottom:-1px !important;
+    display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    padding: 0 1rem;
+    padding: 0.5rem 1rem;
     margin-bottom: 5px;
     list-style: none;
     background-color: #fff;

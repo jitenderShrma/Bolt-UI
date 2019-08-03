@@ -3,12 +3,12 @@
  
      <div class="col-lg-15 control-section">
         <div class="content-wrapper">
-            <ejs-toolbar :clicked="addEditHandler">
+            <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
                 <e-items>
-                         <e-item  id="add" :text="$ml.get('add')"></e-item>
-                         <e-item id="edit" :text="$ml.get('edit')"></e-item>
-                         <e-item id="delete" :text="$ml.get('delete')"></e-item>
-                          <e-item  id="upload" :text="$ml.get('upload')"></e-item>
+                  <e-item align="right" id="add" :text="$ml.get('add')" :template="addTemplate"></e-item>
+                 <e-item align="right" id="edit" :text="$ml.get('edit')" :template="editTemplate"></e-item>
+                 <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item>
+                  <e-item align="right" id="upload" :template="uploadTemplate" :text="$ml.get('upload')"></e-item>
                 </e-items>
                 </ejs-toolbar>
              <div class="control-section">
@@ -121,6 +121,58 @@ export default {
         },
     data: function () {
       return {
+        addTemplate: function () {
+              return {
+                  template: Vue.component("addTemplate", {
+                      template: `<b-badge id="label1" variant="success" ><i class="fa fa-plus"></i>&nbsp<span id="hide" v-text="$ml.get('add')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
+                deleteTemplate: function () {
+              return {
+                  template: Vue.component("deleteTemplate", {
+                      template: `<b-badge id="label1" variant="primary" ><i class="fa fa-trash-o"></i>&nbsp<span id="hide" v-text="$ml.get('delete')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
+                editTemplate: function () {
+              return {
+                  template: Vue.component("editTemplate", {
+                      template: `<b-badge id="label1" variant="primary" ><i class="fa fa-edit"></i>&nbsp<span id="hide" v-text="$ml.get('edit')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
+                uploadTemplate: function () {
+              return {
+                  template: Vue.component("uploadTemplate", {
+                      template: `<b-badge id="label1" variant="primary" ><i class="fa fa-upload"></i>&nbsp<span id="hide" v-text="$ml.get('upload')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
         browseModal:false,
       allowCalculatedField:true,
           complete:false,
@@ -209,8 +261,7 @@ export default {
           },
            height : window.innerHeight*0.695,
           toolbar: [
-          'ExcelExport','PdfExport',
-            
+          'CsvExport','PdfExport',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
@@ -290,6 +341,13 @@ export default {
                 })
             },
             clickHandler (args) {
+              if (args.item.text === 'CSV Export') {
+                this.$refs.overviewgrid.csvExport()
+                    }
+                    if (args.item.text === 'PDF Export') {
+                this.$refs.overviewgrid.pdfExport()
+
+                    }
                     if(this.$refs.overviewgrid.getSelectedRecords().length>0){
                     let withHeader = false;
                     if (args.item.id === 'copyHeader') {
