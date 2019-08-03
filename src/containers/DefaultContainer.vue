@@ -6,8 +6,6 @@
         <i class="icon-energy font-2xl" style="margin-top:-6px;"></i>
         &nbsp;
         <h3  style="color:black">BOLT</h3>
-       <!-- <img class="navbar-brand-full" src="favicon-16x16.png" width="89" height="25" alt="CoreUI Logo">
-        <img class="navbar-brand-minimized" src="favicon-16x16.png" width="30" height="30" alt="CoreUI Logo"> -->
       </b-link>
       <SidebarToggler class="d-md-down-none" display="lg" />
       <b-navbar-nav class="ml-auto">
@@ -93,8 +91,9 @@ export default {
     }
   },
   beforeMount: function () {
+    //Create Custom Navigation Bar For Users
     if(this.$session.has('subuser')) {
-      var permission = this.$session.get('permissions')
+      var permission = this.$session.get('user').permissions
       for(var i=0;i<permission.length;i++) {
         if(permission[i].module_name != undefined)
         {

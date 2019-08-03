@@ -454,7 +454,20 @@ export default {
         this.designation = this.list_to_tree_desig(res.data)
       })
   },
-  
+  watch : {
+    'staff.department' : function(){
+      if(this.staff.department == null || this.staff.department == "") {
+        axios.get(`${apiUrl}dropdown/designation/no/dept`,{withCredentials:true}).then((res) => {
+          this.designation = this.list_to_tree_desig(res.data)
+        })
+      }
+      else {
+        axios.get(`${apiUrl}dropdown/designation/find/${this.staff.department}`,{withCredentials:true}).then((res) => {
+          this.designation = this.list_to_tree_desig(res.data)
+        })
+      }
+    }
+  },
   methods : {
     list_to_tree_desig(list) {
           var map = {}, node, roots = [], i;

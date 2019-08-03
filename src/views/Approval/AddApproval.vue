@@ -71,7 +71,7 @@
               :horizontal="true">
               <b-row>
                 <b-col sm="4">
-                  <ejs-dropdownlist v-model="input.department" :groupTemplate="groupTemplate1"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
+                    <treeselect :placeholder="$ml.get('pholddept')" v-model="input.department" :multiple="false" :options="department" />
                 </b-col>
               </b-row>
             </b-form-group>
@@ -82,8 +82,7 @@
               :horizontal="true">
               <b-row>
                 <b-col sm="4">
-                  <ejs-dropdownlist name="Head" v-validate="'required'" @change="changeFields" v-model="input.budget_head" :dataSource='head' :fields='head_fields' :allowFiltering="true" :groupTemplate="groupTemplate2" popupHeight='300' :placeholder="$ml.get('pholdhead')"></ejs-dropdownlist>
-                  <span id="errors">{{ errors.first('Head') }}</span>
+                  <treeselect required :placeholder="$ml.get('pholdhead')" v-model="input.budget_head" :multiple="false" :options="head" />
                 </b-col>
               </b-row>
             </b-form-group>
@@ -142,215 +141,171 @@
           <div v-else>
             <div class="justify-content-center">
             <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
-
           </div>
           </div>
         </b-card>
-
         </b-col>
     </b-row>
   </div>
 </template>
-
 <script>
   import apiUrl from '@/apiUrl';
   import axios from 'axios';
   import Vue from 'vue';
+  import Treeselect from '@riophae/vue-treeselect'
+  import '@riophae/vue-treeselect/dist/vue-treeselect.css'
   import { CoolSelect } from 'vue-cool-select'
   import { Switch as cSwitch } from '@coreui/vue'
   import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
-  import { MultiSelectPlugin, DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
-  import { Query } from '@syncfusion/ej2-data';
   import VueNotifications from 'vue-notifications'
-import miniToastr from 'mini-toastr'// https://github.com/se-panfilov/mini-toastr
+  import miniToastr from 'mini-toastr'// https://github.com/se-panfilov/mini-toastr
 
-const toastTypes = {
-  success: 'success',
-  error: 'error',
-  info: 'info',
-  warn: 'warn'
-}
+  const toastTypes = {
+    success: 'success',
+    error: 'error',
+    info: 'info',
+    warn: 'warn'
+  }
 
-miniToastr.init({types: toastTypes})
+  miniToastr.init({types: toastTypes})
 
-function toast ({title, message, type, timeout, cb}) {
-  return miniToastr[type](message, title, timeout, cb)
-}
+  function toast ({title, message, type, timeout, cb}) {
+    return miniToastr[type](message, title, timeout, cb)
+  }
 
-const options = {
-  success: toast,
-  error: toast,
-  info: toast,
-  warn: toast
-}
-//  VueNotifications.setPluginOptions(options)
+  const options = {
+    success: toast,
+    error: toast,
+    info: toast,
+    warn: toast
+  }
 
-Vue.use(VueNotifications, options)
-  Vue.use(MultiSelectPlugin);
-Vue.use(TextBoxPlugin);
-
-  Vue.use(DropDownListPlugin);
-  var groupVue1 = Vue.component("groupTemplate1", {
-    template: `<strong>{{val1}}</strong>`,
-    data() {
-      return {
-        data: {
-
-        },
-        val1:""
-      };
-    },
-    mounted() {
-      axios.get(`${apiUrl}`+`department/dept/get/`+`${this.data.parent_department}`,{withCredentials:true}).then((res) => {
-        console.log(res.data)
-        this.val1 = res.data.department_name
-      });
-    }
-  });
-  var groupVue2 = Vue.component("groupTemplate2", {
-    template: `<strong>{{val2}}</strong>`,
-    data() {
-      return {
-        data: {
-
-        },
-        val2:""
-      };
-    },
-    async mounted() {
-      axios.get(`${apiUrl}`+`head/head/view/one/`+`${this.data.parent_head}`,{withCredentials:true}).then((res) => {
-        console.log(res.data)
-        this.val2 = res.data.name
-      });
-    
-    }
-  });
-
-
+  Vue.use(VueNotifications, options)
+  Vue.use(TextBoxPlugin);
+  
 	export default {
-		name : 'AddTransaction',
+		name : 'AddApproval',
 		components : {
       CoolSelect,
       cSwitch,
-      MultiSelectPlugin
+      Treeselect
 		},
 		data: function() {
 			return {
-        groupTemplate1: function () {
-              return {
-                  template: groupVue1
-              }
-          },
-          
-          groupTemplate2: function () {
-              return {
-                  template: groupVue2
-              }
-          },
-          quotes:[
-          ],
           verified:false,
-				input:{
-					department:null,
-          approval_type:"",
-          recurring_rate:"",
-          budget_head:null,
-          month:"",
-          amount:"",
-          request_for_quote:"",
-          description:""
-				},
-        addresslist : {
-        compAdd : "",
-        country : "",
-        state : "",
-        zip : "",
-        phone : "",
-        email : ""
-      },
-        vendor : {
-        vendor_company:"",
-        pan:"",
-        gst:"",
-        turnover:"",
-        kcp_name : "",
-        kcp_phone : "",
-        acc_no : "",
-        acc_name:"",
-        ifsc : "",
-        bank_name:"",
-        pan_copy: null,
-        gst_certi:null,
-        address:this.addresslist
-      },
-        vendors:[],
-        is_po_rasied:false,
-        quotation:false,
-        quote:{
-          vendor:"",
-          title:"",
-          description:"",
-          file:"",
-          price:"",
-          isPurchased:false,
-          purchase_order:""
-        },
-        validate:true,
-        purchase_orders:[],
-        purchase_order:{},
-        poModal:false,
-        quoteModal :false,
-        vendorModal:false,
-				types:[
-          "One Time","Recurring"
-				],
-        disableCategory:false,
-				category:[
-					"Purchase Order","Bill","Invoice","Reimburstement"
-				],
-        month:[ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"}
-        
-        
-        ],
-        department:[
-        ],
-        approvals :[
-          
-        ],
-        head:[],
-        dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
-        approvalFields:{text:"description",value:"_id"},
-        head_fields:{groupBy:'parent_head',text:"name",value:"_id"},
-        loader:false
+  				input:{
+  					department:null,
+            approval_type:"",
+            recurring_rate:"",
+            budget_head:null,
+            month:"",
+            amount:"",
+            request_for_quote:"",
+            description:""
+  				},
+          validate:true,
+  				types:[
+            "One Time","Recurring"
+  				],
+  				category:[
+  					"Purchase Order","Bill","Invoice","Reimburstement"
+  				],
+          month:[ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"}
+          ],
+          department:[
+          ],
+          approvals :[
+          ],
+          head:[],
+          loader:false
 			}
 		},
 		async mounted() {
-      axios.get(`${apiUrl}`+`approvals/preApp/get/all`,{withCredentials:true}).then((res) => {
-        this.approvals = res.data
-      });
-      axios.get(`${apiUrl}`+`vendor/get/all`,{withCredentials:true}).then((res) => {
-        this.vendors = res.data
-      });
-      axios.get(`${apiUrl}`+`po/get/all`,{withCredentials:true}).then((res) => {
-        this.purchase_orders = res.data
-      });
+      this.month.splice(0,new Date().getMonth()) //Set months
+      // Department Tree
       axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
-        this.department = res.data
+        this.department = this.list_to_tree_dept(res.data)
       })
+      // Head Tree
       axios.get(`${apiUrl}`+`head/head/get`,{withCredentials:true}).then((res) => {
         console.log(res.data);
-        this.head = res.data
+        this.head = this.list_to_tree_head(res.data)
       })
 		},
+    watch : {
+      // Change Heads Based on Department
+      'input.department' : function() {
+        if(this.input.department == null || this.input.department == "") {
+          axios.get(`${apiUrl}dropdown/head/no/dept`,{withCredentials:true}).then((res) => {
+            this.head = this.list_to_tree_head(res.data)
+          })
+        }
+        else {
+          axios.get(`${apiUrl}dropdown/head/find/${this.input.department}`,{withCredentials:true}).then((res) => {
+            this.head = this.list_to_tree_head(res.data)
+          })
+        }
+      }
+    },
 		methods : {
-       filtering(e) {
-        var department = this.department
-           var query = new Query();
-            //frame the query based on search string with filter type.
-            query = query.where("department_name", "startswith", e.text, true);
-            //pass the filter data source, filter query to updateData method.
-            e.updateData(department, query);
-        },
+      list_to_tree_dept(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_department != undefined ) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_department]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataDept(roots)
+          return roots
+      },
+      convertDataDept(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataDept(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].department_name;
+        delete roots[i]._id;
+        delete roots[i].department_name;
+        }
+      },
+      list_to_tree_head(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_head != undefined ) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_head]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataHead(roots)
+          return roots
+      },
+      convertDataHead(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataHead(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].name;
+        delete roots[i]._id;
+        delete roots[i].name;
+        }
+      },
         sendData() {
           this.$validator.validate().then(valid => {
             if (!valid) {
@@ -362,7 +317,6 @@ Vue.use(TextBoxPlugin);
                  this.loader = true
               })
               setTimeout(function(){window.location.href = ('#/approval/view/all')},2000)
-              
             }
           });
           },
@@ -389,13 +343,10 @@ Vue.use(TextBoxPlugin);
     }
 	};
 </script>
-
 <style>
-
 #errors {
   color:red;
 }
-
   .e-ddl .e-dropdownbase .e-fixed-head {
   visibility: hidden;
 }

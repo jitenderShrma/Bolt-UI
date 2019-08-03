@@ -103,8 +103,6 @@ import apiUrl from '@/apiUrl'
 import axios from 'axios'
 import Vue from 'vue'
 import { Browser } from '@syncfusion/ej2-base';
-import {ClientTable, Event} from 'vue-tables-2'
-import { ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
 import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import VueNotifications from 'vue-notifications'
@@ -120,8 +118,7 @@ Vue.use(ColorPickerPlugin);
 import {
   PivotViewPlugin,
   GroupingBar,
-  FieldList,
-  IDataSet
+  FieldList
 } from "@syncfusion/ej2-vue-pivotview";
 import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
@@ -149,7 +146,6 @@ const toastTypes = {
 var api = axios.create({
   withCredentials:true
 })
-  Vue.use(ClientTable)
 miniToastr.init({types: toastTypes})
 
 function toast ({title, message, type, timeout, cb}) {
@@ -169,8 +165,6 @@ Vue.use(VueNotifications, options)
 export default {
     name: 'LabelList',
     components: {
-      ClientTable,
-      Event,
       ToolbarPlugin,
       GridPlugin, Filter, Selection, Sort, VirtualScroll,
         Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
@@ -178,7 +172,6 @@ export default {
         PivotViewPlugin,
         GroupingBar,
         FieldList,
-        IDataSet,
         Edit
     },
      provide: {

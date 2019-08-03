@@ -30,22 +30,19 @@ import apiUrl from '@/apiUrl'
 import axios from 'axios'
 import Vue from 'vue'
 import { Browser } from '@syncfusion/ej2-base';
-import {ClientTable, Event} from 'vue-tables-2'
 import { ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
 import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import VueNotifications from 'vue-notifications'
 import { DatePickerPlugin } from "@syncfusion/ej2-vue-calendars";
-import { NumericTextBox } from "@syncfusion/ej2-inputs";
 import { NumericTextBoxPlugin } from "@syncfusion/ej2-vue-inputs";
 import miniToastr from 'mini-toastr' 
 import {
   PivotViewPlugin,
   GroupingBar,
-  FieldList,
-  IDataSet
+  FieldList
 } from "@syncfusion/ej2-vue-pivotview";
 import { ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
-    import { DropDownList, DropDownListPlugin,ChangeEventArgs } from '@syncfusion/ej2-vue-dropdowns';
+    import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     
     Vue.use(PivotViewPlugin);
     Vue.use(GridPlugin);
@@ -63,7 +60,6 @@ const toastTypes = {
   warn: 'warn'
 }
 
-  Vue.use(ClientTable)
 miniToastr.init({types: toastTypes})
 
 function toast ({title, message, type, timeout, cb}) {
@@ -83,15 +79,12 @@ Vue.use(VueNotifications, options)
 export default {
     name: 'CommunicationLog',
     components: {
-      ClientTable,
-      Event,
-      GridPlugin, Filter, Selection, Sort, VirtualScroll,ChangeEventArgs,
+      GridPlugin, Filter, Selection, Sort, VirtualScroll,
         Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
         NumericTextBoxPlugin,
         PivotViewPlugin,
   GroupingBar,
-  FieldList,
-  IDataSet
+  FieldList
     },
      provide: {
             grid: [FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser]

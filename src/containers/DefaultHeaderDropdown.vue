@@ -2,7 +2,7 @@
   <AppHeaderDropdown right no-caret>
     <template slot="header">
       <i class="fa fa-language fa-lg "></i>
-      <b-badge pill variant="info">{{itemsCount}}</b-badge>
+      <b-badge pill variant="info"></b-badge>
     </template>
     <template slot="dropdown">
       <div class="dropdown-menu-lg">
@@ -24,7 +24,11 @@ export default {
   name: 'DefaultHeaderDropdown',
   components: {
     AppHeaderDropdown
+  },
+  data : function() {
+    return {
+    }
   }
-}
+};
 </script>
 

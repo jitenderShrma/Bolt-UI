@@ -52,7 +52,6 @@ import axios from 'axios'
 import ml from '@/ml'
 import Vue from 'vue'
 import { Browser } from '@syncfusion/ej2-base';
-import {ClientTable, Event} from 'vue-tables-2'
 import { ToolbarPlugin,ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
 import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import VueNotifications from 'vue-notifications'
@@ -86,7 +85,6 @@ const toastTypes = {
   warn: 'warn'
 }
 
-  Vue.use(ClientTable)
 miniToastr.init({types: toastTypes})
 
 function toast ({title, message, type, timeout, cb}) {
@@ -104,18 +102,15 @@ const options = {
 Vue.use(VueNotifications, options)
 
 export default {
-    name: 'Communication Log',
+    name: 'SMSTemplateList',
     components: {
-      ClientTable,
-      Event,
       ToolbarPlugin,
-      GridPlugin, Filter, Selection, Sort, VirtualScroll,ChangeEventArgs,
+      GridPlugin, Filter, Selection, Sort, VirtualScroll,
         Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
         NumericTextBoxPlugin,
         PivotViewPlugin,
   GroupingBar,
   FieldList,
-  IDataSet,
   Edit
     },
      provide: {

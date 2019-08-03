@@ -62,11 +62,10 @@ import miniToastr from 'mini-toastr'
 import {
   PivotViewPlugin,
   GroupingBar,
-  FieldList,
-  IDataSet
+  FieldList
 } from "@syncfusion/ej2-vue-pivotview";
 import { Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
-import { DropDownList, DropDownListPlugin,ChangeEventArgs } from '@syncfusion/ej2-vue-dropdowns';
+import { DropDownList, DropDownListPlugin} from '@syncfusion/ej2-vue-dropdowns';
     Vue.use(ToolbarPlugin);
         
     Vue.use(PivotViewPlugin);
@@ -103,21 +102,9 @@ const options = {
 Vue.use(VueNotifications, options)
 
 export default {
-    name: 'Permission List',
-    components: {
-      ClientTable,
-      Event,
-      ToolbarPlugin,
-      GridPlugin, Filter, Selection, Sort, VirtualScroll,ChangeEventArgs,
-        Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
-        NumericTextBoxPlugin,
-        PivotViewPlugin,
-  GroupingBar,
-  FieldList,
-  IDataSet,
-  Edit
-    },
-     provide: {
+    name: 'PermissionList',
+    components: {ClientTable, Event, ToolbarPlugin, GridPlugin, Filter, Selection, Sort, VirtualScroll, Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin, NumericTextBoxPlugin, PivotViewPlugin, GroupingBar, FieldList,  Edit },
+    provide: {
             grid: [Edit,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page]
         },
     data: function () {

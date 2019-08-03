@@ -14,7 +14,6 @@
               <e-item id="big" prefixIcon='e-big-icon' ></e-item>
               <e-item id="collapse" :text="$ml.get('collapseall')"></e-item>
               <e-item id="expand" :text="$ml.get('expandall')"></e-item>
-              <e-item id="label" :text="$ml.get('label')"></e-item>
             </e-items>
           </ejs-toolbar>
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 

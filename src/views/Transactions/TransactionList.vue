@@ -8,6 +8,7 @@
                          <e-item  id="add" :text="$ml.get('add')"></e-item>
                          <e-item id="edit" :text="$ml.get('edit')"></e-item>
                          <e-item id="delete" :text="$ml.get('delete')"></e-item>
+                          <e-item  id="upload" :text="$ml.get('upload')"></e-item>
                 </e-items>
                 </ejs-toolbar>
              <div class="control-section">
@@ -34,7 +35,12 @@
         <ejs-dialog :buttons='alertDlgButtons' ref="alertDialog" v-bind:visible="false" :header='alertHeader' :animationSettings='animationSettings' :content='alertContent' :showCloseIcon='showCloseIcon' :target='target'
             :width='alertWidth'>
         </ejs-dialog>
-         
+          <b-modal :title="$ml.get('upload')" size="sm" class="modal-primary" v-model="browseModal" @ok="browseModal = false" hide-footer>
+          <div id="modalTarget" class="control-section; position:relative" style="height:300px;">
+              <ejs-uploader ref="uploadObj" id='defaultfileupload' :multiple = "false" :success="onUploadSuccess" :progress="onProgress" :failure="onUploadFailed"  :allowedExtensions="extensions" :asyncSettings="path" name="UploadFiles"></ejs-uploader>
+            </div>
+    
+  </b-modal>
   </div>
  </div>
 </template>
@@ -42,9 +48,8 @@
 import apiUrl from '@/apiUrl'
 import axios from 'axios'
 import Vue from 'vue'
+import { UploaderPlugin } from '@syncfusion/ej2-vue-inputs';
 import { Browser } from '@syncfusion/ej2-base';
-import {ClientTable, Event} from 'vue-tables-2'
-import { ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
 import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import VueNotifications from 'vue-notifications'
@@ -55,12 +60,12 @@ import miniToastr from 'mini-toastr'
 import {
   PivotViewPlugin,
   GroupingBar,
-  FieldList,
-  IDataSet
+  FieldList
 } from "@syncfusion/ej2-vue-pivotview";
 import {
 PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
+    Vue.use(UploaderPlugin);
     
     Vue.use(PivotViewPlugin);
     Vue.use(GridPlugin);
@@ -84,7 +89,6 @@ const toastTypes = {
 var api = axios.create({
   withCredentials:true
 })
-  Vue.use(ClientTable)
 miniToastr.init({types: toastTypes})
 
 function toast ({title, message, type, timeout, cb}) {
@@ -103,18 +107,13 @@ Vue.use(VueNotifications, options)
 
 export default {
     name: 'TransactionList',
-    components: {
-      ClientTable,
-      Event,
-      ToolbarPlugin,
-      
+    components: {      ToolbarPlugin,
       GridPlugin, Filter, Selection, Sort, VirtualScroll,
         Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
         NumericTextBoxPlugin,
         PivotViewPlugin,
   GroupingBar,
   FieldList,
-  IDataSet,
   Edit
     },
      provide: {
@@ -122,6 +121,24 @@ export default {
         },
     data: function () {
       return {
+        browseModal:false,
+      allowCalculatedField:true,
+          complete:false,
+          upload:false,
+          extensions : '.csv',
+          path: {
+            saveUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Save',
+            removeUrl: 'https://aspnetmvc.syncfusion.com/services/api/uploadbox/Remove'
+          },
+          dropElement: '.control-fluid',
+          change: (args) => {
+            this.$refs.uploadObj.autoUpload = args.checked;
+            this.$refs.uploadObj.clearAll();
+        },
+        changed: (args) => {
+            this.$refs.uploadObj.sequentialUpload = args.checked;
+            this.$refs.uploadObj.clearAll();
+        },
         labelTemplate: function() {
           return {
             template:Vue.component('labelTemplate', {
@@ -223,6 +240,35 @@ export default {
             };
         },
   methods: {
+    onProgress(args) {
+      },
+       onUploadSuccess: function (args) {
+          var formData = new FormData();
+          formData.append('csv',args.file.rawFile);
+          formData.append('import_setting',"M");
+          formData.append('year',"2019")
+          console.log(formData);
+          this.upload = true
+          console.log("req called");
+          api.post(`${apiUrl}`+`csv/read/`,formData,{headers:{'Content-Type':'multipart/form-data'}}).then((res)=>{
+            console.log(res);
+            console.log("res")
+            api.get(`${apiUrl}`+`transaction/get/all`).then((response) => {
+                    this.datasrc = response.data;
+                })
+          })
+          this.browseModal = false
+
+          // axios.post(`${apiUrl}`+`csv/read`,formData,{headers:{'Content-Type':'multipart/form-data'}}).then((res) => {
+          //   this.dataSourceSettings.dataSource = res.data
+          // })
+        },
+        onUploadFailed: function (args) {
+            console.log('Upload fails');
+        },
+        onFileRemove: function (args) {
+            args.postRawFile = false;
+        },
             actionBegin: function(args) {
                 console.log(args)
             },
@@ -273,6 +319,9 @@ export default {
                 if(args.item.id == "add") {
                     console.log(args)
                     this.$router.push('/transaction/add');
+                }
+                if(args.item.id=="upload") {
+                  this.browseModal = true
                 }
                 if(args.item.id == "edit") {
                     var selected = this.$refs.overviewgrid.getSelectedRecords()

@@ -3,15 +3,14 @@
      <div id="target" class="col-lg-15 control-section">
         <div class="content-wrapper">
             <ejs-toolbar :clicked="addEditHandler">
-                <e-items>
-                  <e-item id="add" :template="addTemplate" :text="$ml.get('add')"></e-item
-                  <e-item id="excelexport" :text="$ml.get('exportexcel')"></e-item>
-                  <e-item id="pdfexport" :text="$ml.get('exportpdf')"></e-item>
-              <e-item id="label" :text="$ml.get('label')"></e-item>
-
-                </e-items>
-                </ejs-toolbar>
-             <div class="control-section">
+              <e-items>
+                <e-item id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
+                <e-item id="excelexport" :text="$ml.get('exportexcel')"></e-item>
+                <e-item id="pdfexport" :text="$ml.get('exportpdf')"></e-item>
+                <e-item id="label" :text="$ml.get('label')"></e-item>
+              </e-items>
+            </ejs-toolbar>
+            <div class="control-section">
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
                 :height="height" :enableHover='false'>
                 <e-columns>
@@ -27,7 +26,6 @@
                     <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' ></e-column>
                     <e-column field='description' headerText='Description'  :filter='filter' ></e-column>
                     <e-column field='amount' headerText='Amount'  :filter='filter' ></e-column>
-                    
                 </e-columns>
                 </ejs-grid>
                  </div>
@@ -36,33 +34,62 @@
             target='#target' >
             <b-form v-on:submit.prevent="addLabel">
         <div class="content-wrapper textbox-default">
-        <div class="row">
-        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
-        </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-              <p>Label Color</p>
+          <br>
+          <div v-for="(run,i) in editinput.labels" :key="i">
+              <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="editinput.labels[i].color">{{editinput.labels[i].label_name}}</b-badge>
+              <b-btn style="float:right" v-on:click="delLabel(`${editinput.labels[i]._id}`,`${editinput._id}`,`${i}`)" size="sm" variant="danger"><i class="fa fa-trash-o"></i></b-btn>
             </div>
-            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                    <ejs-colorpicker :modeSwitcher="false" value="#000" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
-            </div>
-        </div>
-        <br>
-        <div class="multiline_wrapper">
-            <ejs-textbox v-model="formdata.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
-        </div>
-        </div>
-        <div slot="footer">
-              <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
-          </div>
+            <b-form v-on:submit.prevent = "selectLabel(`${editinput._id}`)">
+                      <label v-text="$ml.get('labels')"></label>
+                      <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
+                        <div slot="item" slot-scope = "{item :label}">
+                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                        </div>
+                        <div slot="selection" slot-scope = "{item :label}">
+                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                        </div>
+                        <div slot="after-items-fixed">
+                          <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>
+                        </div>
+                      </cool-select>
+                      <br>
+                        <div slot="footer">
+                          <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('add')"><i class="fa fa-dot-circle-o"></i></b-button>
+                        </div>
+                </b-form>
+              </div>
           </b-form>
         </ejs-dialog>
         <ejs-dialog :buttons='alertDlgButtons' ref="alertDialog" v-bind:visible="false" :header='alertHeader' :animationSettings='animationSettings' :content='alertContent' :showCloseIcon='showCloseIcon' :target='target'
             :width='alertWidth'>
         </ejs-dialog>
+        <b-modal size="sm" :title="$ml.get('label')" class="modal-primary" v-model="addModal" @ok="addModal = false" hide-footer>
+              <b-form v-on:submit.prevent="addLabel(`${editinput._id}`)">
+              <div class="content-wrapper textbox-default">
+              <div class="row">
+              <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                      <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
+              </div>
+              </div>
+              <br>
+              <div class="row">
+                  <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                    <p>Label Color</p>
+                  </div>
+                  <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                          <ejs-colorpicker :modeSwitcher="false" value="#000" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
+                  </div>
+              </div>
+              <br>
+              <div class="multiline_wrapper">
+                  <ejs-textbox v-model="formdata.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
+              </div>
+              </div>
+              <div slot="footer">
+                    <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+                </div>
+                </b-form>
+            </b-modal>
   </div>
  </div>
 </template>
@@ -71,8 +98,6 @@ import apiUrl from '@/apiUrl'
 import axios from 'axios'
 import Vue from 'vue'
 import { Browser } from '@syncfusion/ej2-base';
-import {ClientTable, Event} from 'vue-tables-2'
-import { ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
 import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import VueNotifications from 'vue-notifications'
 import { DatePickerPlugin } from "@syncfusion/ej2-vue-calendars";
@@ -80,9 +105,9 @@ import miniToastr from 'mini-toastr'
 import {
   PivotViewPlugin,
   GroupingBar,
-  FieldList,
-  IDataSet
+  FieldList
 } from "@syncfusion/ej2-vue-pivotview";
+import {CoolSelect} from 'vue-cool-select';
 import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
@@ -112,7 +137,6 @@ const toastTypes = {
 var api = axios.create({
   withCredentials:true
 })
-  Vue.use(ClientTable)
 miniToastr.init({types: toastTypes})
 
 function toast ({title, message, type, timeout, cb}) {
@@ -132,17 +156,14 @@ Vue.use(VueNotifications, options)
 export default {
     name: 'ApprovalList',
     components: {
-      ClientTable,
-      Event,
       ToolbarPlugin,
-      
+      CoolSelect,
       GridPlugin, Filter, Selection, Sort, VirtualScroll,
         Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
         NumericTextBoxPlugin,
         PivotViewPlugin,
         GroupingBar,
         FieldList,
-        IDataSet,
         Edit
     },
      provide: {
@@ -150,6 +171,8 @@ export default {
         },
     data: function () {
       return {
+        labels:[],
+        addModal:false,
         buttonTemplate: function () {
               return {
                   template: Vue.component('buttonTemplate', {
@@ -179,6 +202,7 @@ export default {
                 })
               }
           },
+          editinput : {},
         labelTemplate: function () {
               return {
                   template: Vue.component('labelTemplate', {
@@ -288,6 +312,7 @@ export default {
                 filterOptions: {
                     type: 'Menu'
                 },
+                selectedLabel:null,
                 filter: {
                     type: 'CheckBox'
                 },
@@ -301,28 +326,51 @@ export default {
             };
         },
   methods: {
+    delLabel(args,id,label) {
+      console.log(this.editinput.labels.splice(label,1))
+      var body = {
+        labels : args
+      }
+      console.log(body)
+      api.put(`${apiUrl}approvals/preApp/pop/label/${id}`,body).then((res) => {
+        console.log(res.data)
+      })
+      
+    },
             actionBegin: function(args) {
                 console.log(args)
             },
-            
             addLabel (args) {
-        this.$refs.dialogObj.hide();
-        let val = this.$refs.overviewgrid.getSelectedRecords()
-              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((response) => {
-                var id = {
-                  labels :  response.data._id
-                }
-                api.put(`${apiUrl}`+`approvals/preApp/push/label/`+`${val[0]._id}`,id).then((response) => {
-                  console.log(response.data)
-                    this.$router.go(0)
-                });
-                this.formdata=null
+            this.addModal =false
+                    api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((label)=>{
+                      var id = {
+                        labels :  label.data._id
+                      }
+                  api.get(`${apiUrl}`+`label/label/find/by/Approval`).then((res) => {
+                    this.labels = res.data
+                  })
+                console.log(this.editinput.labels)
               });
-            
       },
     onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
       }, 
+      selectLabel(args) {
+        if(this.selectedLabel != null) {
+        var label;
+        api.get(`${apiUrl}label/label/get/one/${this.selectedLabel}`).then((res) => {
+          label = res.data
+          this.editinput.labels.push(label);
+        })
+
+        var data = {
+          labels : this.selectedLabel
+        }
+        api.put(`${apiUrl}approvals/preApp/push/label/${args}`,data).then((res) => {
+            
+        })
+      }
+      },
             clickHandler (args) {
                     if(this.$refs.overviewgrid.getSelectedRecords().length>0){
                     let withHeader = false;
@@ -351,9 +399,12 @@ export default {
                 }
             },
             addEditHandler(args) {
+              var data = this.$refs.overviewgrid.getSelectedRecords()
               if(args.item.id == 'label') {
-                  if(this.$refs.overviewgrid.getSelectedRecords().length>0) {
+                  if(data.length>0) {
                     this.$refs.dialogObj.show();
+                    this.editinput = data[0]
+                    console.log(this.editinput)
                   }
                   else { 
                     alert("Please select a record to label it");
@@ -386,7 +437,7 @@ export default {
               }
             }
         }, 
-        async mounted () { 
+        async mounted () {
                 this.$refs.dialogObj.hide();
                 this.link = window.location.href;
                 this.key = this.link.split('view/').pop()
@@ -395,6 +446,9 @@ export default {
                 api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
                   console.log(response.data)
                     this.datasrc = response.data;
+                })
+                api.get(`${apiUrl}`+`label/label/find/by/Approval`).then((res) => {
+                  this.labels = res.data
                 })
               }
               else{
@@ -405,16 +459,8 @@ export default {
                 })
               }
         },
-        computed: {
-            getTradeData: async function () {
-                this.data = this.datasrc.slice(0)
-                return this.data
-            }
-        }
 };
 </script>
-
-
 <style>
 #label {
     font-size: 12px;

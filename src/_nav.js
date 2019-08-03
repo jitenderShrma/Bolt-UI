@@ -26,11 +26,6 @@ var items = [
     icon: 'icon-user',
     children:[
       {
-        name: 'All Users',
-        url: '/user/list',
-        icon: 'icon-user'
-      },
-      {
         name: 'Staff',
         url: '/staff',
         icon: 'icon-user'

@@ -34,8 +34,6 @@ import apiUrl from '@/apiUrl'
 import axios from 'axios'
 import Vue from 'vue'
 import { Browser } from '@syncfusion/ej2-base';
-import {ClientTable, Event} from 'vue-tables-2'
-import { ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
 import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import VueNotifications from 'vue-notifications'
 import { DatePickerPlugin } from "@syncfusion/ej2-vue-calendars";
@@ -53,9 +51,7 @@ import miniToastr from 'mini-toastr'
 import {
   PivotViewPlugin,
   GroupingBar,
-  FieldList,
-  IDataSet,
-
+  FieldList
 } from "@syncfusion/ej2-vue-pivotview";
 import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Group } from "@syncfusion/ej2-vue-grids";
     
@@ -77,7 +73,6 @@ const toastTypes = {
 var api = axios.create({
   withCredentials:true
 })
-  Vue.use(ClientTable)
 miniToastr.init({types: toastTypes})
 
 function toast ({title, message, type, timeout, cb}) {
@@ -111,24 +106,20 @@ var captionVue = Vue.component('captionTemplate',{
 Vue.use(VueNotifications, options)
 
 export default {
-    name: 'ApprovalList',
+    name: 'StaffList',
     components: {
-      ClientTable,
-      Event,
       ToolbarPlugin,
-      
       GridPlugin, Filter, Selection, Sort, VirtualScroll,
         Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
         NumericTextBoxPlugin,
         PivotViewPlugin,
         GroupingBar,
         FieldList,
-        IDataSet,
         Edit
     },
      provide: {
-            grid: [Group,PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser]
-        },
+            grid: [ Group,PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser ]
+    },
     data: function () {
       return {
         labelTemplate: function () {

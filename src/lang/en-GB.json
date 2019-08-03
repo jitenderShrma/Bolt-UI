@@ -1,6 +1,7 @@
 {
     "login" : "Login",
     "signin" : "Sign into your account",
+    "username" : "User Name",
     "password" :"Password",
     "forgotpassword" : "Forgot Password?",
     "switch" : "Switch",
@@ -31,7 +32,7 @@
     "adduser": "Add User",
     "getallusers": "Get All Users",
     "users" :"Users",
-    "username" : "User Name",
+    
     "pholdusername" : "Enter the name of your User",
     "usertype" : "Type",
     "placeholderusertype" : "Select a User Type",
@@ -232,5 +233,8 @@
     "reject" : "Reject",
     "pholdswitchbudget" : "Switch Budget",
     "staff" : "Staff",
-    "more" : "More"
+    "more" : "More",
+    "parentdept" : "Parent Department",
+    "labels" : "Labels",
+    "parentdesig" : "Parent Designation"
 }

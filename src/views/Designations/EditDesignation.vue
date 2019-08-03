@@ -4,20 +4,31 @@
                 <b-form v-on:submit.prevent="editDesig">
                     <b-tabs>
                       <b-tab :title="$ml.get('designation')" active>
-                      	<b-form-group style="padding:5%">
+                      	<b-form-group style="padding:2%">
+                          <b-col sm="6">
                       		<ejs-textbox v-model="input.name" floatLabelType="Auto" :placeholder="$ml.get('designation')"></ejs-textbox>
-                      		<div v-if="!clicked">
-                  				<ejs-dropdownlist :change="changeDesig" :showClearButton="true"  v-model="input.parent_designation_id" floatLabelType="Auto" :groupTemplate="desigTemplate" :allowFiltering="true" :dataSource='data' :fields='desig_fields' popupHeight='300' :placeholder="$ml.get('pholdparentdesig')"></ejs-dropdownlist>
-                  			</div>
-                  			<div v-else>
-                  				<ejs-dropdownlist :change="changeDesig" :showClearButton="true" v-model="input.parent_designation_id" :allowFiltering="true" :dataSource='data' :fields='desig_fields'  popupHeight='300' :placeholder="$ml.get('pholdparentdesig')"></ejs-dropdownlist>
-                  			</div>
-                  			<div v-if="!clicked1">
-                  				<ejs-dropdownlist :change="changeDept" :close="switchNow1" :showClearButton="true" v-model="input.department" floatLabelType="Auto" :groupTemplate="groupTemplate1" :allowFiltering="true" :dataSource='department' :fields='dept_fields' popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
-                  			</div>
-	                  		<div v-else>
-	                  			<ejs-dropdownlist :change="changeDept" v-model="input.department" :showClearButton="true" floatLabelType="Auto"  :allowFiltering="true" :dataSource='department' :fields='dept_fields' popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
-	                  		</div>
+                        </b-col>
+                      		<b-col sm="6">
+                            <label v-text="$ml.get('parentdesig')"></label>
+                            <treeselect :placeholder="$ml.get('pholdparentdesig')" v-model="input.parent_designation_id" :multiple="false" :options="data" />
+                          </b-col>
+                          <!-- <div v-if="!clicked">
+                            <b-col sm="6">
+                              
+                          <ejs-dropdownlist :change="changeDesig" :showClearButton="true"  v-model="input.parent_designation_id" floatLabelType="Auto" :groupTemplate="desigTemplate" :allowFiltering="true" :dataSource='data' :fields='desig_fields' popupHeight='300' :placeholder="$ml.get('pholdparentdesig')" ></ejs-dropdownlist>
+                        </b-col>
+                        </div>
+                        <div v-else>
+                          <b-col sm="6">
+                            <label v-text="$ml.get('designation')"></label>
+                            <treeselect :placeholder="$ml.get('pholddesig')" v-model="input.designation" :multiple="false" :options="data" />
+                          <ejs-dropdownlist :change="changeDesig" :showClearButton="true" v-model="input.parent_designation_id" :allowFiltering="true" :dataSource='data' :fields='desig_fields'  popupHeight='300' :placeholder="$ml.get('pholdparentdesig')" ></ejs-dropdownlist>
+                        </b-col>
+                        </div> -->
+                        <b-col sm="6">
+                          <label v-text="$ml.get('department')"></label>
+                          <treeselect @select="changeDesig" :placeholder="$ml.get('pholdparentdept')" v-model="input.department" :multiple="false" :options="department" />
+                        </b-col>
 				  		</b-form-group>
 				  	  </b-tab>
 			  		  <b-tab :title="$ml.get('permissions')">
@@ -32,17 +43,69 @@
 					                    <e-column editType= 'booleanedit' :width="60" :displayAsCheckBox='true' field='delete' headerText='Delete'   ></e-column>
 					                    <e-column editType= 'booleanedit' :width="60" :displayAsCheckBox='true' field='read' headerText='Read'   ></e-column>
 					                    <e-column editType= 'booleanedit' :width="60" :displayAsCheckBox='true' field='write' headerText='Add'   ></e-column>
-					                    
 					                </e-columns>
 					            </ejs-grid>
 					        </div>
 					    </div>
 					</div>
 			    </b-tab>
+          <b-tab :title="$ml.get('labels')">
+            <b-form-group>
+                    <div v-for="(run,i) in input.labels" :key="i">
+                      <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="input.labels[i].color">{{input.labels[i].label_name}}</b-badge>
+                      <b-btn style="float:right" @click="delLabel(`${input.labels[i]._id}`,`${input._id}`,`${i}`)" size="sm" variant="danger"><i class="fa fa-trash-o"></i></b-btn>
+                    </div>
+                    <b-form v-on:submit.prevent = "selectLabel(`${input._id}`)">
+                      <label v-text="$ml.get('labels')"></label>
+                      <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
+                        <div slot="item" slot-scope = "{item :label}">
+                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                        </div>
+                        <div slot="selection" slot-scope = "{item :label}">
+                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                        </div>
+                        <div slot="after-items-fixed">
+                          <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>
+                        </div>
+                      </cool-select>
+                      <br>
+                        <div slot="footer">
+                          <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('add')"><i class="fa fa-dot-circle-o"></i></b-button>
+                        </div>
+                    </b-form>
+                  </b-form-group>
+          </b-tab>
               </b-tabs>
               <br>
                 <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
             </b-card>
+            <b-modal size="sm" :title="$ml.get('label')" class="modal-primary" v-model="addModal" @ok="addModal = false" hide-footer>
+              <b-form v-on:submit.prevent="addLabel(`${input._id}`)">
+              <div class="content-wrapper textbox-default">
+              <div class="row">
+              <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                      <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
+              </div>
+              </div>
+              <br>
+              <div class="row">
+                  <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                    <p>Label Color</p>
+                  </div>
+                  <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                          <ejs-colorpicker :modeSwitcher="false" value="#000" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
+                  </div>
+              </div>
+              <br>
+              <div class="multiline_wrapper">
+                  <ejs-textbox v-model="formdata.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
+              </div>
+              </div>
+              <div slot="footer">
+                    <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+                </div>
+                </b-form>
+            </b-modal>
                 </div>
 </template>
 
@@ -51,9 +114,10 @@ import apiUrl from '@/apiUrl'
 import axios from 'axios'
 import ml from '@/ml'
 import Vue from 'vue'
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { Browser } from '@syncfusion/ej2-base';
-import {ClientTable, Event} from 'vue-tables-2'
-import { ToolbarPlugin,ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
+import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import VueNotifications from 'vue-notifications'
 import { DatePickerPlugin } from "@syncfusion/ej2-vue-calendars";
@@ -64,13 +128,12 @@ import miniToastr from 'mini-toastr'
 import {
   PivotViewPlugin,
   GroupingBar,
-  FieldList,
-  IDataSet
+  FieldList
 } from "@syncfusion/ej2-vue-pivotview";
 import { Switch as cSwitch } from '@coreui/vue'
-
+import {CoolSelect} from 'vue-cool-select';
 import { Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
-import { DropDownList, DropDownListPlugin,ChangeEventArgs } from '@syncfusion/ej2-vue-dropdowns';
+import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     Vue.use(ToolbarPlugin);
     Vue.use(TextBoxPlugin)
     Vue.use(PivotViewPlugin);
@@ -89,7 +152,6 @@ const toastTypes = {
   warn: 'warn'
 }
 
-  Vue.use(ClientTable)
 miniToastr.init({types: toastTypes})
 
 function toast ({title, message, type, timeout, cb}) {
@@ -109,65 +171,20 @@ Vue.use(VueNotifications, options)
 var departments = []
 var designations = []
 var new_department = ""
-var groupVue1 = Vue.component("groupTemplate1", {
-    template: `<strong>{{data.parent_department}}</strong>`,
-    data() {
-      return {
-        data: {
-
-        },
-        val1:""
-      };
-    },
-    async mounted() {
-      if(this.data.parent_department!=null) {
-      await api.get(`${apiUrl}`+`department/dept/get/`+`${this.data.parent_department}`).then((res) => {
-        console.log(res.data)
-        this.data.parent_department = res.data.department_name
-        departments.push(this.data)
-      })
-    }
-    }
-  });
-var desigVue = Vue.component("desigTemplate", {
-    template: `<strong>{{data.parent_designation_id}}</strong>`,
-    data() {
-      return {
-        data: {
-
-        },
-        val1:""
-      };
-    },
-    async mounted() {
-      if(this.data.parent_designation_id!=null) {
-      await api.get(`${apiUrl}`+`designation/desig/get/one/`+`${this.data.parent_designation_id}`).then((res) => {
-        console.log(res.data)
-        this.val1 = res.data.name
-        this.data.parent_designation_id = res.data.name
-        designations.push(this.data)
-      }).catch((error) => {
-        console.log("asda");
-      })
-    }
-    }
-  });
-
 
 export default {
-    name: "AddDesignation",
+    name: "EditDesignation",
     components :  {
       cSwitch,
-        ClientTable,
-      Event,
+      CoolSelect,
+      Treeselect,
       ToolbarPlugin,
-      GridPlugin, Filter, Selection, Sort, VirtualScroll,ChangeEventArgs,
+      GridPlugin, Filter, Selection, Sort, VirtualScroll,
         Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
         NumericTextBoxPlugin,
         PivotViewPlugin,
   GroupingBar,
   FieldList,
-  IDataSet,
   Edit
     },
     data : function() {
@@ -182,9 +199,16 @@ export default {
                   template: desigVue
               }
           },
+          addModal :false,
           selected:false,
           link:"",
           key:"",
+          formdata: {
+                  label_name : "",
+                  color : "#fff",
+                  context : "Designations",
+                  description : ""
+                },
           clicked1:false,
             department:[],
              commands: [
@@ -212,6 +236,7 @@ export default {
 	            {module_name:"budSet",text:"Budget Settings",read:false,write:false,edit:false,delete:false},
 	            {module_name:"staff",text:"Staff",read:false,write:false,edit:false,delete:false}
 	            ],
+              selectedLabel:null,
             modal :false,
             input:{},
             selected:false,
@@ -222,34 +247,163 @@ export default {
           modules:[
             
           ],
+          squarePalettesColn: 7,
+          circlePaletteColors: {'custom': ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#2196f3', '#03a9f4', '#00bcd4',
+                    '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
+          labels:[],
           module:"",
           module_fields:{text:"text",value:"value"} 
    };
   },
+  
   async mounted() {
   	this.link = window.location.href
   	this.key = this.link.split('edit/').pop()
   	api.get(`${apiUrl}`+`designation/desig/get/one/${this.key}`).then((res) =>{
   		this.input.department = res.data.department
+      this.input._id = res.data._id
       this.input.parent_designation_id = res.data.parent_designation_id
       this.input.name = res.data.name
+      this.input.labels = res.data.labels
+      console.log(this.input.labels)
   	})
+    api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
+        this.labels = res.data
+      })
     api.get(`${apiUrl}/super/group/subgroup/find/by/${this.key}`).then((res) => {
       this.datasrc = res.data.permissions
     })
-    api.get(`${apiUrl}`+`department/dept/get`).then((res) => {
-        this.department = res.data
+    axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+        this.department = this.list_to_tree_dept(res.data)
       })
-     api.get(`${apiUrl}`+`designation/desig/get/all`)
-    .then((response) => {
-      this.data = response.data
-      });
+      axios.get(`${apiUrl}`+`designation/desig/get/all`,{withCredentials:true}).then((res) => {
+        this.data = this.list_to_tree_desig(res.data)
+      })
+
 
     },
   provide: {
             grid: [Edit,Resize, Selection, Sort,Toolbar]
         },
+  watch : {
+    'input.department' : function(){
+      console.log("asd")
+      if(this.input.department == null || this.input.department == "") {
+        axios.get(`${apiUrl}dropdown/designation/no/dept`,{withCredentials:true}).then((res) => {
+          this.data = this.list_to_tree_desig(res.data)
+        })
+      }
+      else {
+        axios.get(`${apiUrl}dropdown/designation/find/${this.input.department}`,{withCredentials:true}).then((res) => {
+          this.data = this.list_to_tree_desig(res.data)
+        })
+      }
+    }
+  },
    methods:{
+    onChange(args) {
+        this.formdata.color = args.currentValue.hex.slice(1);
+      }, 
+    delLabel(args,id,label) {
+      console.log(args,id,label)
+      var body = {
+        labels : args
+      }
+      api.put(`${apiUrl}designation/desig/pop/label/${id}`,body).then((res) => {
+        api.get(`${apiUrl}`+`designation/desig/get/one/${this.key}`).then((res) =>{
+          this.input.labels = res.data.labels
+          console.log(this.input.labels)
+        })
+      })
+      
+    },
+    addLabel (args) {
+      this.addModal =false
+              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((label)=>{
+                var id = {
+                  labels :  label.data._id
+                }
+                  api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
+                    this.labels = res.data
+                  })
+                console.log(this.input.labels)
+              });
+      },
+    selectLabel(args) {
+        if(this.selectedLabel != null) {
+        var label;
+        api.get(`${apiUrl}label/label/get/one/${this.selectedLabel}`).then((res) => {
+          label = res.data
+          this.input.labels.push(label);
+          this.selectedLabel = null
+        })
+
+        var data = {
+          labels : this.selectedLabel
+        }
+        api.put(`${apiUrl}designation/desig/push/label/${args}`,data).then((res) => {
+            
+        })
+      }
+      },
+    list_to_tree_desig(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_designation_id != undefined ) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_designation_id]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataDesig(roots)
+          return roots
+      },
+      list_to_tree_dept(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_department != undefined ) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_department]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataDept(roots)
+          return roots
+      },
+      convertDataDept(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataDept(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].department_name;
+        delete roots[i]._id;
+        delete roots[i].department_name;
+        }
+      },
+      convertDataDesig(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataDesig(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].name;
+        delete roots[i]._id;
+        delete roots[i].name;
+          }
+      },
    	actionComplete(args) {
    		console.log(args)
    	},
@@ -323,8 +477,16 @@ export default {
           this.changeFields(args)
       },
       changeDesig(args) {
-      	if(args.e!=null){
-      	}
+      	if(this.input.department == null || this.input.department == "") {
+          axios.get(`${apiUrl}dropdown/designation/no/dept`,{withCredentials:true}).then((res) => {
+            this.data = this.list_to_tree_desig(res.data)
+          })
+        }
+        else {
+          axios.get(`${apiUrl}dropdown/designation/find/${this.input.department}`,{withCredentials:true}).then((res) => {
+            this.data = this.list_to_tree_desig(res.data)
+          })
+        }
       },
       clickHandler(args){
         if(args.item.id === 'add') {

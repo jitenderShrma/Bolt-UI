@@ -8,12 +8,12 @@ const DefaultContainer = () => import('@/containers/DefaultContainer');
 const Dashboard = () => import('@/views/Dashboard');
 
 //Additional Attributes
-
 const AttributeList = () => import('@/views/Attributes/AttributeList');
 const AttributeEdit = () => import('@/views/Attributes/AttributeEdit');
 
-
+//Test Page
 const test = () => import('@/views/test');
+
 // Login Pages
 const SuperUserLogin = () => import('@/views/login_pages/SuperUserLogin');
 const UserLogin = () => import('@/views/login_pages/UserLogin');
@@ -37,15 +37,14 @@ const UGPermissionList = () => import('@/views/User Type/UGPermissionList');
 const UserGroups = () => import('@/views/UserGroups');
 const UserGroupsDetails = () => import('@/views/UserGroupDetail');
 const SettingEdit = () => import('@/views/SettingEdit');
-//Permissions
-const AddPermission = () => import('@/views/Permission/AddPermission');
-const PermissionDetails = () => import('@/views/Permission/PermissionDetails');
+
+
+
 //Communication
 const  PluginList = () => import('@/views/Communication/Plugin');
 const CommunicationLog = () => import('@/views/Communication/CommunicationLog');
 
 // Company Routes
-
 const CompanyList = () => import('@/views/Company/CompanyList');
 const CompanyDetails = () => import('@/views/Company/CompanyDetails');
 const AddCompany = () => import('@/views/Company/AddCompany');
@@ -69,27 +68,21 @@ const AddApproval = () => import('@/views/Approval/AddApproval');
 const ApprovalList = () => import('@/views/Approval/ApprovalList');
 const EditApproval = () => import('@/views/Approval/EditApproval');
 
-
 //Label Routes
 const LabelList = () => import('@/views/Label/LabelList');
-
 
 //Setting Routes
 const Settings = () => import('@/views/settings');
 
-
 //Department Routes
 const DepartmentList = () => import('@/views/Departments/DepartmentList');
-
 
 //Pivot Routes
 const TotalBudget = () => import('@/views/PivotTables/BudgetTables/TotalBudget');
 const ApprovedBudget = () => import('@/views/PivotTables/BudgetTables/ApprovedBudget');
 
-
 //Head Routes
 const HeadList = () => import('@/views/Heads/HeadList');
-
 
 //Designation Routes
 const DesignationList = () => import('@/views/Designations/DesignationList');
@@ -97,9 +90,7 @@ const AddDesignation = () => import('@/views/Designations/AddDesignation');
 const EditDesignation = () => import('@/views/Designations/EditDesignation');
 
 //Error Pages
-
 const NotFound = () => import('@/views/NotFound');
-
 
 Vue.use(Router)
 
@@ -233,21 +224,6 @@ var router = new Router({
                   component : AttributeEdit
                 },
 
-              ]
-            },
-            {
-              path: '/permissions',
-              meta : { requiresAuth : true },
-              component: {
-                render (c) { return c('router-view') }
-              },
-              children: [
-                {
-                  name : `Permission Details`,
-                  meta : { requiresAuth : true },
-                  path : `/permissions`,
-                  component : PermissionDetails
-                },
               ]
             },
             {
@@ -589,7 +565,7 @@ var router = new Router({
             {
               path: '/approval',
               meta : { requiresAuth : true },
-              redirect:'/approval/view/pending',
+              redirect:'/approval/view/all',
               name:'Approval List',
               component : {
                 render(c) { return c('router-view') }
@@ -610,7 +586,6 @@ var router = new Router({
                 {
                   path:'/approval/view/:id',
                   meta : { requiresAuth : true },
-                  name:'Approval List',
                   component : ApprovalList
                 }
               ]

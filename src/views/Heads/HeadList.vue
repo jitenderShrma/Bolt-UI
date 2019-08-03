@@ -97,22 +97,82 @@
                     </div>
                     <br>
                     <div v-if="!selected">
-                    <ejs-dropdownlist floatLabelType="Auto" v-model="input.department" :groupTemplate="groupTemplate1"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
+                    <label v-text="$ml.get('department')"></label>
+                      <treeselect :placeholder="$ml.get('pholddept')" v-model="input.department" :multiple="false" :options="department" />
                   </div>
                 </b-form-group>
                 <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
                 </div>
             </b-modal>
             <b-modal :title="$ml.get('edithead')" class="modal-primary" v-model="editmodal" @ok="editmodal = false" hide-footer>
+
               <b-form v-on:submit.prevent="editHead">
+                <b-tabs>
+                  <b-tab :title="$ml.get('head')" active>
                 <b-form-group>
                   <div class="e-float-input e-control-wrapper"><input v-model="editinput.name" class="e-field e-defaultcell" type="text" e-mappinguid="grid-column168" id="_gridcontrolname" name="name" style="text-align:undefined" aria-labelledby="label__gridcontrolname"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolname" for="_gridcontrolname">Head Name</label></div><div class="e-float-input e-control-wrapper"><input v-model="editinput.accounting_head" class="e-field e-defaultcell" type="text" e-mappinguid="grid-column170" id="_gridcontrolaccounting_head" name="accounting_head" style="text-align:undefined" aria-labelledby="label__gridcontrolaccounting_head"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolaccounting_head" for="_gridcontrolaccounting_head">Account Head</label></div><div class="e-float-input e-control-wrapper"><input v-model="editinput.notes" class="e-field e-defaultcell" type="text"  e-mappinguid="grid-column171" id="_gridcontrolnotes" name="notes" style="text-align:undefined" aria-labelledby="label__gridcontrolnotes"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolnotes" for="_gridcontrolnotes">Notes</label></div>
                   <div v-if="isRoot">
-                    <ejs-dropdownlist floatLabelType="Auto" v-model="editinput.department" :groupTemplate="groupTemplate1"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
+                    <label v-text="$ml.get('department')"></label>
+                      <treeselect :placeholder="$ml.get('pholddept')" v-model="editinput.department" :multiple="false" :options="department" />
                   </div>
                 </b-form-group>
+                </b-tab>
+                <b-tab :title="$ml.get('labels')">
+                  <b-form-group>
+                    <div v-for="(run,i) in editinput.labels" :key="i">
+                      <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="editinput.labels[i].color">{{editinput.labels[i].label_name}}</b-badge>
+                      <b-btn style="float:right" v-on:click="delLabel(`${editinput.labels[i]._id}`,`${editinput._id}`,`${i}`)" size="sm" variant="danger"><i class="fa fa-trash-o"></i></b-btn>
+                    </div>
+                    <b-form v-on:submit.prevent = "selectLabel(`${editinput._id}`)">
+                      <label v-text="$ml.get('labels')"></label>
+                      <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
+                        <div slot="item" slot-scope = "{item :label}">
+                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                        </div>
+                        <div slot="selection" slot-scope = "{item :label}">
+                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                        </div>
+                        <div slot="after-items-fixed">
+                          <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>
+                        </div>
+                      </cool-select>
+                      <br>
+                        <div slot="footer">
+                          <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('add')"><i class="fa fa-dot-circle-o"></i></b-button>
+                        </div>
+                    </b-form>
+                  </b-form-group>
+                </b-tab>
+                </b-tabs>
                 <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
               </b-form>
+            </b-modal>
+            <b-modal size="sm" :title="$ml.get('label')" class="modal-primary" v-model="addModal" @ok="addModal = false" hide-footer>
+              <b-form v-on:submit.prevent="addLabel(`${editinput._id}`)">
+              <div class="content-wrapper textbox-default">
+              <div class="row">
+              <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                      <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
+              </div>
+              </div>
+              <br>
+              <div class="row">
+                  <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                    <p>Label Color</p>
+                  </div>
+                  <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                          <ejs-colorpicker :modeSwitcher="false" value="#000" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
+                  </div>
+              </div>
+              <br>
+              <div class="multiline_wrapper">
+                  <ejs-textbox v-model="formdata.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
+              </div>
+              </div>
+              <div slot="footer">
+                    <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+                </div>
+                </b-form>
             </b-modal>
         </div>
     </div>
@@ -124,14 +184,16 @@
 import Vue from 'vue'
 import axios from 'axios'
 import apiUrl from '@/apiUrl'
-import { ExcelExport,PdfExport,TreeGridPlugin, Edit, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import { ExcelExport,PdfExport,TreeGridPlugin, Edit, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
 import { addClass, removeClass, getValue } from '@syncfusion/ej2-base';
 // import { addRecord } from "@syncfusion/ej2-vue-grids";
-import { ToolbarPlugin,ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
+import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import { NumericTextBoxPlugin,ColorPickerPlugin } from "@syncfusion/ej2-vue-inputs";
 import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
-
+import {CoolSelect} from 'vue-cool-select'
   import { MultiSelectPlugin, DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
   Vue.use(DropDownListPlugin);
 Vue.use(TextBoxPlugin);
@@ -183,7 +245,9 @@ var groupVue = Vue.component("groupTemplate", {
 export default {
     name: "HeadList",
     components :  {
-        TreeGridPlugin,ToolbarPlugin,ExcelExport,PdfExport, Edit,CommandColumn, Filter, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page
+      Treeselect,
+      CoolSelect,
+        TreeGridPlugin,ToolbarPlugin,ExcelExport,PdfExport, Edit,CommandColumn, Filter, Toolbar, TreeGridComponent, Sort, Reorder,Resize, Page
     },
     data : function() {
         return {
@@ -199,6 +263,7 @@ export default {
                 })
               }
           },
+          labels:[],
           formdata: {
                   label_name : "",
                   color : "#fff",
@@ -222,6 +287,7 @@ export default {
           modal:false,
           link:"",
           key:"",
+          addModal:false,
           selected:false,
           dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
              commands: [
@@ -245,6 +311,7 @@ export default {
             input:{
 
             },
+            selectedLabel:null,
             module:null,
             isRoot:false,
             squarePalettesColn: 7,
@@ -289,13 +356,84 @@ export default {
           });
      }
      await axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
-        this.department = res.data
+        this.department = this.list_to_tree_dept(res.data)
+      })
+     axios.get(`${apiUrl}`+`label/label/find/by/Heads`,{withCredentials:true}).then((res) => {
+        this.labels = res.data
       })
     },
   provide: {
       treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
+    delLabel(args,id,label) {
+      console.log(this.editinput.labels.splice(label,1))
+      var body = {
+        labels : args
+      }
+      console.log(body)
+      api.put(`${apiUrl}head/head/pop/label/${id}`,body).then((res) => {
+        console.log(res.data)
+      })
+      
+    },
+    addLabel (args) {
+      this.addModal =false
+              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((label)=>{
+                var id = {
+                  labels :  label.data._id
+                }
+                  api.get(`${apiUrl}`+`label/label/find/by/Heads`).then((res) => {
+                    this.labels = res.data
+                  })
+                console.log(this.editinput.labels)
+              });
+      },
+      selectLabel(args) {
+        if(this.selectedLabel != null) {
+        var label;
+        api.get(`${apiUrl}label/label/get/one/${this.selectedLabel}`).then((res) => {
+          label = res.data
+          this.editinput.labels.push(label);
+        })
+
+        var data = {
+          labels : this.selectedLabel
+        }
+        api.put(`${apiUrl}head/head/push/label/${args}`,data).then((res) => {
+            
+        })
+      }
+      },
+    list_to_tree_dept(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_department != undefined ) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_department]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataDept(roots)
+          return roots
+      },
+      convertDataDept(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataDept(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].department_name;
+        delete roots[i]._id;
+        delete roots[i].department_name;
+        }
+      },
     async load(args) {
       console.log("create")
       if(this.$route.path == '/heads/list') {
@@ -314,23 +452,23 @@ export default {
         this.department = res.data
       })
     },
-    addLabel (args) {
-        this.$refs.dialogObj.hide();
-        let val = this.$refs.treegrid.getSelectedRecords()
-              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((response) =>{
-                var id = {
-                  labels :  response.data._id
-                }
-                api.put(`${apiUrl}`+`head/head/push/label/`+`${val[0]._id}`,id).then((response)=>{
-                    api.get(`${apiUrl}`+`head/head/get`)
-                    .then((response) => {
-                      this.data = response.data
-                      });
-                });
-                this.formdata=null
-              });
+    // addLabel (args) {
+    //     this.$refs.dialogObj.hide();
+    //     let val = this.$refs.treegrid.getSelectedRecords()
+    //           api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((response) =>{
+    //             var id = {
+    //               labels :  response.data._id
+    //             }
+    //             api.put(`${apiUrl}`+`head/head/push/label/`+`${val[0]._id}`,id).then((response)=>{
+    //                 api.get(`${apiUrl}`+`head/head/get`)
+    //                 .then((response) => {
+    //                   this.data = response.data
+    //                   });
+    //             });
+    //             this.formdata=null
+    //           });
             
-      },
+    //   },
     onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
       }, 

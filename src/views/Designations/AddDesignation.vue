@@ -8,17 +8,28 @@
                       		<b-col sm="6">
                       			<ejs-textbox v-model="input.name" floatLabelType="Auto" :placeholder="$ml.get('designation')"></ejs-textbox>
                       		</b-col>
-                      		<div v-if="!clicked">
+                          <b-col sm="6">
+                            <label v-text="$ml.get('parentdesig')"></label>
+                            <treeselect :placeholder="$ml.get('pholdparentdesig')" v-model="input.parent_designation_id" :multiple="false" :options="data" />
+                          </b-col>
+                      		<!-- <div v-if="!clicked">
                       			<b-col sm="6">
+                              
                   				<ejs-dropdownlist :change="changeDesig" :showClearButton="true"  v-model="input.parent_designation_id" floatLabelType="Auto" :groupTemplate="desigTemplate" :allowFiltering="true" :dataSource='data' :fields='desig_fields' popupHeight='300' :placeholder="$ml.get('pholdparentdesig')" ></ejs-dropdownlist>
                   			</b-col>
                   			</div>
                   			<div v-else>
                   				<b-col sm="6">
+                            <label v-text="$ml.get('designation')"></label>
+                            <treeselect :placeholder="$ml.get('pholddesig')" v-model="input.designation" :multiple="false" :options="data" />
                   				<ejs-dropdownlist :change="changeDesig" :showClearButton="true" v-model="input.parent_designation_id" :allowFiltering="true" :dataSource='data' :fields='desig_fields'  popupHeight='300' :placeholder="$ml.get('pholdparentdesig')" ></ejs-dropdownlist>
                   			</b-col>
-                  			</div>
-                  			<div v-if="!clicked1">
+                  			</div> -->
+                        <b-col sm="6">
+                          <label v-text="$ml.get('department')"></label>
+                          <treeselect :placeholder="$ml.get('pholdparentdept')" v-model="input.department" :multiple="false" :options="department" />
+                        </b-col>
+                  			<!-- <div v-if="!clicked1">
                   				<b-col sm="8">
                   					<b-row>
                   						<b-col sm="9">
@@ -41,7 +52,7 @@
                   			</b-col>
                   		</b-row>
 	                  		</b-col>
-	                  		</div>
+	                  		</div> -->
 				  		</b-form-group>
 				  	  </b-tab>
 			  		  <b-tab :title="$ml.get('permissions')">
@@ -76,8 +87,7 @@ import axios from 'axios'
 import ml from '@/ml'
 import Vue from 'vue'
 import { Browser } from '@syncfusion/ej2-base';
-import {ClientTable, Event} from 'vue-tables-2'
-import { ToolbarPlugin,ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
+import { ToolbarPlugin} from "@syncfusion/ej2-vue-navigations";
 import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import VueNotifications from 'vue-notifications'
 import { DatePickerPlugin } from "@syncfusion/ej2-vue-calendars";
@@ -88,13 +98,13 @@ import miniToastr from 'mini-toastr'
 import {
   PivotViewPlugin,
   GroupingBar,
-  FieldList,
-  IDataSet
+  FieldList
 } from "@syncfusion/ej2-vue-pivotview";
 import { Switch as cSwitch } from '@coreui/vue'
-
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
-import { DropDownList, DropDownListPlugin,ChangeEventArgs } from '@syncfusion/ej2-vue-dropdowns';
+import { DropDownList, DropDownListPlugin} from '@syncfusion/ej2-vue-dropdowns';
     Vue.use(ToolbarPlugin);
     Vue.use(TextBoxPlugin)
     Vue.use(PivotViewPlugin);
@@ -113,7 +123,6 @@ const toastTypes = {
   warn: 'warn'
 }
 
-  Vue.use(ClientTable)
 miniToastr.init({types: toastTypes})
 
 function toast ({title, message, type, timeout, cb}) {
@@ -234,16 +243,14 @@ export default {
     name: "AddDesignation",
     components :  {
       cSwitch,
-        ClientTable,
-      Event,
+        Treeselect,
       ToolbarPlugin,
-      GridPlugin, Filter, Selection, Sort, VirtualScroll,ChangeEventArgs,
+      GridPlugin, Filter, Selection, Sort, VirtualScroll,
         Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
         NumericTextBoxPlugin,
         PivotViewPlugin,
   GroupingBar,
   FieldList,
-  IDataSet,
   Edit
     },
     data : function() {
@@ -314,19 +321,90 @@ export default {
   	api.get(`${apiUrl}`+`designation/desig/get/one/${this.key}`).then((res) =>{
   		this.input.department = res.data.department
   	})
-    api.get(`${apiUrl}`+`department/dept/get`).then((res) => {
-        this.department = res.data
+    axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+        this.department = this.list_to_tree_dept(res.data)
       })
-     api.get(`${apiUrl}`+`designation/desig/get/all`)
-    .then((response) => {
-      this.data = response.data
-      });
+      axios.get(`${apiUrl}`+`designation/desig/get/all`,{withCredentials:true}).then((res) => {
+        this.data = this.list_to_tree_desig(res.data)
+      })
 
     },
   provide: {
             grid: [Edit,Resize, Selection, Sort,Toolbar]
         },
+  watch : {
+    'input.department' : function(){
+      if(this.input.department == null || this.input.department == "") {
+        axios.get(`${apiUrl}dropdown/designation/no/dept`,{withCredentials:true}).then((res) => {
+          this.data = this.list_to_tree_desig(res.data)
+        })
+      }
+      else {
+        axios.get(`${apiUrl}dropdown/designation/find/${this.input.department}`,{withCredentials:true}).then((res) => {
+          this.data = this.list_to_tree_desig(res.data)
+        })
+      }
+    }
+  },
    methods:{
+    list_to_tree_desig(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_designation_id != undefined ) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_designation_id]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataDesig(roots)
+          return roots
+      },
+      list_to_tree_dept(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_department != undefined ) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_department]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataDept(roots)
+          return roots
+      },
+      convertDataDept(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataDept(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].department_name;
+        delete roots[i]._id;
+        delete roots[i].department_name;
+        }
+      },
+      convertDataDesig(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataDesig(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].name;
+        delete roots[i]._id;
+        delete roots[i].name;
+          }
+      },
    	actionComplete(args) {
    		console.log(args)
    	},

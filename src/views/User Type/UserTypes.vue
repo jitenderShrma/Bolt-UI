@@ -73,9 +73,9 @@
 import Vue from 'vue'
 import axios from 'axios'
 import apiUrl from '@/apiUrl'
-import { ExcelExport,PdfExport,TreeGridPlugin, Edit, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
+import { ExcelExport,PdfExport,TreeGridPlugin, Edit, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
 import { addClass, removeClass, getValue } from '@syncfusion/ej2-base';
-import { ToolbarPlugin,ClickEventArgs } from "@syncfusion/ej2-vue-navigations";
+import { ToolbarPlugin} from "@syncfusion/ej2-vue-navigations";
 import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
 import { CheckBoxPlugin } from "@syncfusion/ej2-vue-buttons";
@@ -99,7 +99,7 @@ var api = axios.create({
 export default {
     name: "UserTypeList",
     components :  {
-        TreeGridPlugin,ToolbarPlugin,ExcelExport,PdfExport, Edit,CommandColumn, Filter, Toolbar, TreeGridComponent, Sort, Reorder, ITreeData,Resize, Page
+        TreeGridPlugin,ToolbarPlugin,ExcelExport,PdfExport, Edit,CommandColumn, Filter, Toolbar, TreeGridComponent, Sort, Reorder, Resize, Page
     },
     data : function() {
         return {

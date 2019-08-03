@@ -71,7 +71,7 @@
               :horizontal="true">
               <b-row>
                 <b-col sm="4">
-                  <ejs-dropdownlist :readonly="input.isApproved" v-model="input.department" :groupTemplate="groupTemplate1"  :allowFiltering="true" id='department' :dataSource='department'  :fields='dept_fields'  popupHeight='300' :placeholder="$ml.get('pholddept')"></ejs-dropdownlist>
+                  <treeselect :placeholder="$ml.get('pholddept')" v-model="input.department" :multiple="false" :options="department" />
                 </b-col>
               </b-row>
             </b-form-group>
@@ -82,7 +82,7 @@
               :horizontal="true">
               <b-row>
                 <b-col sm="4">
-                  <ejs-dropdownlist :readonly="input.isApproved" v-model="input.head" id='head' :dataSource='head' :fields='head_fields' :allowFiltering="true" :groupTemplate="groupTemplate2" popupHeight='300' :placeholder="$ml.get('pholdhead')"></ejs-dropdownlist>
+                  <treeselect required :placeholder="$ml.get('pholdhead')" v-model="input.budget_head" :multiple="false" :options="head" />
                 </b-col>
               </b-row>
             </b-form-group>
@@ -111,7 +111,7 @@
               :horizontal="true">
               <b-row>
               <b-col sm="2">
-              <ejs-textbox type="number" :max="boundaryAmount" @change="validateAmount" floatLabelType="Auto" v-model="input.amount"  :placeholder="$ml.get('pholdtransacammount')"></ejs-textbox>
+              <ejs-textbox type="number" floatLabelType="Auto" v-model="input.amount"  :placeholder="$ml.get('pholdtransacammount')"></ejs-textbox>
             </b-col>
             <b-col sm="2">
               <br>
@@ -119,10 +119,10 @@
               &nbsp;
               &nbsp;
               &nbsp;
-              <div v-if="visible">
+              <!-- <div v-if="visible">
               <label v-text="$ml.get('maxamount')"></label>&nbsp;:&nbsp;
               <span v-text="boundaryAmount"></span>
-            </div>
+            </div> -->
             </b-col>
           </b-row>
             </b-form-group>
@@ -459,6 +459,8 @@
   import axios from 'axios';
   import Vue from 'vue';
   import { CoolSelect } from 'vue-cool-select'
+    import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
   import { Switch as cSwitch } from '@coreui/vue'
   import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
   import { MultiSelectPlugin, DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
@@ -534,6 +536,7 @@ Vue.use(TextBoxPlugin);
 		components : {
       CoolSelect,
       cSwitch,
+      Treeselect,
       MultiSelectPlugin
 		},
 		data: function() {
@@ -631,7 +634,22 @@ Vue.use(TextBoxPlugin);
         
 			}
 		},
+    watch : {
+      'input.department' : function() {
+        if(this.input.department == null || this.input.department == "") {
+          axios.get(`${apiUrl}dropdown/head/no/dept`,{withCredentials:true}).then((res) => {
+            this.head = this.list_to_tree_head(res.data)
+          })
+        }
+        else {
+          axios.get(`${apiUrl}dropdown/head/find/${this.input.department}`,{withCredentials:true}).then((res) => {
+            this.head = this.list_to_tree_head(res.data)
+          })
+        }
+      }
+    },
 		async mounted() {
+      this.month.splice(0,new Date().getMonth())
       if(this.$session.has('subuser')) {
         this.visible = false
       };
@@ -648,17 +666,71 @@ Vue.use(TextBoxPlugin);
         this.purchase_orders = res.data
       });
       axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
-        this.department = res.data
+        this.department = this.list_to_tree_dept(res.data)
       })
       axios.get(`${apiUrl}`+`head/head/get`,{withCredentials:true}).then((res) => {
-        console.log(res.data);
-        this.head = res.data
+        this.head = this.list_to_tree_head(res.data)
       })
 		},
-		watch :{
-
-		},
 		methods : {
+      list_to_tree_dept(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_department != undefined ) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_department]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataDept(roots)
+          return roots
+      },
+      convertDataDept(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataDept(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].department_name;
+        delete roots[i]._id;
+        delete roots[i].department_name;
+        }
+      },
+      list_to_tree_head(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_head != undefined ) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_head]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataHead(roots)
+          return roots
+      },
+      convertDataHead(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataHead(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].name;
+        delete roots[i]._id;
+        delete roots[i].name;
+        }
+      },
        filtering(e) {
         var department = this.department
            var query = new Query();
