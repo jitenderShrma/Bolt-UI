@@ -341,13 +341,7 @@ export default {
                 })
             },
             clickHandler (args) {
-              if (args.item.text === 'CSV Export') {
-                this.$refs.overviewgrid.csvExport()
-                    }
-                    if (args.item.text === 'PDF Export') {
-                this.$refs.overviewgrid.pdfExport()
-
-                    }
+              
                     if(this.$refs.overviewgrid.getSelectedRecords().length>0){
                     let withHeader = false;
                     if (args.item.id === 'copyHeader') {
@@ -366,8 +360,8 @@ export default {
                 if (args.item.id === 'big') {
                     this.rowHeight = 60;
                 }
-                if (args.item.text === 'Excel Export') {
-                    this.$refs.overviewgrid.excelExport()
+                if (args.item.text === 'CSV Export') {
+                    this.$refs.overviewgrid.csvExport()
                 }
                 if (args.item.text === 'PDF Export') {
                     this.$refs.overviewgrid.pdfExport()

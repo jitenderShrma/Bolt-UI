@@ -14,7 +14,7 @@
             :allowExcelExport='true'
             :enableCollapseAll="false"
             :recordDoubleClick="beginEdit"
-            :allowSorting='true' :toolbar="toolbar" :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :load="load">
+            :allowSorting='true' :toolbar="toolbar" :toolbarClick="clickHandler" :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :load="load">
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <e-column :visible="false" field='_id'></e-column>
@@ -42,7 +42,7 @@
                   <b-form-group style="padding:5%">
                     <div class="e-float-input e-control-wrapper"><input v-model="editinput.department_name" class="e-field e-defaultcell" type="text" value="asdasddas" e-mappinguid="grid-column843" id="_gridcontroldepartment_name" name="department_name" style="text-align:undefined" aria-labelledby="label__gridcontroldepartment_name"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontroldepartment_name" for="_gridcontroldepartment_name">Department Name</label></div>
                     <label v-text="$ml.get('parentdept')"></label>
-                    <treeselect :placeholder="$ml.get('pholdparentdesig')" v-model="editinput.parent_department" :multiple="false" :options="treedept" />
+                    <treeselect :default-expand-level="10" :placeholder="$ml.get('pholdparentdesig')" v-model="editinput.parent_department" :multiple="false" :options="treedept" />
                   </b-form-group>
                 </b-tab>
                 <b-tab :title="$ml.get('labels')">
@@ -480,11 +480,11 @@ export default {
                               this.$refs.treegrid.expandAll()
                     }
                 }
-        if (args.item.id === 'exportPdf') {
-            this.$refs.treegrid.pdfExport({hierarchyExportMode: 'All'});
+        if (args.item.text === 'PDF Export') {
+            this.$refs.treegrid.pdfExport();
         }
-         if (args.item.id === 'exportExcel') {
-            this.$refs.treegrid.excelExport();
+         if (args.item.text === 'CSV Export') {
+            this.$refs.treegrid.csvExport();
         }
         
         if (args.item.id === 'small') {
@@ -554,6 +554,9 @@ export default {
           roots[i].label = roots[i].department_name;
         delete roots[i]._id;
         delete roots[i].department_name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
         }
       },
       changeTabs(args) {

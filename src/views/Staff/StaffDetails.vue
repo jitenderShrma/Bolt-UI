@@ -514,6 +514,9 @@ export default {
           roots[i].label = roots[i].department_name;
         delete roots[i]._id;
         delete roots[i].department_name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
         }
       },
       convertDataDesig(roots) {
@@ -525,6 +528,9 @@ export default {
           roots[i].label = roots[i].name;
         delete roots[i]._id;
         delete roots[i].name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
           }
       },
     deleteId() {

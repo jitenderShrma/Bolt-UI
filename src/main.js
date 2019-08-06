@@ -12,7 +12,9 @@ import { GridPlugin } from '@syncfusion/ej2-vue-grids';
 import VueSession from 'vue-session'
 import { TreeGridPlugin } from '@syncfusion/ej2-vue-treegrid';
 import VeeValidate from 'vee-validate';
+import VueBlu from 'vue-blu'
 
+Vue.use(VueBlu)
 Vue.use(require('vue-moment'));
 Vue.use(VeeValidate);
 Vue.use(TreeGridPlugin);

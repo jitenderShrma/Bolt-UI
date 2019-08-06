@@ -10,7 +10,7 @@
                       		</b-col>
                           <b-col sm="6">
                             <label v-text="$ml.get('parentdesig')"></label>
-                            <treeselect :placeholder="$ml.get('pholdparentdesig')" v-model="input.parent_designation_id" :multiple="false" :options="data" />
+                            <treeselect :default-expand-level="10" :placeholder="$ml.get('pholdparentdesig')" v-model="input.parent_designation_id" :multiple="false" :options="data" />
                           </b-col>
                       		<!-- <div v-if="!clicked">
                       			<b-col sm="6">
@@ -27,7 +27,7 @@
                   			</div> -->
                         <b-col sm="6">
                           <label v-text="$ml.get('department')"></label>
-                          <treeselect :placeholder="$ml.get('pholdparentdept')" v-model="input.department" :multiple="false" :options="department" />
+                          <treeselect :default-expand-level="10" :placeholder="$ml.get('pholdparentdept')" v-model="input.department" :multiple="false" :options="department" />
                         </b-col>
                   			<!-- <div v-if="!clicked1">
                   				<b-col sm="8">
@@ -59,17 +59,61 @@
 			  		    <div class="col-lg-15 control-section">
 					        <div class="content-wrapper">
 					             <div class="control-section">
-					            <ejs-grid ref='overviewgrid' :editSettings='editSettings' :rowHeight='rowHeight' :allowResizing='true'   id='overviewgrid' :dataSource="datasrc"  :allowSorting='true' :allowSelection="true" :actionComplete="actionComplete"
-					                 :enableHover='true' >
-					                <e-columns>
-					                    <e-column field='text'  headerText='Module Name'  :isPrimaryKey='true'></e-column>
-					                    <e-column editType= 'booleanedit' :width="60" :displayAsCheckBox='true' field='edit' headerText='Edit'   ></e-column>
-					                    <e-column editType= 'booleanedit' :width="60" :displayAsCheckBox='true' field='delete' headerText='Delete'   ></e-column>
-					                    <e-column editType= 'booleanedit' :width="60" :displayAsCheckBox='true' field='read' headerText='Read'   ></e-column>
-					                    <e-column editType= 'booleanedit' :width="60" :displayAsCheckBox='true' field='write' headerText='Add'   ></e-column>
-					                    
-					                </e-columns>
-					            </ejs-grid>
+					            <b-row>
+                          <b-col style="padding-right:0px">
+                            <span v-text="$ml.get('modulename')"></span>
+                          </b-col>
+                          <b-col style="padding-right:0px">
+                            <span v-text="$ml.get('readown')"></span>
+                          </b-col>
+                          <b-col style="padding-right:0px">
+                            <span v-text="$ml.get('readall')"></span>
+                          </b-col>
+                          <b-col style="padding-right:0px">
+                            <span v-text="$ml.get('addall')"></span>
+                          </b-col>
+                          <b-col style="padding-right:0px">
+                            <span v-text="$ml.get('editall')"></span>
+                          </b-col>
+                          <b-col style="padding-right:0px">
+                            <span v-text="$ml.get('deleteall')"></span>
+                          </b-col>
+                          <b-col>
+                            <span v-text="$ml.get('others')"></span>
+                          </b-col>
+                        </b-row>
+                        <hr>
+                        <div v-for="(run,i) in datasrc" :key="i">
+                          <b-row style="margin:10px;">
+                          <b-col style="padding-right:0px">
+                            <span>{{datasrc[i].text}}</span>
+                          </b-col>
+                          <b-col style="padding-right:0px">
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_own" :uncheckedValue="false" :checkedValue="true"/>
+                          </b-col>
+                          <b-col style="padding-right:0px">
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].read" :uncheckedValue="false" :checkedValue="true"/>
+                          </b-col>
+                          <b-col style="padding-right:0px">
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].write" :uncheckedValue="false" :checkedValue="true"/>
+                          </b-col>
+                          <b-col style="padding-right:0px">
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].edit" :uncheckedValue="false" :checkedValue="true"/>
+                          </b-col>
+                          <b-col style="padding-right:0px">
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].delete" :uncheckedValue="false" :checkedValue="true"/>
+                          </b-col>
+                          <b-col style="padding-right:0px;">
+                            <b-tooltip target="exButton1" title="Additional Permissions Available!"></b-tooltip>
+                            <div v-if="i==7">
+                            <b-btn id="exButton1" variant="primary" size="sm" @click="toggle(`${i}`)"><i class="fa fa-plus-square"></i></b-btn>
+                          </div>
+                          <div v-else>
+                            <b-btn id="exButton2" variant="primary" size="sm" @click="toggle(`${i}`)"><i class="fa fa-plus-square"></i></b-btn>
+                          </div>
+                          </b-col>
+                        </b-row>
+                        </div>
 					        </div>
 					    </div>
 					</div>
@@ -78,6 +122,53 @@
               <br>
                 <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
             </b-card>
+            <b-modal size="md" :title="module+' Permissions'" class="modal-primary" v-model="permissionmodal" @ok="permissionmodal = false" hide-footer>
+              <div v-if="module =='Company'">
+                
+              </div>
+              <div v-if="module =='User'">
+                
+              </div>
+              <div v-if="module =='User Group'">
+                
+              </div>
+              <div v-if="module =='Department'">
+                
+              </div>
+              <div v-if="module =='Designation'">
+                
+              </div>
+
+              <div v-if="module =='Head'">
+                
+              </div>
+              <div v-if="module =='Label'">
+                
+              </div>
+              <div v-if="module =='Approval'">
+                
+                <label v-text="$ml.get('bydept')"></label>
+                <br>
+                <c-switch class="mx-1" @change="setDept" color="primary" name="switch1" v-model="by_dept" :uncheckedValue="false" :checkedValue="true"/>
+                <br>
+                <label v-text="$ml.get('byhead')"></label>
+                <br>
+                <c-switch class="mx-1" @change="setHead" color="primary" name="switch1" v-model="by_heads" :uncheckedValue="false" :checkedValue="true"/>
+                <br>
+                <div v-if="by_heads">
+                <label v-text="$ml.get('heads')"></label>
+                <treeselect :default-expand-level="10" :flat="true" :placeholder="$ml.get('pholdheads')" v-model="approval_permissions.by_heads.allowed_heads" :multiple="true" :options="heads" />
+              </div>
+              </div>
+              <div v-if="module =='Budget Settings'">
+                
+                
+              </div>
+              <div v-if="module =='Staff'">
+                
+                
+              </div>
+            </b-modal>
                 </div>
 </template>
 
@@ -255,6 +346,28 @@ export default {
     },
     data : function() {
         return {
+          by_dept:false,
+          by_heads:false,
+          approval_permissions:{
+            by_department:{
+              status:false
+            },
+            by_heads:{
+              status:false,
+              allowed_heads:null
+            },
+
+          },
+          heads:[],
+          permissionmodal:false,
+          additionalpermission:[
+              {module_name:"company",text:"Company",read_own:false},{module_name:"subuser",text:"User",read_own:false},
+              {module_name:"subgroup",text:"User Group",read_own:false},{module_name:"dept",text:"Department",read_own:false},
+              {module_name:"desig",text:"Designation",read_own:false},{module_name:"head",text:"Head",read_own:false},
+              {module_name:"label",text:"Label",read_own:false},{module_name:"preApp",text:"Approval",read_own:false},
+              {module_name:"budSet",text:"Budget Settings",read_own:false},
+              {module_name:"staff",text:"Staff",read_own:false}
+              ],
        		addDesignation : function() {
        			return {
        			template : addDesigVue
@@ -315,6 +428,10 @@ export default {
    };
   },
   async mounted() {
+    api.get(`${apiUrl}`+`head/head/get`)
+    .then((response) => {
+      this.heads = this.list_to_tree_head(response.data)
+      });
   	this.link = window.location.href
   	this.key = this.link.split('add/').pop()
   	this.input.parent_designation_id = this.key
@@ -333,6 +450,16 @@ export default {
             grid: [Edit,Resize, Selection, Sort,Toolbar]
         },
   watch : {
+    'by_dept' : function(){
+      if(this.by_dept) {
+        this.by_heads = false
+      }
+    },
+    'by_heads' : function(){
+      if(this.by_heads) {
+        this.by_dept = false
+      }
+    },
     'input.department' : function(){
       if(this.input.department == null || this.input.department == "") {
         axios.get(`${apiUrl}dropdown/designation/no/dept`,{withCredentials:true}).then((res) => {
@@ -347,6 +474,50 @@ export default {
     }
   },
    methods:{
+    setDept(args) {
+      this.approval_permissions.by_department.status = args
+      this.approval_permissions.by_heads.status = !args
+    },
+    setHead(args) {
+      this.approval_permissions.by_heads.status = args
+      this.approval_permissions.by_department.status = !args
+    },
+    list_to_tree_head(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_head != undefined ) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_head]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataHead(roots)
+          return roots
+      },
+      convertDataHead(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataHead(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].name;
+        delete roots[i]._id;
+        delete roots[i].name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
+        }
+      },
+      toggle(i) {
+      this.module = this.datasrc[i].text
+      this.permissionmodal = true
+    },
     list_to_tree_desig(list) {
           var map = {}, node, roots = [], i;
           for (i = 0; i < list.length; i += 1) {
@@ -392,6 +563,9 @@ export default {
           roots[i].label = roots[i].department_name;
         delete roots[i]._id;
         delete roots[i].department_name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
         }
       },
       convertDataDesig(roots) {
@@ -403,6 +577,9 @@ export default {
           roots[i].label = roots[i].name;
         delete roots[i]._id;
         delete roots[i].name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
           }
       },
    	actionComplete(args) {
@@ -445,7 +622,9 @@ export default {
               		var user_group = {
 		                user_type:"Staff",
 		                user_group_name:response.data._id || response.data[0]._id,
-		                permissions:this.datasrc
+		                permissions:this.datasrc,
+                    additional_permissions : this.additionalpermission,
+                    approval_permissions:this.approval_permissions
 		              }
                   console.log(response.data)
 	                api.get(`${apiUrl}`+`designation/desig/get/all`)

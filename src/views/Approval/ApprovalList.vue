@@ -9,18 +9,18 @@
               </e-items>
             </ejs-toolbar>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :clickHandler="clickHandler"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column :visible="pending" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
                     <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column>
-                    <e-column field='request_by.user_name' headerText='Requested By'  :filter='filter' ></e-column>
+                    <!-- <e-column field='request_by.user_name' headerText='Requested By'  :filter='filter' ></e-column> -->
                     <e-column field='labels' headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
                     <e-column field='status' headerText='Status'  :filter='filter' ></e-column>
                     <e-column field='recurring_rate' headerText='Recurring Rate'  :filter='filter' ></e-column>
-                    <e-column field='budget_head.name' headerText='Head'  :filter='filter' ></e-column>
-                    <e-column field='department.department_name' headerText='Department'  :filter='filter' ></e-column>
+                    <!-- <e-column field='budget_head.name' headerText='Head'  :filter='filter' ></e-column> -->
+                    <!-- <e-column field='department.department_name' headerText='Department'  :filter='filter' ></e-column> -->
                     <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' ></e-column>
                     <e-column field='description' headerText='Description'  :filter='filter' ></e-column>
                     <e-column field='amount' headerText='Amount'  :filter='filter' ></e-column>
@@ -420,8 +420,8 @@ export default {
                 if (args.item.id === 'big') {
                     this.rowHeight = 60;
                 }
-                if (args.item.text === 'Excel Export') {
-                    this.$refs.overviewgrid.excelExport()
+                if (args.item.text === 'CSV Export') {
+                    this.$refs.overviewgrid.csvExport()
                 }
                 if (args.item.text === 'PDF Export') {
                     this.$refs.overviewgrid.pdfExport()

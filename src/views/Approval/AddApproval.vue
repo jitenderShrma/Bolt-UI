@@ -71,7 +71,7 @@
               :horizontal="true">
               <b-row>
                 <b-col sm="4">
-                    <treeselect :placeholder="$ml.get('pholddept')" v-model="input.department" :multiple="false" :options="department" />
+                    <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddept')" v-model="input.department" :multiple="false" :options="department" />
                 </b-col>
               </b-row>
             </b-form-group>
@@ -82,7 +82,7 @@
               :horizontal="true">
               <b-row>
                 <b-col sm="4">
-                  <treeselect required :placeholder="$ml.get('pholdhead')" v-model="input.budget_head" :multiple="false" :options="head" />
+                  <treeselect :default-expand-level="10" required :placeholder="$ml.get('pholdhead')" v-model="input.budget_head" :multiple="false" :options="head" />
                 </b-col>
               </b-row>
             </b-form-group>
@@ -275,6 +275,9 @@
           roots[i].label = roots[i].department_name;
         delete roots[i]._id;
         delete roots[i].department_name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
         }
       },
       list_to_tree_head(list) {
@@ -304,6 +307,9 @@
           roots[i].label = roots[i].name;
         delete roots[i]._id;
         delete roots[i].name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
         }
       },
         sendData() {

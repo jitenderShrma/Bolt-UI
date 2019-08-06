@@ -13,7 +13,7 @@
                 </ejs-toolbar>
              <div class="control-section">
                 
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' 
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' :toolbarClick="clickHandler"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='context' headerText='Context'  :filter='filter' ></e-column>
@@ -431,8 +431,8 @@ export default {
                 if (args.item.id === 'big') {
                     this.rowHeight = 60;
                 }
-                if (args.item.text === 'Excel Export') {
-                    this.$refs.overviewgrid.excelExport()
+                if (args.item.text === 'CSV Export') {
+                    this.$refs.overviewgrid.csvExport()
                 }
                 if (args.item.text === 'PDF Export') {
                     this.$refs.overviewgrid.pdfExport()

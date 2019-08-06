@@ -26,7 +26,7 @@
      <div class="col-lg-15 control-section">
         <div class="content-wrapper">
              <div class="control-section">
-            <ejs-grid ref='overviewgrid' :editSettings='editSettings' :rowHeight='rowHeight' :showColumnMenu='true' :allowResizing='true'  :showColumnChooser='true'  id='overviewgrid'  :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true'
+            <ejs-grid ref='overviewgrid' :editSettings='editSettings' :rowHeight='rowHeight' :showColumnMenu='true' :allowResizing='true'  :showColumnChooser='true'  id='overviewgrid' :allowExcelExport="true" :allowPdfExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true'
                 :height="height" :actionBegin='actionBegin' :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler" :load='load'>
                 <e-columns>
                     <e-column width="80" type='checkbox' :allowFiltering='false' :allowSorting='false'  ></e-column>
@@ -65,7 +65,7 @@ import {
   FieldList,
   IDataSet
 } from "@syncfusion/ej2-vue-pivotview";
-import { Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
+import { ExcelExport,PdfExport,Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
 import { DropDownList, DropDownListPlugin,ChangeEventArgs } from '@syncfusion/ej2-vue-dropdowns';
     Vue.use(ToolbarPlugin);
         
@@ -114,7 +114,7 @@ export default {
   Edit
     },
      provide: {
-            grid: [Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser]
+            grid: [ExcelExport,PdfExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser]
         },
     data: function () {
       return {
@@ -311,6 +311,12 @@ export default {
                     this.$refs.overviewgrid.copy(withHeader);
                 } else if(args.item.id === 'copyHeader' || args.item.id === 'copy'){
                     this.$refs.alertDialog.show();
+                }
+                if (args.item.text === 'CSV Export') {
+                  this.$refs.overviewgrid.csvExport();
+                }
+                if (args.item.text === 'PDF Export') {
+                  this.$refs.overviewgrid.pdfExport();
                 }
                  if (args.item.id === 'small') {
                     this.rowHeight = 20;

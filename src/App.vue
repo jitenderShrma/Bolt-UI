@@ -14,6 +14,11 @@ export default {
   display:none;
 }
 }
+@media (max-width: 580px) {
+  #xs{
+    max-width : 26.66667% !important;
+  }
+}
 #label1 {
   font-size:17px;
   font-weight: 1;
@@ -28,6 +33,12 @@ export default {
     position: absolute;
     right: 0%;
     top: -7.3%;
+    height: 38px !important;
+}
+#toolbarbudget {
+    position: absolute;
+    right: 11%;
+    top: -7.5%;
     height: 38px !important;
 }
 #toolbarpivot {

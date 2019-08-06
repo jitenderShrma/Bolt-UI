@@ -17,7 +17,7 @@
             :rowSelected="rowSelected"
             :rowDeselecting="rowDeselecting"
             :enableCollapseAll="false"
-            :toolbar="toolbar"
+            :toolbar="toolbar" :toolbarClick="clickHandler"
             :allowSorting='true' :recordDoubleClick="editPage" :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
@@ -618,11 +618,11 @@ export default {
                               });
                             
                           }
-        if (args.item.id === 'exportPdf') {
+        if (args.item.text === 'PDF Export') {
             this.$refs.treegrid.pdfExport({hierarchyExportMode: 'All'});
         }
-         if (args.item.id === 'exportExcel') {
-            this.$refs.treegrid.excelExport();
+         if (args.item.text === 'CSV Export') {
+            this.$refs.treegrid.csvExport({hierarchyExportMode: 'All'});
         }
         
         if (args.item.id === 'small') {

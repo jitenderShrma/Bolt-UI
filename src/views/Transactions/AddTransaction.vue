@@ -700,6 +700,9 @@ Vue.use(TextBoxPlugin);
           roots[i].label = roots[i].department_name;
         delete roots[i]._id;
         delete roots[i].department_name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
         }
       },
       list_to_tree_head(list) {
@@ -729,6 +732,9 @@ Vue.use(TextBoxPlugin);
           roots[i].label = roots[i].name;
         delete roots[i]._id;
         delete roots[i].name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
         }
       },
        filtering(e) {
