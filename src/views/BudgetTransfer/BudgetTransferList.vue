@@ -16,6 +16,7 @@
                     <!-- <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column> -->
                     <e-column field='requested_by.user_name' headerText='Requested By'  :filter='filter' ></e-column>
+                    <e-column field='status' headerText='Status'  :filter='filter' ></e-column>
                     <!-- <e-column field='labels[0].label_name' headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column> -->
                     <e-column field='amount' headerText='Amount'  :filter='filter' ></e-column>
                     <e-column field='month' headerText='Month'  :filter='filter' ></e-column>
@@ -458,12 +459,58 @@ export default {
               if(to.params.id == 'pending') {
                 api.get(`${apiUrl}`+`transfer/budtrans/view/requests/pending`).then((response) => {
                     this.datasrc = response.data;
+                    for(var i =0;i<this.datasrc.length;i++) {
+                      if(this.datasrc[i].requested_by == null) {
+                        this.datasrc[i].requested_by = {
+                          user_name:"No longer exists!"
+                        }
+                      }
+                      if(this.datasrc[i].department == null) {
+                        this.datasrc[i].department = {
+                          department_name:"No longer exists!"
+                        }
+                      }
+                      if(this.datasrc[i].source_head == null) {
+                        this.datasrc[i].source_head = {
+                          name:"No longer exists!"
+                        }
+                      }
+                      if(this.datasrc[i].destination_head == null) {
+                        this.datasrc[i].destination_head = {
+                          name:"No longer exists!"
+                        }
+                      }
+                      
+                    }
                 })
                 this.pending = true
               }
               else {
                 api.get(`${apiUrl}`+`transfer/budtrans/view/requests/all`).then((response) => {
                     this.datasrc = response.data;
+                    for(var i =0;i<this.datasrc.length;i++) {
+                      if(this.datasrc[i].requested_by == null) {
+                        this.datasrc[i].requested_by = {
+                          user_name:"No longer exists!"
+                        }
+                      }
+                      if(this.datasrc[i].department == null) {
+                        this.datasrc[i].department = {
+                          department_name:"No longer exists!"
+                        }
+                      }
+                      if(this.datasrc[i].source_head == null) {
+                        this.datasrc[i].source_head = {
+                          name:"No longer exists!"
+                        }
+                      }
+                      if(this.datasrc[i].destination_head == null) {
+                        this.datasrc[i].destination_head = {
+                          name:"No longer exists!"
+                        }
+                      }
+                      
+                    }
                 })
                 this.pending = false
               }

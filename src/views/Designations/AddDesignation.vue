@@ -93,7 +93,7 @@
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_own" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_own" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_own" @change="setReadOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
@@ -101,7 +101,7 @@
                             <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].read" :uncheckedValue="false" :checkedValue="true" disabled/>
                           </div>
                           <div v-else>
-                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].read" :uncheckedValue="false" :checkedValue="true"/>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].read" @change="setReadAll(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                           </div>
                           </b-col>
                           <b-col style="padding-right:0px">
@@ -501,6 +501,18 @@ export default {
     }
   },
    methods:{
+    setReadAll(args) {
+      this.additionalpermission[args].read_all = this.datasrc[args].read
+      if(this.datasrc[args].read) {
+        this.additionalpermission[args].read_own = false
+      }
+    },
+    setReadOwn(args) {
+      if(this.additionalpermission[args].read_own) {
+        this.additionalpermission[args].read_all = false
+        this.datasrc[args].read = false
+      }
+    },
     setDept(args) {
       this.approval_permissions.by_department.status = args
       this.approval_permissions.by_heads.status = !args
