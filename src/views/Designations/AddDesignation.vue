@@ -98,10 +98,10 @@
                           </b-col>
                           <b-col style="padding-right:0px">
                             <div v-if="datasrc[i].module_name == 'importTrans'">
-                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].read" :uncheckedValue="false" :checkedValue="true" disabled/>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_all" :uncheckedValue="false" :checkedValue="true" disabled/>
                           </div>
                           <div v-else>
-                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].read" @change="setReadAll(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_all" @change="setReadAll(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                           </div>
                           </b-col>
                           <b-col style="padding-right:0px">
@@ -502,15 +502,15 @@ export default {
   },
    methods:{
     setReadAll(args) {
-      this.additionalpermission[args].read_all = this.datasrc[args].read
-      if(this.datasrc[args].read) {
+      if(this.additionalpermission[args].read_all) {
         this.additionalpermission[args].read_own = false
+        this.datasrc[args].read = true
       }
     },
     setReadOwn(args) {
       if(this.additionalpermission[args].read_own) {
         this.additionalpermission[args].read_all = false
-        this.datasrc[args].read = false
+        this.datasrc[args].read = true
       }
     },
     setDept(args) {

@@ -16,7 +16,8 @@
                     <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column>
                     <e-column field='request_by.user_name' headerText='Requested By'  :filter='filter' ></e-column>
-                    <e-column field='labels[0].label_name' headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
+                    <e-column headerText='Labels' :template="headlabelTemplate" :filter='filter' ></e-column>
+                    <e-column field='labels[0].label_name' headerText='More Labels' :template="labelTemplate" :filter='filter' ></e-column>
                     <e-column field='status' headerText='Status'  :filter='filter' ></e-column>
                     <e-column field='recurring_rate' headerText='Recurring Rate'  :filter='filter' ></e-column>
                     <e-column field='budget_head.name' headerText='Head'  :filter='filter' ></e-column>
@@ -236,6 +237,18 @@ export default {
               return {
                   template: Vue.component('labelTemplate', {
                       template: `<div ><b-badge style="font-weight:100;margin:3px" v-for="label in data.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
+                  data: function() {
+                          return {
+                              data: {},
+                          }
+                      }
+                })
+              }
+          },
+          headlabelTemplate: function () {
+              return {
+                  template: Vue.component('labelTemplate', {
+                      template: `<div><b-badge style="font-weight:100;margin:3px" v-for="label in data.budget_head.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
                   data: function() {
                           return {
                               data: {},

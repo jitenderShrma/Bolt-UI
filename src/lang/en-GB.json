@@ -259,5 +259,6 @@
     "sourcehead" : "Source Head",
     "desthead" : "Destination Head",
     "pholdsourcehead" : "Select a Source Head",
-    "pholddesthead" : "Select a Destination Head"
+    "pholddesthead" : "Select a Destination Head",
+    "editlabel" : "Edit Label"
 }
