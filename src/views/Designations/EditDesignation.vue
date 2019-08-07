@@ -493,10 +493,9 @@ export default {
   },
    methods:{
     setReadAll(args) {
-      
-      if(this.datasrc[args].read_all) {
+      if(this.additionalpermission[args].read_all) {
         this.additionalpermission[args].read_own = false
-        this.additionalpermission[args].read = true
+        this.datasrc[args].read = true
       }
     },
     setReadOwn(args) {
