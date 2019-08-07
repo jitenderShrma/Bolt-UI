@@ -129,8 +129,17 @@
           <b-tab :title="$ml.get('labels')">
             <b-form-group>
                     <div v-for="(run,i) in input.labels" :key="i">
+                      <b-row>
+                      <b-col>
                       <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="input.labels[i].color">{{input.labels[i].label_name}}</b-badge>
-                      <b-btn style="float:right" @click="delLabel(`${input.labels[i]._id}`,`${input._id}`,`${i}`)" size="sm" variant="danger"><i class="fa fa-trash-o"></i></b-btn>
+                    </b-col>
+                    <b-col>
+                      <b-btn v-on:click="editLabel(input.labels[i])" size="sm" variant="primary" v-text="$ml.get('edit')"></b-btn>
+                    </b-col>
+                    <b-col>
+                      <b-btn v-on:click="delLabel(`${input.labels[i]._id}`,`${input._id}`,`${i}`)" size="sm" variant="danger"><i class="fa fa-trash-o"></i></b-btn>
+                    </b-col>
+                  </b-row>
                     </div>
                     <b-form v-on:submit.prevent = "selectLabel(`${input._id}`)">
                       <label v-text="$ml.get('labels')"></label>
@@ -164,18 +173,32 @@
                       <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
               </div>
               </div>
+              </div>
+              <div slot="footer">
+                    <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+                </div>
+                </b-form>
+            </b-modal>
+            <b-modal size="sm" :title="$ml.get('editlabel')" class="modal-primary" v-model="editlabelmodal" @ok="editlabelmodal = false" hide-footer>
+              <b-form v-on:submit.prevent="editdeptLabel(`${input._id}`)">
+              <div class="content-wrapper textbox-default">
+              <div class="row">
+              <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                      <ejs-textbox v-model="editlabel.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
+              </div>
+              </div>
               <br>
               <div class="row">
                   <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
                     <p>Label Color</p>
                   </div>
                   <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                          <ejs-colorpicker :modeSwitcher="false" value="#000" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
+                          <ejs-colorpicker :modeSwitcher="false" :value="editlabel.color" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
                   </div>
               </div>
               <br>
               <div class="multiline_wrapper">
-                  <ejs-textbox v-model="formdata.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
+                  <ejs-textbox v-model="editlabel.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
               </div>
               </div>
               <div slot="footer">
@@ -265,7 +288,7 @@ import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import VueNotifications from 'vue-notifications'
 import { DatePickerPlugin } from "@syncfusion/ej2-vue-calendars";
 import { NumericTextBox } from "@syncfusion/ej2-inputs";
-import { NumericTextBoxPlugin } from "@syncfusion/ej2-vue-inputs";
+import { NumericTextBoxPlugin,ColorPickerPlugin } from "@syncfusion/ej2-vue-inputs";
 import miniToastr from 'mini-toastr' 
   import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
 import {
@@ -278,6 +301,7 @@ import {CoolSelect} from 'vue-cool-select';
 import { Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
 import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     Vue.use(ToolbarPlugin);
+    Vue.use(ColorPickerPlugin);
     Vue.use(TextBoxPlugin)
     Vue.use(PivotViewPlugin);
     Vue.use(GridPlugin);
@@ -360,7 +384,7 @@ export default {
           key:"",
           formdata: {
                   label_name : "",
-                  color : "#fff",
+                  color : "2196f3",
                   context : "Designations",
                   description : ""
                 },
@@ -420,6 +444,8 @@ export default {
             
           ],
           heads:[],
+          editlabelmodal:false,
+          editlabel:{},
           module:"",
           permissionmodal:false,
           squarePalettesColn: 7,
@@ -492,6 +518,23 @@ export default {
     }
   },
    methods:{
+    editdeptLabel() {
+      var id = this.editlabel._id
+      this.editlabel._id = undefined
+      api.put(`${apiUrl}label/label/edit/${id}`,this.editlabel).then((res) => {
+        console.log(res.data)
+      })
+      this.$router.go(0)
+    },
+    editLabel(args) {
+      console.log(args)
+      this.editlabelmodal = true
+      this.editlabel._id = args._id
+      this.editlabel.label_name = args.label_name
+      this.editlabel.description =args.description
+      this.editlabel.color =`#`+`${args.color}`
+      
+    },
     setReadAll(args) {
       if(this.additionalpermission[args].read_all) {
         this.additionalpermission[args].read_own = false
@@ -563,6 +606,7 @@ export default {
     },
     onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
+        this.editlabel.color = args.currentValue.hex.slice(1);
       }, 
     delLabel(args,id,label) {
       console.log(args,id,label)
@@ -816,3 +860,53 @@ export default {
   },
 };
 </script>
+<style>
+     .badge-f44336 {
+    background-color:#f44336;
+    color:white;
+  }
+  .badge-e91e63{
+    background-color:#e91e63;
+    color:white;
+  }
+  .badge-9c27b0{
+    background-color:#9c27b0;
+    color:white;
+  }
+  .badge-673ab7{
+    background-color:#673ab7;
+    color:white;
+  }
+  .badge-2196f3{
+    background-color:#2196f3;
+    color:white;
+  }
+  .badge-03a9f4{
+    background-color:#03a9f4;
+    color:white;
+  }
+  .badge-00bcd4{
+    background-color:#00bcd4;
+    color:white;
+  }
+  .badge-009688{
+    background-color:#009688;
+    color:white;
+  }
+  .badge-8bc34a{
+    background-color:#8bc34a;
+    color:white;
+  }
+  .badge-cddc39{
+    background-color:#cddc39;
+    color:black;
+  }
+  .badge-ffeb3b{
+    background-color:#ffeb3b;
+    color:black;
+  }
+  .badge-ffc107{
+    background-color:#ffc107;
+    color:black;
+  }
+</style>

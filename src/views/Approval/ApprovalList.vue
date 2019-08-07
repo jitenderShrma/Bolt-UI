@@ -35,8 +35,17 @@
         <div class="content-wrapper textbox-default">
           <br>
           <div v-for="(run,i) in editinput.labels" :key="i">
-              <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="editinput.labels[i].color">{{editinput.labels[i].label_name}}</b-badge>
-              <b-btn style="float:right" v-on:click="delLabel(`${editinput.labels[i]._id}`,`${editinput._id}`,`${i}`)" size="sm" variant="danger"><i class="fa fa-trash-o"></i></b-btn>
+              <b-row>
+                  <b-col>
+                  <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="editinput.labels[i].color">{{editinput.labels[i].label_name}}</b-badge>
+                </b-col>
+                <b-col>
+                  <b-btn v-on:click="editLabel(editinput.labels[i])" size="sm" variant="primary" v-text="$ml.get('edit')"></b-btn>
+                </b-col>
+                <b-col>
+                  <b-btn v-on:click="delLabel(`${editinput.labels[i]._id}`,`${editinput._id}`,`${i}`)" size="sm" variant="danger"><i class="fa fa-trash-o"></i></b-btn>
+                </b-col>
+              </b-row>
             </div>
             <b-form v-on:submit.prevent = "selectLabel(`${editinput._id}`)">
                       <label v-text="$ml.get('labels')"></label>
@@ -70,18 +79,32 @@
                       <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
               </div>
               </div>
+              </div>
+              <div slot="footer">
+                    <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+                </div>
+                </b-form>
+            </b-modal>
+            <b-modal size="sm" :title="$ml.get('editlabel')" class="modal-primary" v-model="editlabelmodal" @ok="editlabelmodal = false" hide-footer>
+              <b-form v-on:submit.prevent="editdeptLabel(`${editinput._id}`)">
+              <div class="content-wrapper textbox-default">
+              <div class="row">
+              <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                      <ejs-textbox v-model="editlabel.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
+              </div>
+              </div>
               <br>
               <div class="row">
                   <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
                     <p>Label Color</p>
                   </div>
                   <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                          <ejs-colorpicker :modeSwitcher="false" value="#000" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
+                          <ejs-colorpicker :modeSwitcher="false" :value="editlabel.color" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
                   </div>
               </div>
               <br>
               <div class="multiline_wrapper">
-                  <ejs-textbox v-model="formdata.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
+                  <ejs-textbox v-model="editlabel.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
               </div>
               </div>
               <div slot="footer">
@@ -260,7 +283,7 @@ export default {
           module:null,
           formdata: {
                   label_name : "",
-                  color : "#fff",
+                  color : "2196f3",
                   context : "Approval",
                   description : ""
                 },
@@ -341,6 +364,8 @@ export default {
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
             ],
+            editlabelmodal:false,
+            editlabel:{},
           pageSettings: { pageSizes: [10,20,40,80], pageCount: 4 },
         ddData: [{ value: 1000, text: '1,000 Rows and 11 Columns' }, { value: 10000, text: '10,000 Rows and 11 Columns' }],
                 ddValue: 1000,
@@ -368,6 +393,23 @@ export default {
             };
         },
   methods: {
+    editdeptLabel() {
+      var id = this.editlabel._id
+      this.editlabel._id = undefined
+      api.put(`${apiUrl}label/label/edit/${id}`,this.editlabel).then((res) => {
+        console.log(res.data)
+      })
+      this.$router.go(0)
+    },
+    editLabel(args) {
+      console.log(args)
+      this.editlabelmodal = true
+      this.editlabel._id = args._id
+      this.editlabel.label_name = args.label_name
+      this.editlabel.description =args.description
+      this.editlabel.color =`#`+`${args.color}`
+      
+    },
     delLabel(args,id,label) {
       console.log(this.editinput.labels.splice(label,1))
       var body = {
@@ -396,6 +438,7 @@ export default {
       },
     onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
+        this.editlabel.color = args.currentValue.hex.slice(1);
       }, 
       selectLabel(args) {
         if(this.selectedLabel != null) {

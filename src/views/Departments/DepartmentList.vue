@@ -358,6 +358,7 @@ export default {
       api.put(`${apiUrl}label/label/edit/${id}`,this.editlabel).then((res) => {
         console.log(res.data)
       })
+      this.$router.go(0)
     },
     editLabel(args) {
       console.log(args)
