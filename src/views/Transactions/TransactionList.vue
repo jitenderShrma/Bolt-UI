@@ -261,7 +261,7 @@ export default {
           },
            height : window.innerHeight*0.695,
           toolbar: [
-          'CsvExport','PdfExport',
+          'CsvExport',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
@@ -296,23 +296,16 @@ export default {
        onUploadSuccess: function (args) {
           var formData = new FormData();
           formData.append('csv',args.file.rawFile);
-          formData.append('import_setting',"M");
-          formData.append('year',"2019")
           console.log(formData);
           this.upload = true
           console.log("req called");
-          api.post(`${apiUrl}`+`csv/read/`,formData,{headers:{'Content-Type':'multipart/form-data'}}).then((res)=>{
+          api.post(`${apiUrl}`+`import/importTrans/transactions/all`,formData,{headers:{'Content-Type':'multipart/form-data'}}).then((res)=>{
             console.log(res);
-            console.log("res")
-            api.get(`${apiUrl}`+`transaction/get/all`).then((response) => {
+            api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
                     this.datasrc = response.data;
                 })
           })
           this.browseModal = false
-
-          // axios.post(`${apiUrl}`+`csv/read`,formData,{headers:{'Content-Type':'multipart/form-data'}}).then((res) => {
-          //   this.dataSourceSettings.dataSource = res.data
-          // })
         },
         onUploadFailed: function (args) {
             console.log('Upload fails');
@@ -384,8 +377,8 @@ export default {
                 if(args.item.id == "delete") {
                     var selected = this.$refs.overviewgrid.getSelectedRecords()
                     if(selected.length>0) {
-                        axios.delete(`${apiUrl}`+`transaction/delete/`+`${selected[0]._id}`,{withCredentials:true}).then((response) => {
-                                axios.get(`${apiUrl}`+`transaction/get/all`,{withCredentials:true}).then((response) => {
+                        axios.delete(`${apiUrl}`+`transaction/trans/delete/`+`${selected[0]._id}`,{withCredentials:true}).then((response) => {
+                                axios.get(`${apiUrl}`+`transaction/trans/get/all`,{withCredentials:true}).then((response) => {
                             this.datasrc = response.data;
                         })
                     })
@@ -398,8 +391,26 @@ export default {
             
         },
         async mounted () { 
-                api.get(`${apiUrl}`+`transaction/get/all`).then((response) => {
+                api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
                     this.datasrc = response.data;
+                    for(var i =0;i<this.datasrc.length;i++) {
+                      if(this.datasrc[i].user == null) {
+                        this.datasrc[i].user = {
+                          user_name:"No longer exists!"
+                        }
+                      }
+                      if(this.datasrc[i].department == null) {
+                        this.datasrc[i].department = {
+                          department_name:"No longer exists!"
+                        }
+                      }
+                      if(this.datasrc[i].head == null) {
+                        this.datasrc[i].head = {
+                          name:"No longer exists!"
+                        }
+                      }
+                    }
+                    console.log(this.datasrc)
                 })
             
         }

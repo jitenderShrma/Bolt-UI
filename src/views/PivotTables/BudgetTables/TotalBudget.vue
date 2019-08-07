@@ -11,7 +11,7 @@
             </e-items>
           </ejs-toolbar>
           <b-col sm="1" id="xs" style="position: fixed; top: -6%; right: 3%;width:55px;z-index:1001">
-            <b-dropdown size="sm" id="ddown_primary" :text="$ml.get('view')" variant="primary" class="m-0">
+            <b-dropdown size="sm" id="ddown_primary" :text="currentView" variant="primary" class="m-0">
               <b-dropdown-item @click="switchGraph">Graph</b-btn></b-dropdown-item>
               <b-dropdown-item @click="switchValue">Budget</b-btn></b-dropdown-item>
             </b-dropdown>
@@ -596,7 +596,7 @@
                 <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
                 </div>
             </b-modal>
-            <b-modal :title="$ml.get('edithead')" class="modal-primary" v-model="editmodal" @ok="editmodal = false" hide-footer>
+            <b-modal :title="$ml.get('edithead')+` : `+`${editinput.name}`" class="modal-primary" v-model="editmodal" @ok="editmodal = false" hide-footer>
 
               <b-form v-on:submit.prevent="editHead">
                 <b-tabs>
@@ -1131,7 +1131,7 @@ export default {
              editSettings: { allowDeleting: true,mode: 'Dialog', allowAdding: true, newRowPosition: 'Child' },
              rowHeight: 30,
               toolbar: [
-          'CsvExport','PdfExport',
+          'CsvExport',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
@@ -1142,6 +1142,7 @@ export default {
             input:{
 
             },
+            currentView:"Budget",
             selectedLabel:null,
             module:null,
             isRoot:false,
@@ -1437,9 +1438,11 @@ export default {
       },
       switchGraph() {
         this.something = false
+        this.currentView = "Graph"
       },
       switchValue() {
         this.something = true
+        this.currentView = "Budget"
       },
        onUploadSuccess: function (args) {
           var formData = new FormData();

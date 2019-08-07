@@ -19,7 +19,7 @@
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='department_name' headerText='Department Name' width='170' ></e-column>
-                    <e-column field='labels' :template="labelTemplate" headerText='Labels'></e-column>
+                    <e-column field='labels[0].label_name' :template="labelTemplate" headerText='Labels'></e-column>
                     <e-column :template="buttonDesig" width='80' headerText='Manage Designations' ></e-column>
                      <e-column :template="buttonHead" width='80' headerText='Manage Heads' ></e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
@@ -186,7 +186,7 @@ export default {
           }
         },
         toolbar: [
-          'CsvExport','PdfExport',
+          'CsvExport',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },

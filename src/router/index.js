@@ -81,6 +81,10 @@ const DepartmentList = () => import('@/views/Departments/DepartmentList');
 const TotalBudget = () => import('@/views/PivotTables/BudgetTables/TotalBudget');
 const ApprovedBudget = () => import('@/views/PivotTables/BudgetTables/ApprovedBudget');
 
+//Budget Transfer Routes
+const BudgetTransfer =() => import('@/views/BudgetTransfer');
+const BudgetTransferList =() => import('@/views/BudgetTransfer/BudgetTransferList');
+
 //Head Routes
 const HeadList = () => import('@/views/Heads/HeadList');
 
@@ -490,7 +494,30 @@ var router = new Router({
                 },
                 
               ]
-            },{
+            },
+            {
+              path: '/budgettrans',
+              name:"Budget Transfer List",
+              redirect:'/budgettrans/list/add',
+              meta : { requiresAuth : true },
+              component: {
+                render (c) { return c('router-view') }
+              },
+              children: [
+                {
+                  meta : { requiresAuth : true },
+                  path : `/budgettrans/list/:id`,
+                  component : BudgetTransferList
+                },
+                {
+                  name : `Add Budget Transfer`,
+                  meta : { requiresAuth : true },
+                  path : `/budgettrans/add`,
+                  component : BudgetTransfer
+                }
+              ]
+            },
+            {
             path : '/test',
             component: {
               render(c) {return c('router-view')},

@@ -24,7 +24,7 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
                     <e-column field='head_key' headerText='Head Key' ></e-column>
-                    <e-column field='labels' :template="labelTemplate" headerText='Labels' ></e-column>
+                    <e-column field='labels[0].label_name' :template="labelTemplate" headerText='Labels' ></e-column>
                     <e-column field='accounting_head' headerText='Account Head' ></e-column>
                     <e-column field='notes' headerText='Notes'></e-column>
                     <e-column :allowEditing="true" :template="groupTemplate" field='department' headerText='Department' width='170' ></e-column>
@@ -97,7 +97,7 @@
                 <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
                 </div>
             </b-modal>
-            <b-modal :title="$ml.get('edithead')" class="modal-primary" v-model="editmodal" @ok="editmodal = false" hide-footer>
+            <b-modal :title="$ml.get('edithead')+` : `+`${editinput.name}`" class="modal-primary" v-model="editmodal" @ok="editmodal = false" hide-footer>
 
               <b-form v-on:submit.prevent="editHead">
                 <b-tabs>
@@ -351,7 +351,7 @@ export default {
              editSettings: { allowDeleting: true,mode: 'Dialog', allowAdding: true, newRowPosition: 'Child' },
              rowHeight: 30,
               toolbar: [
-          'CsvExport','PdfExport',
+          'CsvExport',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },

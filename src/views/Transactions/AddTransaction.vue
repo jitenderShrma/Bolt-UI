@@ -750,7 +750,7 @@ Vue.use(TextBoxPlugin);
             this.input.status = "Approved"
           }
           console.log(this.input)
-          axios.post(`${apiUrl}`+`transaction/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
+          axios.post(`${apiUrl}`+`transaction/trans/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
             this.$router.push("/transaction/list")});
         },
         addVendor() {

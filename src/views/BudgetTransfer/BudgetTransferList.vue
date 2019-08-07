@@ -13,17 +13,17 @@
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column :visible="pending" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
-                    <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
-                    <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column>
-                    <e-column field='request_by.user_name' headerText='Requested By'  :filter='filter' ></e-column>
-                    <e-column field='labels[0].label_name' headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
-                    <e-column field='status' headerText='Status'  :filter='filter' ></e-column>
-                    <e-column field='recurring_rate' headerText='Recurring Rate'  :filter='filter' ></e-column>
-                    <e-column field='budget_head.name' headerText='Head'  :filter='filter' ></e-column>
-                    <e-column field='department.department_name' headerText='Department'  :filter='filter' ></e-column>
-                    <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' ></e-column>
-                    <e-column field='description' headerText='Description'  :filter='filter' ></e-column>
+                    <!-- <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
+                    <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column> -->
+                    <e-column field='requested_by.user_name' headerText='Requested By'  :filter='filter' ></e-column>
+                    <!-- <e-column field='labels[0].label_name' headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column> -->
                     <e-column field='amount' headerText='Amount'  :filter='filter' ></e-column>
+                    <e-column field='month' headerText='Month'  :filter='filter' ></e-column>
+                    <e-column field='source_head.name' headerText='Source Head'  :filter='filter' ></e-column>
+                    <e-column field='destination_head.name' headerText='Destination Head'  :filter='filter' ></e-column>
+                    <!-- <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' ></e-column>
+                    <e-column field='description' headerText='Description'  :filter='filter' ></e-column>
+                    <e-column field='amount' headerText='Amount'  :filter='filter' ></e-column> -->
                 </e-columns>
                 </ejs-grid>
                  </div>
@@ -441,7 +441,7 @@ export default {
                 }
                 if(args.item.id == "add") {
                     console.log(args)
-                    this.$router.push('/approval/add');
+                    this.$router.push('/budgettrans/add');
                 }
                 
             },
@@ -456,13 +456,13 @@ export default {
             },
             $route (to, from){
               if(to.params.id == 'pending') {
-                api.get(`${apiUrl}`+`approvals/preApp/view/requests`).then((response) => {
+                api.get(`${apiUrl}`+`transfer/budtrans/view/requests/pending`).then((response) => {
                     this.datasrc = response.data;
                 })
                 this.pending = true
               }
               else {
-                api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
+                api.get(`${apiUrl}`+`transfer/budtrans/view/requests/all`).then((response) => {
                     this.datasrc = response.data;
                 })
                 this.pending = false
@@ -472,15 +472,15 @@ export default {
         async mounted () {
                 this.$refs.dialogObj.hide();
                 this.link = window.location.href;
-                this.key = this.link.split('view/').pop()
+                this.key = this.link.split('list/').pop()
                 if(this.key == 'all') {
                   this.pending = false
-                api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
+                api.get(`${apiUrl}`+`transfer/budtrans/view/requests/all`).then((response) => {
                   console.log(response.data)
                     this.datasrc = response.data;
                     for(var i =0;i<this.datasrc.length;i++) {
-                      if(this.datasrc[i].request_by == null) {
-                        this.datasrc[i].request_by = {
+                      if(this.datasrc[i].requested_by == null) {
+                        this.datasrc[i].requested_by = {
                           user_name:"No longer exists!"
                         }
                       }
@@ -489,15 +489,17 @@ export default {
                           department_name:"No longer exists!"
                         }
                       }
-                      if(this.datasrc[i].budget_head == null) {
-                        this.datasrc[i].budget_head = {
+                      if(this.datasrc[i].source_head == null) {
+                        this.datasrc[i].source_head = {
                           name:"No longer exists!"
                         }
                       }
-                      this.datasrc[i].labellist = "";
-                      for(var j=0;j<this.datasrc[i].labels.length;i++) {
-                        this.datasrc[i].labellist = this.datasrc[i].labellist+`${this.datasrc[i].labels[j].label_name},`
+                      if(this.datasrc[i].destination_head == null) {
+                        this.datasrc[i].destination_head = {
+                          name:"No longer exists!"
+                        }
                       }
+                      
                     }
                     console.log(this.datasrc)
                 })
@@ -507,11 +509,11 @@ export default {
               }
               else{
                 this.pending = true
-                api.get(`${apiUrl}`+`approvals/preApp/view/requests`).then((response) => {
+                api.get(`${apiUrl}`+`transfer/budtrans/view/requests/pending`).then((response) => {
                     this.datasrc = response.data;
                     for(var i =0;i<this.datasrc.length;i++) {
-                      if(this.datasrc[i].request_by == null) {
-                        this.datasrc[i].request_by = {
+                      if(this.datasrc[i].requested_by == null) {
+                        this.datasrc[i].requested_by = {
                           user_name:"No longer exists!"
                         }
                       }
@@ -520,15 +522,17 @@ export default {
                           department_name:"No longer exists!"
                         }
                       }
-                      if(this.datasrc[i].budget_head == null) {
-                        this.datasrc[i].budget_head = {
+                      if(this.datasrc[i].source_head == null) {
+                        this.datasrc[i].source_head = {
                           name:"No longer exists!"
                         }
                       }
-                      this.datasrc[i].labellist = "";
-                      for(var j=0;j<this.datasrc[i].labels.length;i++) {
-                        this.datasrc[i].labellist = this.datasrc[i].labellist+","+`this.datasrc[i].labels[j].label_name`
+                      if(this.datasrc[i].destination_head == null) {
+                        this.datasrc[i].destination_head = {
+                          name:"No longer exists!"
+                        }
                       }
+                      
                     }
                     console.log(response.data)
                 })

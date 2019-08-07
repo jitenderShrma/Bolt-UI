@@ -552,7 +552,7 @@ Vue.use(TextBoxPlugin);
 		},
 		async mounted() {
       var key = window.location.href.split('/edit').pop()
-      axios.get(`${apiUrl}`+`transaction/get`+`${key}`,{withCredentials:true}).then((res) => {
+      axios.get(`${apiUrl}`+`transaction/trans/get/one`+`${key}`,{withCredentials:true}).then((res) => {
         this.input = res.data
       });
       axios.get(`${apiUrl}`+`vendor/get/all`,{withCredentials:true}).then((res) => {

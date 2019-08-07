@@ -22,15 +22,9 @@ var items = [
     }
   },  
   {
-    name: 'Users',
-    icon: 'icon-user',
-    children:[
-      {
         name: 'Staff',
         url: '/staff',
         icon: 'icon-user'
-      }
-    ]
   },
   // {
   //   name: 'User Groups',
@@ -95,6 +89,26 @@ var items = [
         icon:"icon-star"
       }
     ]
+  },
+  {
+    name: "Budget Transfer",
+    icon:"icon-star",
+    children : [
+      {
+        name:"All Budget Transfer Requests",
+        url:"/budgettrans/list/all",
+        icon:'icon-calculator'
+      },
+      {
+        name:'Pending Budget Transfer Requests',
+        url: '/budgettrans/list/pending',
+        icon:'icon-calculator',
+        badge: {
+          variant: 'danger',
+          text: pendingCount
+        }
+      }
+      ]
   },
   {
     name:"Transaction",

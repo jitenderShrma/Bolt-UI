@@ -159,6 +159,7 @@
     "month" : "Month",
     "pholdmonth"  : "Select the Month of Expenditure",
     "transacammount" : "Transaction Amount",
+    "amount" : "Amount",
     "pholdtransacammount": "Enter the Transaction Amount",
     "quotations" : "Quotations",
     "poraised" : "Purchase Order Raised?",
@@ -254,5 +255,9 @@
     "others" : "Others",
     "readown" : "Read Own",
     "bydept" : "Give Access of all Heads of User's Department",
-    "byhead" : "Give Access to selected Heads"
+    "byhead" : "Give Access to selected Heads",
+    "sourcehead" : "Source Head",
+    "desthead" : "Destination Head",
+    "pholdsourcehead" : "Select a Source Head",
+    "pholddesthead" : "Select a Destination Head"
 }
