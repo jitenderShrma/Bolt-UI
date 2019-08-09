@@ -94,7 +94,7 @@
               :horizontal="true">
               <b-row>
               <b-col sm="2">
-              <ejs-textbox type="number" :max="boundaryAmount" @change="validateAmount" floatLabelType="Auto" v-model="input.amount"  :placeholder="$ml.get('pholdapprovalamount')" :required="validate"></ejs-textbox>
+              <ejs-textbox type="number" @change="validateAmount" floatLabelType="Auto" v-model="input.amount"  :placeholder="$ml.get('pholdapprovalamount')" :required="validate"></ejs-textbox>
             </b-col>
             <b-col sm="2">
               <br>
@@ -133,10 +133,88 @@
                 </b-col>
               </b-row>
             </b-form-group>
+            <b-form-group>
+              <b-row>
+                <b-col sm="4">
+                    <div v-for="(run,i) in input.labels" :key="i">
+                      <b-row>
+                      <b-col>
+                      <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="input.labels[i].color">{{input.labels[i].label_name}}</b-badge>
+                    </b-col>
+                    <b-col>
+                      <b-btn v-on:click="editLabeladd(input.labels[i])" size="sm" variant="primary" v-text="$ml.get('edit')"></b-btn>
+                    </b-col>
+                    <b-col>
+                      <b-btn v-on:click="delLabeladd(`${input.labels[i]._id}`,`${input._id}`,`${i}`)" size="sm" variant="danger"><i class="fa fa-trash-o"></i></b-btn>
+                    </b-col>
+                  </b-row>
+                    </div>
+                    <b-form v-on:submit.prevent = "selectLabeladd(`${input._id}`)">
+                      <label v-text="$ml.get('labels')"></label>
+                      <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
+                        <div slot="item" slot-scope = "{item :label}">
+                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                        </div>
+                        <div slot="selection" slot-scope = "{item :label}">
+                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                        </div>
+                        <div slot="after-items-fixed">
+                          <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>
+                        </div>
+                      </cool-select>
+                      <br>
+                        <div slot="footer">
+                          <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('add')"><i class="fa fa-dot-circle-o"></i></b-button>
+                        </div>
+                    </b-form>
+                  </b-col>
+                </b-row>
+                  </b-form-group>
            <div slot="footer">
               <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
           </div>
           </b-form>
+          <b-modal size="sm" :title="$ml.get('label')" class="modal-primary" v-model="addModal" @ok="addModal = false" hide-footer>
+              <b-form v-on:submit.prevent="addLabel(`${editinput._id}`)">
+              <div class="content-wrapper textbox-default">
+              <div class="row">
+              <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                      <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
+              </div>
+              </div>
+              </div>
+              <div slot="footer">
+                    <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+                </div>
+                </b-form>
+            </b-modal>
+            <b-modal size="sm" :title="$ml.get('editlabel')" class="modal-primary" v-model="editlabelmodal" @ok="editlabelmodal = false" hide-footer>
+              <b-form v-on:submit.prevent="editdeptLabel(`${editinput._id}`)">
+              <div class="content-wrapper textbox-default">
+              <div class="row">
+              <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                      <ejs-textbox v-model="editlabel.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
+              </div>
+              </div>
+              <br>
+              <div class="row">
+                  <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                    <p>Label Color</p>
+                  </div>
+                  <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                          <ejs-colorpicker :modeSwitcher="false" :value="editlabel.color" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
+                  </div>
+              </div>
+              <br>
+              <div class="multiline_wrapper">
+                  <ejs-textbox v-model="editlabel.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
+              </div>
+              </div>
+              <div slot="footer">
+                    <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+                </div>
+                </b-form>
+            </b-modal>
         </div>
           <div v-else>
             <div class="justify-content-center">
@@ -201,8 +279,10 @@
             month:"",
             amount:"",
             request_for_quote:"",
-            description:""
+            description:"",
+            labels:[]
   				},
+          addModal:false,
           validate:true,
   				types:[
             "One Time","Recurring"
@@ -212,6 +292,24 @@
   				],
           month:[ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"}
           ],
+          labels:[],
+          editlabelmodal:false,
+          editlabel:{},
+          formdata: {
+                  label_name : "",
+                  color : "2196f3",
+                  context : "Approval",
+                  description : ""
+                },
+          editinput:{
+          },
+          editmodal:false,
+          selectedLabel:null,
+            module:null,
+            isRoot:false,
+            squarePalettesColn: 7,
+        circlePaletteColors: {'custom': ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#2196f3', '#03a9f4', '#00bcd4',
+                    '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
           department:[
           ],
           approvals :[
@@ -221,6 +319,9 @@
 			}
 		},
 		async mounted() {
+      axios.get(`${apiUrl}`+`label/label/find/by/Approval`,{withCredentials:true}).then((res) => {
+        this.labels = res.data
+      })
       this.month.splice(0,new Date().getMonth()) //Set months
       // Department Tree
       axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
@@ -248,6 +349,42 @@
       }
     },
 		methods : {
+      editLabeladd(args) {
+      this.editlabelmodal = true
+      this.editlabel._id = args._id
+      this.editlabel.label_name = args.label_name
+      this.editlabel.description =args.description
+      this.editlabel.color =`#`+`${args.color}`
+    },
+    delLabeladd(args,id,label) {
+      console.log(this.input.labels.splice(label,1))
+    },
+    selectLabeladd(args) {
+        if(this.selectedLabel != null) {
+        var label;
+        axios.get(`${apiUrl}label/label/get/one/${this.selectedLabel}`,{withCredentials:true}).then((res) => {
+          label = res.data
+          this.input.labels.push(label);
+          console.log(this.input.labels)
+        })
+      }
+      },
+      addLabel (args) {
+      this.addModal =false
+              axios.post(`${apiUrl}`+`label/label/create`,this.formdata,{withCredentials:true}).then((label)=>{
+                var id = {
+                  labels :  label.data._id
+                }
+                  axios.get(`${apiUrl}`+`label/label/find/by/Approval`,{withCredentials:true}).then((res) => {
+                    this.labels = res.data
+                  })
+                console.log(this.editinput.labels)
+              });
+      },
+      onChange(args) {
+        this.formdata.color = args.currentValue.hex.slice(1);
+        this.editlabel.color = args.currentValue.hex.slice(1);
+      }, 
       list_to_tree_dept(list) {
           var map = {}, node, roots = [], i;
           for (i = 0; i < list.length; i += 1) {
@@ -404,4 +541,52 @@
     box-shadow: inset 0px 0px 0px 50px #7ac142;
   }
 }
+.badge-f44336 {
+    background-color:#f44336;
+    color:white;
+  }
+  .badge-e91e63{
+    background-color:#e91e63;
+    color:white;
+  }
+  .badge-9c27b0{
+    background-color:#9c27b0;
+    color:white;
+  }
+  .badge-673ab7{
+    background-color:#673ab7;
+    color:white;
+  }
+  .badge-2196f3{
+    background-color:#2196f3;
+    color:white;
+  }
+  .badge-03a9f4{
+    background-color:#03a9f4;
+    color:white;
+  }
+  .badge-00bcd4{
+    background-color:#00bcd4;
+    color:white;
+  }
+  .badge-009688{
+    background-color:#009688;
+    color:white;
+  }
+  .badge-8bc34a{
+    background-color:#8bc34a;
+    color:white;
+  }
+  .badge-cddc39{
+    background-color:#cddc39;
+    color:black;
+  }
+  .badge-ffeb3b{
+    background-color:#ffeb3b;
+    color:black;
+  }
+  .badge-ffc107{
+    background-color:#ffc107;
+    color:black;
+  }
 </style>

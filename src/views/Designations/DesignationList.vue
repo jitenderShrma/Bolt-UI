@@ -10,7 +10,7 @@
             </e-items>
           </ejs-toolbar>
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_designation_id' :height='height' :allowReordering='true' :allowFiltering='true'
+            :treeColumnIndex='1' childMapping='children' :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -21,8 +21,8 @@
             :allowSorting='true' :recordDoubleClick="editPage" :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
-                    <e-column :visible="false" field='_id'></e-column>
-                    <e-column  field='name' headerText='Designation Name' ></e-column>
+                    <e-column :visible="false" field='id'></e-column>
+                    <e-column  field='label' headerText='Designation Name' ></e-column>
                     <e-column  field='labels[0].label_name' :allowEditing="false" :template="labelTemplate" headerText='Labels' ></e-column>
                     <e-column :template="groupTemplate" field='department' :editTemplate="departmentTemplate" headerText='Department' width='170' ></e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
@@ -411,7 +411,7 @@ export default {
     if(this.$route.path == '/designation/list') {
     await api.get(`${apiUrl}`+`designation/desig/get/all`)
     .then((response) => {
-      this.data = response.data
+      this.data = this.list_to_tree_desig(response.data)
       });
   }
   else{
@@ -475,8 +475,40 @@ export default {
               });
             
       },
+      list_to_tree_desig(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_designation_id != undefined ) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_designation_id]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataDesig(roots)
+          return roots
+      },
+      convertDataDesig(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataDesig(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].name;
+        delete roots[i]._id;
+        delete roots[i].name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
+          }
+      },
       editPage(args) {
-        this.$router.push(`/designation/edit/${args.rowData._id}`)
+        this.$router.push(`/designation/edit/${args.rowData.id}`)
       },
       onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);

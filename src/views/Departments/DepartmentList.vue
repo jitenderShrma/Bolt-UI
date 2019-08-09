@@ -28,9 +28,48 @@
             
             <b-modal :title="$ml.get('adddept')" class="modal-primary" v-model="modal" @ok="modal = false" hide-footer>
                 <b-form v-on:submit.prevent="adddept">
+                  <b-tabs>
+                  <b-tab :title="$ml.get('department')" active>
                   <b-form-group>
                   <div class="e-float-input e-control-wrapper"><input v-model="input.department_name" class="e-field e-defaultcell" type="text" value="" e-mappinguid="grid-column1" id="_gridcontroldepartment_name" name="department_name" style="text-align:undefined" aria-labelledby="label__gridcontroldepartment_name"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontroldepartment_name" for="_gridcontroldepartment_name">Department Name</label></div>
-                </b-form-group>
+                  </b-form-group>
+                </b-tab>
+                <b-tab :title="$ml.get('labels')">
+                  <b-form-group>
+                    <div v-for="(run,i) in input.labels" :key="i">
+                      <b-row>
+                      <b-col>
+                      <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="input.labels[i].color">{{input.labels[i].label_name}}</b-badge>
+                    </b-col>
+                    <b-col>
+                      <b-btn v-on:click="editLabeladd(input.labels[i])" size="sm" variant="primary" v-text="$ml.get('edit')"></b-btn>
+                    </b-col>
+                    <b-col>
+                      <b-btn v-on:click="delLabeladd(`${input.labels[i]._id}`,`${input._id}`,`${i}`)" size="sm" variant="danger"><i class="fa fa-trash-o"></i></b-btn>
+                    </b-col>
+                  </b-row>
+                    </div>
+                    <b-form v-on:submit.prevent = "selectLabeladd(`${input._id}`)">
+                      <label v-text="$ml.get('labels')"></label>
+                      <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
+                        <div slot="item" slot-scope = "{item :label}">
+                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                        </div>
+                        <div slot="selection" slot-scope = "{item :label}">
+                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                        </div>
+                        <div slot="after-items-fixed">
+                          <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>
+                        </div>
+                      </cool-select>
+                      <br>
+                        <div slot="footer">
+                          <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('add')"><i class="fa fa-dot-circle-o"></i></b-button>
+                        </div>
+                    </b-form>
+                  </b-form-group>
+                </b-tab>
+              </b-tabs>
                 <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
                 
             </b-modal>
@@ -42,7 +81,7 @@
                   <b-form-group style="padding:5%">
                     <div class="e-float-input e-control-wrapper"><input v-model="editinput.department_name" class="e-field e-defaultcell" type="text" value="asdasddas" e-mappinguid="grid-column843" id="_gridcontroldepartment_name" name="department_name" style="text-align:undefined" aria-labelledby="label__gridcontroldepartment_name"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontroldepartment_name" for="_gridcontroldepartment_name">Department Name</label></div>
                     <label v-text="$ml.get('parentdept')"></label>
-                    <treeselect :default-expand-level="10" :placeholder="$ml.get('pholdparentdesig')" v-model="editinput.parent_department" :multiple="false" :options="treedept" />
+                    <treeselect ref='treeselect1' @open="checkParent" :default-expand-level="10" :placeholder="$ml.get('pholdparentdesig')" v-model="editinput.parent_department" :multiple="false" :options="treedept" />
                   </b-form-group>
                 </b-tab>
                 <b-tab :title="$ml.get('labels')">
@@ -155,6 +194,32 @@ Vue.use(CoolSelect);
 var api = axios.create({
   withCredentials :true
 })
+import VueNotifications from 'vue-notifications'
+import miniToastr from 'mini-toastr'// https://github.com/se-panfilov/mini-toastr
+
+const toastTypes = {
+  success: 'success',
+  error: 'error',
+  info: 'info',
+  warn: 'warn'
+}
+
+miniToastr.init({types: toastTypes})
+
+function toast ({title, message, type, timeout, cb}) {
+  return miniToastr[type](message, title, timeout, cb)
+}
+
+const options = {
+  success: toast,
+  error: toast,
+  info: toast,
+  warn: toast
+}
+//  VueNotifications.setPluginOptions(options)
+
+Vue.use(VueNotifications, options)
+
 
 export default {
     name: "DepartmentList",
@@ -303,6 +368,7 @@ export default {
           link:"",
           key:"",
           input:{
+            labels:[],
           },
           editlabelmodal:false,
           editlabel:{},
@@ -380,6 +446,28 @@ export default {
       })
       
     },
+    editLabeladd(args) {
+      console.log(args)
+      this.editlabelmodal = true
+      this.editlabel._id = args._id
+      this.editlabel.label_name = args.label_name
+      this.editlabel.description =args.description
+      this.editlabel.color =`#`+`${args.color}`
+      
+    },
+    delLabeladd(args,id,label) {
+      console.log(this.input.labels.splice(label,1))
+      
+    },
+    selectLabeladd(args) {
+        if(this.selectedLabel != null) {
+        var label;
+        api.get(`${apiUrl}label/label/get/one/${this.selectedLabel}`).then((res) => {
+          label = res.data
+          this.input.labels.push(label);
+        })
+      }
+    },
     async load(args) {
       api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
@@ -418,7 +506,9 @@ export default {
                 this.$refs.treegrid.expandAll()            
                 });
             this.modal=false
-            this.input = {}
+            this.input = {
+              labels:[]
+            }
           }
           else {
             this.input.parent_department = parent[0]._id
@@ -428,11 +518,16 @@ export default {
                   this.data = response.data
                   });
             });
-            this.input = {}
+            this.input = {
+              labels:[]
+            }
             this.modal=false
           }
       },
       editdept() {
+        if(this.editinput.parent_department == undefined) {
+          this.editinput.parent_department = null
+        }
         var sendData = {
           department_name:this.editinput.department_name,
           parent_department:this.editinput.parent_department
@@ -482,10 +577,6 @@ export default {
             }
        },
        beginEdit(args) {
-        api.get(`${apiUrl}`+`department/dept/get`)
-        .then((response) => {
-          this.treedept = this.list_to_tree_dept(response.data)
-          })
         this.editinput = args.rowData
         this.editmodal = true
        },
@@ -569,6 +660,35 @@ export default {
                   })
           })
         }
+      },
+      // disableProp(args) {
+      //   console.log(args)
+      //   // if(args.children != null || args.children.length>0) {
+      //   //   if(args.id == this.editinput._id) {
+      //   //     args.isDisabled = true
+      //   //     return args
+      //   //   }
+      //   //   else{
+      //   //     for(var i=0;i<args.children.length;i++) {
+      //   //       return this.disableProp(args.children[i])
+      //   //     }
+      //   //   }
+      //   // }
+      //   // else {
+      //   //   return args
+      //   // }
+        
+      // },
+      checkParent(args) {
+        api.get(`${apiUrl}`+`department/dept/get`)
+        .then((response) => {
+          for(var i=0;i<response.data.length;i++) {
+            if(response.data[i]._id == this.editinput._id) {
+              response.data[i].isDisabled = true
+            }
+          }
+          this.treedept = this.list_to_tree_dept(response.data)
+          })
       },
       list_to_tree_dept(list) {
           var map = {}, node, roots = [], i;

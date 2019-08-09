@@ -10,7 +10,7 @@
             </e-items>
           </ejs-toolbar>
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_head' :height='height' :allowReordering='true' :allowFiltering='true'
+             :treeColumnIndex='1' childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true'
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -64,6 +64,8 @@
             <b-modal :title="$ml.get('addhead')" class="modal-primary" v-model="modal" @ok="modal = false" hide-footer>
               <div>
                 <b-form v-on:submit.prevent="addHead">
+                  <b-tabs>
+                  <b-tab :title="$ml.get('head')" active>
                   <b-form-group style="padding:5%">
                  <div class="e-float-input e-control-wrapper">
                   <input v-validate="'required'" v-model="input.name" class="e-field e-defaultcell" type="text" value="" e-mappinguid="grid-column1" id="_gridcontrolname" name="Head Name" style="text-align:undefined" aria-labelledby="label__gridcontrolname">
@@ -94,6 +96,43 @@
                     <label v-text="$ml.get('parenthead')"></label>
                       <treeselect :default-expand-level="10" :placeholder="$ml.get('pholdparenthead')" v-model="input.parent_head" :multiple="false" :options="head" />
                 </b-form-group>
+              </b-tab>
+              <b-tab :title="$ml.get('labels')">
+                  <b-form-group>
+                    <div v-for="(run,i) in input.labels" :key="i">
+                      <b-row>
+                      <b-col>
+                      <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="input.labels[i].color">{{input.labels[i].label_name}}</b-badge>
+                    </b-col>
+                    <b-col>
+                      <b-btn v-on:click="editLabeladd(input.labels[i])" size="sm" variant="primary" v-text="$ml.get('edit')"></b-btn>
+                    </b-col>
+                    <b-col>
+                      <b-btn v-on:click="delLabeladd(`${input.labels[i]._id}`,`${input._id}`,`${i}`)" size="sm" variant="danger"><i class="fa fa-trash-o"></i></b-btn>
+                    </b-col>
+                  </b-row>
+                    </div>
+                    <b-form v-on:submit.prevent = "selectLabeladd(`${input._id}`)">
+                      <label v-text="$ml.get('labels')"></label>
+                      <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
+                        <div slot="item" slot-scope = "{item :label}">
+                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                        </div>
+                        <div slot="selection" slot-scope = "{item :label}">
+                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                        </div>
+                        <div slot="after-items-fixed">
+                          <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>
+                        </div>
+                      </cool-select>
+                      <br>
+                        <div slot="footer">
+                          <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('add')"><i class="fa fa-dot-circle-o"></i></b-button>
+                        </div>
+                    </b-form>
+                  </b-form-group>
+                </b-tab>
+            </b-tabs>
                 <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
                 </div>
             </b-modal>
@@ -103,11 +142,16 @@
                 <b-tabs>
                   <b-tab :title="$ml.get('head')" active>
                 <b-form-group>
-                  <div class="e-float-input e-control-wrapper"><input v-model="editinput.name" class="e-field e-defaultcell" type="text" e-mappinguid="grid-column168" id="_gridcontrolname" name="name" style="text-align:undefined" aria-labelledby="label__gridcontrolname"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolname" for="_gridcontrolname">Head Name</label></div><div class="e-float-input e-control-wrapper"><input v-model="editinput.accounting_head" class="e-field e-defaultcell" type="text" e-mappinguid="grid-column170" id="_gridcontrolaccounting_head" name="accounting_head" style="text-align:undefined" aria-labelledby="label__gridcontrolaccounting_head"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolaccounting_head" for="_gridcontrolaccounting_head">Account Head</label></div><div class="e-float-input e-control-wrapper"><input v-model="editinput.notes" class="e-field e-defaultcell" type="text"  e-mappinguid="grid-column171" id="_gridcontrolnotes" name="notes" style="text-align:undefined" aria-labelledby="label__gridcontrolnotes"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolnotes" for="_gridcontrolnotes">Notes</label></div>
+                  <div class="e-float-input e-control-wrapper"><input v-model="editinput.name" class="e-field e-defaultcell" type="text" e-mappinguid="grid-column168" id="_gridcontrolname" name="name" style="text-align:undefined" aria-labelledby="label__gridcontrolname"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolname" for="_gridcontrolname">Head Name</label></div>
+                  <div class="e-float-input e-control-wrapper">
+                    <input v-model="editinput.head_key" class="e-field e-defaultcell" type="text" value="" e-mappinguid="grid-column2" id="_gridcontrolhead_key" name="Head Key" style="text-align:undefined" aria-labelledby="label__gridcontrolhead_key">
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top" id="label__gridcontrolhead_key" for="_gridcontrolhead_key">Head Key</label>
+                  </div><div class="e-float-input e-control-wrapper"><input v-model="editinput.accounting_head" class="e-field e-defaultcell" type="text" e-mappinguid="grid-column170" id="_gridcontrolaccounting_head" name="accounting_head" style="text-align:undefined" aria-labelledby="label__gridcontrolaccounting_head"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolaccounting_head" for="_gridcontrolaccounting_head">Account Head</label></div><div class="e-float-input e-control-wrapper"><input v-model="editinput.notes" class="e-field e-defaultcell" type="text"  e-mappinguid="grid-column171" id="_gridcontrolnotes" name="notes" style="text-align:undefined" aria-labelledby="label__gridcontrolnotes"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolnotes" for="_gridcontrolnotes">Notes</label></div>
                     <label v-text="$ml.get('department')"></label>
                       <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddept')" v-model="editinput.department" :multiple="false" :options="department" />
                       <label v-text="$ml.get('parenthead')"></label>
-                      <treeselect :default-expand-level="10" :placeholder="$ml.get('pholdparenthead')" v-model="editinput.parent_head" :multiple="false" :options="head" />
+                      <treeselect @open="checkParent" :default-expand-level="10" :placeholder="$ml.get('pholdparenthead')" v-model="editinput.parent_head" :multiple="false" :options="head" />
                 </b-form-group>
                 </b-tab>
                 <b-tab :title="$ml.get('labels')">
@@ -385,6 +429,7 @@ export default {
             data: [],
             department:[],
             input:{
+              labels:[]
             },
             selectedLabel:null,
             module:null,
@@ -400,13 +445,13 @@ export default {
       if(this.$route.path == '/heads/list') {
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
-      this.data = response.data
+      this.data = this.list_to_tree_head(response.data)
       });
      }
      else{
       await api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
         .then((response) => {
-          this.data = response.data
+          this.data = this.list_to_tree_head(response.data)
           });
      }
      await axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
@@ -421,13 +466,13 @@ export default {
      if(this.$route.path == '/heads/list') {
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
-      this.data = response.data
+      this.data = this.list_to_tree_head(response.data)
       });
      }
      else{
       await api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
         .then((response) => {
-          this.data = response.data
+          this.data = this.list_to_tree_head(response.data)
           this.input.department = this.key 
           });
      }
@@ -442,6 +487,17 @@ export default {
       treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
+    checkParent(args) {
+        api.get(`${apiUrl}`+`head/head/get`)
+        .then((response) => {
+          for(var i=0;i<response.data.length;i++) {
+            if(response.data[i]._id == this.editinput._id) {
+              response.data[i].isDisabled = true
+            }
+          }
+          this.head = this.list_to_tree_head(response.data)
+          })
+      },
     editdeptLabel() {
       var id = this.editlabel._id
       this.editlabel._id = undefined
@@ -469,6 +525,25 @@ export default {
       })
       
     },
+    editLabeladd(args) {
+      this.editlabelmodal = true
+      this.editlabel._id = args._id
+      this.editlabel.label_name = args.label_name
+      this.editlabel.description =args.description
+      this.editlabel.color =`#`+`${args.color}`
+    },
+    delLabeladd(args,id,label) {
+      console.log(this.input.labels.splice(label,1))
+    },
+    selectLabeladd(args) {
+        if(this.selectedLabel != null) {
+        var label;
+        api.get(`${apiUrl}label/label/get/one/${this.selectedLabel}`).then((res) => {
+          label = res.data
+          this.input.labels.push(label);
+        })
+      }
+      },
     addLabel (args) {
       this.addModal =false
               api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((label)=>{
@@ -535,13 +610,13 @@ export default {
       if(this.$route.path == '/heads/list') {
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
-      this.data = response.data
+      this.data = this.list_to_tree_head(response.data)
       });
      }
      else{
       await api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
         .then((response) => {
-          this.data = response.data
+          this.data = this.list_to_tree_head(response.data)
           });
      }
      await axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
@@ -581,20 +656,22 @@ export default {
                 if(this.$route.path == '/heads/list') {
                 api.get(`${apiUrl}`+`head/head/get`)
                     .then((response) => {
-                      this.data = response.data
+                      this.data = this.list_to_tree_head(response.data)
                       });
                     this.modal = false       
 
-                      this.input={}  
+                      this.input={
+                        labels:[]
+                      }  
                     }
                     else {
                       api.get(`${apiUrl}`+`head/head/find/${this.key}`)
                     .then((response) => {
-                      this.data = response.data
+                      this.data = this.list_to_tree_head(response.data)
                       });
                     this.modal = false    
 
-                      this.input={department:this.key}
+                      this.input={department:this.key,labels:[]}
                     }
               });
             
@@ -603,6 +680,12 @@ export default {
           });
       },  
       editHead() {
+        if(this.editinput.parent_head == undefined) {
+          this.editinput.parent_head =null
+        }
+        if(this.editinput.department == undefined) {
+          this.editinput.department =null
+        }
         var sendData = {
           name:this.editinput.name,
           head_key:this.editinput.head_key,
@@ -615,7 +698,7 @@ export default {
           console.log(response.data)
             api.get(`${apiUrl}`+`head/head/get`)
                 .then((response) => {
-                  this.data = response.data
+                  this.data = this.list_to_tree_head(response.data)
               });
           });
         this.editmodal = false
@@ -645,14 +728,15 @@ export default {
         if(args.rowData.parentItem==null) {
           this.isRoot = true
           if(this.getflag==0) {
-          this.head = this.list_to_tree_head(this.data)
+
+          this.head = this.data
           this.getflag=1
         }
         }
         else{
           this.isRoot = false
           if(this.getflag==0) {
-          this.head = this.list_to_tree_head(this.data)
+          this.head = this.data
           this.getflag=1
         }
         }
@@ -712,8 +796,6 @@ export default {
             }
             roots[i].id = roots[i]._id;
           roots[i].label = roots[i].name;
-        delete roots[i]._id;
-        delete roots[i].name;
         if(roots[i].children.length<=0) {
           delete roots[i].children
         }
@@ -721,7 +803,7 @@ export default {
       },
       clickHandler(args){
         if(this.getflag==0) {
-          this.head = this.list_to_tree_head(this.data)
+          this.head = this.data
 	  this.getflag=1
         }
         
@@ -740,13 +822,13 @@ export default {
                                   if(this.$route.path == '/heads/list') {
                                    api.get(`${apiUrl}`+`head/head/get`)
                                     .then((response) => {
-                                      this.data = response.data
+                                      this.data = this.list_to_tree_head(response.data)
                                   });
                                   }
                                   else {
                                     api.get(`${apiUrl}`+`head/head/find/${this.key}`)
                                     .then((response) => {
-                                      this.data = response.data
+                                      this.data = this.list_to_tree_head(response.data)
                                       });
                                   }
                               });

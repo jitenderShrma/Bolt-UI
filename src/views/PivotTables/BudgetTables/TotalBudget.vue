@@ -18,7 +18,7 @@
           </b-col>
           <div v-if="selected2=='Jan'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_head' :height='height' :allowReordering='true' :allowFiltering='true'
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -59,7 +59,7 @@
         </div>
         <div v-if="selected2=='Feb'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_head' :height='height' :allowReordering='true' :allowFiltering='true'
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -102,7 +102,7 @@
         </div>
         <div v-if="selected2=='Mar'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_head' :height='height' :allowReordering='true' :allowFiltering='true'
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -145,7 +145,7 @@
         </div>
         <div v-if="selected2=='Apr'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_head' :height='height' :allowReordering='true' :allowFiltering='true'
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -188,7 +188,7 @@
         </div>
         <div v-if="selected2=='May'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_head' :height='height' :allowReordering='true' :allowFiltering='true'
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -231,7 +231,7 @@
         </div>
         <div v-if="selected2=='Jun'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_head' :height='height' :allowReordering='true' :allowFiltering='true'
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -274,7 +274,7 @@
         </div>
         <div v-if="selected2=='July'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_head' :height='height' :allowReordering='true' :allowFiltering='true'
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -317,7 +317,7 @@
         </div>
         <div v-if="selected2=='Aug'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_head' :height='height' :allowReordering='true' :allowFiltering='true'
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -360,7 +360,7 @@
         </div>
         <div v-if="selected2=='Sep'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_head' :height='height' :allowReordering='true' :allowFiltering='true'
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -402,7 +402,7 @@
         </div>
         <div v-if="selected2=='Oct'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_head' :height='height' :allowReordering='true' :allowFiltering='true'
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -445,7 +445,7 @@
         </div>
         <div v-if="selected2=='Nov'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_head' :height='height' :allowReordering='true' :allowFiltering='true'
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -488,7 +488,7 @@
         </div>
         <div v-if="selected2=='Dec'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            idMapping='_id' :treeColumnIndex='1' parentIdMapping='parent_head' :height='height' :allowReordering='true' :allowFiltering='true'
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :actionComplete="actionComplete"
@@ -859,7 +859,7 @@ var template8Vue = Vue.component('template8',{
               };
             },
             mounted() {
-              this.value = (this.data.amount_left[7]/this.data.permissible_values[7])*100
+              this.value = Math.round((this.data.amount_left[7]/this.data.permissible_values[7])*100)
             }       
               })
 var template9Vue = Vue.component('template9',{
@@ -1158,7 +1158,7 @@ export default {
      this.key = this.link.split(`head/`).pop()
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
-      this.data = response.data
+      this.data = this.list_to_tree_head(response.data)
       });
      api.get(`${apiUrl}`+`/super/settings/budget/budSet/get`).then((resp)=>{
           if(resp.data.fin_year_start_month == "Jan"){
@@ -1307,7 +1307,7 @@ export default {
                 
                 api.get(`${apiUrl}`+`head/head/get`)
                     .then((response) => {
-                      this.data = response.data
+                      this.data = this.list_to_tree_head(response.data)
                       });
                     this.modal = false       
 
@@ -1330,7 +1330,7 @@ export default {
         api.put(`${apiUrl}`+`head/head/update/one/`+`${this.editinput._id}`,sendData).then((response)=>{
             api.get(`${apiUrl}`+`head/head/get`)
                 .then((response) => {
-                  this.data = response.data
+                  this.data = this.list_to_tree_head(response.data)
               });
           });
         this.editmodal = false
@@ -1360,14 +1360,14 @@ export default {
         if(args.rowData.parentItem==null) {
           this.isRoot = true
           if(this.getflag==0) {
-          this.head = this.list_to_tree_head(this.data)
+          this.head = this.data
           this.getflag=1
         }
         }
         else{
           this.isRoot = false
           if(this.getflag==0) {
-          this.head = this.list_to_tree_head(this.data)
+          this.head = this.data
           this.getflag=1
         }
         }
@@ -1427,8 +1427,6 @@ export default {
             }
             roots[i].id = roots[i]._id;
           roots[i].label = roots[i].name;
-        delete roots[i]._id;
-        delete roots[i].name;
         if(roots[i].children.length<=0) {
           delete roots[i].children
         }
@@ -1470,7 +1468,7 @@ export default {
   
       clickHandler(args){
         if(this.getflag==0) {
-          this.head = this.list_to_tree_head(this.data)
+          this.head = this.data
     this.getflag=1
         }
         
@@ -1494,7 +1492,7 @@ export default {
                                api.delete(`${apiUrl}`+`head/head/delete/one/`+`${data[0].head_key}`).then((res)=>{
                                    api.get(`${apiUrl}`+`head/head/get`)
                                     .then((response) => {
-                                      this.data = response.data
+                                      this.data = this.list_to_tree_head(response.data)
                                   });
                               });
                               

@@ -10,7 +10,7 @@
                         </b-col>
                       		<b-col sm="6">
                             <label v-text="$ml.get('parentdesig')"></label>
-                            <treeselect :default-expand-level="10" :placeholder="$ml.get('pholdparentdesig')" v-model="input.parent_designation_id" :multiple="false" :options="data" />
+                            <treeselect @open="checkParent" :default-expand-level="10" :placeholder="$ml.get('pholdparentdesig')" v-model="input.parent_designation_id" :multiple="false" :options="data" />
                           </b-col>
                           <!-- <div v-if="!clicked">
                             <b-col sm="6">
@@ -518,6 +518,17 @@ export default {
     }
   },
    methods:{
+    checkParent(args) {
+        api.get(`${apiUrl}`+`designation/desig/get/all`)
+        .then((response) => {
+          for(var i=0;i<response.data.length;i++) {
+            if(response.data[i]._id == this.input._id) {
+              response.data[i].isDisabled = true
+            }
+          }
+          this.data = this.list_to_tree_desig(response.data)
+          })
+      },
     editdeptLabel() {
       var id = this.editlabel._id
       this.editlabel._id = undefined
@@ -741,7 +752,12 @@ export default {
                 additional_permissions : this.additionalpermission,
                 approval_permissions : this.approval_permissions,
               }
-              console.log(this.input)
+              if(this.input.parent_designation_id == undefined) {
+                this.input.parent_designation_id = null
+              }
+              if(this.input.department == undefined) {
+                this.input.department = null
+              }
               api.put(`${apiUrl}`+`designation/desig/update/${this.key}`,this.input).then((response) => {
                 console.log(response.data)
                     api.put(`${apiUrl}`+`super/group/subgroup/edit/by/${this.key}`,user_group).then((res) => {

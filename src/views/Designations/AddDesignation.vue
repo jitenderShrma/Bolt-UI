@@ -139,10 +139,86 @@
 					    </div>
 					</div>
 			    </b-tab>
+          <b-tab :title="$ml.get('labels')">
+            <b-form-group>
+                    <div v-for="(run,i) in input.labels" :key="i">
+                      <b-row>
+                      <b-col>
+                      <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="input.labels[i].color">{{input.labels[i].label_name}}</b-badge>
+                    </b-col>
+                    <b-col>
+                      <b-btn v-on:click="editLabel(input.labels[i])" size="sm" variant="primary" v-text="$ml.get('edit')"></b-btn>
+                    </b-col>
+                    <b-col>
+                      <b-btn v-on:click="delLabel(`${input.labels[i]._id}`,`${input._id}`,`${i}`)" size="sm" variant="danger"><i class="fa fa-trash-o"></i></b-btn>
+                    </b-col>
+                  </b-row>
+                    </div>
+                    <b-form v-on:submit.prevent = "selectLabel(`${input._id}`)">
+                      <label v-text="$ml.get('labels')"></label>
+                      <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
+                        <div slot="item" slot-scope = "{item :label}">
+                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                        </div>
+                        <div slot="selection" slot-scope = "{item :label}">
+                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                        </div>
+                        <div slot="after-items-fixed">
+                          <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>
+                        </div>
+                      </cool-select>
+                      <br>
+                        <div slot="footer">
+                          <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('add')"><i class="fa fa-dot-circle-o"></i></b-button>
+                        </div>
+                    </b-form>
+                  </b-form-group>
+          </b-tab>
               </b-tabs>
               <br>
                 <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
             </b-card>
+            <b-modal size="sm" :title="$ml.get('label')" class="modal-primary" v-model="addModal" @ok="addModal = false" hide-footer>
+              <b-form v-on:submit.prevent="addLabel(`${input._id}`)">
+              <div class="content-wrapper textbox-default">
+              <div class="row">
+              <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                      <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
+              </div>
+              </div>
+              </div>
+              <div slot="footer">
+                    <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+                </div>
+                </b-form>
+            </b-modal>
+            <b-modal size="sm" :title="$ml.get('editlabel')" class="modal-primary" v-model="editlabelmodal" @ok="editlabelmodal = false" hide-footer>
+              <b-form v-on:submit.prevent="editdeptLabel(`${input._id}`)">
+              <div class="content-wrapper textbox-default">
+              <div class="row">
+              <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                      <ejs-textbox v-model="editlabel.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
+              </div>
+              </div>
+              <br>
+              <div class="row">
+                  <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                    <p>Label Color</p>
+                  </div>
+                  <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
+                          <ejs-colorpicker :modeSwitcher="false" :value="editlabel.color" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
+                  </div>
+              </div>
+              <br>
+              <div class="multiline_wrapper">
+                  <ejs-textbox v-model="editlabel.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
+              </div>
+              </div>
+              <div slot="footer">
+                    <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+                </div>
+                </b-form>
+            </b-modal>
             <b-modal size="md" :title="module+' Permissions'" class="modal-primary" v-model="permissionmodal" @ok="permissionmodal = false" hide-footer>
               <div v-if="module =='Company'">
                 
@@ -205,6 +281,7 @@ import { NumericTextBox } from "@syncfusion/ej2-inputs";
 import { NumericTextBoxPlugin } from "@syncfusion/ej2-vue-inputs";
 import miniToastr from 'mini-toastr' 
   import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
+  import {CoolSelect} from 'vue-cool-select';
 import {
   PivotViewPlugin,
   GroupingBar,
@@ -326,7 +403,7 @@ var addDesigVue = Vue.component("addDesignation", {
         },
         clicked:false,
         modal:false,
-        input:{},
+        input:{labels:[]},
         department:[],
         dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
       };
@@ -354,6 +431,7 @@ export default {
     components :  {
       cSwitch,
         Treeselect,
+        CoolSelect,
       ToolbarPlugin,
       GridPlugin, Filter, Selection, Sort, VirtualScroll,
         Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
@@ -406,6 +484,7 @@ export default {
                   template: desigVue
               }
           },
+          addModal :false,
           selected:false,
           link:"",
           key:"",
@@ -441,7 +520,9 @@ export default {
               {module_name:"paymentorder",text:"Payment Order",read:false,write:false,edit:false,delete:false}
 	            ],
             modal :false,
-            input:{},
+            input:{
+              labels:[]
+            },
             selected:false,
           dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
           desig_fields:{groupBy:'parent_designation_id',text:"name",value:"_id"},
@@ -450,6 +531,20 @@ export default {
           modules:[
             
           ],
+          squarePalettesColn: 7,
+          circlePaletteColors: {'custom': ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#2196f3', '#03a9f4', '#00bcd4',
+                    '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
+          formdata: {
+                  label_name : "",
+                  color : "2196f3",
+                  context : "Designations",
+                  description : ""
+                },
+                isShowRight:false,
+          editlabelmodal:false,
+          editlabel:{},
+          labels:[],
+          selectedLabel:null,
           module:"",
           module_fields:{text:"text",value:"value"} 
    };
@@ -465,6 +560,9 @@ export default {
   	api.get(`${apiUrl}`+`designation/desig/get/one/${this.key}`).then((res) =>{
   		this.input.department = res.data.department
   	})
+    api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
+        this.labels = res.data
+      })
     axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.department = this.list_to_tree_dept(res.data)
       })
@@ -501,6 +599,48 @@ export default {
     }
   },
    methods:{
+    editdeptLabel() {
+      var id = this.editlabel._id
+      this.editlabel._id = undefined
+      api.put(`${apiUrl}label/label/edit/${id}`,this.editlabel).then((res) => {
+        console.log(res.data)
+      })
+      this.$router.go(0)
+    },
+    editLabel(args) {
+      console.log(args)
+      this.editlabelmodal = true
+      this.editlabel._id = args._id
+      this.editlabel.label_name = args.label_name
+      this.editlabel.description =args.description
+      this.editlabel.color =`#`+`${args.color}`
+      
+    },
+    delLabel(args,id,label) {
+      console.log(this.input.labels.splice(label,1))
+    },
+    addLabel (args) {
+      this.addModal =false
+              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((label)=>{
+                var id = {
+                  labels :  label.data._id
+                }
+                  api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
+                    this.labels = res.data
+                  })
+                console.log(this.input.labels)
+              });
+      },
+    selectLabel(args) {
+        if(this.selectedLabel != null) {
+        var label;
+        api.get(`${apiUrl}label/label/get/one/${this.selectedLabel}`).then((res) => {
+          label = res.data
+          this.input.labels.push(label);
+          this.selectedLabel = null
+        })
+      }
+      },
     setReadAll(args) {
       if(this.additionalpermission[args].read_all) {
         this.additionalpermission[args].read_own = false
@@ -644,6 +784,10 @@ export default {
       	// 	}
       	}
       },
+      onChange(args) {
+        this.formdata.color = args.currentValue.hex.slice(1);
+        this.editlabel.color = args.currentValue.hex.slice(1);
+      }, 
       addDesig(args) {
         if(this.input.parent_designation_id == "") {
           this.input.parent_designation_id = undefined
