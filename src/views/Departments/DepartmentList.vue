@@ -9,7 +9,7 @@
             </e-items>
           </ejs-toolbar>
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight' :dataSource='data' 
-            :treeColumnIndex='1' idMapping="_id" parentIdMapping="parent_department" :height='height' :allowReordering='true' :allowFiltering='true'
+            :treeColumnIndex='1' childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
             :enableCollapseAll="false"
@@ -389,7 +389,7 @@ export default {
     '$route' : function() {
       api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
-      this.data = response.data
+      this.data = this.list_to_tree_dept(response.data);
       })
     api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
         this.labels = res.data
@@ -399,7 +399,7 @@ export default {
   mounted() {
      api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
-      this.data = response.data
+      this.data = this.list_to_tree_dept(response.data)
       })
     api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
         this.labels = res.data
@@ -408,7 +408,7 @@ export default {
     created() {
      api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
-      this.data = response.data
+      this.data = this.list_to_tree_dept(response.data)
       })
     api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
         this.labels = res.data
@@ -471,7 +471,7 @@ export default {
     async load(args) {
       api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
-      this.data = response.data
+      this.data = this.list_to_tree_dept(response.data)
       })
     api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
       console.log(res.data)
@@ -500,7 +500,7 @@ export default {
             api.post(`${apiUrl}`+`department/dept/create`,this.input).then((response)=>{
                 api.get(`${apiUrl}`+`department/dept/get`)
                 .then((response) => {
-                  this.data = response.data
+                  this.data = this.list_to_tree_dept(response.data)
                   });
                 this.$refs.treegrid.collapseAll()
                 this.$refs.treegrid.expandAll()            
@@ -515,7 +515,7 @@ export default {
              api.post(`${apiUrl}`+`department/dept/create`,this.input).then((response)=>{
                api.get(`${apiUrl}`+`department/dept/get`)
                 .then((response) => {
-                  this.data = response.data
+                  this.data = this.list_to_tree_dept(response.data)
                   });
             });
             this.input = {
@@ -536,7 +536,7 @@ export default {
           console.log(res.data)
             api.get(`${apiUrl}`+`department/dept/get`)
                 .then((response) => {
-                  this.data = response.data
+                  this.data = this.list_to_tree_dept(response.data)
               });
           });
         this.editmodal=false
@@ -607,7 +607,7 @@ export default {
                               api.delete(`${apiUrl}`+`department/dept/delete/`+`${data[0]._id}`).then((res)=>{
                                 api.get(`${apiUrl}`+`department/dept/get`)
                                 .then((response) => {
-                                  this.data = response.data
+                                  this.data = this.list_to_tree_dept(response.data)
                                   })
                               });
                               this.$refs.treegrid.collapseAll()
@@ -656,7 +656,7 @@ export default {
           api.put(`${apiUrl}`+`department/dept/edit/`+`${args.data._id}`,sendData).then((res)=>{
             api.get(`${apiUrl}`+`department/dept/get`)
                 .then((response) => {
-                  this.data = response.data
+                  this.data = this.list_to_tree_dept(response.data)
                   })
           })
         }
@@ -715,8 +715,6 @@ export default {
             }
             roots[i].id = roots[i]._id;
           roots[i].label = roots[i].department_name;
-        delete roots[i]._id;
-        delete roots[i].department_name;
         if(roots[i].children.length<=0) {
           delete roots[i].children
         }

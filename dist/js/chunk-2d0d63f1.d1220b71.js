@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0d63f1"],{7277:function(a,e,n){"use strict";n.r(e);var t=function(){var a=this,e=a.$createElement;a._self._c;return a._m(0)},s=[function(){var a=this,e=a.$createElement,n=a._self._c||e;return n("div",{staticClass:"animated fadeIn"},[n("div",{attrs:{id:"Dashboard"}},[a._v("Dashboard")])])}],r={name:"dashboard"},d=r,c=n("2877"),i=Object(c["a"])(d,t,s,!1,null,null,null);e["default"]=i.exports}}]);
-//# sourceMappingURL=chunk-2d0d63f1.d1220b71.js.map

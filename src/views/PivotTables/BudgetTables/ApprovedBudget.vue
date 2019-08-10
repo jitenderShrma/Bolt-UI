@@ -4,8 +4,8 @@
     <div id="target" class="col-lg-12 control-section">
         <div>
           <ejs-toolbar id="toolbarbudget" :clicked="clickHandler">
-            <e-items>
-              <e-item align="right" id="add" :text="$ml.get('add')" :template="addTemplate" ></e-item>
+            <e-items><!-- 
+              <e-item align="right" id="add" :text="$ml.get('add')" :template="addTemplate" ></e-item> -->
               <e-item align="right" id="upload" :template="uploadTemplate" :text="$ml.get('upload')"></e-item>
               <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item>
             </e-items>
@@ -1313,10 +1313,7 @@ export default {
               
               api.post(`${apiUrl}`+`head/head/create`,this.input).then((response) =>{
                 
-                api.get(`${apiUrl}`+`head/head/get`)
-                    .then((response) => {
-                      this.data = this.list_to_tree_head(response.data)
-                      });
+                this.$route.go(0)
                     this.modal = false       
 
                       this.input={}  
@@ -1336,10 +1333,7 @@ export default {
           parent_head : this.editinput.parent_head
         }
         api.put(`${apiUrl}`+`head/head/update/one/`+`${this.editinput._id}`,sendData).then((response)=>{
-            api.get(`${apiUrl}`+`head/head/get`)
-                .then((response) => {
-                  this.data = this.list_to_tree_head(response.data)
-              });
+            this.$router.go(0)
           });
         this.editmodal = false
       },
@@ -1365,24 +1359,22 @@ export default {
         }
       },
       beginEdit(args) {
-        if(args.rowData.parentItem==null) {
-          this.isRoot = true
-          if(this.getflag==0) {
-          this.head = this.data
-          this.getflag=1
-        }
-        }
-        else{
-          this.isRoot = false
-          if(this.getflag==0) {
-          this.head = this.data
-          this.getflag=1
-        }
-        }
-        
-
-        this.editmodal =true
-        this.editinput = args.rowData
+        // if(args.rowData.parentItem==null) {
+        //   this.isRoot = true
+        //   if(this.getflag==0) {
+        //   this.head = this.data
+        //   this.getflag=1
+        // }
+        // }
+        // else{
+        //   this.isRoot = false
+        //   if(this.getflag==0) {
+        //   this.head = this.data
+        //   this.getflag=1
+        // }
+        // }
+        // this.editmodal =true
+        // this.editinput = args.rowData
       },
        onClick(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
@@ -1471,10 +1463,6 @@ export default {
           this.head = this.data
     this.getflag=1
         }
-        
-        if(args.item.id === 'add') {
-          this.modal =true
-          }
           if(args.item.id=="upload") {
             this.browseModal = true
           }
@@ -1490,10 +1478,7 @@ export default {
         if(args.item.id == 'delete') {
                             var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
                                api.delete(`${apiUrl}`+`head/head/delete/one/`+`${data[0].head_key}`).then((res)=>{
-                                   api.get(`${apiUrl}`+`head/head/get`)
-                                    .then((response) => {
-                                      this.data = this.list_to_tree_head(response.data)
-                                  });
+                                   this.$router.go(0)
                               });
                               
                             
