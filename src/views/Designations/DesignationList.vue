@@ -351,7 +351,7 @@ export default {
                     ],
                 height : window.innerHeight*0.65,
              filterSettings: { type: "Menu" },
-             pageSettings: { pageSize: 15},
+             pageSettings: {pageSize:true,pageSize:200, pageSizes: [200,300,400,500], pageCount: 4 },
              editSettings: { allowDeleting: true,mode: 'Dialog', allowEditing: true,allowAdding: true, newRowPosition: 'Child' },
              rowHeight: 30,
             selectionSettings : {type:"Single"},
@@ -382,13 +382,13 @@ export default {
     if(this.$route.path == '/designation/list') {
     await api.get(`${apiUrl}`+`designation/desig/get/all`)
     .then((response) => {
-      this.data = response.data
+      this.data = this.list_to_tree_desig(response.data)
       });
   }
   else{
     await api.get(`${apiUrl}`+`designation/desig/find/${this.key}`)
     .then((response) => {
-      this.data = response.data
+      this.data = this.list_to_tree_desig(response.data)
       for(var i =0;i<this.data.length;i++) {
         if(!(this.data.some(item => this.data[i].parent_designation_id == item._id))) {
           this.data[i].parent_designation_id = undefined
@@ -418,7 +418,7 @@ export default {
     await api.get(`${apiUrl}`+`designation/desig/find/${this.key}`)
     .then((response) => {
       console.log(response.data)
-      this.data = response.data
+      this.data = this.list_to_tree_desig(response.data)
       for(var i =0;i<this.data.length;i++) {
         if(!(this.data.some(item => this.data[i].parent_designation_id == item._id))) {
           this.data[i].parent_designation_id = undefined
@@ -442,13 +442,13 @@ export default {
      if(this.$route.path == '/designation/list') {
     await api.get(`${apiUrl}`+`designation/desig/get/all`)
     .then((response) => {
-      this.data = response.data
+      this.data = this.list_to_tree_desig(response.data)
       });
   }
   else{
     await api.get(`${apiUrl}`+`designation/desig/find/${this.key}`)
     .then((response) => {
-      this.data = response.data
+      this.data = this.list_to_tree_desig(response.data)
       for(var i =0;i<this.data.length;i++) {
         if(!(this.data.some(item => this.data[i].parent_designation_id == item._id))) {
           this.data[i].parent_designation_id = undefined
@@ -500,8 +500,6 @@ export default {
             }
             roots[i].id = roots[i]._id;
           roots[i].label = roots[i].name;
-        delete roots[i]._id;
-        delete roots[i].name;
         if(roots[i].children.length<=0) {
           delete roots[i].children
         }
@@ -645,7 +643,7 @@ export default {
             api.delete(`${apiUrl}`+`designation/desig/delete/`+`${data[0]._id}`).then((res) => {
                                 api.get(`${apiUrl}`+`designation/desig/get/all`)
                                 .then((res) => {
-                                  this.data = res.data
+                                  this.data = this.list_to_tree_desig(res.data)
                                   });
                               });
                             

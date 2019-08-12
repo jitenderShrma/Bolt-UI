@@ -1,6 +1,6 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
-    <div id="target" class="col-lg-12 control-section">
+    <div id="target" class="control-section">
         <div>
           <ejs-toolbar id="toolbar" :clicked="clickHandler">
             <e-items>
@@ -378,7 +378,7 @@ export default {
           command2: [{ type:"Heads",tooltipText : "Double click", buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat',click:this.onClickHead } }, ],
           height : window.innerHeight*0.65,
           filterSettings: { type: "Menu" },
-          pageSettings: { pageSize: 15},
+          pageSettings: {pageSize:true,pageSize:200, pageSizes: [200,300,400,500], pageCount: 4 },
           editSettings: { allowDeleting: true,mode: 'Dialog',allowAdding: true, newRowPosition: 'Child' },
           rowHeight: 30,
           selectionSettings : {type:"Single"},

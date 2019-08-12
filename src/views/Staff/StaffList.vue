@@ -260,7 +260,7 @@ export default {
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
             ],
-          pageSettings: { pageSizes: [12,50,100,200], pageCount: 4 },
+          pageSettings: {pageSize:true,pageSize:200, pageSizes: [200,300,400,500], pageCount: 4} ,
         ddData: [{ value: 1000, text: '1,000 Rows and 11 Columns' }, { value: 10000, text: '10,000 Rows and 11 Columns' }],
                 ddValue: 1000,
                 stTime: null,

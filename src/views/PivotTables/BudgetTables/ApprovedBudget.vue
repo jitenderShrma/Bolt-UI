@@ -1128,7 +1128,7 @@ export default {
                     selected2:"Jan",
                 height : window.innerHeight*0.65,
              filterSettings: { type: "Menu" },
-             pageSettings: { pageSize: 15},
+             pageSettings: {pageSize:true,pageSize:200, pageSizes: [200,300,400,500], pageCount: 4} ,
              editSettings: { allowDeleting: true,mode: 'Dialog', allowAdding: true, newRowPosition: 'Child' },
              rowHeight: 30,
               toolbar: [

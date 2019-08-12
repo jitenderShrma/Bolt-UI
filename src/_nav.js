@@ -95,12 +95,12 @@ var items = [
     icon:"icon-star",
     children : [
       {
-        name:"All Budget Transfer Requests",
+        name:"All Requests",
         url:"/budgettrans/list/all",
         icon:'icon-calculator'
       },
       {
-        name:'Pending Budget Transfer Requests',
+        name:'Pending Approvals',
         url: '/budgettrans/list/pending',
         icon:'icon-calculator',
         badge: {
