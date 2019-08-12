@@ -120,9 +120,12 @@ export default {
               Auth.login();
               if(response.data.auth) {
                 this.$session.set('user',response.data.user)
+                localStorage.setItem('session-key',JSON.parse(sessionStorage['vue-session-key']).user)
               }
               else {
                 this.$session.set('Subuser',response.data.user)
+                var user = this.$session.get('Subuser')
+                localStorage.setItem('session-key',`${user._id},${user.company}`)
               }
               this.$router.push(this.$route.query.redirect || '/dashboard')
             })
