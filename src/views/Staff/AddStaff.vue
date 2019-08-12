@@ -700,6 +700,16 @@ export default {
       })
   },
   watch : {
+    'by_dept' : function(){
+      if(this.by_dept) {
+        this.by_heads = false
+      }
+    },
+    'by_heads' : function(){
+      if(this.by_heads) {
+        this.by_dept = false
+      }
+    },
     'staff.department' : function(){
       if(this.staff.department == null || this.staff.department == "") {
         axios.get(`${apiUrl}dropdown/designation/no/dept`,{withCredentials:true}).then((res) => {
