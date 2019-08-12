@@ -83,25 +83,109 @@ export default {
           }
         },
         {
-          name: 'Permissions',
-          url: '/permissions',
-          icon: 'icon-settings',
-        }
+          name:"Approval",
+          url:"/approval",
+          icon:"icon-calculator",
+          children : [
+            {
+              name:"Approval Requests",
+              url:"/approval/view/all",
+              icon:'icon-calculator'
+            },
+            {
+              name:'Pending Requests',
+              url: '/approval/view/pending',
+              icon:'icon-calculator',
+              badge: {
+                variant: 'danger',
+              }
+            }
+
+          ]
+        },
       ],
     }
   },
   beforeMount: function () {
-    //Create Custom Navigation Bar For Users
-    if(this.$session.has('subuser')) {
-      var permission = this.$session.get('user').permissions
+    var Session = JSON.parse(localStorage['session_key']);
+    console.log(Session)
+    if(Session._id!=null) {
+      var permission = Session.user_permissions
       for(var i=0;i<permission.length;i++) {
         if(permission[i].module_name != undefined)
         {
-           this.navItems.push({
-           name : `${permission[i].module_name}`,
-           url: `${permission[i].module_name}/list`,
-           icon: 'icon-star',
-          })
+          if(permission[i].read == true) {
+            if(permission[i].text == "Staff") {
+              this.navItems.push({
+                  name: 'Staff',
+                  url: '/staff',
+                  icon: 'icon-user'
+            })
+            }
+            if(permission[i].text=="Department") {
+              
+                this.navItems.push({
+                  name : "Departments",
+                  url : "/department/list",
+                  icon : "icon-star"
+                })
+            }
+            if(permission[i].text=="Designation") {
+              
+                this.navItems.push({
+    name : "Designations",
+    url : "/designation/list",
+    icon : "icon-star"
+  },)
+            }
+            if(permission[i].text=="Head") {
+              
+                this.navItems.push(  {
+    name : "Heads",
+    url : "/heads/list",
+    icon : "icon-star"
+  },)
+            }
+            if(permission[i].text=="Label") {
+              
+                this.navItems.push({
+    name:"Label",
+    url:"/label",
+    icon:"icon-calculator"
+  },)
+            }
+            if(permission[i].text=="Transaction") {
+              
+                this.navItems.push({
+    name:"Transaction",
+    url:"/transaction",
+    icon:"icon-calculator"
+  },)
+            }
+            if(permission[i].text=="Budget Transfer") {
+              
+                this.navItems.push({
+    name: "Budget Transfer",
+    icon:"icon-star",
+    children : [
+      {
+        name:"All Requests",
+        url:"/budgettrans/list/all",
+        icon:'icon-calculator'
+      },
+      {
+        name:'Pending Approvals',
+        url: '/budgettrans/list/pending',
+        icon:'icon-calculator',
+        badge: {
+          variant: 'danger',
+          text: pendingCount
+        }
+      }
+      ]
+  })
+            }
+          }
       }
     }
     }

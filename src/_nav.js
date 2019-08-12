@@ -121,12 +121,12 @@ var items = [
     icon:"icon-calculator",
     children : [
       {
-        name:"All Approvals",
+        name:"Approval Requests",
         url:"/approval/view/all",
         icon:'icon-calculator'
       },
       {
-        name:'Approval Requests',
+        name:'Pending Requests',
         url: '/approval/view/pending',
         icon:'icon-calculator',
         badge: {

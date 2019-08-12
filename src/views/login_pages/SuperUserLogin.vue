@@ -125,7 +125,8 @@ export default {
               else {
                 this.$session.set('Subuser',response.data.user)
                 var user = this.$session.get('Subuser')
-                localStorage.setItem('session-key',`${user._id},${user.company}`)
+                localStorage.setItem('session_key',JSON.stringify(user))
+                console.log(JSON.parse(localStorage.session_key))
               }
               this.$router.push(this.$route.query.redirect || '/dashboard')
             })

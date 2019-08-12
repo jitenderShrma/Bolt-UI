@@ -66,8 +66,8 @@ export default {
       };
   },
   async mounted() {
-    console.log(localStorage['session-key'].length)
-    if(localStorage['session-key'].length==24) {
+    console.log(localStorage['session_key'].length)
+    if(localStorage['session_key'].length==24) {
       axios.get(`${apiUrl}`+`company/list`,{withCredentials : true})
       .then(response => {
         console.log(response.data)
@@ -80,13 +80,14 @@ export default {
     })
   }
   else{
-    var list = localStorage['session-key'].split(',')
+
+    var list = JSON.parse(localStorage.session_key)
     console.log(list)
-    var user = list[0]
+    var user = list._id
     this.isUser = true;
     axios.get(`${apiUrl}/user/subuser/get/${user}`,{withCredentials:true}).then((res) => {
       this.user = res.data;
-      axios.get(`${apiUrl}`+`company/${list[1]}`,{withCredentials : true})
+      axios.get(`${apiUrl}`+`company/${list.company}`,{withCredentials : true})
       .then(response => {
         this.data = [response.data]
       this.ssnCompany = response.data
@@ -130,7 +131,7 @@ export default {
               Auth.logout();
               this.$session.destroy();
               delete sessionStorage['vue-session-key'];
-              delete localStorage['session-key'];
+              delete localStorage['session_key'];
               console.log(Auth.loggedIn);            
               this.$router.push('/login');
             })
@@ -143,7 +144,7 @@ export default {
               Auth.logout();
               this.$session.destroy();
               delete sessionStorage['vue-session-key'];
-              delete localStorage['session-key'];
+              delete localStorage['session_key'];
               console.log(Auth.loggedIn);            
               this.$router.push('/login');
             })
