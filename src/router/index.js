@@ -656,20 +656,16 @@ var router = new Router({
 })
 
 
+
 router.beforeEach((to, from, next) => {
-  if(sessionStorage.length>0) {
-    var sessionExists = JSON.parse(sessionStorage['vue-session-key']).user
-    var sessionExists1 = JSON.parse(sessionStorage['vue-session-key']).subuser
+  if(localStorage['session-key']!=null) {
+    var sessionExists = localStorage['session-key']
     if(sessionExists) {
+      if(to.fullPath == "/login") {
+        next({path:'/dashboard'});
+      }
     if (to.matched.some(record => record.meta.requiresAuth) && !sessionExists) {
       next({ path: '/login', query: { redirect: to.fullPath }});
-    } else {
-      next();
-    }
-  }
-  if(sessionExists1){
-    if (to.matched.some(record => record.meta.requiresAuth) && !sessionExists1) {
-      next({ path: '/login/user', query: { redirect: to.fullPath }});
     } else {
       next();
     }

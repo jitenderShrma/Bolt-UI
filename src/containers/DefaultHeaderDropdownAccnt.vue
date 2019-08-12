@@ -66,9 +66,11 @@ export default {
       };
   },
   async mounted() {
-    if(this.$session.has('user')) {
+    console.log(localStorage['session-key'].length)
+    if(localStorage['session-key'].length==24) {
       axios.get(`${apiUrl}`+`company/list`,{withCredentials : true})
       .then(response => {
+        console.log(response.data)
         this.data = response.data
         this.ssnCompany = this.data[0]
         axios.get(`${apiUrl}`+`company/${this.ssnCompany._id}`,{withCredentials : true})
@@ -77,16 +79,22 @@ export default {
       })
     })
   }
-  if(this.$session.has('Subuser')) {
-    var user = this.$session.get('Subuser')
-    this.user = user;
+  else{
+    var list = localStorage['session-key'].split(',')
+    console.log(list)
+    var user = list[0]
     this.isUser = true;
-    axios.get(`${apiUrl}`+`company/${user.company}`,{withCredentials : true})
+    axios.get(`${apiUrl}/user/subuser/get/${user}`,{withCredentials:true}).then((res) => {
+      this.user = res.data;
+      axios.get(`${apiUrl}`+`company/${list[1]}`,{withCredentials : true})
       .then(response => {
         this.data = [response.data]
       this.ssnCompany = response.data
       this.$session.set('company',response.data._id);
       console.log(this.ssnCompany)})
+    })
+    
+    
   }
   },
   methods : {
@@ -122,6 +130,7 @@ export default {
               Auth.logout();
               this.$session.destroy();
               delete sessionStorage['vue-session-key'];
+              delete localStorage['session-key'];
               console.log(Auth.loggedIn);            
               this.$router.push('/login');
             })
@@ -134,6 +143,7 @@ export default {
               Auth.logout();
               this.$session.destroy();
               delete sessionStorage['vue-session-key'];
+              delete localStorage['session-key'];
               console.log(Auth.loggedIn);            
               this.$router.push('/login');
             })
