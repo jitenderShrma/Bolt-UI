@@ -9,7 +9,7 @@
               </e-items>
             </ejs-toolbar>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :enableColumnVirtualization='true' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column :visible="pending" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
@@ -195,37 +195,6 @@ export default {
       return {
         labels:[],
         addModal:false,
-        excelTemplate : function() {
-          return {
-            template:Vue.component('excelTemplate', {
-              template:`<button class="e-tbar-btn e-tbtn-txt e-control e-btn e-lib" type="button" id="overviewgrid_excelexport" tabindex="-1" style="width: auto;"><span id="hide" class="e-btn-icon e-csv-icon e-icons e-icon-left"></span><div class="e-tbar-btn-text">Excel Export</div></button>`,
-            data : function() {
-              return {
-                data:{},
-                images: {
-                    csv: require('../../assets/images/csv.png')
-                },
-              }
-            }
-          })
-          }
-        },
-        pdfTemplate : function() {
-          return {
-            template:Vue.component('pdfTemplate', {
-              template:`<b-badge id="label1" variant="primary" ><img :src="images.pdf"></img>&nbsp<span id="hide" v-text="$ml.get('pdf')"></span></b-badge>`,
-            data : function() {
-              return {
-                data:{},
-                images: {
-                    pdf: require('../../assets/images/pdf.png')
-                },
-              }
-            }
-          })
-          }
-        },
-        
         buttonTemplate: function () {
               return {
                   template: Vue.component('buttonTemplate', {

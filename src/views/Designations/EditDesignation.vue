@@ -36,23 +36,38 @@
 					        <div class="content-wrapper">
 					             <div class="control-section">
                         <b-row>
-                          <b-col style="padding-right:0px">
+                          <b-col style="padding-right:0px;padding-left:25px;">
                             <span v-text="$ml.get('modulename')"></span>
                           </b-col>
-                          <b-col style="padding-right:0px">
+                          <b-col style="padding-right:0px;padding-left:25px;">
                             <span v-text="$ml.get('readown')"></span>
+                            <br>
+                            <span style="margin-bottom:10px;"></span>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="readOwn" @change="setAllReadOwn" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col style="padding-right:0px">
                             <span v-text="$ml.get('readall')"></span>
+                            <br>
+                            <span style="margin-bottom:10px;"></span>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="readAll"  @change="setAllReadAll" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col style="padding-right:0px">
                             <span v-text="$ml.get('addall')"></span>
+                            <br>
+                            <span style="margin-bottom:10px;"></span>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="addAll" @change="setAllAdd" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col style="padding-right:0px">
                             <span v-text="$ml.get('editall')"></span>
+                            <br>
+                            <span style="margin-bottom:10px;"></span>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="editAll" @change="setAllEdit" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col style="padding-right:0px">
                             <span v-text="$ml.get('deleteall')"></span>
+                            <br>
+                            <span style="margin-bottom:10px;"></span>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="deleteAll" @change="setAllDelete" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col>
                             <span v-text="$ml.get('others')"></span>
@@ -356,7 +371,12 @@ export default {
     },
     data : function() {
         return {
-          by_dept:false,
+          addAll:false,
+          readAll:false,
+          editAll:false,
+          deleteAll:false,
+          readOwn:false,
+          by_dept:true,
           by_heads:false,
           groupTemplate1: function () {
               return {
@@ -370,7 +390,7 @@ export default {
           },
           approval_permissions:{
             by_department:{
-              status:false
+              status:true
             },
             by_heads:{
               status:false,
@@ -409,28 +429,28 @@ export default {
             selectionSettings : {type:"Single"},
             data: [],
             datasrc:[
-            	{module_name:"company",text:"Company",read:false,write:false,edit:false,delete:false},{module_name:"subuser",text:"User",read:false,write:false,edit:false,delete:false},
-	            {module_name:"subgroup",text:"User Group",read:false,write:false,edit:false,delete:false},{module_name:"dept",text:"Department",read:false,write:false,edit:false,delete:false},
-	            {module_name:"desig",text:"Designation",read:false,write:false,edit:false,delete:false},{module_name:"head",text:"Head",read:false,write:false,edit:false,delete:false},
-	            {module_name:"label",text:"Label",read:false,write:false,edit:false,delete:false},{module_name:"preApp",text:"Approval",read:false,write:false,edit:false,delete:false},
-	            {module_name:"budSet",text:"Budget Settings",read:false,write:false,edit:false,delete:false},
-	            {module_name:"staff",text:"Staff",read:false,write:false,edit:false,delete:false},
-	            {module_name:"trans",text:"Transaction",read:false,write:false,edit:false,delete:false},
+              {module_name:"company",text:"Company",read:true,write:false,edit:false,delete:false},{module_name:"subuser",text:"User",read:true,write:false,edit:false,delete:false},
+              {module_name:"subgroup",text:"User Group",read:true,write:true,edit:true,delete:true},{module_name:"dept",text:"Department",read:true,write:false,edit:false,delete:false},
+              {module_name:"desig",text:"Designation",read:true,write:false,edit:false,delete:false},{module_name:"head",text:"Head",read:true,write:false,edit:false,delete:false},
+              {module_name:"label",text:"Label",read:true,write:false,edit:false,delete:false},{module_name:"preApp",text:"Approval",read:true,write:false,edit:false,delete:false},
+              {module_name:"budSet",text:"Budget Settings",read:true,write:false,edit:false,delete:false},
+              {module_name:"staff",text:"Staff",read:true,write:false,edit:false,delete:false},
+              {module_name:"trans",text:"Transaction",read:true,write:false,edit:false,delete:false},
               {module_name:"importTrans",text:"Transaction Upload",write:false},
-              {module_name:"budtrans",text:"Budget Transfer",read:false,write:false,edit:false,delete:false},
-              {module_name:"paymentorder",text:"Payment Order",read:false,write:false,edit:false,delete:false}
+              {module_name:"budtrans",text:"Budget Transfer",read:true,write:false,edit:false,delete:false},
+              {module_name:"paymentorder",text:"Purchase Order",read:true,write:false,edit:false,delete:false}
               ],
               additionalpermission:[
-              {module_name:"company",text:"Company",read_own:false},{module_name:"subuser",text:"User",read_own:false},
-              {module_name:"subgroup",text:"User Group",read_own:false},{module_name:"dept",text:"Department",read_own:false},
-              {module_name:"desig",text:"Designation",read_own:false},{module_name:"head",text:"Head",read_own:false},
-              {module_name:"label",text:"Label",read_own:false},{module_name:"preApp",text:"Approval",read_own:false},
-              {module_name:"budSet",text:"Budget Settings",read_own:false},
-              {module_name:"staff",text:"Staff",read_own:false},
-              {module_name:"trans",text:"Transaction",read_own:false},
-              {module_name:"importTrans",text:"Transaction Upload",read_own:false},
-              {module_name:"budtrans",text:"Budget Transfer",read_own:false},
-              {module_name:"paymentorder",text:"Payment Order",read_own:false}
+              {module_name:"company",text:"Company",read_own:true,read_all:false},{module_name:"subuser",text:"User",read_own:true,read_all:false},{module_name:"subgroup",text:"User Group",read_own:false,read_all:true},
+              {module_name:"dept",text:"Department",read_own:false,read_all:false},
+              {module_name:"desig",text:"Designation",read_own:false,read_all:false},{module_name:"head",text:"Head",read_own:false,read_all:false},
+              {module_name:"label",text:"Label",read_own:false,read_all:false},{module_name:"preApp",text:"Approval",read_own:true,read_all:false},
+              {module_name:"budSet",text:"Budget Settings",read_own:false,read_all:false},
+              {module_name:"staff",text:"Staff",read_own:false,read_all:false},
+              {module_name:"trans",text:'Transcation',read_own:true,read_all:false},
+              {module_name:"importTrans",text:"Transaction Upload",read_own:false,read_all:false},
+              {module_name:"budtrans",text:"Budget Transfer",read_own:false,read_all:false},
+              {module_name:"paymentorder",text:"Payment Order",read_own:false,read_all:false}
               ],
               selectedLabel:null,
             modal :false,
@@ -598,6 +618,64 @@ export default {
         }
         }
 
+      },
+      setAllDelete(args) {
+        for(var i=0;i<this.datasrc.length;i++) {
+          if(i==11) {
+            this.datasrc[i].deleteall = false
+          }
+          else {
+          this.datasrc[i].delete = args
+          }
+        }
+      },
+      setAllEdit(args) {
+        for(var i=0;i<this.datasrc.length;i++) {
+          if(i==11) {
+            this.datasrc[i].edit = false
+          }
+          else{
+            this.datasrc[i].edit = args
+          }
+        }
+      },
+      setAllAdd(args) {
+        for(var i=0;i<this.datasrc.length;i++) {
+          this.datasrc[i].write = args
+          
+        }
+      },
+      setAllReadAll(args) {
+        if(args) {
+          this.readOwn = false
+        }
+        for(var i=0;i<this.additionalpermission.length;i++) {
+          
+          if(args) {
+            this.additionalpermission[i].read_own = false
+          }
+          if(i==11) {
+            this.additionalpermission[i].read_own = false
+          }
+          else{this.additionalpermission[i].read_all = args}
+        }
+      },
+      setAllReadOwn(args) {
+        if(args) {
+          this.readAll = false
+        }
+        for(var i=0;i<this.additionalpermission.length;i++) {
+          
+          if(args) {
+            this.additionalpermission[i].read_all = false
+          }
+          if(i==11) {
+            this.additionalpermission[i].read_all = false
+          }
+          else{
+            this.additionalpermission[i].read_own = args
+          }
+        }
       },
     rowSelected(args) {
       this.$refs.overviewgrid.startEdit(args.data)

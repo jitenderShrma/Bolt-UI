@@ -13,7 +13,7 @@
                 </ejs-toolbar>
              <div class="control-section">
                 
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' :toolbarClick="clickHandler"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' :toolbarClick="clickHandler"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='context' headerText='Context'  :filter='filter' ></e-column>
@@ -327,7 +327,6 @@ export default {
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
             ],
-          pageSettings: {pageSize:true,pageSize:200, pageSizes: [200,300,400,500], pageCount: 4} ,
         ddData: [{ value: 1000, text: '1,000 Rows and 11 Columns' }, { value: 10000, text: '10,000 Rows and 11 Columns' }],
                 ddValue: 1000,
                 stTime: null,
@@ -488,6 +487,7 @@ export default {
           this.$refs.dialogObj1.hide()
                 api.get(`${apiUrl}`+`label/label/get/all`).then((response) => {
                     this.datasrc = response.data;
+                    console.log(response.data)
                 })
             
         }
