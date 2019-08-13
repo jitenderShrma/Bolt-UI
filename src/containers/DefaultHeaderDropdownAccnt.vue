@@ -70,7 +70,6 @@ export default {
     if(Session.length==24) {
       axios.get(`${apiUrl}`+`company/list`,{withCredentials : true})
       .then(response => {
-        console.log(response.data)
         this.data = response.data
         this.ssnCompany = this.data[0]
         axios.get(`${apiUrl}`+`company/${this.ssnCompany._id}`,{withCredentials : true})
@@ -82,22 +81,22 @@ export default {
   else{
       var list = JSON.parse(localStorage.session_key)
       console.log(list)
-      var user = list._id
+      var user = list.user._id
       this.isUser = true;
       axios.get(`${apiUrl}/user/subuser/get/${user}`,{withCredentials:true}).then((res) => {
         this.user = res.data;
-        axios.get(`${apiUrl}`+`company/${list.company}`,{withCredentials : true})
+        axios.get(`${apiUrl}`+`company/${list.user.company}`,{withCredentials : true})
         .then(response => {
           this.data = [response.data]
         this.ssnCompany = response.data
         this.$session.set('company',response.data._id);
-        console.log(this.ssnCompany)})
+        })
       })
     }
   },
   methods : {
     userDetails() {
-      this.$router.push(`user/details/${this.user._id}`);
+      this.$router.push(`staff/details/${this.user._id}`);
     },
     Settings(){
       console.log("settings");
@@ -123,6 +122,7 @@ export default {
       console.log(this.ssnCompany)})
     },
     async Logout() {
+      delete localStorage['session_key'];
       if(this.$session.has('Subuser')) {
         axios.post(`${apiUrl}`+`user/subuser/logout`,{withCredentials :true}).then((response) =>{
               Auth.logout();

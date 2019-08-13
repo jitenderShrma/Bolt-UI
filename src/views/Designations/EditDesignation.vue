@@ -46,13 +46,25 @@
                             <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="readOwn" @change="setAllReadOwn" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col style="padding-right:0px">
+                            <span v-text="$ml.get('editown')"></span>
+                            <br>
+                            <span style="margin-bottom:10px;"></span>
+                            <c-switch id="padded" size="sm" class="mx-1" color="primary" name="switch1" v-model="editOwn" @change="setAllEditOwn" :uncheckedValue="false" :checkedValue="true"/>
+                          </b-col>
+                          <b-col style="padding-right:0px">
+                            <span v-text="$ml.get('deleteown')"></span>
+                            <br>
+                            <span style="margin-bottom:10px;"></span>
+                            <c-switch id="padded" size="sm" class="mx-1" color="primary" name="switch1" v-model="deleteOwn" @change="setAllDeleteOwn" :uncheckedValue="false" :checkedValue="true"/>
+                          </b-col>
+                          <b-col style="padding-right:0px">
                             <span v-text="$ml.get('readall')"></span>
                             <br>
                             <span style="margin-bottom:10px;"></span>
                             <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="readAll"  @change="setAllReadAll" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col style="padding-right:0px">
-                            <span v-text="$ml.get('addall')"></span>
+                            <span v-text="$ml.get('create')"></span>
                             <br>
                             <span style="margin-bottom:10px;"></span>
                             <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="addAll" @change="setAllAdd" :uncheckedValue="false" :checkedValue="true"/>
@@ -85,6 +97,22 @@
                             </div>
                             <div v-else>
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_own" @change="setReadOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
+                            </div>
+                          </b-col>
+                          <b-col style="padding-right:0px">
+                            <div v-if="datasrc[i].module_name == 'importTrans'">
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" disabled/>
+                            </div>
+                            <div v-else>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" @change="setEditOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
+                            </div>
+                          </b-col>
+                          <b-col style="padding-right:0px">
+                            <div v-if="datasrc[i].module_name == 'importTrans'">
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" :uncheckedValue="false" :checkedValue="true" disabled/>
+                            </div>
+                            <div v-else>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" @change="setDeleteOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
@@ -374,6 +402,8 @@ export default {
           addAll:false,
           readAll:false,
           editAll:false,
+          editOwn:false,
+          deleteOwn:false,
           deleteAll:false,
           readOwn:false,
           by_dept:true,
@@ -428,20 +458,20 @@ export default {
             ],
             selectionSettings : {type:"Single"},
             data: [],
-            datasrc:[
+             datasrc:[
               {module_name:"company",text:"Company",read:true,write:false,edit:false,delete:false},{module_name:"subuser",text:"User",read:true,write:false,edit:false,delete:false},
-              {module_name:"subgroup",text:"User Group",read:true,write:true,edit:true,delete:true},{module_name:"dept",text:"Department",read:true,write:false,edit:false,delete:false},
+              {module_name:"subgroup",text:"User Group",read:true,write:false,edit:false,delete:false},{module_name:"dept",text:"Department",read:true,write:false,edit:false,delete:false},
               {module_name:"desig",text:"Designation",read:true,write:false,edit:false,delete:false},{module_name:"head",text:"Head",read:true,write:false,edit:false,delete:false},
-              {module_name:"label",text:"Label",read:true,write:false,edit:false,delete:false},{module_name:"preApp",text:"Approval",read:true,write:false,edit:false,delete:false},
+              {module_name:"label",text:"Label",read:true,write:false,edit:false,delete:false},{module_name:"preApp",text:"Approval",read:true,write:true,edit:false,delete:false},
               {module_name:"budSet",text:"Budget Settings",read:true,write:false,edit:false,delete:false},
               {module_name:"staff",text:"Staff",read:true,write:false,edit:false,delete:false},
-              {module_name:"trans",text:"Transaction",read:true,write:false,edit:false,delete:false},
+              {module_name:"trans",text:"Transaction",read:true,write:true,edit:false,delete:false},
               {module_name:"importTrans",text:"Transaction Upload",write:false},
               {module_name:"budtrans",text:"Budget Transfer",read:true,write:false,edit:false,delete:false},
               {module_name:"paymentorder",text:"Purchase Order",read:true,write:false,edit:false,delete:false}
               ],
               additionalpermission:[
-              {module_name:"company",text:"Company",read_own:true,read_all:false},{module_name:"subuser",text:"User",read_own:true,read_all:false},{module_name:"subgroup",text:"User Group",read_own:false,read_all:true},
+              {module_name:"company",text:"Company",read_own:true,read_all:false},{module_name:"subuser",text:"User",read_own:true,read_all:false},{module_name:"subgroup",text:"User Group",read_own:false,read_all:false},
               {module_name:"dept",text:"Department",read_own:false,read_all:false},
               {module_name:"desig",text:"Designation",read_own:false,read_all:false},{module_name:"head",text:"Head",read_own:false,read_all:false},
               {module_name:"label",text:"Label",read_own:false,read_all:false},{module_name:"preApp",text:"Approval",read_own:true,read_all:false},
@@ -620,9 +650,15 @@ export default {
 
       },
       setAllDelete(args) {
+      if(args) {
+          this.deleteOwn = false
+        }
         for(var i=0;i<this.datasrc.length;i++) {
+          if(args) {
+            this.additionalpermission[i].delete_own = false
+          }
           if(i==11) {
-            this.datasrc[i].deleteall = false
+            this.datasrc[i].delete = false
           }
           else {
           this.datasrc[i].delete = args
@@ -630,7 +666,13 @@ export default {
         }
       },
       setAllEdit(args) {
+        if(args) {
+          this.editOwn = false
+        }
         for(var i=0;i<this.datasrc.length;i++) {
+          if(args) {
+            this.additionalpermission[i].edit_own = false
+          }
           if(i==11) {
             this.datasrc[i].edit = false
           }
@@ -639,10 +681,47 @@ export default {
           }
         }
       },
+      setAllDeleteOwn(args) {
+        if(args) {
+          this.deleteAll = false
+        }
+        for(var i=0;i<this.additionalpermission.length;i++) {
+          if(args) {
+            this.datasrc[i].delete = false
+          }
+          if(i==11) {
+            this.additionalpermission[i].delete_own = false
+          }
+          else {
+          this.additionalpermission[i].delete_own = args
+          }
+        }
+      },
+      setAllEditOwn(args) {
+        if(args) {
+          this.editAll = false
+        }
+        for(var i=0;i<this.additionalpermission.length;i++) {
+          if(args) {
+            this.datasrc[i].edit = false
+          }
+          if(i==11) {
+            this.additionalpermission[i].edit_own = false
+          }
+          else{
+            this.additionalpermission[i].edit_own = args
+          }
+        }
+      },
       setAllAdd(args) {
         for(var i=0;i<this.datasrc.length;i++) {
+          if(i==7|| i==10) {
+            this.datasrc[i].write = true
+          }
+          else {
           this.datasrc[i].write = args
-          
+
+          }
         }
       },
       setAllReadAll(args) {
@@ -650,9 +729,14 @@ export default {
           this.readOwn = false
         }
         for(var i=0;i<this.additionalpermission.length;i++) {
-          
           if(args) {
             this.additionalpermission[i].read_own = false
+          }
+          if(!args) {
+            this.additionalpermission[0].read_own = true
+            this.additionalpermission[1].read_own = true
+            this.additionalpermission[7].read_own = true
+            this.additionalpermission[10].read_own = true
           }
           if(i==11) {
             this.additionalpermission[i].read_own = false
@@ -665,7 +749,6 @@ export default {
           this.readAll = false
         }
         for(var i=0;i<this.additionalpermission.length;i++) {
-          
           if(args) {
             this.additionalpermission[i].read_all = false
           }
@@ -673,9 +756,14 @@ export default {
             this.additionalpermission[i].read_all = false
           }
           else{
-            this.additionalpermission[i].read_own = args
+            if(i==0 ||i==1 ||i==7 ||i==10) {
+            this.additionalpermission[i].read_own = true
           }
-        }
+          else{
+            this.additionalpermission[i].read_own = args
+          }}
+          }
+        
       },
     rowSelected(args) {
       this.$refs.overviewgrid.startEdit(args.data)

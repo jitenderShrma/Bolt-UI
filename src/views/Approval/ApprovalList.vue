@@ -9,22 +9,23 @@
               </e-items>
             </ejs-toolbar>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :enableColumnVirtualization='true' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
-                    <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
-                    <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column>
-                    <e-column field='request_by.user_name' headerText='Requested By'  :filter='filter' ></e-column>
-                    <e-column headerText='Labels' :template="headlabelTemplate" :filter='filter' ></e-column>
-                    <e-column field='labels[0].label_name' headerText='More Labels' :template="labelTemplate" :filter='filter' ></e-column>
-                    <e-column field='status' headerText='Status'  :filter='filter' ></e-column>
-                    <e-column field='recurring_rate' headerText='Recurring Rate'  :filter='filter' ></e-column>
-                    <e-column field='budget_head.name' headerText='Head'  :filter='filter' ></e-column>
-                    <e-column field='department.department_name' headerText='Department'  :filter='filter' ></e-column>
-                    <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' ></e-column>
-                    <e-column field='description' headerText='Description'  :filter='filter' ></e-column>
-                    <e-column field='amount' headerText='Amount'  :filter='filter' ></e-column>
+                    <e-column :visible="false" field="last_updated" headerText='last_updated' width='140'></e-column>
+                    <e-column field='ref_id' headerText='Ref ID' width="117"  :filter='filter' ></e-column>
+                    <e-column field='status' headerText='Status' width="137" :filter='filter' ></e-column>
+                    <e-column field='request_by.user_name' width="120" headerText='Req By'  :filter='filter' ></e-column>
+                    <e-column field='month' :template="monthTemplate" width="117" headerText='Month' :filter='filter' ></e-column>
+                    <e-column field='amount' headerText='Amount' width="126" :filter='filter' ></e-column>
+                    <e-column field='approval_type' headerText='Type' width="108" :filter='filter' ></e-column>
+                    <e-column field='labels[0].label_name' width="116" headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
+                    
+                    <e-column field='recurring_rate' headerText='Recur Rate' width="138" :filter='filter' ></e-column>
+                    <e-column field='budget_head.name' headerText='Head' width="110" :filter='filter' ></e-column>
+                    <e-column field='department.department_name' headerText='Department' width="145" :filter='filter' ></e-column>
+                    <e-column field='description' headerText='Description' width="143" :filter='filter' ></e-column>
                 </e-columns>
                 </ejs-grid>
                  </div>
@@ -195,31 +196,48 @@ export default {
       return {
         labels:[],
         addModal:false,
+        sortOptions:{columns: [{field: 'status', direction: 'Descending'},{field: 'last_updated', direction: 'Descending'}]},
         buttonTemplate: function () {
               return {
                   template: Vue.component('buttonTemplate', {
                       template: `<div>
-                                <div v-if="data.status=='PENDING'">
+                                <div v-if="yes">
                                   <b-button @click="acceptReq" type="submit" size="sm" variant="primary" v-text="$ml.get('accept')"><i class="fa fa-dot-circle-o"></i></b-button>
                                   <b-button @click="rejectReq" type="submit" size="sm" variant="danger" v-text="$ml.get('reject')"><i class="fa fa-dot-circle-o"></i></b-button>
+                                  </div
                                 </div>`,
                   data: function() {
                           return {
                               data: {},
+                              designation:null,
+                              yes:false
                           }
                       },
                       methods : {
                         acceptReq() {
                           axios.get(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
                             console.log(res.data)
-                            window.location.href="#/approval/view/all"
+                            window.location.reload();
                           })
                         },
                         rejectReq() {
                           axios.get(`${apiUrl}`+`/approval/level1/reject/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
                             console.log(res.data)
-                            window.location.href="#/approval/view/all"
+                            window.location.reload();
                           })
+                        }
+                      },
+                      mounted() {
+                        var data =  JSON.parse(localStorage['session_key'])
+                        if(data.user_type) {
+                          this.designation = data.user_type.designation
+                          if(this.data.assigned_to_designation == this.designation && this.data.status=="PENDING") {
+                            this.yes=true
+                          }
+                        }
+                        if(data.length == 24 && this.data.status=="PENDING") {
+                          console.log("yes")
+                          this.yes=true
                         }
                       }
                 })

@@ -124,10 +124,10 @@ export default {
                 localStorage.setItem('session_key',JSON.stringify(user))
               }
               else {
-                this.$session.set('Subuser',response.data.user)
+                console.log(response.data)
+                this.$session.set('Subuser',response.data)
                 var user = this.$session.get('Subuser')
                 localStorage.setItem('session_key',JSON.stringify(user))
-                console.log(JSON.parse(localStorage.session_key))
               }
               this.$router.push(this.$route.query.redirect || '/dashboard')
             })
@@ -141,5 +141,5 @@ export default {
       },
   }
   
-}
+};
 </script>

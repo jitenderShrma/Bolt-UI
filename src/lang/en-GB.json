@@ -261,5 +261,8 @@
     "pholdsourcehead" : "Select a Source Head",
     "pholddesthead" : "Select a Destination Head",
     "editlabel" : "Edit Label",
-    "staffdetails": "Staff Details"
+    "staffdetails": "Staff Details",
+    "editown" : "Edit Own",
+    "deleteown" : "Delete Own",
+    "create" : "Create"
 }

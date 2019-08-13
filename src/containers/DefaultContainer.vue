@@ -92,13 +92,13 @@ export default {
   },
   beforeMount: function () {
     var Session = JSON.parse(localStorage['session_key']);
-    if(Session._id!=null) {
+    if(Session.user!=null) {
       var permission = Session.additional_permissions
       console.log(permission)
       for(var i=0;i<permission.length;i++) {
         if(permission[i].module_name != undefined)
         {
-          if(permission[i].read_all == true) {
+          if(permission[i].read_all == true || permission[i].read_own == true ) {
             if(permission[i].text == "Staff") {
               this.navItems.push({
                   name: 'Staff',
@@ -128,7 +128,24 @@ export default {
                 name : "Heads",
                 url : "/heads/list",
                 icon : "icon-star"
-              },)
+              },
+              {
+                name: "Budget",
+                icon:"icon-star",
+                url:"/budget",
+                children : [
+                  {
+                    name:"Total Budget",
+                    url:"/budget/total",
+                    icon:"icon-star"
+                  },
+                  {
+                    name:"Approved Budget",
+                    url:"/budget/approved",
+                    icon:"icon-star"
+                  }
+                ]
+              })
             }
             if(permission[i].text=="Label") {
               
@@ -138,8 +155,7 @@ export default {
                   icon:"icon-calculator"
                 },)
             }
-            if(permission[i].text=="Transaction") {
-              
+            if(permission[i].text=="Transcation") {
                 this.navItems.push({
                   name:"Transaction",
                   url:"/transaction",
