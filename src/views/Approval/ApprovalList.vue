@@ -12,7 +12,7 @@
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :enableColumnVirtualization='true' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"
                 :height="height" :enableHover='false'>
                 <e-columns>
-                    <e-column :visible="pending" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
+                    <e-column headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
                     <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column>
                     <e-column field='request_by.user_name' headerText='Requested By'  :filter='filter' ></e-column>
@@ -199,6 +199,7 @@ export default {
               return {
                   template: Vue.component('buttonTemplate', {
                       template: `<div>
+                                <div v-if="data.status=='PENDING'">
                                   <b-button @click="acceptReq" type="submit" size="sm" variant="primary" v-text="$ml.get('accept')"><i class="fa fa-dot-circle-o"></i></b-button>
                                   <b-button @click="rejectReq" type="submit" size="sm" variant="danger" v-text="$ml.get('reject')"><i class="fa fa-dot-circle-o"></i></b-button>
                                 </div>`,
@@ -498,7 +499,7 @@ export default {
                 this.$refs.dialogObj.hide();
                 this.link = window.location.href;
                 this.key = this.link.split('view/').pop()
-                if(this.key == 'all') {
+                
                   this.pending = false
                 api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
                   console.log(response.data)
@@ -529,35 +530,35 @@ export default {
                 api.get(`${apiUrl}`+`label/label/find/by/Approval`).then((res) => {
                   this.labels = res.data
                 })
-              }
-              else{
-                this.pending = true
-                api.get(`${apiUrl}`+`approvals/preApp/view/requests`).then((response) => {
-                    this.datasrc = response.data;
-                    for(var i =0;i<this.datasrc.length;i++) {
-                      if(this.datasrc[i].request_by == null) {
-                        this.datasrc[i].request_by = {
-                          user_name:"No longer exists!"
-                        }
-                      }
-                      if(this.datasrc[i].department == null) {
-                        this.datasrc[i].department = {
-                          department_name:"No longer exists!"
-                        }
-                      }
-                      if(this.datasrc[i].budget_head == null) {
-                        this.datasrc[i].budget_head = {
-                          name:"No longer exists!"
-                        }
-                      }
-                      this.datasrc[i].labellist = "";
-                      for(var j=0;j<this.datasrc[i].labels.length;i++) {
-                        this.datasrc[i].labellist = this.datasrc[i].labellist+","+`this.datasrc[i].labels[j].label_name`
-                      }
-                    }
-                    console.log(response.data)
-                })
-              }
+              
+              // else{
+              //   this.pending = true
+              //   api.get(`${apiUrl}`+`approvals/preApp/view/requests`).then((response) => {
+              //       this.datasrc = response.data;
+              //       for(var i =0;i<this.datasrc.length;i++) {
+              //         if(this.datasrc[i].request_by == null) {
+              //           this.datasrc[i].request_by = {
+              //             user_name:"No longer exists!"
+              //           }
+              //         }
+              //         if(this.datasrc[i].department == null) {
+              //           this.datasrc[i].department = {
+              //             department_name:"No longer exists!"
+              //           }
+              //         }
+              //         if(this.datasrc[i].budget_head == null) {
+              //           this.datasrc[i].budget_head = {
+              //             name:"No longer exists!"
+              //           }
+              //         }
+              //         this.datasrc[i].labellist = "";
+              //         for(var j=0;j<this.datasrc[i].labels.length;i++) {
+              //           this.datasrc[i].labellist = this.datasrc[i].labellist+","+`this.datasrc[i].labels[j].label_name`
+              //         }
+              //       }
+              //       console.log(response.data)
+              //   })
+              // }
         },
 };
 </script>

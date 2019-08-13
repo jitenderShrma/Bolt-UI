@@ -119,8 +119,9 @@ export default {
               this.response = response;
               Auth.login();
               if(response.data.auth) {
+                var user = response.data.user
                 this.$session.set('user',response.data.user)
-                localStorage.setItem('session-key',JSON.parse(sessionStorage['vue-session-key']).user)
+                localStorage.setItem('session_key',JSON.stringify(user))
               }
               else {
                 this.$session.set('Subuser',response.data.user)

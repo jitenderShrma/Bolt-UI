@@ -116,26 +116,9 @@ var items = [
     icon:"icon-calculator"
   },
   {
-    name:"Approval",
-    url:"/approval",
-    icon:"icon-calculator",
-    children : [
-      {
-        name:"Approval Requests",
-        url:"/approval/view/all",
-        icon:'icon-calculator'
-      },
-      {
-        name:'Pending Requests',
-        url: '/approval/view/pending',
-        icon:'icon-calculator',
-        badge: {
-          variant: 'danger',
-          text: pendingCount
-        }
-      }
-
-    ]
+    name:"Approval Requests",
+    url:"/approval/view/all",
+    icon:"icon-calculator"
   },
   {
     name:"Label",

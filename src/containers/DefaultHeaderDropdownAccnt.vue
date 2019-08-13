@@ -66,8 +66,8 @@ export default {
       };
   },
   async mounted() {
-    console.log(localStorage['session_key'].length)
-    if(localStorage['session_key'].length==24) {
+    var Session = JSON.parse(localStorage['session_key'])
+    if(Session.length==24) {
       axios.get(`${apiUrl}`+`company/list`,{withCredentials : true})
       .then(response => {
         console.log(response.data)
@@ -80,23 +80,20 @@ export default {
     })
   }
   else{
-
-    var list = JSON.parse(localStorage.session_key)
-    console.log(list)
-    var user = list._id
-    this.isUser = true;
-    axios.get(`${apiUrl}/user/subuser/get/${user}`,{withCredentials:true}).then((res) => {
-      this.user = res.data;
-      axios.get(`${apiUrl}`+`company/${list.company}`,{withCredentials : true})
-      .then(response => {
-        this.data = [response.data]
-      this.ssnCompany = response.data
-      this.$session.set('company',response.data._id);
-      console.log(this.ssnCompany)})
-    })
-    
-    
-  }
+      var list = JSON.parse(localStorage.session_key)
+      console.log(list)
+      var user = list._id
+      this.isUser = true;
+      axios.get(`${apiUrl}/user/subuser/get/${user}`,{withCredentials:true}).then((res) => {
+        this.user = res.data;
+        axios.get(`${apiUrl}`+`company/${list.company}`,{withCredentials : true})
+        .then(response => {
+          this.data = [response.data]
+        this.ssnCompany = response.data
+        this.$session.set('company',response.data._id);
+        console.log(this.ssnCompany)})
+      })
+    }
   },
   methods : {
     userDetails() {
