@@ -241,7 +241,7 @@
           </b-form-group>
           </div>
           </b-tab>
-      <b-tab :title="$ml.get('permissions')">
+      <b-tab :title="$ml.get('permissions')" :disabled="!tab">
         <div class="col-lg-15 control-section">
                   <div class="content-wrapper">
                        <div class="control-section">
@@ -310,19 +310,19 @@
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
-                            <div v-if="datasrc[i].module_name == 'importTrans'">
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" disabled/>
+                            <div v-if="datasrc[i].text == 'User'">
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" />
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" @change="setEditOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
-                            <div v-if="datasrc[i].module_name == 'importTrans'">
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" :uncheckedValue="false" :checkedValue="true" disabled/>
+                            <div v-if="datasrc[i].text == 'Approval' || datasrc[i].text == 'User'">
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" @change="setDeleteOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own"  :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
@@ -355,7 +355,7 @@
                           </b-col>
                           <b-col style="padding-right:0px;">
                             <b-tooltip target="exButton1" title="Additional Permissions Available!"></b-tooltip>
-                            <div v-if="i==7">
+                            <div v-if="datasrc[i].text=='Approval'">
                             <b-btn id="exButton1" variant="primary" size="sm" @click="toggle(`${i}`)"><i class="fa fa-plus-square"></i></b-btn>
                           </div>
                           <div v-else>
@@ -371,10 +371,14 @@
     </b-tabs>
           <b-button type="button" variant="primary" @click="primaryModal = true" style="float:right" class="mr-1" v-text="$ml.get('customattributes')"></b-button>
            <div slot="footer">
+              <div v-if="permission_override">
+              <b-button @click="savePermissions" type="button" size="sm" variant="primary" v-text="$ml.get('savepermissions')"><i class="fa fa-dot-circle-o"></i></b-button>
+              &nbsp;
+              <b-button type="button" @click="resetPermissions" size="sm" variant="danger" v-text="$ml.get('reset')"><i class="fa fa-ban"></i></b-button>
+            </div>
+            <div v-else>
               <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
-              <router-link :to="{ path: '/sites',}">
-              <b-button type="reset" size="sm" variant="danger" v-text="$ml.get('reset')"><i class="fa fa-ban"></i></b-button>
-              </router-link>
+              </div>
           </div>
           </b-form>
           <b-modal :title="$ml.get('customattributes')" class="modal-primary" v-model="primaryModal" @ok="primaryModal = false" hide-footer>
@@ -564,6 +568,7 @@ export default {
       data :[],
       field_types : ['Text','Email','Phone','TexArea'],
       input : {
+
         },
         idmodal:false,
         taxx : {
@@ -625,30 +630,17 @@ export default {
             },
 
           },
+          tab:false,
           permission_override:0,
+          datasrcOld:null,
+          additionalpermissionOld:null,
+          approval_permissionsOld:null,
       datasrc:[
-              {module_name:"company",text:"Company",read:true,write:false,edit:false,delete:false},{module_name:"subuser",text:"User",read:true,write:false,edit:false,delete:false},
-              {module_name:"subgroup",text:"User Group",read:true,write:false,edit:false,delete:false},{module_name:"dept",text:"Department",read:true,write:false,edit:false,delete:false},
-              {module_name:"desig",text:"Designation",read:true,write:false,edit:false,delete:false},{module_name:"head",text:"Head",read:true,write:false,edit:false,delete:false},
-              {module_name:"label",text:"Label",read:true,write:false,edit:false,delete:false},{module_name:"preApp",text:"Approval",read:true,write:true,edit:false,delete:false},
-              {module_name:"budSet",text:"Budget Settings",read:true,write:false,edit:false,delete:false},
-              {module_name:"staff",text:"Staff",read:true,write:false,edit:false,delete:false},
-              {module_name:"trans",text:"Transaction",read:true,write:true,edit:false,delete:false},
-              {module_name:"importTrans",text:"Transaction Upload",write:false},
-              {module_name:"budtrans",text:"Budget Transfer",read:true,write:false,edit:false,delete:false},
-              {module_name:"paymentorder",text:"Purchase Order",read:true,write:false,edit:false,delete:false}
               ],
+              datasrcnow:null,
+              additionalpermissionnow:null,
+              approval_permissionsnow:null,
               additionalpermission:[
-              {module_name:"company",text:"Company",read_own:true,read_all:false},{module_name:"subuser",text:"User",read_own:true,read_all:false},{module_name:"subgroup",text:"User Group",read_own:false,read_all:false},
-              {module_name:"dept",text:"Department",read_own:false,read_all:false},
-              {module_name:"desig",text:"Designation",read_own:false,read_all:false},{module_name:"head",text:"Head",read_own:false,read_all:false},
-              {module_name:"label",text:"Label",read_own:false,read_all:false},{module_name:"preApp",text:"Approval",read_own:true,read_all:false},
-              {module_name:"budSet",text:"Budget Settings",read_own:false,read_all:false},
-              {module_name:"staff",text:"Staff",read_own:false,read_all:false},
-              {module_name:"trans",text:'Transcation',read_own:true,read_all:false},
-              {module_name:"importTrans",text:"Transaction Upload",read_own:false,read_all:false},
-              {module_name:"budtrans",text:"Budget Transfer",read_own:false,read_all:false},
-              {module_name:"paymentorder",text:"Payment Order",read_own:false,read_all:false}
               ],
               heads:[],
       dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
@@ -669,19 +661,17 @@ export default {
       console.log(res.data)
       this.input = res.data
       this.addresslist = this.input.personal_details.address[0]
-      if(this.input.user_permissions.length>0) {
-        this.datasrc = this.input.user_permissions
-      }
-      if(this.input.additional_permissions.length>0) {
-      this.additionalpermission = this.input.additional_permissions
-      }
-      if(this.input.approval_permissions.length>0) {
-      this.approval_permissions = this.input.approval_permissions
-      }
-      this.by_heads = this.input.approval_permissions.by_heads.status
-      this.by_dept = this.input.approval_permissions.by_department.status
       axios.get(`${apiUrl}staff/staff/get/one/${this.input.user_type}`,{withCredentials:true}).then((resp) => {
         this.staff = resp.data
+        api.get(`${apiUrl}`+`super/group/subgroup/find/by/${this.staff.designation}`).then((res) => {
+            this.datasrcOld = JSON.parse(JSON.stringify(this.OverRide(this.input.user_permissions,res.data.permissions)))
+            this.additionalpermissionOld = JSON.parse(JSON.stringify(this.OverRide(this.input.additional_permissions,res.data.additional_permissions)))
+            // this.approval_permissionsOld = JSON.parse(JSON.stringify(this.ObjectOverRide(this.input.approval_permission,res.data.approval_permissions)))
+            this.datasrc = JSON.parse(JSON.stringify(this.OverRide(this.input.user_permissions,res.data.permissions)))
+            this.additionalpermission = JSON.parse(JSON.stringify(this.OverRide(this.input.additional_permissions,res.data.additional_permissions)))
+            // this.approval_permissions = JSON.parse(JSON.stringify(this.ObjectOverRide(this.input.approval_permissions,res.data.approval_permissions)))
+            this.tab = true
+        })
       })
     })
 
@@ -693,6 +683,7 @@ export default {
       })
   },
   watch : {
+    
     'by_dept' : function(){
       if(this.by_dept) {
         this.by_heads = false
@@ -714,9 +705,415 @@ export default {
           this.designation = this.list_to_tree_desig(res.data)
         })
       }
+    },
+    'staff.designation' : function(){
+      if(this.staff.designation == null) {
+        this.tab = false
+      }
+      else{
+        this.tab = true
+      }
     }
   },
   methods : {
+    OverRide(a1,b1) {
+        var result_array = [];
+        var arr = b1.concat(a1);
+        var len = arr.length;
+        var assoc = {};
+
+
+        while(len--) {
+            var item = arr[len];
+            if(!assoc[item.module_name]) 
+            { 
+                result_array.unshift(item);
+                assoc[item.module_name] = true;
+            }
+        }
+
+        return result_array;
+    },
+    ObjectOverRide(a1,b1){
+        if(a1.by_heads.status == true){
+            return a1;
+        }else{
+            return b1;
+        }
+    },
+    resetPermissions() {
+        api.get(`${apiUrl}`+`super/group/subgroup/find/by/${this.staff.designation}`).then((res) => {
+        console.log(res.data,"usergroup")
+        this.datasrcOld = JSON.parse(JSON.stringify(res.data.permissions))
+        this.additionalpermissionOld = JSON.parse(JSON.stringify(res.data.additional_permissions))
+        this.by_heads = JSON.parse(JSON.stringify(res.data.approval_permissions.by_heads.status))
+        this.by_dept = JSON.parse(JSON.stringify(res.data.approval_permissions.by_department.status))
+        this.approval_permissionsOld = JSON.parse(JSON.stringify(res.data.approval_permissions))
+        this.datasrc = JSON.parse(JSON.stringify(res.data.permissions))
+        this.additionalpermission = JSON.parse(JSON.stringify(res.data.additional_permissions))
+        this.approval_permissions = JSON.parse(JSON.stringify(res.data.approval_permissions))
+        this.tab = true
+        this.readAll=false
+        this.editOwn=false
+        this.deleteOwn=false
+        this.editAll=false
+        this.deleteAll=false
+        this.readOwn=false
+        this.addAll = false
+        this.input.user_permissions=[]
+        this.input.additional_permissions = []
+        this.input.approval_permissions = {
+          by_department:{},
+          by_heads:{}
+        }
+
+      })
+      },
+      savePermissions() {
+        for(var i=0;i<this.datasrc.length;i++) {
+          if(this.datasrc[i].read != this.datasrcOld[i].read) {
+            if(this.datasrc[i].write != this.datasrcOld[i].write) {
+              if(this.datasrc[i].edit != this.datasrcOld[i].edit) {
+                if(this.datasrc[i].delete !=this.datasrcOld[i].delete) {
+                  this.input.user_permissions.push({
+                    module_name: this.datasrc[i].module_name,
+                    text:this.datasrc[i].text,
+                    read:this.datasrc[i].read,
+                    write:this.datasrc[i].write,
+                    edit:this.datasrc[i].edit,
+                    delete:this.datasrc[i].delete
+                  })
+                  console.log("push")
+                }
+                else {
+                  this.input.user_permissions.push({
+                    module_name: this.datasrc[i].module_name,
+                    text:this.datasrc[i].text,
+                    read:this.datasrc[i].read,
+                    write:this.datasrc[i].write,
+                    edit:this.datasrc[i].edit
+                  })
+                  console.log("push")
+                }
+              }
+              else {
+                if(this.datasrc[i].delete !=this.datasrcOld[i].delete) {
+                  this.input.user_permissions.push({
+                    module_name: this.datasrc[i].module_name,
+                    text:this.datasrc[i].text,
+                    read:this.datasrc[i].read,
+                    write:this.datasrc[i].write,
+                    delete:this.datasrc[i].delete
+                  })
+                  console.log("push")
+                }
+                else{
+                  this.input.user_permissions.push({
+                      module_name: this.datasrc[i].module_name,
+                      text:this.datasrc[i].text,
+                      read:this.datasrc[i].read,
+                      write:this.datasrc[i].write
+                    })
+                  console.log("push")
+                }
+              }
+            }
+            else{
+              if(this.datasrc[i].edit != this.datasrcOld[i].edit) {
+                if(this.datasrc[i].delete !=this.datasrcOld[i].delete) {
+                  this.input.user_permissions.push({
+                    module_name: this.datasrc[i].module_name,
+                    text:this.datasrc[i].text,
+                    read:this.datasrc[i].read,
+                    edit:this.datasrc[i].edit,
+                    delete:this.datasrc[i].delete
+                  })
+                  console.log("push")
+                }
+                else {
+                  this.input.user_permissions.push({
+                    module_name: this.datasrc[i].module_name,
+                    text:this.datasrc[i].text,
+                    read:this.datasrc[i].read,
+                    edit:this.datasrc[i].edit
+                  })
+                  console.log("push")
+                }
+              }
+              else {
+                if(this.datasrc[i].delete !=this.datasrcOld[i].delete) {
+                  this.input.user_permissions.push({
+                    module_name: this.datasrc[i].module_name,
+                    text:this.datasrc[i].text,
+                    read:this.datasrc[i].read,
+                    delete:this.datasrc[i].delete
+                  })
+                  console.log("push")
+                }
+                else{
+                  this.input.user_permissions.push({
+                      module_name: this.datasrc[i].module_name,
+                    text:this.datasrc[i].text,
+                      read:this.datasrc[i].read,
+                    })
+                  console.log("push")
+                }
+              }
+            }
+          }
+          else {
+            if(this.datasrc[i].write != this.datasrcOld[i].write) {
+              if(this.datasrc[i].edit != this.datasrcOld[i].edit) {
+                if(this.datasrc[i].delete !=this.datasrcOld[i].delete) {
+                  this.input.user_permissions.push({
+                    module_name: this.datasrc[i].module_name,
+                    text:this.datasrc[i].text,
+                    write:this.datasrc[i].write,
+                    edit:this.datasrc[i].edit,
+                    delete:this.datasrc[i].delete
+                  })
+                  console.log("push")
+                }
+                else {
+                  this.input.user_permissions.push({
+                    module_name: this.datasrc[i].module_name,
+                    text:this.datasrc[i].text,
+                    write:this.datasrc[i].write,
+                    edit:this.datasrc[i].edit
+                  })
+                  console.log("push")
+                }
+              }
+              else {
+                if(this.datasrc[i].delete !=this.datasrcOld[i].delete) {
+                  this.input.user_permissions.push({
+                    module_name: this.datasrc[i].module_name,
+                    text:this.datasrc[i].text,
+                    write:this.datasrc[i].write,
+                    delete:this.datasrc[i].delete
+                  })
+                  console.log("push")
+                }
+                else{
+                  this.input.user_permissions.push({
+                      module_name: this.datasrc[i].module_name,
+                    text:this.datasrc[i].text,
+                      write:this.datasrc[i].write
+                    })
+                  console.log("push")
+                }
+              }
+            }
+            else{
+              if(this.datasrc[i].edit != this.datasrcOld[i].edit) {
+                if(this.datasrc[i].delete !=this.datasrcOld[i].delete) {
+                  this.input.user_permissions.push({
+                    module_name: this.datasrc[i].module_name,
+                    text:this.datasrc[i].text,
+                    edit:this.datasrc[i].edit,
+                    delete:this.datasrc[i].delete
+                  })
+                  console.log("push")
+                }
+                else {
+                  this.input.user_permissions.push({
+                    module_name: this.datasrc[i].module_name,
+                    text:this.datasrc[i].text,
+                    edit:this.datasrc[i].edit
+                  })
+                  console.log("push")
+                }
+              }
+              else {
+                if(this.datasrc[i].delete !=this.datasrcOld[i].delete) {
+                  this.input.user_permissions.push({
+                    module_name: this.datasrc[i].module_name,
+                    text:this.datasrc[i].text,
+                    delete:this.datasrc[i].delete
+                  })
+                  console.log("push")
+                }
+              }
+            }
+          }
+          if(this.additionalpermission[i].read_own != this.additionalpermissionOld[i].read_own) {
+            if(this.additionalpermission[i].read_all != this.additionalpermissionOld[i].read_all) {
+              if(this.additionalpermission[i].edit_own != this.additionalpermissionOld[i].edit_own) {
+                if(this.additionalpermission[i].delete_own !=this.additionalpermissionOld[i].delete_own) {
+                  this.input.additional_permissions.push({
+                    module_name: this.additionalpermission[i].module_name,
+                    text:this.additionalpermission[i].text,
+                    read_own:this.additionalpermission[i].read_own,
+                    read_all:this.additionalpermission[i].read_all,
+                    edit_own:this.additionalpermission[i].edit_own,
+                    delete_own:this.additionalpermission[i].delete_own
+                  })
+                  console.log("push")
+                }
+                else {
+                  this.input.additional_permissions.push({
+                    module_name: this.additionalpermission[i].module_name,
+                    text:this.additionalpermission[i].text,
+                    read_own:this.additionalpermission[i].read_own,
+                    read_all:this.additionalpermission[i].read_all,
+                    edit_own:this.additionalpermission[i].edit_own
+                  })
+                  console.log("push")
+                }
+              }
+              else {
+                if(this.additionalpermission[i].delete_own !=this.additionalpermissionOld[i].delete_own) {
+                  this.input.additional_permissions.push({
+                    module_name: this.additionalpermission[i].module_name,
+                    text:this.datasrc[i].text,
+                    read_own:this.additionalpermission[i].read_own,
+                    read_all:this.additionalpermission[i].read_all,
+                    delete_own:this.additionalpermission[i].delete_own
+                  })
+                  console.log("push")
+                }
+                else{
+                  this.input.additional_permissions.push({
+                      module_name: this.additionalpermission[i].module_name,
+                      text:this.additionalpermission[i].text,
+                      read_own:this.additionalpermission[i].read_own,
+                      read_all:this.additionalpermission[i].read_all
+                    })
+                  console.log("push")
+                }
+              }
+            }
+            else{
+              if(this.additionalpermission[i].edit_own != this.additionalpermissionOld[i].edit_own) {
+                if(this.additionalpermission[i].delete_own !=this.additionalpermissionOld[i].delete_own) {
+                  this.input.additional_permissions.push({
+                    module_name: this.additionalpermission[i].module_name,
+                    text:this.datasrc[i].text,
+                    read_own:this.additionalpermission[i].read_own,
+                    edit_own:this.additionalpermission[i].edit_own,
+                    delete_own:this.additionalpermission[i].delete_own
+                  })
+                  console.log("push")
+                }
+                else {
+                  this.input.additional_permissions.push({
+                    module_name: this.additionalpermission[i].module_name,
+                    text:this.additionalpermission[i].text,
+                    read_own:this.additionalpermission[i].read_own,
+                    edit_own:this.additionalpermission[i].edit_own
+                  })
+                  console.log("push")
+                }
+              }
+              else {
+                if(this.additionalpermission[i].delete_own !=this.additionalpermissionOld[i].delete_own) {
+                  this.input.additional_permissions.push({
+                    module_name: this.additionalpermission[i].module_name,
+                    text:this.datasrc[i].text,
+                    read_own:this.additionalpermission[i].read_own,
+                    delete_own:this.additionalpermission[i].delete_own
+                  })
+                  console.log("push")
+                }
+                else{
+                  this.input.additional_permissions.push({
+                      module_name: this.additionalpermission[i].module_name,
+                      text:this.additionalpermission[i].text,
+                      read_own:this.additionalpermission[i].read_own,
+                    })
+                  console.log("push")
+                }
+              }
+            }
+          }
+          else {
+            if(this.additionalpermission[i].read_all != this.additionalpermissionOld[i].read_all) {
+              if(this.additionalpermission[i].edit_own != this.additionalpermissionOld[i].edit_own) {
+                if(this.additionalpermission[i].delete_own !=this.additionalpermissionOld[i].delete_own) {
+                  this.input.additional_permissions.push({
+                    module_name: this.additionalpermission[i].module_name,
+                    text:this.datasrc[i].text,
+                    read_all:this.additionalpermission[i].read_all,
+                    edit_own:this.additionalpermission[i].edit_own,
+                    delete_own:this.additionalpermission[i].delete_own
+                  })
+                  console.log("push")
+                }
+                else {
+                  this.input.additional_permissions.push({
+                    module_name: this.additionalpermission[i].module_name,
+                    text:this.additionalpermission[i].text,
+                    read_all:this.additionalpermission[i].read_all,
+                    edit_own:this.additionalpermission[i].edit_own
+                  })
+                  console.log("push")
+                }
+              }
+              else {
+                if(this.additionalpermission[i].delete_own !=this.additionalpermissionOld[i].delete_own) {
+                  this.input.additional_permissions.push({
+                    module_name: this.additionalpermission[i].module_name,
+                    text:this.datasrc[i].text,
+                    read_all:this.additionalpermission[i].read_all,
+                    delete_own:this.additionalpermission[i].delete_own
+                  })
+                  console.log("push")
+                }
+                else{
+                  this.input.additional_permissions.push({
+                      module_name: this.additionalpermission[i].module_name,
+                      text:this.additionalpermission[i].text,
+                      read_all:this.additionalpermission[i].read_all
+                    })
+                  console.log("push")
+                }
+              }
+            }
+            else{
+              if(this.additionalpermission[i].edit_own != this.additionalpermissionOld[i].edit_own) {
+                if(this.additionalpermission[i].delete_own !=this.additionalpermissionOld[i].delete_own) {
+                  this.input.additional_permissions.push({
+                    module_name: this.additionalpermission[i].module_name,
+                    text:this.datasrc[i].text,
+                    edit_own:this.additionalpermission[i].edit_own,
+                    delete_own:this.additionalpermission[i].delete_own
+                  })
+                  console.log("push")
+                }
+                else {
+                  this.input.additional_permissions.push({
+                    module_name: this.additionalpermission[i].module_name,
+                    text:this.additionalpermission[i].text,
+                    edit_own:this.additionalpermissionOld[i].edit_own
+                  })
+                  console.log("push")
+                }
+              }
+              else {
+                if(this.additionalpermission[i].delete_own !=this.additionalpermissionOld[i].delete_own) {
+                  this.input.additional_permissions.push({
+                    module_name: this.additionalpermission[i].module_name,
+                    text:this.datasrc[i].text,
+                    delete_own:this.additionalpermissionOld[i].delete_own
+                  })
+                  console.log("push")
+                }
+              }
+            }
+          }
+        }
+        // if(this.approval_permissions.by_heads.status != this.approval_permissionsOld.by_heads.status) {
+        //   this.input.approval_permissions.by_heads.status = this.approval_permissions.by_heads.status
+        //     if(this.approval_permissions.by_heads.allowed_heads != this.approval_permissionsOld.by_heads.allowed_heads) {
+        //     this.input.approval_permissions.by_heads.allowed_heads = this.approval_permissions.by_heads.allowed_heads
+        //   }
+        // }
+        
+        // if(this.approval_permissions.by_department.status != this.approval_permissionsOld.by_department.status) {
+        //   this.input.approval_permissions.by_department.status = this.approval_permissions.by_department.status
+        // }
+        // console.log(this.input.user_permissions,this.input.additional_permissions,this.input.approval_permissions)
+      },
     checkTab(args) {
       this.permission_override = args
     },
@@ -746,7 +1143,7 @@ export default {
           if(args) {
             this.additionalpermission[i].delete_own = false
           }
-          if(i==11) {
+          if(this.datasrc[i].text=="Transaction Upload") {
             this.datasrc[i].delete = false
           }
           else {
@@ -762,7 +1159,7 @@ export default {
           if(args) {
             this.additionalpermission[i].edit_own = false
           }
-          if(i==11) {
+          if(this.datasrc[i].text=="Transaction Upload") {
             this.datasrc[i].edit = false
           }
           else{
@@ -778,7 +1175,7 @@ export default {
           if(args) {
             this.datasrc[i].delete = false
           }
-          if(i==11) {
+          if(this.additionalpermission[i].text=="Transaction Upload") {
             this.additionalpermission[i].delete_own = false
           }
           else {
@@ -794,7 +1191,7 @@ export default {
           if(args) {
             this.datasrc[i].edit = false
           }
-          if(i==11) {
+          if(this.additionalpermission[i].text=="Transaction Upload") {
             this.additionalpermission[i].edit_own = false
           }
           else{
@@ -804,7 +1201,7 @@ export default {
       },
       setAllAdd(args) {
         for(var i=0;i<this.datasrc.length;i++) {
-          if(i==7 || i==10) {
+          if(this.datasrc[i].text=="Approval" || this.datasrc[i].text == "Transaction") {
             this.datasrc[i].write = true
           }
           else {
@@ -827,7 +1224,7 @@ export default {
             this.additionalpermission[7].read_own = true
             this.additionalpermission[10].read_own = true
           }
-          if(i==11) {
+          if(this.additionalpermission[i].text=="Transaction Upload") {
             this.additionalpermission[i].read_own = false
           }
           else{this.additionalpermission[i].read_all = args}
@@ -841,11 +1238,11 @@ export default {
           if(args) {
             this.additionalpermission[i].read_all = false
           }
-          if(i==11) {
+          if(this.additionalpermission[i].text=="Transaction Upload") {
             this.additionalpermission[i].read_all = false
           }
           else{
-            if(i==0 ||i==1 ||i==7 ||i==10) {
+            if(this.datasrc[i].text=="Company" ||this.datasrc[i].text=="User" ||this.datasrc[i].text=="Approval" ||this.datasrc[i].text=="Transaction") {
             this.additionalpermission[i].read_own = true
           }
           else{
@@ -976,9 +1373,18 @@ export default {
       })
     },
     setUserGroup(args) {
-      api.get(`${apiUrl}`+`super/group/subgroup/find/by/${args.id}`).then((res) => {
+      api.get(`${apiUrl}`+`super/group/subgroup/find/by/${this.staff.designation}`).then((res) => {
         console.log(res.data)
         this.input.user_group = res.data._id
+        this.datasrcOld = JSON.parse(JSON.stringify(res.data.permissions))
+        this.additionalpermissionOld = JSON.parse(JSON.stringify(res.data.additional_permissions))
+        this.by_heads = JSON.parse(JSON.stringify(res.data.approval_permissions.by_heads.status))
+        this.by_dept = JSON.parse(JSON.stringify(res.data.approval_permissions.by_department.status))
+        this.approval_permissionsOld = JSON.parse(JSON.stringify(res.data.approval_permissions))
+        this.datasrc = JSON.parse(JSON.stringify(res.data.permissions))
+        this.additionalpermission = JSON.parse(JSON.stringify(res.data.additional_permissions))
+        this.approval_permissions = JSON.parse(JSON.stringify(res.data.approval_permissions))
+        this.tab = true
       })
     },
     click() {
@@ -992,12 +1398,6 @@ export default {
      else {
       if(this.input.onType=="Staff") {
         this.input.address = [this.addresslist];
-        if(this.permission_override) {
-          this.input.user_permissions=this.datasrc
-          this.input.approval_permissions=this.approval_permissions
-          this.input.additional_permissions = this.additionalpermission
-        }
-        
         axios.put(`${apiUrl}`+`staff/staff/update/one/${this.input.user_type}`,this.staff,{withCredentials:true}).then((response)=> {
           axios.put(`${apiUrl}`+`user/subuser/edit/${this.input._id}`,this.input, {withCredentials : true}).then((response) =>{
             console.log(response.data)

@@ -100,19 +100,19 @@
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
-                            <div v-if="datasrc[i].module_name == 'importTrans'">
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" disabled/>
+                            <div v-if="datasrc[i].text == 'User'">
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" />
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" @change="setEditOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
-                            <div v-if="datasrc[i].module_name == 'importTrans'">
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" :uncheckedValue="false" :checkedValue="true" disabled/>
+                            <div v-if="datasrc[i].text == 'Approval' || datasrc[i].text == 'User'">
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" @change="setDeleteOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own"  :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
@@ -471,16 +471,16 @@ export default {
               {module_name:"paymentorder",text:"Purchase Order",read:true,write:false,edit:false,delete:false}
               ],
               additionalpermission:[
-              {module_name:"company",text:"Company",read_own:true,read_all:false},{module_name:"subuser",text:"User",read_own:true,read_all:false},{module_name:"subgroup",text:"User Group",read_own:false,read_all:false},
-              {module_name:"dept",text:"Department",read_own:false,read_all:false},
-              {module_name:"desig",text:"Designation",read_own:false,read_all:false},{module_name:"head",text:"Head",read_own:false,read_all:false},
-              {module_name:"label",text:"Label",read_own:false,read_all:false},{module_name:"preApp",text:"Approval",read_own:true,read_all:false},
-              {module_name:"budSet",text:"Budget Settings",read_own:false,read_all:false},
-              {module_name:"staff",text:"Staff",read_own:false,read_all:false},
-              {module_name:"trans",text:'Transcation',read_own:true,read_all:false},
+              {module_name:"company",text:"Company",read_own:true,read_all:false,delete_own:false,edit_own:false},{module_name:"subuser",text:"User",read_own:true,read_all:false,delete_own:true,edit_own:true},{module_name:"subgroup",text:"User Group",read_own:false,read_all:false,delete_own:false,edit_own:false},
+              {module_name:"dept",text:"Department",read_own:false,read_all:false,delete_own:false,edit_own:false},
+              {module_name:"desig",text:"Designation",read_own:false,read_all:false,delete_own:false,edit_own:false},{module_name:"head",text:"Head",read_own:false,read_all:false,delete_own:false,edit_own:false},
+              {module_name:"label",text:"Label",read_own:false,read_all:false,delete_own:false,edit_own:false},{module_name:"preApp",text:"Approval",read_own:true,read_all:false,delete_own:true,edit_own:false},
+              {module_name:"budSet",text:"Budget Settings",read_own:false,read_all:false,delete_own:false,edit_own:false},
+              {module_name:"staff",text:"Staff",read_own:false,read_all:false,delete_own:false,edit_own:false},
+              {module_name:"trans",text:'Transcation',read_own:true,read_all:false,delete_own:false,edit_own:false},
               {module_name:"importTrans",text:"Transaction Upload",read_own:false,read_all:false},
-              {module_name:"budtrans",text:"Budget Transfer",read_own:false,read_all:false},
-              {module_name:"paymentorder",text:"Payment Order",read_own:false,read_all:false}
+              {module_name:"budtrans",text:"Budget Transfer",read_own:false,read_all:false,delete_own:false,edit_own:false},
+              {module_name:"paymentorder",text:"Payment Order",read_own:false,read_all:false,delete_own:false,edit_own:false}
               ],
               selectedLabel:null,
             modal :false,

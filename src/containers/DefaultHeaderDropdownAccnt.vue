@@ -80,19 +80,16 @@ export default {
   }
   else{
       var list = JSON.parse(localStorage.session_key)
-      console.log(list)
-      var user = list.user._id
+      this.user = list.user
       this.isUser = true;
-      axios.get(`${apiUrl}/user/subuser/get/${user}`,{withCredentials:true}).then((res) => {
-        this.user = res.data;
-        axios.get(`${apiUrl}`+`company/${list.user.company}`,{withCredentials : true})
+        axios.get(`${apiUrl}`+`company/${this.user.company}`,{withCredentials : true})
         .then(response => {
+          console.log(response.data)
           this.data = [response.data]
         this.ssnCompany = response.data
         this.$session.set('company',response.data._id);
         })
-      })
-    }
+      }
   },
   methods : {
     userDetails() {

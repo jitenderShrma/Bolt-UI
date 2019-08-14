@@ -12,47 +12,10 @@
                             <label v-text="$ml.get('parentdesig')"></label>
                             <treeselect :default-expand-level="10" :placeholder="$ml.get('pholdparentdesig')" v-model="input.parent_designation_id" :multiple="false" :options="data" />
                           </b-col>
-                      		<!-- <div v-if="!clicked">
-                      			<b-col sm="6">
-                              
-                  				<ejs-dropdownlist :change="changeDesig" :showClearButton="true"  v-model="input.parent_designation_id" floatLabelType="Auto" :groupTemplate="desigTemplate" :allowFiltering="true" :dataSource='data' :fields='desig_fields' popupHeight='300' :placeholder="$ml.get('pholdparentdesig')" ></ejs-dropdownlist>
-                  			</b-col>
-                  			</div>
-                  			<div v-else>
-                  				<b-col sm="6">
-                            <label v-text="$ml.get('designation')"></label>
-                            <treeselect :placeholder="$ml.get('pholddesig')" v-model="input.designation" :multiple="false" :options="data" />
-                  				<ejs-dropdownlist :change="changeDesig" :showClearButton="true" v-model="input.parent_designation_id" :allowFiltering="true" :dataSource='data' :fields='desig_fields'  popupHeight='300' :placeholder="$ml.get('pholdparentdesig')" ></ejs-dropdownlist>
-                  			</b-col>
-                  			</div> -->
                         <b-col sm="6">
                           <label v-text="$ml.get('department')"></label>
                           <treeselect :default-expand-level="10" :placeholder="$ml.get('pholdparentdept')" v-model="input.department" :multiple="false" :options="department" />
                         </b-col>
-                  			<!-- <div v-if="!clicked1">
-                  				<b-col sm="8">
-                  					<b-row>
-                  						<b-col sm="9">
-                  				<ejs-dropdownlist :change="changeDept" :close="switchNow1" :showClearButton="true" v-model="input.department" floatLabelType="Auto" :groupTemplate="groupTemplate1" :allowFiltering="true" :dataSource='department' :fields='dept_fields' popupHeight='300' :placeholder="$ml.get('pholddept')" :footerTemplate="addDesignation"></ejs-dropdownlist>
-                  			</b-col>
-                  			<b-col sm="1">
-                  				<b-button variant="primary" @click="refreshDept" style=" margin-top:10px;"><i class="fa fa-refresh"></i></b-button>
-                  			</b-col>
-                  		</b-row>
-                  			</b-col>
-                  			</div>
-	                  		<div v-else>
-	                  			<b-col sm="8">
-                  					<b-row>
-                  						<b-col sm="9">
-	                  			<ejs-dropdownlist :change="changeDept" v-model="input.department" :showClearButton="true" floatLabelType="Auto"  :allowFiltering="true" :dataSource='department' :fields='dept_fields' popupHeight='300' :placeholder="$ml.get('pholddept')" :footerTemplate="addDesignation"></ejs-dropdownlist>
-	                  			</b-col>
-                  			<b-col sm="1">
-                  				<b-button variant="primary" @click="refreshDept" style=" margin-top:10px;"><i class="fa fa-refresh"></i></b-button>
-                  			</b-col>
-                  		</b-row>
-	                  		</b-col>
-	                  		</div> -->
 				  		</b-form-group>
 				  	  </b-tab>
 			  		  <b-tab :title="$ml.get('permissions')">
@@ -124,19 +87,19 @@
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
-                            <div v-if="datasrc[i].module_name == 'importTrans'">
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" disabled/>
+                            <div v-if="datasrc[i].text == 'User'">
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" />
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" @change="setEditOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
-                            <div v-if="datasrc[i].module_name == 'importTrans'">
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" :uncheckedValue="false" :checkedValue="true" disabled/>
+                            <div v-if="datasrc[i].text == 'Approval' || datasrc[i].text == 'User'">
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" @change="setDeleteOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own"  :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
@@ -520,16 +483,16 @@ export default {
               {module_name:"paymentorder",text:"Purchase Order",read:true,write:false,edit:false,delete:false}
               ],
               additionalpermission:[
-              {module_name:"company",text:"Company",read_own:true,read_all:false},{module_name:"subuser",text:"User",read_own:true,read_all:false},{module_name:"subgroup",text:"User Group",read_own:false,read_all:false},
-              {module_name:"dept",text:"Department",read_own:false,read_all:false},
-              {module_name:"desig",text:"Designation",read_own:false,read_all:false},{module_name:"head",text:"Head",read_own:false,read_all:false},
-              {module_name:"label",text:"Label",read_own:false,read_all:false},{module_name:"preApp",text:"Approval",read_own:true,read_all:false},
-              {module_name:"budSet",text:"Budget Settings",read_own:false,read_all:false},
-              {module_name:"staff",text:"Staff",read_own:false,read_all:false},
-              {module_name:"trans",text:'Transcation',read_own:true,read_all:false},
+              {module_name:"company",text:"Company",read_own:true,read_all:false,delete_own:false,edit_own:false},{module_name:"subuser",text:"User",read_own:true,read_all:false,delete_own:true,edit_own:true},{module_name:"subgroup",text:"User Group",read_own:false,read_all:false,delete_own:false,edit_own:false},
+              {module_name:"dept",text:"Department",read_own:false,read_all:false,delete_own:false,edit_own:false},
+              {module_name:"desig",text:"Designation",read_own:false,read_all:false,delete_own:false,edit_own:false},{module_name:"head",text:"Head",read_own:false,read_all:false,delete_own:false,edit_own:false},
+              {module_name:"label",text:"Label",read_own:false,read_all:false,delete_own:false,edit_own:false},{module_name:"preApp",text:"Approval",read_own:true,read_all:false,delete_own:true,edit_own:false},
+              {module_name:"budSet",text:"Budget Settings",read_own:false,read_all:false,delete_own:false,edit_own:false},
+              {module_name:"staff",text:"Staff",read_own:false,read_all:false,delete_own:false,edit_own:false},
+              {module_name:"trans",text:'Transcation',read_own:true,read_all:false,delete_own:false,edit_own:false},
               {module_name:"importTrans",text:"Transaction Upload",read_own:false,read_all:false},
-              {module_name:"budtrans",text:"Budget Transfer",read_own:false,read_all:false},
-              {module_name:"paymentorder",text:"Payment Order",read_own:false,read_all:false}
+              {module_name:"budtrans",text:"Budget Transfer",read_own:false,read_all:false,delete_own:false,edit_own:false},
+              {module_name:"paymentorder",text:"Payment Order",read_own:false,read_all:false,delete_own:false,edit_own:false}
               ],
        		addDesignation : function() {
        			return {

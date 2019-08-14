@@ -264,5 +264,6 @@
     "staffdetails": "Staff Details",
     "editown" : "Edit Own",
     "deleteown" : "Delete Own",
-    "create" : "Create"
+    "create" : "Create",
+    "savepermissions" : "Save Permissions"
 }
