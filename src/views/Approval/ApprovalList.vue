@@ -2,17 +2,18 @@
  <div class="animated slideInLeft" style="animation-duration:100ms">
      <div id="target" class="col-lg-15 control-section">
         <div class="content-wrapper">
-            <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
+            <ejs-toolbar ref="toolbar" id="toolbargrid" :clicked="addEditHandler">
               <e-items>
-                <e-item  align="right" id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
+                  <e-item  align="right" id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
+                  <e-item  align="right" id="cancel" :template="cancelTemplate" :text="$ml.get('cancel')"></e-item>
                 <e-item align="right" id="label" :text="$ml.get('label')"></e-item>
               </e-items>
             </ejs-toolbar>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc"  :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"
                 :height="height" :enableHover='false'>
                 <e-columns>
-                    <e-column headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
+                    <e-column :visible="enableColumn" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
                     <e-column :visible="false" field="last_updated" headerText='last_updated' width='140'></e-column>
                     <e-column field='ref_id' headerText='Ref ID' width="117"  :filter='filter' ></e-column>
                     <e-column field='status' headerText='Status' width="137" :filter='filter' ></e-column>
@@ -195,15 +196,18 @@ export default {
     data: function () {
       return {
         labels:[],
+        write:true,
+                delete_own:true,
         addModal:false,
         sortOptions:{columns: [{field: 'status', direction: 'Descending'},{field: 'last_updated', direction: 'Descending'}]},
         buttonTemplate: function () {
               return {
+                
                   template: Vue.component('buttonTemplate', {
                       template: `<div>
                                 <div v-if="yes">
-                                  <b-button @click="acceptReq" type="submit" size="sm" variant="primary" v-text="$ml.get('accept')"><i class="fa fa-dot-circle-o"></i></b-button>
-                                  <b-button @click="rejectReq" type="submit" size="sm" variant="danger" v-text="$ml.get('reject')"><i class="fa fa-dot-circle-o"></i></b-button>
+                                  <b-button @click="acceptReq" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
+                                  <b-button @click="rejectReq" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
                                   </div
                                 </div>`,
                   data: function() {
@@ -229,8 +233,8 @@ export default {
                       },
                       mounted() {
                         var data =  JSON.parse(localStorage['session_key'])
-                        if(data.user_type) {
-                          this.designation = data.user_type.designation
+                        if(data.user) {
+                          this.designation = data.user.user_type.designation
                           if(this.data.assigned_to_designation == this.designation && this.data.status=="PENDING") {
                             this.yes=true
                           }
@@ -299,6 +303,19 @@ export default {
                     })
                   }
                 },
+            cancelTemplate: function () {
+              return {
+                  template: Vue.component("cancelTemplate", {
+                      template: `<b-badge id="label1" variant="danger" ><i class="fa fa-trash-o"></i>&nbsp<span id="hide" v-text="$ml.get('cancel')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
            monthTemplate: function () {
               return {
                   template: Vue.component("monthTemplate", {
@@ -341,13 +358,14 @@ export default {
                     })
               }
           },
+          enableColumn:false,
           link:'',
           key:'',
           pending:false,
            height : window.innerHeight*0.695,
           toolbar: [
           'CsvExport',
-            
+            'Search',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
@@ -487,6 +505,13 @@ export default {
                     console.log(args)
                     this.$router.push('/approval/add');
                 }
+                if(args.item.id == "cancel") {
+                  if(data.length>0) {
+                    axios.put(`${apiUrl}approvals/preApp/cancel/label/${data[0].ref_id}`).then((res) => {
+                        console.log(res)
+                    })
+                  }
+                }
                 
             },
             alertDlgBtnClick() {
@@ -517,12 +542,41 @@ export default {
                 this.$refs.dialogObj.hide();
                 this.link = window.location.href;
                 this.key = this.link.split('view/').pop()
-                
+                var user =  JSON.parse(localStorage['session_key'])
+                console.log(user)
+                if(user.user) {
+                  for(var i=0;i<user.permission.length;i++) {
+                    if(user.permission[i].text == "Approval") {
+                      if(!user.permission[i].write) {
+                        this.write =false
+                      }
+                    }
+                  }
+                  for(var i=0;i<user.additional_permissions.length;i++) {
+                    if(user.additional_permissions[i].text == "Approval") {
+                      if(!user.additional_permissions[i].delete_own) {
+                        this.delete_own = false
+                      }
+                    }
+                  }
+                }
                   this.pending = false
                 api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
                   console.log(response.data)
                     this.datasrc = response.data;
                     for(var i =0;i<this.datasrc.length;i++) {
+                      if(user.user) {
+                        console.log("user exists")
+                        if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
+                           this.enableColumn =  true
+                        }
+                      }
+                      else {
+                        console.log("user")
+                        if(this.datasrc[i].status=="PENDING") {
+                           this.enableColumn =  true
+                        }
+                      }
                       if(this.datasrc[i].request_by == null) {
                         this.datasrc[i].request_by = {
                           user_name:"No longer exists!"
@@ -644,7 +698,7 @@ export default {
 }
 #label1 {
   font-size:17px;
-  font-weight: 1;
+  font-weight: 100;
 }
 #ddown_primary {
   font-size:17px;

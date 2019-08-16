@@ -154,7 +154,7 @@ export default {
             editparams: { params: { popupHeight: '300px' }},
            rowHeight: 40,
           toolbar: [
-            'CsvExport',
+            'CsvExport','Search',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },

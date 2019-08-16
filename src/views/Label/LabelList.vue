@@ -322,7 +322,7 @@ export default {
           },
           label:0,
            height : window.innerHeight*0.695,
-          toolbar: [
+          toolbar: ['Search',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },

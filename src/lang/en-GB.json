@@ -265,5 +265,6 @@
     "editown" : "Edit Own",
     "deleteown" : "Delete Own",
     "create" : "Create",
-    "savepermissions" : "Save Permissions"
+    "savepermissions" : "Save Permissions",
+    "cancel" : "Cancel"
 }

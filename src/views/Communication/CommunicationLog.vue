@@ -274,11 +274,7 @@ export default {
 
 
 <style>
-.e-search {
-    position: absolute;
-    top: -94.5%;
-    width: 130px !important;
-}
+
 .container-fluid {
     width: 100%;
     padding-right: 0px !important;

@@ -274,7 +274,7 @@ export default {
           }
         },
         toolbar: [
-          'CsvExport',
+          'CsvExport','Search',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
@@ -474,7 +474,6 @@ export default {
       this.data = this.list_to_tree_dept(response.data)
       })
     api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
-      console.log(res.data)
         this.labels = res.data
       })
     },

@@ -27,7 +27,7 @@
                     <e-column field='labels[0].label_name' :template="labelTemplate" headerText='Labels' ></e-column>
                     <e-column field='accounting_head' headerText='Account Head' ></e-column>
                     <e-column field='notes' headerText='Notes'></e-column>
-                    <e-column :allowEditing="true" :template="groupTemplate" field='department' headerText='Department' width='170' ></e-column>
+                    <e-column :allowEditing="true" field='department.department_name' headerText='Department' width='170' ></e-column>
                     <e-column :allowEditing="true" :visible="false" field="parent_head" headerText="Parent Head">
                     </e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
@@ -420,7 +420,7 @@ export default {
              editSettings: { allowDeleting: true,mode: 'Dialog', allowAdding: true, newRowPosition: 'Child' },
              rowHeight: 30,
               toolbar: [
-          'CsvExport',
+          'CsvExport','Search',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },

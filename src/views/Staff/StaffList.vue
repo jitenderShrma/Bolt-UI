@@ -10,15 +10,15 @@
                 </ejs-toolbar>
              <div class="control-section">
                 
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :groupSettings='groupOptions' :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :gridLines="Default" :allowFiltering='true' :filterSettings='filterOptions'  :allowGrouping='true' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
-            :recordDoubleClick="editStaff"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowReordering="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowFiltering='true' :filterSettings='filterOptions' :allowTextWraping="true" :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbarClick="clickHandler"
+            :recordDoubleClick="editStaff" :toolbar="toolbar"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='personal_details.name' headerText='Name'  :filter='filter' ></e-column>
                     <e-column field='user_name' headerText='Username'  :filter='filter' ></e-column>
                     <e-column field='user_type.designation.name' headerText='Designation'  :filter='filter' ></e-column>
-                    <e-column field='user_type.designation.labels' :template="labelTemplate" headerText='Labels '  :filter='filter' ></e-column>
                     <e-column field='user_type.department.department_name' headerText='Department'  :filter='filter' ></e-column>
+                    <e-column field='user_type.designation.labels[0].label_name' :template="labelTemplate" headerText='Labels '  :filter='filter' ></e-column>
                 </e-columns>
                 </ejs-grid>
                  </div>
@@ -53,7 +53,7 @@ import {
   GroupingBar,
   FieldList
 } from "@syncfusion/ej2-vue-pivotview";
-import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Group } from "@syncfusion/ej2-vue-grids";
+import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort,Reorder, Filter, Selection, GridComponent,Group } from "@syncfusion/ej2-vue-grids";
     
     Vue.use(GridPlugin);
 
@@ -118,7 +118,7 @@ export default {
         Edit
     },
      provide: {
-            grid: [ Group,PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser ]
+            grid: [ Group,PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder ]
     },
     data: function () {
       return {
@@ -254,9 +254,8 @@ export default {
           } },
            height : window.innerHeight*0.695,
           toolbar: [
-          'ExcelExport','PdfExport',
-            
-            { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
+          'Search',
+          { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
             ],
@@ -364,6 +363,18 @@ export default {
             alertDlgBtnClick() {
                     this.$refs.alertDialog.hide();
                 },
+                clickHandler(args) {
+                  if (args.item.id === 'small') {
+            this.rowHeight = 20;
+            }
+        
+        if (args.item.id === 'medium') {
+            this.rowHeight = 30;
+        }
+        if (args.item.id === 'big') {
+            this.rowHeight = 60;
+        }
+                }
             
         },
         async mounted () { 
@@ -497,4 +508,5 @@ export default {
     border-bottom-color: white;
     border-left-color: white;
 }
+
 </style>

@@ -660,7 +660,6 @@ var router = new Router({
 router.beforeEach((to, from, next) => {
   if(localStorage['session_key']!=null) {
     var sessionExists = localStorage['session_key']
-    console.log(localStorage['session_key'])
     if(sessionExists) {
     if (to.matched.some(record => record.meta.requiresAuth) && !sessionExists) {
       next({ path: '/login', query: { redirect: to.fullPath }});

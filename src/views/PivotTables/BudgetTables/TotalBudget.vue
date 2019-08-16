@@ -530,36 +530,6 @@
         </div>
         <div v-else>
         </div>
-
-
-            <ejs-dialog id='dialog' height="400" style="max-height:fit-content !important" header='Add A Label' showCloseIcon='true' :isModal='LabelModal' :animationSettings='animationSettings' width='285px' ref='dialogObj'
-            target='#target' >
-            <b-form v-on:submit.prevent="addLabel">
-        <div class="content-wrapper textbox-default">
-        <div class="row">
-        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
-        </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-              <p>Label Color</p>
-            </div>
-            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                    <ejs-colorpicker :modeSwitcher="false" value="#000" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
-            </div>
-        </div>
-        <br>
-        <div class="multiline_wrapper">
-            <ejs-textbox v-model="formdata.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
-        </div>
-        </div>
-        <div slot="footer">
-              <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
-          </div>
-          </b-form>
-        </ejs-dialog>
             <b-modal :title="$ml.get('addhead')" class="modal-primary" v-model="modal" @ok="modal = false" hide-footer>
               <div>
                 <b-form v-on:submit.prevent="addHead">
@@ -1131,7 +1101,7 @@ export default {
              editSettings: { allowDeleting: true,mode: 'Dialog', allowAdding: true, newRowPosition: 'Child' },
              rowHeight: 30,
               toolbar: [
-          'CsvExport',
+          'CsvExport','Search',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
@@ -1153,8 +1123,7 @@ export default {
    };
   },
   async mounted() {
-    this.$refs.dialogObj.hide();
-    this.link = window.location.href;
+      this.link = window.location.href;
      this.key = this.link.split(`head/`).pop()
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {

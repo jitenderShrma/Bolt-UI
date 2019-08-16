@@ -9,6 +9,9 @@ export default {
 </script>
 
 <style lang="scss">
+.e-search {
+  width:130px !important;
+}
 @media (max-width: 992px) {
   #hide {
   display:none;

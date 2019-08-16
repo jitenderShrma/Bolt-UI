@@ -261,7 +261,7 @@ export default {
           },
            height : window.innerHeight*0.695,
           toolbar: [
-          'CsvExport',
+          'CsvExport','Search',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },

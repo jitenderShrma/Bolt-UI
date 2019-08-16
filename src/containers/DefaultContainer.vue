@@ -47,6 +47,8 @@
 
 <script>
 import nav from '@/_nav'
+import axios from 'axios'
+import apiUrl from '@/apiUrl'
 import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, AsideToggler, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
 import DefaultAside from './DefaultAside'
 import DefaultHeaderDropdown from './DefaultHeaderDropdown'
@@ -72,6 +74,8 @@ export default {
   },
   data () {
     return {
+      pendingCount1:0,
+      pendingCount2:0,
       navItems: [
         {
           name: 'Dashboard',
@@ -82,19 +86,19 @@ export default {
             text: 'NEW'
           }
         },
-        {
-          name:"Approval",
-          url:"/approval/view/all",
-          icon:"icon-calculator"
-        },
       ],
     }
   },
-  beforeMount: function () {
+  beforeMount:function () {
+     axios.get(`${apiUrl}approvals/preApp/get/count`,{withCredentials:true}).then((res) => {
+      this.pendingCount1 = res.data
+    })
+     axios.get(`${apiUrl}transfer/budtrans/get/count`,{withCredentials:true}).then((resp) => {
+        this.pendingCount2 = resp.data
+      })
     var Session = JSON.parse(localStorage['session_key']);
     if(Session.user!=null) {
       var permission = Session.additional_permissions
-      console.log(permission)
       for(var i=0;i<permission.length;i++) {
         if(permission[i].module_name != undefined)
         {
@@ -112,6 +116,18 @@ export default {
                   name : "Departments",
                   url : "/department/list",
                   icon : "icon-star"
+                })
+            }
+            if(permission[i].text == "Approval") {
+              this.navItems.push(
+                {
+                  name:"Approval Requests",
+                  url:"/approval/view/all",
+                  icon:"icon-calculator",
+                  badge: {
+                    variant: 'primary',
+                    text: this.pendingCount1
+                  }
                 })
             }
             if(permission[i].text=="Designation") {
@@ -167,21 +183,11 @@ export default {
                 this.navItems.push({
                   name: "Budget Transfer",
                   icon:"icon-star",
-                  children : [
-                    {
-                      name:"All Requests",
-                      url:"/budgettrans/list/all",
-                      icon:'icon-calculator'
-                    },
-                    {
-                      name:'Pending Approvals',
-                      url: '/budgettrans/list/pending',
-                      icon:'icon-calculator',
-                      badge: {
-                        variant: 'danger'
-                      }
-                    }
-                    ]
+                  url:"/budgettrans/list/all",
+                  badge: {
+                    variant: 'primary',
+                    text: this.pendingCount2
+                  }
                 })
             }
           }
@@ -189,7 +195,105 @@ export default {
     }
     }
     else {
-    this.navItems = nav.items
+    this.navItems = [
+  {
+    name: 'Dashboard',
+    url: '/dashboard',
+    icon: 'icon-speedometer',
+    badge: {
+      variant: 'primary',
+      text: 'NEW'
+    }
+  },  
+  {
+        name: 'Staff',
+        url: '/staff',
+        icon: 'icon-user'
+  },
+  {
+    name : "Templates",
+    url : '/templates',
+    icon : 'icon-envelope',
+    children : [
+      {
+        name : 'Email Templates',
+        url : '/templates/email',
+        icon : 'icon-envelope',
+      },
+      {
+        name : 'SMS Templates',
+        url : '/templates/sms',
+        icon : 'icon-envelope',
+      },
+    ]
+  },
+  {
+    name: 'Communication Log',
+    url: '/plugin/log',
+    icon: 'icon-settings',
+  },
+  {
+    name : "Departments",
+    url : "/department/list",
+    icon : "icon-star"
+  },
+  {
+    name : "Designations",
+    url : "/designation/list",
+    icon : "icon-star"
+  },
+  {
+    name : "Heads",
+    url : "/heads/list",
+    icon : "icon-star"
+  },
+  {
+    name: "Budget",
+    icon:"icon-star",
+    url:"/budget",
+    children : [
+      {
+        name:"Total Budget",
+        url:"/budget/total",
+        icon:"icon-star"
+      },
+      {
+        name:"Approved Budget",
+        url:"/budget/approved",
+        icon:"icon-star"
+      }
+    ]
+  },
+  {
+    name: "Budget Transfer",
+    icon:"icon-star",
+    url:"/budgettrans/list/all",
+    badge: {
+      variant: 'primary',
+      text: this.pendingCount2
+    }
+  },
+  {
+    name:"Transaction",
+    url:"/transaction",
+    icon:"icon-calculator"
+  },
+  {
+    name:"Approval Requests",
+    url:"/approval/view/all",
+    icon:"icon-calculator",
+    badge: {
+      variant: 'primary',
+      text: this.pendingCount1
+    }
+  },
+  {
+    name:"Label",
+    url:"/label",
+    icon:"icon-calculator"
+  },
+  
+]
     }
   },
   computed: {

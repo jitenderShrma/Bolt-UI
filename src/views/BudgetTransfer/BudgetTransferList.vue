@@ -9,10 +9,11 @@
               </e-items>
             </ejs-toolbar>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :sortSettings='sortOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"
                 :height="height" :enableHover='false'>
                 <e-columns>
-                    <e-column :visible="pending" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
+                    <e-column :visible="enableColumn" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
+                    <e-column :visible="false" field="last_updated" headerText='last_updated' width='140'></e-column>
                     <!-- <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column> -->
                     <e-column field='requested_by.user_name' headerText='Requested By'  :filter='filter' ></e-column>
@@ -132,10 +133,6 @@ const toastTypes = {
   warn: 'warn'
 }
 
-
-var api = axios.create({
-  withCredentials:true
-})
 miniToastr.init({types: toastTypes})
 
 function toast ({title, message, type, timeout, cb}) {
@@ -207,26 +204,43 @@ export default {
               return {
                   template: Vue.component('buttonTemplate', {
                       template: `<div>
-                                  <b-button @click="acceptReq" type="submit" size="sm" variant="primary" v-text="$ml.get('accept')"><i class="fa fa-dot-circle-o"></i></b-button>
-                                  <b-button @click="rejectReq" type="submit" size="sm" variant="danger" v-text="$ml.get('reject')"><i class="fa fa-dot-circle-o"></i></b-button>
+                                <div v-if="yes">
+                                  <b-button @click="acceptReq" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
+                                  <b-button @click="rejectReq" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
+                                  </div>
                                 </div>`,
                   data: function() {
                           return {
                               data: {},
+                              designation:null,
+                              yes:false
                           }
                       },
                       methods : {
                         acceptReq() {
-                          axios.get(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
+                          api.post(`${apiUrl}`+`transfer/budtrans/accept/requests/${this.data._id}`).then((res) => {
                             console.log(res.data)
-                            window.location.href="#/approval/view/all"
+                            window.location.reload();
                           })
                         },
                         rejectReq() {
-                          axios.get(`${apiUrl}`+`/approval/level1/reject/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
+                          api.post(`${apiUrl}`+`transfer/budtrans/reject/requests/${this.data._id}`).then((res) => {
                             console.log(res.data)
-                            window.location.href="#/approval/view/all"
+                            window.location.reload();
                           })
+                        }
+                      },
+                      mounted() {
+                        var data =  JSON.parse(localStorage['session_key'])
+                        if(data.user) {
+                          this.designation = data.user.user_type.designation
+                          if(this.data.assigned_to == this.designation && this.data.status=="PENDING") {
+                            this.yes=true
+                          }
+                        }
+                        if(data.length == 24 && this.data.status=="PENDING") {
+                          console.log("yes")
+                          this.yes=true
                         }
                       }
                 })
@@ -321,9 +335,10 @@ export default {
           link:'',
           key:'',
           pending:false,
+          sortOptions:{columns: [{field: 'status', direction: 'Descending'},{field: 'last_updated', direction: 'Descending'}]},
            height : window.innerHeight*0.695,
           toolbar: [
-          'CsvExport',
+          'CsvExport','Search',
             
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
@@ -342,6 +357,7 @@ export default {
                 filterOptions: {
                     type: 'Menu'
                 },
+                enableColumn:false,
                 selectedLabel:null,
                 filter: {
                     type: 'CheckBox'
@@ -455,66 +471,66 @@ export default {
             'someval' : function() {
               console.log(this.someval);
             },
-            $route (to, from){
-              if(to.params.id == 'pending') {
-                api.get(`${apiUrl}`+`transfer/budtrans/view/requests/pending`).then((response) => {
-                    this.datasrc = response.data;
-                    for(var i =0;i<this.datasrc.length;i++) {
-                      if(this.datasrc[i].requested_by == null) {
-                        this.datasrc[i].requested_by = {
-                          user_name:"No longer exists!"
-                        }
-                      }
-                      if(this.datasrc[i].department == null) {
-                        this.datasrc[i].department = {
-                          department_name:"No longer exists!"
-                        }
-                      }
-                      if(this.datasrc[i].source_head == null) {
-                        this.datasrc[i].source_head = {
-                          name:"No longer exists!"
-                        }
-                      }
-                      if(this.datasrc[i].destination_head == null) {
-                        this.datasrc[i].destination_head = {
-                          name:"No longer exists!"
-                        }
-                      }
+            // $route (to, from){
+            //   if(to.params.id == 'pending') {
+            //     api.get(`${apiUrl}`+`transfer/budtrans/view/requests/pending`).then((response) => {
+            //         this.datasrc = response.data;
+            //         for(var i =0;i<this.datasrc.length;i++) {
+            //           if(this.datasrc[i].requested_by == null) {
+            //             this.datasrc[i].requested_by = {
+            //               user_name:"No longer exists!"
+            //             }
+            //           }
+            //           if(this.datasrc[i].department == null) {
+            //             this.datasrc[i].department = {
+            //               department_name:"No longer exists!"
+            //             }
+            //           }
+            //           if(this.datasrc[i].source_head == null) {
+            //             this.datasrc[i].source_head = {
+            //               name:"No longer exists!"
+            //             }
+            //           }
+            //           if(this.datasrc[i].destination_head == null) {
+            //             this.datasrc[i].destination_head = {
+            //               name:"No longer exists!"
+            //             }
+            //           }
                       
-                    }
-                })
-                this.pending = true
-              }
-              else {
-                api.get(`${apiUrl}`+`transfer/budtrans/view/requests/all`).then((response) => {
-                    this.datasrc = response.data;
-                    for(var i =0;i<this.datasrc.length;i++) {
-                      if(this.datasrc[i].requested_by == null) {
-                        this.datasrc[i].requested_by = {
-                          user_name:"No longer exists!"
-                        }
-                      }
-                      if(this.datasrc[i].department == null) {
-                        this.datasrc[i].department = {
-                          department_name:"No longer exists!"
-                        }
-                      }
-                      if(this.datasrc[i].source_head == null) {
-                        this.datasrc[i].source_head = {
-                          name:"No longer exists!"
-                        }
-                      }
-                      if(this.datasrc[i].destination_head == null) {
-                        this.datasrc[i].destination_head = {
-                          name:"No longer exists!"
-                        }
-                      }
+            //         }
+            //     })
+            //     this.pending = true
+            //   }
+            //   else {
+            //     api.get(`${apiUrl}`+`transfer/budtrans/view/requests/all`).then((response) => {
+            //         this.datasrc = response.data;
+            //         for(var i =0;i<this.datasrc.length;i++) {
+            //           if(this.datasrc[i].requested_by == null) {
+            //             this.datasrc[i].requested_by = {
+            //               user_name:"No longer exists!"
+            //             }
+            //           }
+            //           if(this.datasrc[i].department == null) {
+            //             this.datasrc[i].department = {
+            //               department_name:"No longer exists!"
+            //             }
+            //           }
+            //           if(this.datasrc[i].source_head == null) {
+            //             this.datasrc[i].source_head = {
+            //               name:"No longer exists!"
+            //             }
+            //           }
+            //           if(this.datasrc[i].destination_head == null) {
+            //             this.datasrc[i].destination_head = {
+            //               name:"No longer exists!"
+            //             }
+            //           }
                       
-                    }
-                })
-                this.pending = false
-              }
-            }
+            //         }
+            //     })
+            //     this.pending = false
+            //   }
+            // }
         }, 
         async mounted () {
                 this.$refs.dialogObj.hide();
@@ -522,10 +538,23 @@ export default {
                 this.key = this.link.split('list/').pop()
                 if(this.key == 'all') {
                   this.pending = false
+                  var user =  JSON.parse(localStorage['session_key'])
                 api.get(`${apiUrl}`+`transfer/budtrans/view/requests/all`).then((response) => {
                   console.log(response.data)
                     this.datasrc = response.data;
                     for(var i =0;i<this.datasrc.length;i++) {
+                      if(user.user) {
+                        console.log("user exists")
+                        if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to==user.user.user_type.designation) {
+                           this.enableColumn =  true
+                        }
+                      }
+                      else {
+                        console.log("user")
+                        if(this.datasrc[i].status=="PENDING") {
+                           this.enableColumn =  true
+                        }
+                      }
                       if(this.datasrc[i].requested_by == null) {
                         this.datasrc[i].requested_by = {
                           user_name:"No longer exists!"

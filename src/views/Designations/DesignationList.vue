@@ -24,7 +24,7 @@
                     <e-column :visible="false" field='id'></e-column>
                     <e-column  field='label' headerText='Designation Name' ></e-column>
                     <e-column  field='labels[0].label_name' :allowEditing="false" :template="labelTemplate" headerText='Labels' ></e-column>
-                    <e-column :template="groupTemplate" field='department' :editTemplate="departmentTemplate" headerText='Department' width='170' ></e-column>
+                    <e-column field='department.department_name' headerText='Department' width='170' ></e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
             </ejs-treegrid>
@@ -255,7 +255,7 @@ export default {
           }
         },
         toolbar: [
-          'CsvExport',
+          'CsvExport','Search',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },

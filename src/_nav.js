@@ -1,16 +1,4 @@
-import apiUrl from '@/apiUrl'
-import axios from 'axios'
 
-var pendingCount;
-
-// async function getCount() {
-//   var val
-//   await axios.get(`${apiUrl}`+`approvals/preApp/view/requests`,{withCredentials:true}).then((res) => {
-//       val = res.data.length
-//       console.log(res.data)
-//     })
-//   return val
-// }
 var items = [
   {
     name: 'Dashboard',
@@ -26,16 +14,6 @@ var items = [
         url: '/staff',
         icon: 'icon-user'
   },
-  // {
-  //   name: 'User Groups',
-  //   url: '/usertype/list',
-  //   icon: 'icon-star',
-  // },
-  // {
-  //   name: 'Custom Attributes',
-  //   url: '/attribute',
-  //   icon: 'icon-star',
-  // },
   {
     name : "Templates",
     url : '/templates',
@@ -93,22 +71,7 @@ var items = [
   {
     name: "Budget Transfer",
     icon:"icon-star",
-    children : [
-      {
-        name:"All Requests",
-        url:"/budgettrans/list/all",
-        icon:'icon-calculator'
-      },
-      {
-        name:'Pending Approvals',
-        url: '/budgettrans/list/pending',
-        icon:'icon-calculator',
-        badge: {
-          variant: 'danger',
-          text: pendingCount
-        }
-      }
-      ]
+    url:"/budgettrans/list/all"
   },
   {
     name:"Transaction",

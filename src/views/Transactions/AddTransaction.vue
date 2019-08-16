@@ -812,11 +812,11 @@ Vue.use(TextBoxPlugin);
         changeFields(args) {
           axios.get(`${apiUrl}`+`approvals/preApp/get/one/`+`${args.target.value}`,{withCredentials:true}).then((res) => {
             console.log(res.data)
-            if(res.data==null) {
+            if(res.data==null || res.data.status=="PENDING" || res.data.status=="CANCELLED") {
               toast({
                 type: VueNotifications.types.error,
-                title: 'Error!!!',
-                message: 'Invalid Approval Code'
+                title: 'Not Approved',
+                message: 'Approval is either Pending or Cancelled'
               })
             }
             else{
