@@ -103,7 +103,7 @@ export default {
 	        {
 		        name: 'Approved Budget',
 		        data: [],
-		        size: '30%',       
+		        size: '60%',       
 		        dataLabels: {
 		            distance: -30
 		        }
@@ -111,8 +111,8 @@ export default {
 		    {
 	          name:"Total Budget",
 	          data: [],
-	          size:'60%',
-	          innerSize: '60%',
+	          size:'80%',
+	          innerSize: '80%',
 	                
 	        },
 		    {
