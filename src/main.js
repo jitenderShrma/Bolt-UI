@@ -13,7 +13,8 @@ import VueSession from 'vue-session'
 import { TreeGridPlugin } from '@syncfusion/ej2-vue-treegrid';
 import VeeValidate from 'vee-validate';
 import VueBlu from 'vue-blu'
-
+import HighchartsVue from 'highcharts-vue'
+Vue.use(HighchartsVue)
 Vue.use(VueBlu)
 Vue.use(require('vue-moment'));
 Vue.use(VeeValidate);

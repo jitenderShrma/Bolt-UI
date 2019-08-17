@@ -50,6 +50,7 @@ import { HeaderDropdown as AppHeaderDropdown } from '@coreui/vue'
 import axios from 'axios';
 import Auth from '@/Auth.js'
 import apiUrl from '@/apiUrl'
+var api = axios.create({withCredentials:true})
 export default {
   name: 'DefaultHeaderDropdownAccnt',
   components: {
@@ -119,9 +120,10 @@ export default {
       console.log(this.ssnCompany)})
     },
     async Logout() {
-      delete localStorage['session_key'];
-      if(this.$session.has('Subuser')) {
-        axios.post(`${apiUrl}`+`user/subuser/logout`,{withCredentials :true}).then((response) =>{
+      var user = JSON.parse(localStorage['session_key']);
+      if(user.user) {
+        api.post(`${apiUrl}`+`user/subuser/logout`).then((response) =>{
+          console.log(response)
               Auth.logout();
               this.$session.destroy();
               delete sessionStorage['vue-session-key'];
@@ -134,7 +136,8 @@ export default {
             })
       }
       else {
-        axios.get(`${apiUrl}`+`auth/super/logout`,{withCredentials :true}).then((response) =>{
+        api.get(`${apiUrl}`+`auth/super/logout`).then((response) =>{
+          console.log(response)
               Auth.logout();
               this.$session.destroy();
               delete sessionStorage['vue-session-key'];

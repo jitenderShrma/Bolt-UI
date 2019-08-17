@@ -27,7 +27,7 @@
         <b-row>
           <b-col sm="6">
             <span style="color:red;float:right;height:5px;font-size:20px">*</span>
-            <ejs-textbox required :enabled="false" name="Password" v-validate="'required'" type="password" v-model="input.password" floatLabelType="Auto" :placeholder="$ml.get('password')"></ejs-textbox>
+            <ejs-textbox required name="Password" v-validate="'required'" type="password" v-model="input.password" floatLabelType="Auto" :placeholder="$ml.get('password')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
             <span style="color:red;float:right;height:5px;font-size:20px;">*</span>
