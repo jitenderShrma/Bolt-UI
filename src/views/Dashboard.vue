@@ -67,7 +67,7 @@ export default {
 	        {
 		        name: 'Approved Budget',
 		        data: [],
-		        size: '30%',
+		        size: '60%',
 		        dataLabels: {
 		            distance: -10
 		        }               
@@ -75,16 +75,10 @@ export default {
 		    {
 	          name:"Total Budget",
 	          data: [],
-	          size:'60%',
-	          innerSize: '60%',
+	          size:'80%',
+	          innerSize: '80%',
 	          
-	        },
-		    {
-		        name: 'Transactions',
-		        data: [],
-		        size: '80%',
-		        innerSize: '80%',
-		    }
+	        }
         ]
     },
     chartOptions2: {
@@ -171,7 +165,6 @@ export default {
 				data[i].y = data[i].y + (new_data[i].permissible_values[j] - new_data[i].amount_left[j])
 			}
 	}
-		data[1].selected=true
 		console.log(data)
 		return data;
 	},
@@ -192,7 +185,6 @@ export default {
 		for(i=0;i<new_data.length;i++) {
 			data[i] = {name:new_data[i].name,y:new_data[i].permissible_values[d] - new_data[i].amount_left[d]}
 	}
-		data[1].selected=true
 		console.log(data)
 		return data;
 	},

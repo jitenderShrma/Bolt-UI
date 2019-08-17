@@ -92,11 +92,9 @@ export default {
   beforeMount:function () {
      axios.get(`${apiUrl}approvals/preApp/get/count`,{withCredentials:true}).then((res) => {
       this.pendingCount1 = res.data
-    })
-     axios.get(`${apiUrl}transfer/budtrans/get/count`,{withCredentials:true}).then((resp) => {
+      axios.get(`${apiUrl}transfer/budtrans/get/count`,{withCredentials:true}).then((resp) => {
         this.pendingCount2 = resp.data
-      })
-    var Session = JSON.parse(localStorage['session_key']);
+        var Session = JSON.parse(localStorage['session_key']);
     if(Session.user!=null) {
       var permission = Session.additional_permissions
       for(var i=0;i<permission.length;i++) {
@@ -295,6 +293,10 @@ export default {
   
 ]
     }
+      })
+    })
+     
+    
   },
   computed: {
     name () {
