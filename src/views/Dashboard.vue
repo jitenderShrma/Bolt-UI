@@ -85,11 +85,19 @@ export default {
           text: `${this.getMonth()}'s Budget`
         },
         series: [
-	        
 	        {
-		        name: 'Approved Budget',
+		        name: 'Remaining Budget',
+		        data: [],
+		        size: '30%',
+		        dataLabels: {
+		            distance: -10
+		        }               
+		    },
+	        {
+		        name: 'Committed Budget',
 		        data: [],
 		        size: '60%',
+		        innerSize: '60%',
 		        dataLabels: {
 		            distance: -10
 		        }               
@@ -121,11 +129,19 @@ export default {
           text: "This Year's Budget"
         },
         series: [
-	        
 	        {
-		        name: 'Approved Budget',
+		        name: 'Remaining Budget',
 		        data: [],
-		        size: '60%',       
+		        size: '30%',
+		        dataLabels: {
+		            distance: -10
+		        }               
+		    },
+	        {
+		        name: 'Committed Budget',
+		        data: [],
+		        size: '60%',   
+		        innerSize: '60%',    
 		        dataLabels: {
 		            distance: -30
 		        }
@@ -135,7 +151,6 @@ export default {
 	          data: [],
 	          size:'80%',
 	          innerSize: '80%',
-	                
 	        },
         ]
     },
@@ -227,10 +242,12 @@ export default {
   mounted() {
   	api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
-    	this.chartOptions1.series[1].data = this.getTotalDataMonth(response.data)
-      	this.chartOptions1.series[0].data = this.getApprovedDataMonth(response.data)
-      	this.chartOptions2.series[1].data = this.getTotalData(response.data)
-      	this.chartOptions2.series[0].data = this.getApprovedData(response.data)
+    	this.chartOptions1.series[0].data = this.getLeftDataMonth(response.data)
+    	this.chartOptions1.series[2].data = this.getTotalDataMonth(response.data)
+      	this.chartOptions1.series[1].data = this.getApprovedDataMonth(response.data)
+      	this.chartOptions2.series[2].data = this.getTotalData(response.data)
+      	this.chartOptions2.series[1].data = this.getApprovedData(response.data)
+      	this.chartOptions2.series[0].data = this.getLeftData(response.data)
       	this.chartOptions1Bar.series = this.getMonthlyBar1(response.data);
       	this.chartOptions2Bar.series = this.getMonthlyBar2(response.data);
       	this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
@@ -380,6 +397,26 @@ export default {
 			}
 	}
 		console.log(data)
+		return data;
+	},
+	getLeftData(new_data) {
+		var data = []
+		var i=0;
+		for(i=0;i<new_data.length;i++) {
+			data[i] = {name:new_data[i].name,y:0}
+			for(var j=0;j<12;j++) {
+				data[i].y = data[i].y + (new_data[i].amount_left[j])
+			}
+	}
+		return data;
+	},
+	getLeftDataMonth(new_data) {
+		var data = []
+		var i=0;
+		var d = new Date().getMonth()
+		for(i=0;i<new_data.length;i++) {
+			data[i]={name:new_data[i].name,y:new_data[i].amount_left[d]}
+		}
 		return data;
 	},
 	getTotalDataMonth(new_data) {
