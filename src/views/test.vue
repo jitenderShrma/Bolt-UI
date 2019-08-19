@@ -3,13 +3,68 @@
 
     <div id="target" class="col-lg-12 control-section">
         <div>
-          <ejs-toolbar id="toolbar" :clicked="clickHandler">
+          <ejs-toolbar :clicked="clickHandler">
             <e-items>
               <e-item align="right" id="add" :text="$ml.get('add')" :template="addTemplate" ></e-item>
               <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item>
             </e-items>
           </ejs-toolbar>
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+          <b-card>
+          <b-row>
+              <b-col>
+                Head Name
+              </b-col>
+              <b-col>
+                Head Key
+              </b-col>
+              <b-col>
+                column 3
+              </b-col>
+              <b-col>
+                column 4
+              </b-col>
+              <b-col>
+                column 5
+              </b-col>
+            </b-row>
+            <hr>
+          <div v-for="(run,index) in data" :key="index">
+            <b-row>
+              <b-col>
+                <span @click="toggle" v-if="data[index].children" style="margin-left:-10px;cursor:point"><i v-bind:class="[hide ? upClass : rightClass ]"></i></span>
+                {{data[index].name}}
+              </b-col>
+                {{data[index].head_key}}
+              <b-col>
+              </b-col>
+              <b-col>
+              </b-col>
+              <b-col>
+              </b-col>
+              <b-col>
+              </b-col>
+            </b-row>
+            <div v-if="data[index].children && hide">
+              <div v-for="(run,j) in data[index].children" :key="j" style="margin-left:30px ">
+                <b-row>
+              <b-col>
+                {{data[index].children[j].name}}
+              </b-col>
+                {{data[index].children[j].head_key}}
+              <b-col>
+              </b-col>
+              <b-col>
+              </b-col>
+              <b-col>
+              </b-col>
+              <b-col>
+              </b-col>
+            </b-row>
+              </div>
+            </div>
+          </div>
+        </b-card>
+            <!-- <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
              :treeColumnIndex='1' idMapping="_id" parentIdMapping="parent_head" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true'
             :allowExcelExport='true'
@@ -19,9 +74,9 @@
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
             :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
-                <e-columns>
+                <e-columns> -->
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
-                    <e-column :visible="false" field='_id'></e-column>
+                    <!-- <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
                     <e-column field='head_key' headerText='Head Key' ></e-column>
                     <e-column field='labels[0].label_name' :template="labelTemplate" headerText='Labels' ></e-column>
@@ -29,10 +84,10 @@
                     <e-column field='notes' headerText='Notes'></e-column>
                     <e-column :allowEditing="true" :template="groupTemplate" field='department' headerText='Department' width='170' ></e-column>
                     <e-column :allowEditing="true" :visible="false" field="parent_head" headerText="Parent Head">
-                    </e-column>
+                    </e-column> -->
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
-                </e-columns>
-            </ejs-treegrid>
+                <!-- </e-columns>
+            </ejs-treegrid> -->
             <ejs-dialog id='dialog' height="400" style="max-height:fit-content !important" header='Add A Label' showCloseIcon='true' :isModal='LabelModal' :animationSettings='animationSettings' width='285px' ref='dialogObj'
             target='#target' >
             <b-form v-on:submit.prevent="addLabel">
@@ -372,6 +427,7 @@ export default {
                   template: groupVue1
               }
           },
+          hide:true,
           getflag:0,
           LabelModal:false,
           animationSettings: { effect: 'Zoom' },
@@ -402,6 +458,8 @@ export default {
             input:{
               labels:[]
             },
+            upClass:'icon-arrow-down',
+            rightClass:'icon-arrow-right',
             selectedLabel:null,
             module:null,
             isRoot:false,
@@ -441,21 +499,11 @@ export default {
       });
      }
      else{
-          this.data = [ {
-                _id:0,
-                parent_head:2,
-                name:"Some head",
-            },
-            {
-                _id:1,
-                parent_head:0,
-                name:"Some head",
-            },
-            {
-                _id:2,
-                name:"Some head",
-            },
-          ]
+          await api.get(`${apiUrl}`+`head/head/get`)
+    .then((response) => {
+      this.data = this.list_to_tree_head(response.data)
+      console.log(this.data)
+      });
       }
     },
   provide: {
@@ -615,6 +663,9 @@ export default {
     //           });
             
     //   },
+    toggle(args) {
+      this.hide = !this.hide
+    },
     onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
         this.editlabel.color = args.currentValue.hex.slice(1);

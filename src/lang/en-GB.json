@@ -270,5 +270,6 @@
     "create" : "Create",
     "savepermissions" : "Save Permissions",
     "cancel" : "Cancel",
-    "editlabels" : "Edit Labels"
+    "editlabels" : "Edit Labels",
+    "release" : "Release"
 }

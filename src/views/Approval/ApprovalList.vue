@@ -6,6 +6,7 @@
               <e-items>
                   <e-item  align="right" id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
                   <e-item  align="right" id="cancel" :template="cancelTemplate" :text="$ml.get('cancel')"></e-item>
+                  <e-item  align="right" id="release" :template="releaseTemplate" :text="$ml.get('release')"></e-item>
                 <!-- <e-item align="right" id="label" :text="$ml.get('editlabels')"></e-item> -->
               </e-items>
             </ejs-toolbar>
@@ -316,6 +317,19 @@ export default {
                     })
                   }
                 },
+                releaseTemplate: function () {
+              return {
+                  template: Vue.component("releaseTemplate", {
+                      template: `<b-badge id="label1" variant="danger" ><i class="icon-action-undo"></i>&nbsp<span id="hide" v-text="$ml.get('release')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
            monthTemplate: function () {
               return {
                   template: Vue.component("monthTemplate", {
@@ -508,6 +522,13 @@ export default {
                 if(args.item.id == "cancel") {
                   if(data.length>0) {
                     axios.put(`${apiUrl}approvals/preApp/cancel/label/${data[0].ref_id}`).then((res) => {
+                        console.log(res)
+                    })
+                  }
+                }
+                if(args.item.id == "release") {
+                  if(data.length>0) {
+                    axios.get(`${apiUrl}approvals/preApp/release/${data[0].ref_id}`).then((res) => {
                         console.log(res)
                     })
                   }
