@@ -39,9 +39,24 @@
               <b-form-group>
                    <ejs-textbox type="number" v-model="input.recurring_rate" floatLabelType="Auto" :placeholder="$ml.get('pholdrecurringrate')"></ejs-textbox>
                 </b-form-group>
+                
                 </b-col>
               </b-row>
             </b-form-group>
+            <b-form-group
+            :label="$ml.get('recurringperiod')"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true"
+            >
+            <b-row>
+              <b-col sm="4">
+            <b-form-group>
+                   <ejs-textbox type="number" v-model="input.recurring_period" floatLabelType="Auto" :placeholder="$ml.get('pholdrecurringperiod')"></ejs-textbox>
+                </b-form-group>
+              </b-col>
+            </b-row>
+          </b-form-group>
           </div>
           <b-form-group
               :label="$ml.get('month')"

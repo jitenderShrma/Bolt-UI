@@ -193,6 +193,8 @@
     "reqforquote" : "Request For Quotes",
     "recurringrate" : "Recurring Rate",
     "pholdrecurringrate" : "Enter the Recurring Rate",
+    "recurringperiod" : "Recurring Period",
+    "pholdrecurringperiod" : "Enter the Recurring Period",
     "approvalform" : "Approval Request Form",
     "pholdfysm" : "Select the Financial Year Start Month",
     "pholdfy" : "Enter Financial Year",
