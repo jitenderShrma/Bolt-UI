@@ -148,10 +148,14 @@
                 </b-col>
               </b-row>
             </b-form-group>
-            <b-form-group>
+            <b-form-group
+            :label="$ml.get('labels')"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true">
               <b-row>
                 <b-col sm="4">
-                    <div v-for="(run,i) in input.labels" :key="i">
+                    <!-- <div v-for="(run,i) in input.labels" :key="i">
                       <b-row>
                       <b-col>
                       <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="input.labels[i].color">{{input.labels[i].label_name}}</b-badge>
@@ -163,10 +167,16 @@
                       <b-btn v-on:click="delLabeladd(`${input.labels[i]._id}`,`${input._id}`,`${i}`)" size="sm" variant="danger"><i class="fa fa-trash-o"></i></b-btn>
                     </b-col>
                   </b-row>
-                    </div>
-                    <b-form v-on:submit.prevent = "selectLabeladd(`${input._id}`)">
-                      <label v-text="$ml.get('labels')"></label>
-                      <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
+                    </div> --><!-- 
+                    <b-form v-on:submit.prevent = "selectLabeladd(`${input._id}`)"> -->
+                     <!--  <label v-text="$ml.get('labels')"></label> -->
+                      <treeselect @change="selectLabeladd(`${input._id}`)" :placeholder="$ml.get('pholdlabel')" v-model="input.labels" :multiple="true" :options="labels" >
+                        <div slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
+                          <b-badge :variant="node.raw.color">{{node.raw.label}}</b-badge>
+                        </div>
+                        <div slot="value-label" slot-scope="{ node }"><b-badge :variant="node.raw.color">{{node.raw.label}}</b-badge></div>
+                      </treeselect>
+                      <!-- <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
                         <div slot="item" slot-scope = "{item :label}">
                           <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
                         </div>
@@ -176,12 +186,12 @@
                         <div slot="after-items-fixed">
                           <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>
                         </div>
-                      </cool-select>
+                      </cool-select> --><!-- 
                       <br>
                         <div slot="footer">
                           <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('add')"><i class="fa fa-dot-circle-o"></i></b-button>
                         </div>
-                    </b-form>
+                    </b-form> -->
                   </b-col>
                 </b-row>
                   </b-form-group>
@@ -335,7 +345,8 @@
 		},
 		async mounted() {
       axios.get(`${apiUrl}`+`label/label/find/by/Approval`,{withCredentials:true}).then((res) => {
-        this.labels = res.data
+        this.labels = this.convertDataLabel(res.data)
+        console.log(this.labels)
       })
       this.month.splice(0,new Date().getMonth()) //Set months
       // Department Tree
@@ -431,6 +442,16 @@
           delete roots[i].children
         }
         }
+      },
+      convertDataLabel(roots) {
+        for(var i=0;i<roots.length;i++) {
+          roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].label_name;
+          roots[i].raw = roots[i].color;
+        delete roots[i]._id;
+        delete roots[i].label_name;
+        }
+        return roots
       },
       list_to_tree_head(list) {
           var map = {}, node, roots = [], i;

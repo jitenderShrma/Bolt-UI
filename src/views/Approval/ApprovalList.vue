@@ -6,7 +6,7 @@
               <e-items>
                   <e-item  align="right" id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
                   <e-item  align="right" id="cancel" :template="cancelTemplate" :text="$ml.get('cancel')"></e-item>
-                <e-item align="right" id="label" :text="$ml.get('label')"></e-item>
+                <!-- <e-item align="right" id="label" :text="$ml.get('editlabels')"></e-item> -->
               </e-items>
             </ejs-toolbar>
             <div class="control-section">

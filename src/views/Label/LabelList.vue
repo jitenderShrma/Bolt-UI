@@ -31,7 +31,8 @@
                 <ejs-textbox v-model="formdata1.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
         </div>
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                <ejs-textbox v-model="formdata1.context" floatLabelType="Auto" placeholder="Context" required></ejs-textbox>
+                <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" :dataSource='options' v-model="formdata1.context" :placeholder="$ml.get('pholdcontext')">
+            </ejs-dropdownlist>
         </div>
         </div>
         <br>
@@ -40,12 +41,12 @@
               <p>Label Color</p>
             </div>
             <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                    <ejs-colorpicker :value="formdata1.color" :change="onChange" id="color-picker"></ejs-colorpicker>
+                    <ejs-colorpicker :modeSwitcher="false" value="#fff" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
             </div>
         </div>
         <br>
         <div class="multiline_wrapper">
-            <ejs-textbox v-model="formdata1.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
+            <ejs-textbox v-model="formdata1.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description"></ejs-textbox>
         </div>
         </div>
         <div slot="footer">
@@ -62,7 +63,8 @@
                 <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
         </div>
         <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                <ejs-textbox v-model="formdata.context" floatLabelType="Auto" placeholder="Context" required></ejs-textbox>
+          <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" :dataSource='options' v-model="formdata.context" :placeholder="$ml.get('pholdcontext')">
+            </ejs-dropdownlist>
         </div>
         </div>
         <br>
@@ -71,12 +73,12 @@
               <p>Label Color</p>
             </div>
             <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                    <ejs-colorpicker :value="formdata.color" :change="onChange" id="color-picker"></ejs-colorpicker>
+                    <ejs-colorpicker :modeSwitcher="false" :value="formdata.color" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
             </div>
         </div>
         <br>
         <div class="multiline_wrapper">
-            <ejs-textbox v-model="formdata.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
+            <ejs-textbox v-model="formdata.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description"></ejs-textbox>
         </div>
         </div>
         <div slot="footer">
@@ -259,6 +261,9 @@ export default {
             dropdownValue: 'Top',
             datasrc: [],
             editSettings: { allowEditing: true, allowAdding: true, allowDeleting: true,mode:'Dialog'},
+            circlePaletteColors: {'custom': ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#2196f3', '#03a9f4', '#00bcd4',
+                    '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
+                    squarePalettesColn: 7,
             editparams: { params: { popupHeight: '300px' }},
            rowHeight: 40,
            searchTemplate: function () {
@@ -327,6 +332,7 @@ export default {
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
             ],
+            options:['Approval','Heads','Designations','Departments'],
         ddData: [{ value: 1000, text: '1,000 Rows and 11 Columns' }, { value: 10000, text: '10,000 Rows and 11 Columns' }],
                 ddValue: 1000,
                 stTime: null,
@@ -344,7 +350,7 @@ export default {
                 },
                 formdata1: {
                   label_name : "",
-                  color : "#fff",
+                  color : "2196f3",
                   context : "",
                   description : ""
                 },
@@ -388,7 +394,7 @@ export default {
               this.$refs.dialogObj1.hide()
             },
             onChange(args) {
-              this.formdata.color = args.currentValue.hex;
+              this.formdata.color = args.currentValue.hex.slice(1);
             }, 
             load: function() {
                 let proxy = this;
@@ -455,6 +461,7 @@ export default {
                     this.$refs.dialogObj1.show();
                     axios.get(`${apiUrl}`+`label/label/get/one/`+`${id[0]._id}`,{withCredentials:true}).then((res) => {
                         this.formdata = res.data
+                        this.formdata.color = `#${res.data.color}`
                     });
                   }
                   else { 

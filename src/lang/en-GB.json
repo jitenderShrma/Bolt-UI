@@ -53,6 +53,7 @@
     "fieldtype" : "Field Type",
     "fieldname" : "Field Name",
     "context" : "Context",
+    "pholdcontext" : "Select the Context",
     "placeholderfieldname" : "Enter Field Name",
     "description" : "Description",
     "placeholderdescription" : "Enter the Description",
@@ -268,5 +269,6 @@
     "deleteown" : "Delete Own",
     "create" : "Create",
     "savepermissions" : "Save Permissions",
-    "cancel" : "Cancel"
+    "cancel" : "Cancel",
+    "editlabels" : "Edit Labels"
 }
