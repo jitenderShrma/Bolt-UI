@@ -95,6 +95,9 @@
                             <div v-if="datasrc[i].module_name == 'importTrans'">
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_own" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
+                            <div v-if="datasrc[i].module_name == 'budSet'">
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].read" :uncheckedValue="false" :checkedValue="true"/>
+                            </div>
                             <div v-else>
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_own" @change="setReadOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>

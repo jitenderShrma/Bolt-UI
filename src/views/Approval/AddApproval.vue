@@ -350,7 +350,7 @@
       })
       this.month.splice(0,new Date().getMonth()) //Set months
       // Department Tree
-      axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+      axios.get(`${apiUrl}`+`dropdown/department/get/all`,{withCredentials:true}).then((res) => {
         this.department = this.list_to_tree_dept(res.data)
       })
       // Head Tree

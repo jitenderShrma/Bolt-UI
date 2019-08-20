@@ -308,6 +308,9 @@
                             <div v-if="datasrc[i].module_name == 'importTrans'">
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_own" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
+                            <div v-if="datasrc[i].module_name == 'budSet'">
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].read" :uncheckedValue="false" :checkedValue="true"/>
+                            </div>
                             <div v-else>
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_own" @change="setReadOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
@@ -671,7 +674,7 @@ export default {
               {module_name:"subgroup",text:"User Group",read:true,write:false,edit:false,delete:false},{module_name:"dept",text:"Department",read:true,write:false,edit:false,delete:false},
               {module_name:"desig",text:"Designation",read:true,write:false,edit:false,delete:false},{module_name:"head",text:"Head",read:true,write:false,edit:false,delete:false},
               {module_name:"label",text:"Label",read:true,write:false,edit:false,delete:false},{module_name:"preApp",text:"Approval",read:true,write:true,edit:false,delete:false},
-              {module_name:"budSet",text:"Budget Settings",read:true,write:false,edit:false,delete:false},
+              {module_name:"budSet",text:"Budget Settings",read:false,write:false,edit:false,delete:false},
               {module_name:"staff",text:"Staff",read:true,write:false,edit:false,delete:false},
               {module_name:"trans",text:"Transaction",read:true,write:true,edit:false,delete:false},
               {module_name:"importTrans",text:"Transaction Upload",write:false},
