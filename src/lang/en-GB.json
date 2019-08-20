@@ -271,5 +271,6 @@
     "savepermissions" : "Save Permissions",
     "cancel" : "Cancel",
     "editlabels" : "Edit Labels",
-    "release" : "Release"
+    "release" : "Release",
+    "viewlm" : "View Line Managers"
 }

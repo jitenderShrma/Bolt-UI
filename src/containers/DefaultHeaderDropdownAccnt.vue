@@ -17,9 +17,18 @@
         </b-card>
       </b-dropdown-item>
     </div>
-    <b-dropdown-item @click = "Settings"><i class="fa fa-wrench" /> <span  v-text="$ml.get('settings')"></span></b-dropdown-item>
-      <b-dropdown-item @click = "Plugin"><i class="fa fa-file" /> <span  v-text="$ml.get('extensions')"></span>
-      </b-dropdown-item>
+    <div v-if="isUser && checkPermission">
+      <b-dropdown-item @click = "Settings"><i class="fa fa-wrench" /> <span  v-text="$ml.get('settings')"></span></b-dropdown-item>
+      <!-- <b-dropdown-item @click = "Plugin"><i class="fa fa-file" /> <span  v-text="$ml.get('extensions')"></span> -->
+      <!-- </b-dropdown-item> -->
+    </div>
+    <div v-if = "checkPermission == false">
+    </div>
+    <div v-if="isUser==false">
+      <b-dropdown-item @click = "Settings"><i class="fa fa-wrench" /> <span  v-text="$ml.get('settings')"></span></b-dropdown-item>
+      <!-- <b-dropdown-item @click = "Plugin"><i class="fa fa-file" /> <span  v-text="$ml.get('extensions')"></span> -->
+      <!-- </b-dropdown-item> -->
+    </div>
       <b-dropdown-divider />
       <b-dropdown-item @click = "Logout"><i class="fa fa-lock" /> <span  v-text="$ml.get('logout')"></span></b-dropdown-item>
     </template>
@@ -58,6 +67,8 @@ export default {
   },
   data: () => {
     return {
+      permissions:null,
+      checkPermission:false,
       tab : true,
       data : [],
       ssnCompany : {
@@ -68,6 +79,7 @@ export default {
   },
   async mounted() {
     var Session = JSON.parse(localStorage['session_key'])
+    this.permissions = Session
     if(Session.length==24) {
       axios.get(`${apiUrl}`+`company/list`,{withCredentials : true})
       .then(response => {
@@ -81,6 +93,7 @@ export default {
   }
   else{
       var list = JSON.parse(localStorage.session_key)
+      this.permissions = list
       this.user = list.user
       this.isUser = true;
         axios.get(`${apiUrl}`+`company/${this.user.company}`,{withCredentials : true})
@@ -91,10 +104,22 @@ export default {
         this.$session.set('company',response.data._id);
         })
       }
+      this.checkPerm();
   },
   methods : {
+    checkPerm() {
+      var perm = this.permissions.permission
+      for(var i=0;i<perm.length;i++) {
+        if(perm[i].module_name == "budSet") {
+          console.log(perm[i])
+          if(perm[i].read == true){
+            this.checkPermission = true
+          }
+        }
+      }
+    },
     userDetails() {
-      this.$router.push(`staff/details/${this.user._id}`);
+      window.location.href = `#/staff/details/${this.user._id}`;
     },
     Settings(){
       console.log("settings");

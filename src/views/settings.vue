@@ -316,12 +316,31 @@ import { Switch as cSwitch } from '@coreui/vue'
 import axios from 'axios'
 import apiUrl from '@/apiUrl'
 import Vue from 'vue'
+import VueNotifications from 'vue-notifications'
   import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
-
+import miniToastr from 'mini-toastr' 
 import { MultiSelectPlugin, DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
 Vue.use(DropDownListPlugin);
 Vue.use(MultiSelectPlugin);
 Vue.use(TextBoxPlugin);
+const toastTypes = {
+  success: 'success',
+  error: 'error',
+  info: 'info',
+  warn: 'warn'
+}
+miniToastr.init({types: toastTypes})
+
+function toast ({title, message, type, timeout, cb}) {
+  return miniToastr[type](message, title, timeout, cb)
+}
+Vue.use(VueNotifications, options)
+const options = {
+  success: toast,
+  error: toast,
+  info: toast,
+  warn: toast
+}
 
 var api = axios.create({
   withCredentials:true
@@ -491,6 +510,46 @@ export default {
   	});
     api.get(`${apiUrl}/super/settings/budget/budSet/get`,{withCredentials:true}).then((res) => {
       this.input = res.data
+      if(this.input.level1.designation) {
+        this.isLevel1 = true
+        this.isDesig1 = true 
+      }
+      if(this.input.level2.designation) {
+        this.isLevel2 = true
+        this.isDesig2 = true 
+      }
+      if(this.input.level3.designation) {
+        this.isLevel3 = true
+        this.isDesig3 = true 
+      }
+      if(this.input.level4.designation) {
+        this.isLevel4 = true
+        this.isDesig4 = true 
+      }
+      if(this.input.level5.designation) {
+        this.isLevel5 = true
+        this.isDesig5 = true 
+      }
+      if(this.input.level1.designation_label) {
+        this.isLevel1 = true
+        this.isLabel1 = true 
+      }
+      if(this.input.level2.designation_label) {
+        this.isLevel1 = true
+        this.isLabel2 = true 
+      }
+      if(this.input.level3.designation_label) {
+        this.isLevel1 = true
+        this.isLabel3 = true 
+      }
+      if(this.input.level4.designation_label) {
+        this.isLevel1 = true
+        this.isLabel4 = true 
+      }
+      if(this.input.level5.designation_label) {
+        this.isLevel1 = true
+        this.isLabel5 = true 
+      }
       console.log(res.data)
     });
   },
@@ -553,7 +612,11 @@ export default {
     async sendData() {
       await api.put(`${apiUrl}`+`super/settings/budget/budSet/update`,this.input).then((res)=> {
         if(res.data!=null) {
-          this.$router.push('/dashboard')
+          toast({
+            type: VueNotifications.types.success,
+            title: 'Settings Saved',
+            message: 'Budget Settings are Updated'
+          })
         }
       })
 
