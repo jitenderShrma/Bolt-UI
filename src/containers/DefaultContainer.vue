@@ -16,7 +16,7 @@
           <DefaultHeaderDropdownAccnt/>
         </b-nav-item>
       </b-navbar-nav>&nbsp;
-      <!-- <AsideToggler class="d-none d-lg-block" /> -->
+      
     </AppHeader>
     <div class="app-body">
       <AppSidebar fixed>
@@ -33,10 +33,10 @@
           <router-view></router-view>
         </div>
       </main>
-      <AppAside fixed>
+      <!-- <AppAside fixed> -->
         <!--aside-->
-        <DefaultAside/>
-      </AppAside>
+        <!-- <DefaultAside/>
+      </AppAside> -->
     </div>
     <TheFooter>
       <!--footer-->

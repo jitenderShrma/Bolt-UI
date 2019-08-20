@@ -1,5 +1,164 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
+      <AppAside id="new_aside">
+        <div style="float:right">
+        <DefaultToggler id="toggler2"/>
+        <p style="font-size:10px;margin:0">Close</p>
+        </div>
+        <b-tabs>
+    <b-tab>
+      <template slot="title">
+        <i class='icon-list'></i>
+      </template>
+      <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center text-muted text-uppercase small">LM-1 <div style="display:inline" v-if="designation[0]!=null">{{designation[0]}} - {{department[0]}}</div>
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagers[0]" :key="i" class="p-1">
+      <!-- <div class="p-3"> -->
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagers[0][i].user.personal_details.name}}</div>
+        </div>
+      </div>
+      <b-list-group-item class="list-group-item-accent-warning py-1 bg-light text-center  text-muted text-uppercase small">
+        LM-2 <div style="display:inline" v-if="designation[1]!=null">{{designation[1]}} - {{department[1]}}</div>
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagers[1]" :key="i" class="p-1">
+      <!-- <div class="p-3"> -->
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagers[1][i].user.personal_details.name}}</div>
+        </div>
+      </div>
+      <b-list-group-item class="list-group-item-accent-info py-1 bg-light text-center  text-muted text-uppercase small">
+        LM-3 <div style="display:inline" v-if="designation[2]!=null">{{designation[2]}} - {{department[2]}}</div>
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagers[2]" :key="i" class="p-1">
+      <!-- <div class="p-3"> -->
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagers[2][i].user.personal_details.name}}</div>
+        </div>
+      </div>
+      <b-list-group-item class="list-group-item-accent-danger py-1 bg-light text-center  text-muted text-uppercase small">
+        LM-4 <div style="display:inline" v-if="designation[3]!=null">{{designation[3]}} - {{department[3]}}</div>
+      </b-list-group-item>
+
+      <div v-for="(run,i) in lineManagers[3]" :key="i" class="p-1">
+      <!-- <div class="p-3"> -->
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagers[3][i].user.personal_details.name}}</div>
+        </div>
+      </div>
+      <b-list-group-item class="list-group-item-accent-success py-1 bg-light text-center  text-muted text-uppercase small">
+        LM-5 <div style="display:inline" v-if="designation[4]!=null">{{designation[4]}} - {{department[4]}}</div>
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagers[4]" :key="i" class="p-1">
+      <!-- <div class="p-3"> -->
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagers[4][i].user.personal_details.name}}</div>
+        </div>
+      </div>
+    </b-tab>
+    <b-tab>
+      <template slot="title">
+        <i class='icon-speech'></i>
+      </template>
+      <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center  text-muted text-uppercase small">
+        LM-1 <div style="display:inline" v-if="designation[0]!=null">{{designation[0]}} - {{department[0]}}</div>
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagers[0]" :key="i" class="p-1">
+      <!-- <div class="p-3"> -->
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagers[0][i].user.personal_details.name}}</div>
+        </div>
+      </div>
+      <b-list-group-item class="list-group-item-accent-warning py-1 bg-light text-center  text-muted text-uppercase small">
+        LM-2 <div style="display:inline" v-if="designation[1]!=null">{{designation[1]}} - {{department[1]}}</div>
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagers[1]" :key="i" class="p-1">
+      <!-- <div class="p-3"> -->
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagers[1][i].user.personal_details.name}}</div>
+        </div>
+      </div>
+      <b-list-group-item class="list-group-item-accent-info py-1 bg-light text-center  text-muted text-uppercase small">
+        LM-3 <div style="display:inline" v-if="designation[2]!=null">{{designation[2]}} - {{department[2]}}</div>
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagers[2]" :key="i" class="p-1">
+      <!-- <div class="p-3"> -->
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagers[2][i].user.personal_details.name}}</div>
+        </div>
+      </div>
+      <b-list-group-item class="list-group-item-accent-danger py-1 bg-light text-center  text-muted text-uppercase small">
+        LM-4 <div style="display:inline" v-if="designation[3]!=null">{{designation[3]}} - {{department[3]}}</div>
+      </b-list-group-item>
+
+      <div v-for="(run,i) in lineManagers[3]" :key="i" class="p-1">
+      <!-- <div class="p-3"> -->
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagers[3][i].user.personal_details.name}}</div>
+        </div>
+      </div>
+      <b-list-group-item class="list-group-item-accent-success py-1 bg-light text-center  text-muted text-uppercase small">
+        LM-5 <div style="display:inline" v-if="designation[4]!=null">{{designation[4]}} - {{department[4]}}</div>
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagers[4]" :key="i" class="p-1">
+      <!-- <div class="p-3"> -->
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagers[4][i].user.personal_details.name}}</div>
+        </div>
+      </div>
+    </b-tab>
+  </b-tabs>
+      </AppAside>
      <div id="target" class="col-lg-15 control-section">
         <div class="content-wrapper">
             <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
@@ -11,12 +170,13 @@
              <div class="control-section">
                 
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowReordering="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowFiltering='true' :filterSettings='filterOptions' :allowTextWraping="true" :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbarClick="clickHandler"
-            :recordDoubleClick="editStaff" :toolbar="toolbar"
+            :recordDoubleClick="editStaff" :toolbar="toolbar" :rowSelected="rowSelected"
+            :rowDeselected="rowDeselected"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='personal_details.name' headerText='Name'  :filter='filter' ></e-column>
                     <e-column field='user_name' headerText='Username'  :filter='filter' ></e-column>
-                    <e-column field='user_type.designation.name' headerText='Designation'  :filter='filter' ></e-column>
+                    <e-column field='user_type.designation.name' :template="buttonLM" headerText='Designation' :filter='filter'></e-column>
                     <e-column field='user_type.department.department_name' headerText='Department'  :filter='filter' ></e-column>
                     <e-column field='user_type.designation.labels[0].label_name' :template="labelTemplate" headerText='Labels '  :filter='filter' ></e-column>
                 </e-columns>
@@ -33,6 +193,10 @@
 import apiUrl from '@/apiUrl'
 import axios from 'axios'
 import Vue from 'vue'
+import { asideMenuCssClasses, validBreakpoints, checkBreakpoint } from '../../shared/classes'
+import toggleClasses from '../../shared/toggle-classes'
+import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, AsideToggler as DefaultToggler, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
+import AsideToggler from '../../shared/AsideToggler'
 import { Browser } from '@syncfusion/ej2-base';
 import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import VueNotifications from 'vue-notifications'
@@ -68,11 +232,6 @@ const toastTypes = {
   info: 'info',
   warn: 'warn'
 }
-
-
-var api = axios.create({
-  withCredentials:true
-})
 miniToastr.init({types: toastTypes})
 
 function toast ({title, message, type, timeout, cb}) {
@@ -104,18 +263,27 @@ var captionVue = Vue.component('captionTemplate',{
 })
 
 Vue.use(VueNotifications, options)
+import { Switch as cSwitch } from '@coreui/vue'
 
 export default {
     name: 'StaffList',
     components: {
       ToolbarPlugin,
-      GridPlugin, Filter, Selection, Sort, VirtualScroll,
-        Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
-        NumericTextBoxPlugin,
-        PivotViewPlugin,
-        GroupingBar,
-        FieldList,
-        Edit
+      GridPlugin,
+        AsideToggler,
+        AppHeader,
+        DefaultToggler,
+        AppSidebar,
+        AppAside,
+        TheFooter,
+        Breadcrumb,
+        SidebarForm,
+        SidebarFooter,
+        SidebarToggler,
+        SidebarHeader,
+        SidebarNav,
+        SidebarMinimizer,
+        cSwitch
     },
      provide: {
             grid: [ Group,PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder ]
@@ -131,6 +299,38 @@ export default {
                               data: {},
                           }
                       }
+                })
+              }
+          },
+          lineManagers : [],
+          buttonLM: function () {
+              return {
+                  template: Vue.component('buttonLM', {
+                      template: `<div style="line-height:4">{{data.user_type.designation.name}}<AsideToggler id="toggler"/></div>`,
+                      components:{
+                        AsideToggler,
+                        AppHeader,
+                        AppSidebar,
+                        AppAside,
+                        TheFooter,
+                        Breadcrumb,
+                        SidebarForm,
+                        SidebarFooter,
+                        SidebarToggler,
+                        SidebarHeader,
+                        SidebarNav,
+                        SidebarMinimizer
+                      },
+                  data: function() {
+                          return {
+                              data: {},
+                          }
+                      },
+                  methods: {
+                    gotoPage() {
+                      console.log("aside on")
+                    }
+                  }
                 })
               }
           },
@@ -150,6 +350,8 @@ export default {
             dropdownValue: 'Top',
             datasrc: [],
             editSettings: { allowEditing: true, allowAdding: true, allowDeleting: true,mode:'Dialog'},
+            department:[],
+            designation:[],
             editparams: { params: { popupHeight: '300px' }},
            rowHeight: 40,
            addTemplate: function () {
@@ -195,6 +397,23 @@ export default {
               return {
                   template: Vue.component("deleteTemplate", {
                       template: `<b-badge id="label1" variant="primary" ><i class="fa fa-trash-o"></i>&nbsp<span v-text="$ml.get('delete')"></span></b-badge>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
+            LMTemplate: function () {
+              return {
+                  template: Vue.component("LMTemplate", {
+                      template: `<b-badge id="label1" variant="primary" ><i class="icon-people"></i>&nbsp<span v-text="$ml.get('viewlm')"><AsideToggler/></span></b-badge>
+                      `,
+                      components:{
+                        AsideToggler
+                      },
                       data() {
                         return {
                           data: {
@@ -335,6 +554,22 @@ export default {
               console.log(args)
 
               this.$router.push(`/staff/details/${args.rowData._id}`);
+            },
+            rowSelected(args) {
+              if(args.target.outerHTML == `<span class="icon-people"></span>`) {
+                api.get(`${apiUrl}line/managers/find/all/${args.data._id}`).then((res) =>{
+                    this.lineManagers = res.data
+                    for(var i=0;i<this.lineManagers.length;i++) {
+                      this.designation.push(this.lineManagers[i][0].designation.name)
+                      this.department.push(this.lineManagers[i][0].department.department_name)
+                    }
+                })
+              }
+            },
+            rowDeselected(args) {
+              this.lineManagers = []
+              this.department =[]
+              this.designation=[]
             },
             addEditHandler(args) {
               var selected = this.$refs.overviewgrid.getSelectedRecords()
@@ -508,5 +743,74 @@ export default {
     border-bottom-color: white;
     border-left-color: white;
 }
+#toggler {
+  float:right;
+  margin:10px;
+  border-radius: 50px;
+  height: 20px;
+  width:20px;
+  padding:0;
+  margin-top:5;
+  content:'\E81E';
+}
+#toggler:hover {
+  margin:10px;
+  border-radius: 50px;
+  background: grey;
+  height: 20px;
+  width:20px;
+  content:'\E81E';
+  padding:0;
+  margin-top:5;
+}
+#toggler:visited {
+  margin:10px;
+  border-radius: 50px;
+  height: 20px;
+  background: grey;
+  width:20px;
+  content:'\E81E';
+  padding:0;
+  margin-top:5;
+}
+/*#toggler:focus {
+  margin:10px;
+  border-radius: 50px;
+  height: 20px;
+  background: grey;
+  width:20px;
+  content:'\E81E';
+  padding:0;
+  margin-top:5;
+}*/
+#toggler2 {
+  margin:10px;
+  border-radius: 50px;
+  background: black;
+  height: 20px;
+  width:20px;
+  content:'\E81E';
+  padding:0;
+  margin:0;
+}
+#new_aside {
+  width:350px;
+}
+html:not([dir="rtl"]) #new_aside {
+    right: 0;
+    margin-right: -350px;
+}
+@media (min-width: 992px) {
+html:not([dir="rtl"]) .aside-menu-show #new_aside, html:not([dir="rtl"]) .aside-menu-lg-show #new_aside {
+    margin-right: 0;
+}
+html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside-menu-off-canvas .#new_aside {
+    right: 0;
+}
+}
 
+/*html:not([dir="rtl"]) .aside-menu-off-canvas #new_aside {
+    right: 0;
+    margin-right: 0px;
+}*/
 </style>

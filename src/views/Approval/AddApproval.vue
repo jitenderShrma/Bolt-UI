@@ -337,6 +337,7 @@
                     '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
           department:[
           ],
+          dept:[],
           approvals :[
           ],
           head:[],
@@ -351,6 +352,7 @@
       this.month.splice(0,new Date().getMonth()) //Set months
       // Department Tree
       axios.get(`${apiUrl}`+`dropdown/department/get/all`,{withCredentials:true}).then((res) => {
+        this.dept = JSON.parse(JSON.stringify(res.data))
         this.department = this.list_to_tree_dept(res.data)
       })
       // Head Tree
@@ -419,7 +421,7 @@
           }
           for (i = 0; i < list.length; i += 1) {
               node = list[i];
-              if (node.parent_department != undefined ) {
+              if (node.parent_department != undefined  && this.checkExist(node.parent_department)) {
                   // if you have dangling branches check that map[node.parentId] exists
                   list[map[node.parent_department]].children.push(node);
               } else {
@@ -453,6 +455,13 @@
         }
         return roots
       },
+      checkExist(node) {
+        for (var i=0; i < this.dept.length; i++) {
+            if (this.dept[i]._id == node)
+                return true;
+        }
+        return false;
+      },
       list_to_tree_head(list) {
           var map = {}, node, roots = [], i;
           for (i = 0; i < list.length; i += 1) {
@@ -461,7 +470,7 @@
           }
           for (i = 0; i < list.length; i += 1) {
               node = list[i];
-              if (node.parent_head != undefined ) {
+              if (node.parent_head != undefined) {
                   // if you have dangling branches check that map[node.parentId] exists
                   list[map[node.parent_head]].children.push(node);
               } else {

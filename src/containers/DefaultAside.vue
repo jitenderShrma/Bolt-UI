@@ -4,6 +4,9 @@
 
 <script>
 export default {
-  name: 'DefaultAside'
-}
+  name: 'DefaultAside',
+  mounted() {
+  	console.log(this)
+  }
+};
 </script>

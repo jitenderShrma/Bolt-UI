@@ -380,6 +380,7 @@ export default {
           filterSettings: { type: "Menu" },
           pageSettings: {pageSize:true,pageSize:200, pageSizes: [200,300,400,500], pageCount: 4 },
           editSettings: { allowDeleting: true,mode: 'Dialog',allowAdding: true, newRowPosition: 'Child' },
+          dept:[],
           rowHeight: 30,
           selectionSettings : {type:"Single"},
           data:null
@@ -389,6 +390,7 @@ export default {
     '$route' : function() {
       api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
+      this.dept = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_dept(response.data);
       })
     api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
@@ -399,6 +401,7 @@ export default {
   mounted() {
      api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
+      this.dept = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_dept(response.data)
       })
     api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
@@ -493,6 +496,13 @@ export default {
         this.formdata.color = args.currentValue.hex.slice(1);
         this.editlabel.color = args.currentValue.hex.slice(1);
       }, 
+      checkExist(node) {
+        for (var i=0; i < this.dept.length; i++) {
+            if (this.dept[i]._id == node)
+                return true;
+        }
+        return false;
+      },
       adddept(args) {
         var parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
           if(parent.length == 0) {
@@ -697,7 +707,7 @@ export default {
           }
           for (i = 0; i < list.length; i += 1) {
               node = list[i];
-              if (node.parent_department != undefined ) {
+              if (node.parent_department != undefined && this.checkExist(node.parent_department)) {
                   // if you have dangling branches check that map[node.parentId] exists
                   list[map[node.parent_department]].children.push(node);
               } else {
