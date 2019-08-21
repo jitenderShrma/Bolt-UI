@@ -1,7 +1,10 @@
 <template>
   <AppHeaderDropdown right no-caret v-if="tab">
     <template slot="header">
-      <i class="fa fa-user font-3xl"></i>
+      <img
+        src="img/avatars/6.jpg"
+        class="img-avatar"
+        alt="No Profile Pic" />
     </template>\
     <template slot="dropdown">
       <b-dropdown-header tag="div" class="text-center"><strong @click="reRoute(ssnCompany._id)" v-text="ssnCompany.company_name"></strong>&nbsp; &nbsp; &nbsp;<b-badge variant="primary" @click="toggleNavs" v-text="$ml.get('switch')"></b-badge>
@@ -35,7 +38,10 @@
   </AppHeaderDropdown>
   <AppHeaderDropdown right no-caret v-else-if="!tab">
     <template slot="header">
-      <i class="fa fa-user font-3xl"></i>
+      <img
+        src="img/avatars/6.jpg"
+        class="img-avatar"
+        alt="admin@bootstrapmaster.com" />
     </template>\
     <template slot="dropdown">
       <b-dropdown-header tag="div" class="text-center"><strong  v-text="$ml.get('companylist')"></strong>&nbsp; &nbsp; &nbsp;<b-badge variant="primary" @click="toggleNavs" v-text="$ml.get('switch')"></b-badge>

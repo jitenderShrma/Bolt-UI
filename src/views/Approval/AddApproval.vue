@@ -337,6 +337,7 @@
                     '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
           department:[
           ],
+          or_head:[],
           dept:[],
           approvals :[
           ],
@@ -358,6 +359,7 @@
       // Head Tree
       axios.get(`${apiUrl}`+`head/head/get`,{withCredentials:true}).then((res) => {
         console.log(res.data);
+        this.or_head = JSON.parse(JSON.stringify(res.data))
         this.head = this.list_to_tree_head(res.data)
       })
 		},
@@ -366,11 +368,13 @@
       'input.department' : function() {
         if(this.input.department == null || this.input.department == "") {
           axios.get(`${apiUrl}dropdown/head/no/dept`,{withCredentials:true}).then((res) => {
+            this.or_head = JSON.parse(JSON.stringify(res.data))
             this.head = this.list_to_tree_head(res.data)
           })
         }
         else {
           axios.get(`${apiUrl}dropdown/head/find/${this.input.department}`,{withCredentials:true}).then((res) => {
+            this.or_head = JSON.parse(JSON.stringify(res.data))
             this.head = this.list_to_tree_head(res.data)
           })
         }
@@ -421,7 +425,7 @@
           }
           for (i = 0; i < list.length; i += 1) {
               node = list[i];
-              if (node.parent_department != undefined  && this.checkExist(node.parent_department)) {
+              if (node.parent_department != undefined  && this.checkExistDept(node.parent_department)) {
                   // if you have dangling branches check that map[node.parentId] exists
                   list[map[node.parent_department]].children.push(node);
               } else {
@@ -455,9 +459,16 @@
         }
         return roots
       },
-      checkExist(node) {
+      checkExistDept(node) {
         for (var i=0; i < this.dept.length; i++) {
             if (this.dept[i]._id == node)
+                return true;
+        }
+        return false;
+      },
+      checkExistHead(node) {
+        for (var i=0; i < this.or_head.length; i++) {
+            if (this.or_head[i]._id == node)
                 return true;
         }
         return false;
@@ -470,7 +481,7 @@
           }
           for (i = 0; i < list.length; i += 1) {
               node = list[i];
-              if (node.parent_head != undefined) {
+              if (node.parent_head != undefined && this.checkExistHead(node.parent_head)) {
                   // if you have dangling branches check that map[node.parentId] exists
                   list[map[node.parent_head]].children.push(node);
               } else {
@@ -500,6 +511,7 @@
 
             }
             else{
+              parseInt(this.input.recurring_period)
               console.log(this.input)
               axios.post(`${apiUrl}`+`approvals/preApp/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
                  this.loader = true

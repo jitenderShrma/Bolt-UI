@@ -722,6 +722,9 @@ export default {
       UG:false,
       PG:false,
       Doctrate:false,
+      or_head:[],
+      or_dept:[],
+      or_desig:[],
       dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
       desig_fields:{groupBy:'parent_designation_id',text:"name",value:"_id"},
       bloodgroup:["A+","A-","B+","B-","AB+","AB-","O+","O-"],
@@ -731,13 +734,16 @@ export default {
   async mounted() {
     api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
+      this.or_head = JSON.parse(JSON.stringify(response.data))
       this.heads = this.list_to_tree_head(response.data)
       });
     this.isStaff = true
     axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+        this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = this.list_to_tree_dept(res.data)
       })
       axios.get(`${apiUrl}`+`designation/desig/get/all`,{withCredentials:true}).then((res) => {
+        this.or_desig = JSON.parse(JSON.stringify(res.data))
         this.designation = this.list_to_tree_desig(res.data)
       })
     axios.get(`${apiUrl}`+`super/attrib/view/`,{ withCredentials:true })
@@ -855,11 +861,13 @@ export default {
     'staff.department' : function(){
       if(this.staff.department == null || this.staff.department == "") {
         axios.get(`${apiUrl}dropdown/designation/no/dept`,{withCredentials:true}).then((res) => {
+          this.or_desig = JSON.parse(JSON.stringify(res.data))
           this.designation = this.list_to_tree_desig(res.data)
         })
       }
       else {
         axios.get(`${apiUrl}dropdown/designation/find/${this.staff.department}`,{withCredentials:true}).then((res) => {
+          this.or_desig = JSON.parse(JSON.stringify(res.data))
           this.designation = this.list_to_tree_desig(res.data)
         })
       }
@@ -1322,6 +1330,27 @@ export default {
           }
         }
       },
+      checkExistDept(node) {
+        for (var i=0; i < this.or_dept.length; i++) {
+            if (this.or_dept[i]._id == node)
+                return true;
+        }
+        return false;
+      },
+      checkExistDesig(node) {
+        for (var i=0; i < this.or_desig.length; i++) {
+            if (this.or_desig[i]._id == node)
+                return true;
+        }
+        return false;
+      },
+      checkExistHead(node) {
+        for (var i=0; i < this.or_head.length; i++) {
+            if (this.or_head[i]._id == node)
+                return true;
+        }
+        return false;
+      },
       setAllReadAll(args) {
         if(args) {
           this.readOwn = false
@@ -1371,7 +1400,7 @@ export default {
           }
           for (i = 0; i < list.length; i += 1) {
               node = list[i];
-              if (node.parent_head != undefined ) {
+              if (node.parent_head != undefined && this.checkExistHead(node.parent_head)) {
                   // if you have dangling branches check that map[node.parentId] exists
                   list[map[node.parent_head]].children.push(node);
               } else {
@@ -1433,7 +1462,7 @@ export default {
           }
           for (i = 0; i < list.length; i += 1) {
               node = list[i];
-              if (node.parent_designation_id != undefined ) {
+              if (node.parent_designation_id != undefined && this.checkExistDesig(node.parent_designation_id)) {
                   // if you have dangling branches check that map[node.parentId] exists
                   list[map[node.parent_designation_id]].children.push(node);
               } else {
@@ -1451,7 +1480,7 @@ export default {
           }
           for (i = 0; i < list.length; i += 1) {
               node = list[i];
-              if (node.parent_department != undefined ) {
+              if (node.parent_department != undefined && this.checkExistDept(node.parent_department)) {
                   // if you have dangling branches check that map[node.parentId] exists
                   list[map[node.parent_department]].children.push(node);
               } else {

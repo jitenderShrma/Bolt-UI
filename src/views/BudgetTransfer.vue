@@ -107,6 +107,7 @@
 				months:[ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"},
 
           		],
+          		or_head:[],
           		month_fields:{text:"name",value:"text"}
 			}
 		},
@@ -114,6 +115,7 @@
 			this.months.splice(0,new Date().getMonth())
 			api.get(`${apiUrl}`+`head/head/get`)
 		    .then((response) => {
+		    	this.or_head = JSON.parse(JSON.stringify(response.data))
 		      this.heads = this.list_to_tree_head(response.data)
 		      });
 		},
@@ -137,6 +139,13 @@
 					}
 				})
 			},
+			checkExistHead(node) {
+		        for (var i=0; i < this.or_head.length; i++) {
+		            if (this.or_head[i]._id == node)
+		                return true;
+		        }
+		        return false;
+		      },
 			list_to_tree_head(list) {
 	          var map = {}, node, roots = [], i;
 	          for (i = 0; i < list.length; i += 1) {
@@ -145,7 +154,7 @@
 	          }
 	          for (i = 0; i < list.length; i += 1) {
 	              node = list[i];
-	              if (node.parent_head != undefined ) {
+	              if (node.parent_head != undefined && this.checkExistHead(node.parent_head)) {
 	                  // if you have dangling branches check that map[node.parentId] exists
 	                  list[map[node.parent_head]].children.push(node);
 	              } else {

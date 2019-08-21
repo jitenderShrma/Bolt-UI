@@ -431,6 +431,8 @@ export default {
             input:{
               labels:[]
             },
+            or_head:[],
+            or_dept:[],
             selectedLabel:null,
             module:null,
             isRoot:false,
@@ -445,16 +447,19 @@ export default {
       if(this.$route.path == '/heads/list') {
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
+      this.or_head = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_head(response.data)
       });
      }
      else{
       await api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
         .then((response) => {
+          this.or_head = JSON.parse(JSON.stringify(response.data))
           this.data = this.list_to_tree_head(response.data)
           });
      }
      await axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+        this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = res.data
       })
     }
@@ -466,17 +471,20 @@ export default {
      if(this.$route.path == '/heads/list') {
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
+      this.or_head = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_head(response.data)
       });
      }
      else{
       await api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
         .then((response) => {
+          this.or_head = JSON.parse(JSON.stringify(response.data))
           this.data = this.list_to_tree_head(response.data)
           this.input.department = this.key 
           });
      }
      await axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+        this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = this.list_to_tree_dept(res.data)
       })
      axios.get(`${apiUrl}`+`label/label/find/by/Heads`,{withCredentials:true}).then((res) => {
@@ -544,6 +552,20 @@ export default {
         })
       }
       },
+      checkExistDept(node) {
+        for (var i=0; i < this.or_dept.length; i++) {
+            if (this.or_dept[i]._id == node)
+                return true;
+        }
+        return false;
+      },
+      checkExistHead(node) {
+        for (var i=0; i < this.or_head.length; i++) {
+            if (this.or_head[i]._id == node)
+                return true;
+        }
+        return false;
+      },
     addLabel (args) {
       this.addModal =false
               api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((label)=>{
@@ -580,7 +602,7 @@ export default {
           }
           for (i = 0; i < list.length; i += 1) {
               node = list[i];
-              if (node.parent_department != undefined ) {
+              if (node.parent_department != undefined && this.checkExistDept(node.parent_department)) {
                   // if you have dangling branches check that map[node.parentId] exists
                   list[map[node.parent_department]].children.push(node);
               } else {
@@ -607,22 +629,22 @@ export default {
     async load(args) {
 
 
-      if(this.$route.path == '/heads/list') {
-        await api.get(`${apiUrl}`+`head/head/get`)
-    .then((response) => {
-      this.data = this.list_to_tree_head(response.data)
-      });
-     }
-     else{
-      await api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
-        .then((response) => {
-          this.data = this.list_to_tree_head(response.data)
-          });
-     }
-     await axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
-        this.department = res.data
-      })
-    },
+    //   if(this.$route.path == '/heads/list') {
+    //     await api.get(`${apiUrl}`+`head/head/get`)
+    // .then((response) => {
+    //   this.data = this.list_to_tree_head(response.data)
+    //   });
+    //  }
+    //  else{
+    //   await api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
+    //     .then((response) => {
+    //       this.data = this.list_to_tree_head(response.data)
+    //       });
+    //  }
+    //  await axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+    //     this.department = res.data
+    //   })
+    // },
     // addLabel (args) {
     //     this.$refs.dialogObj.hide();
     //     let val = this.$refs.treegrid.getSelectedRecords()
@@ -640,6 +662,7 @@ export default {
     //           });
             
     //   },
+  },
     onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
         this.editlabel.color = args.currentValue.hex.slice(1);
@@ -731,10 +754,9 @@ export default {
           this.getflag=1
         }
         }
-        
-
         this.editmodal =true
         this.editinput = args.rowData
+        this.editinput.department = args.rowData.name
       },
        onClick(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
@@ -770,7 +792,7 @@ export default {
           }
           for (i = 0; i < list.length; i += 1) {
               node = list[i];
-              if (node.parent_head != undefined ) {
+              if (node.parent_head != undefined && this.checkExistHead(node.parent_head)) {
                   // if you have dangling branches check that map[node.parentId] exists
                   list[map[node.parent_head]].children.push(node);
               } else {

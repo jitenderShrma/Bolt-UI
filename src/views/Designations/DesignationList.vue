@@ -370,6 +370,8 @@ export default {
             {value:"budSet",text:"Budget Settings"},
             {value:"staff",text:"Staff"}
           ],
+          or_dept:[],
+          or_desig:[],
           module_fields:{text:"text",value:"value"},
           selectedLabel:null, 
    };
@@ -377,17 +379,20 @@ export default {
   watch : {
     '$route' : async function() {
       await api.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+        this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = res.data
       })
     if(this.$route.path == '/designation/list') {
     await api.get(`${apiUrl}`+`designation/desig/get/all`)
     .then((response) => {
+      this.or_desig = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_desig(response.data)
       });
   }
   else{
     await api.get(`${apiUrl}`+`designation/desig/find/${this.key}`)
     .then((response) => {
+      this.or_desig = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_desig(response.data)
       for(var i =0;i<this.data.length;i++) {
         if(!(this.data.some(item => this.data[i].parent_designation_id == item._id))) {
@@ -406,11 +411,13 @@ export default {
     this.link = window.location.href;
      this.key = this.link.split(`designation/`).pop()
     await api.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+      this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = res.data
       })
     if(this.$route.path == '/designation/list') {
     await api.get(`${apiUrl}`+`designation/desig/get/all`)
     .then((response) => {
+      this.or_desig = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_desig(response.data)
       });
   }
@@ -418,6 +425,7 @@ export default {
     await api.get(`${apiUrl}`+`designation/desig/find/${this.key}`)
     .then((response) => {
       console.log(response.data)
+      this.or_desig = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_desig(response.data)
       for(var i =0;i<this.data.length;i++) {
         if(!(this.data.some(item => this.data[i].parent_designation_id == item._id))) {
@@ -435,30 +443,6 @@ export default {
    },
    methods:{
     async load(args) {
-      
-      await api.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
-        this.department = res.data
-      })
-     if(this.$route.path == '/designation/list') {
-    await api.get(`${apiUrl}`+`designation/desig/get/all`)
-    .then((response) => {
-      this.data = this.list_to_tree_desig(response.data)
-      });
-  }
-  else{
-    await api.get(`${apiUrl}`+`designation/desig/find/${this.key}`)
-    .then((response) => {
-      this.data = this.list_to_tree_desig(response.data)
-      for(var i =0;i<this.data.length;i++) {
-        if(!(this.data.some(item => this.data[i].parent_designation_id == item._id))) {
-          this.data[i].parent_designation_id = undefined
-        }
-      }
-      });
-  }
-    await api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
-        this.labels = res.data
-      })
     },
     addLabel (args) {
         this.$refs.dialogObj.hide();
@@ -483,7 +467,7 @@ export default {
           }
           for (i = 0; i < list.length; i += 1) {
               node = list[i];
-              if (node.parent_designation_id != undefined ) {
+              if (node.parent_designation_id != undefined && this.checkExistDesig(node.parent_designation_id)) {
                   // if you have dangling branches check that map[node.parentId] exists
                   list[map[node.parent_designation_id]].children.push(node);
               } else {
@@ -582,6 +566,20 @@ export default {
                   });
           });
         }
+      },
+      checkExistDept(node) {
+        for (var i=0; i < this.or_dept.length; i++) {
+            if (this.or_dept[i]._id == node)
+                return true;
+        }
+        return false;
+      },
+      checkExistDesig(node) {
+        for (var i=0; i < this.or_desig.length; i++) {
+            if (this.or_desig[i]._id == node)
+                return true;
+        }
+        return false;
       },
        onClick(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
