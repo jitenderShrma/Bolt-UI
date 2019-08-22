@@ -57,7 +57,7 @@
             :label-cols="3"
             :horizontal="true"
             >
-            <b-form-group>
+            <b-form-group :visible="false">
             
             <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLevel1" :uncheckedValue="false" :checkedValue="true"/>
             </b-form-group>
@@ -79,7 +79,7 @@
           </b-col>
         </b-row>
             </b-form-group>
-            <b-form-group>
+            <b-form-group v-if="false">
               <b-row>
                 <b-col sm="4">
                   <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;
@@ -127,7 +127,7 @@
           </b-col>
             </b-row>
             </b-form-group>
-            <b-form-group>
+            <b-form-group v-if="false">
               <b-row>
                 <b-col sm="4">
                   <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;
@@ -176,7 +176,7 @@
           </b-col>
         </b-row>
             </b-form-group>
-            <b-form-group>
+            <b-form-group v-if="false">
               <b-row>
                 <b-col sm="4">
                   <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;
@@ -227,7 +227,7 @@
           </b-col>
         </b-row>
             </b-form-group>
-            <b-form-group>
+            <b-form-group v-if="false">
               <b-row>
                 <b-col sm="4">
                   <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;
@@ -276,7 +276,7 @@
           </b-col>
         </b-row>
             </b-form-group>
-            <b-form-group>
+            <b-form-group v-if="false">
               <b-row>
                 <b-col sm="4">
                   <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;

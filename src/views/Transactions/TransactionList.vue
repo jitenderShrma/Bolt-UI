@@ -13,7 +13,7 @@
                 </ejs-toolbar>
              <div class="control-section">
                 
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowReordering='true' :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :allowTextWrap='true'
                 :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
                     <e-column field='vendor.vendor_company' headerText='Vendor'  :filter='filter' ></e-column>
@@ -63,7 +63,7 @@ import {
   FieldList
 } from "@syncfusion/ej2-vue-pivotview";
 import {
-PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
+PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     Vue.use(UploaderPlugin);
     
@@ -117,7 +117,7 @@ export default {
   Edit
     },
      provide: {
-            grid: [PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser]
+            grid: [PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder]
         },
     data: function () {
       return {
@@ -194,7 +194,7 @@ export default {
         labelTemplate: function() {
           return {
             template:Vue.component('labelTemplate', {
-                      template: `<div><b-badge style="font-weight:100;margin:3px" v-for="label in labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
+                      template: `<div><b-badge style="font-weight:lighter;margin:3px" v-for="label in labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
                   data: function() {
                           return {
                               data: {},
@@ -422,6 +422,7 @@ export default {
 
 #label {
     font-size: 12px;
+    font-weight:lighter;
 }
     .badge-f44336 {
     background-color:#f44336;

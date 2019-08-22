@@ -1,6 +1,5 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
-
   <b-row>
       <b-col md="12">
         <b-card>
@@ -19,7 +18,7 @@
                 <span style="color:red;float:right;height:2px;font-size:20px">*</span>
             <ejs-textbox required name="User Name" v-model="input.user_name" floatLabelType="Auto" :placeholder="$ml.get('username')"></ejs-textbox>
           </b-col>
-          <b-col sm="6">
+          <b-col v-if="isUser" sm="6">
             <label v-text="$ml.get('department')"></label>
             <treeselect :placeholder="$ml.get('pholddept')" v-model="staff.department" :multiple="false" :options="department" />
           </b-col>
@@ -29,7 +28,7 @@
             <span style="color:red;float:right;height:5px;font-size:20px">*</span>
             <ejs-textbox required name="Password" v-validate="'required'" type="password" v-model="input.password" floatLabelType="Auto" :placeholder="$ml.get('password')"></ejs-textbox>
           </b-col>
-          <b-col sm="6">
+          <b-col v-if="isUser" sm="6">
             <span style="color:red;float:right;height:5px;font-size:20px;">*</span>
             <label class="e-label-top" v-text="$ml.get('designation')"></label>
               <treeselect required :placeholder="$ml.get('pholddesig')" v-model="staff.designation" @select="setUserGroup" :multiple="false" :options="designation" />
@@ -241,7 +240,7 @@
           </b-form-group>
           </div>
           </b-tab>
-      <b-tab :title="$ml.get('permissions')" :disabled="!tab">
+      <b-tab v-if="isUser" :title="$ml.get('permissions')" :disabled="!tab">
         <div class="col-lg-15 control-section">
                   <div class="content-wrapper">
                        <div class="control-section">
@@ -652,10 +651,15 @@ export default {
       dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
       desig_fields:{groupBy:'parent_designation_id',text:"name",value:"_id"},
       bloodgroup:["A+","A-","B+","B-","AB+","AB-","O+","O-"],
-      country_fields:{text:"name",value:"name"}
+      country_fields:{text:"name",value:"name"},
+      isUser:false,
     }
   },
   async mounted() {
+    var Session = JSON.parse(localStorage.session_key)
+    if(!Session.user) {
+      this.isUser = true
+    }
     api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
       this.or_head = JSON.parse(JSON.stringify(response.data))

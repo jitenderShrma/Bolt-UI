@@ -1,9 +1,8 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
-      <AppAside id="new_aside">
+      <AppAside id="new_aside" style="height: calc(100vh - 60px);top:-8%">
         <div style="float:right">
-        <DefaultToggler id="toggler2"/>
-        <p style="font-size:10px;margin:0">Close</p>
+        <DefaultToggler style="line-height:2"/>
         </div>
         <b-tabs>
     <b-tab>
@@ -169,7 +168,7 @@
                 </ejs-toolbar>
              <div class="control-section">
                 
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowReordering="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowFiltering='true' :filterSettings='filterOptions' :allowTextWraping="true" :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbarClick="clickHandler"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowReordering="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowFiltering='true' :filterSettings='filterOptions' :allowTextWraping="true" :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbarClick="clickHandler" :allowTextWrap='true'
             :recordDoubleClick="editStaff" :toolbar="toolbar" :rowSelected="rowSelected"
             :rowDeselected="rowDeselected"
                 :height="height" :enableHover='false'>
@@ -195,8 +194,9 @@ import axios from 'axios'
 import Vue from 'vue'
 import { asideMenuCssClasses, validBreakpoints, checkBreakpoint } from '../../shared/classes'
 import toggleClasses from '../../shared/toggle-classes'
-import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, AsideToggler as DefaultToggler, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
+import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
 import AsideToggler from '../../shared/AsideToggler'
+import DefaultToggler from '../../shared/AsideTogglerClose'
 import { Browser } from '@syncfusion/ej2-base';
 import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import VueNotifications from 'vue-notifications'
@@ -293,7 +293,7 @@ export default {
         labelTemplate: function () {
               return {
                   template: Vue.component('labelTemplate', {
-                      template: `<div ><b-badge style="font-weight:100;margin:3px" v-for="label in data.user_type.designation.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
+                      template: `<div ><b-badge style="font-weight:lighter;margin:3px" v-for="label in data.user_type.designation.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
                   data: function() {
                           return {
                               data: {},
@@ -491,6 +491,7 @@ export default {
                 filterOptions: {
                     type: 'Menu'
                 },
+                lineManagersBudget:[],
                 filter: {
                     type: 'CheckBox'
                 },
@@ -563,6 +564,10 @@ export default {
                       this.designation.push(this.lineManagers[i][0].designation.name)
                       this.department.push(this.lineManagers[i][0].department.department_name)
                     }
+                })
+                api.get(`${apiUrl}line/managers/find/settings/${args.data._id}`).then((res) => {
+                  this.lineManagersBudget = res.data
+                  console.log(res.data)
                 })
               }
             },
@@ -643,7 +648,7 @@ export default {
 }
 #label1 {
   font-size:17px;
-  font-weight: 1;
+  font-weight:lighter;
 }
 #customization {
         display: table;
@@ -679,6 +684,7 @@ export default {
 
 #label {
     font-size: 12px;
+    font-weight:lighter;
 }
     .badge-f44336 {
     background-color:#f44336;
@@ -763,7 +769,7 @@ export default {
   padding:0;
   margin-top:5;
 }
-#toggler:visited {
+#toggler:focus {
   margin:10px;
   border-radius: 50px;
   height: 20px;

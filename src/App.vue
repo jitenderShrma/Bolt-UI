@@ -32,6 +32,12 @@ export default {
     top: -7%;
     height: 38px !important;
 }
+#toolbargrid2 {
+    position: absolute;
+    right: 0%;
+    top: -7.5%;
+    height: 38px !important;
+}
 #toolbar {
     position: absolute;
     right: 0%;

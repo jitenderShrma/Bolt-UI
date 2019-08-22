@@ -177,7 +177,7 @@
                     <div v-for="(run,i) in input.labels" :key="i">
                       <b-row>
                       <b-col>
-                      <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="input.labels[i].color">{{input.labels[i].label_name}}</b-badge>
+                      <b-badge style="font-weight:lighter;margin:5px;font-size:15px;" :variant="input.labels[i].color">{{input.labels[i].label_name}}</b-badge>
                     </b-col>
                     <b-col>
                       <b-btn v-on:click="editLabel(input.labels[i])" size="sm" variant="primary" v-text="$ml.get('edit')"></b-btn>
@@ -191,10 +191,10 @@
                       <label v-text="$ml.get('labels')"></label>
                       <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
                         <div slot="item" slot-scope = "{item :label}">
-                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                          <b-badge style="font-weight:lighter;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
                         </div>
                         <div slot="selection" slot-scope = "{item :label}">
-                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                          <b-badge style="font-weight:lighter;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
                         </div>
                         <div slot="after-items-fixed">
                           <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>

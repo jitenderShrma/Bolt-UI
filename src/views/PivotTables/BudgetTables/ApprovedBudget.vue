@@ -12,8 +12,8 @@
           </ejs-toolbar>
           <b-col sm="1" id="xs" style="position: fixed; top: -6%; right: 3%;width:55px;z-index:1001">
             <b-dropdown size="sm" id="ddown_primary" :text="currentView" variant="primary" class="m-0">
-              <b-dropdown-item @click="switchGraph">Graph</b-dropdown-item>
-              <b-dropdown-item @click="switchValue">Budget</b-dropdown-item>
+              <b-dropdown-item @click="switchGraph"><span v-text="$ml.get('graph')"></span></b-dropdown-item>
+              <b-dropdown-item @click="switchValue"><span v-text="$ml.get('budget')"></span></b-dropdown-item>
             </b-dropdown>
           </b-col>
           <div v-if="selected2=='Jan'">
@@ -582,17 +582,17 @@
                 <b-tab :title="$ml.get('labels')">
                   <b-form-group>
                     <div v-for="(run,i) in editinput.labels" :key="i">
-                      <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="editinput.labels[i].color">{{editinput.labels[i].label_name}}</b-badge>
+                      <b-badge style="font-weight:lighter;margin:5px;font-size:15px;" :variant="editinput.labels[i].color">{{editinput.labels[i].label_name}}</b-badge>
                       <b-btn style="float:right" v-on:click="delLabel(`${editinput.labels[i]._id}`,`${editinput._id}`,`${i}`)" size="sm" variant="darkred"><i class="fa fa-trash-o"></i></b-btn>
                     </div>
                     <b-form v-on:submit.prevent = "selectLabel(`${editinput._id}`)">
                       <label v-text="$ml.get('labels')"></label>
                       <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
                         <div slot="item" slot-scope = "{item :label}">
-                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                          <b-badge style="font-weight:lighter;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
                         </div>
                         <div slot="selection" slot-scope = "{item :label}">
-                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                          <b-badge style="font-weight:lighter;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
                         </div>
                         <div slot="after-items-fixed">
                           <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>
@@ -696,7 +696,7 @@ var template1Vue = Vue.component('template1',{
               };
             },
             mounted() {
-              this.value = (this.data.amount_left[0]/this.data.permissible_values[0])*100
+              this.value = +(Math.round((this.data.amount_left[0]/this.data.permissible_values[0])*100 + "e+2")  + "e-2")
             }       
               })
 var template2Vue = Vue.component('template2',{
@@ -715,7 +715,7 @@ var template2Vue = Vue.component('template2',{
               };
             },
             mounted() {
-              this.value = (this.data.amount_left[1]/this.data.permissible_values[1])*100
+              this.value = +(Math.round((this.data.amount_left[1]/this.data.permissible_values[1])*100+ "e+2")  + "e-2")
             }       
               })
 var template3Vue = Vue.component('template3',{
@@ -734,7 +734,7 @@ var template3Vue = Vue.component('template3',{
               };
             },
             mounted() {
-              this.value = (this.data.amount_left[2]/this.data.permissible_values[2])*100
+              this.value = +(Math.round((this.data.amount_left[2]/this.data.permissible_values[2])*100+ "e+2")  + "e-2")
             }       
               })
 var template4Vue = Vue.component('template4',{
@@ -753,7 +753,7 @@ var template4Vue = Vue.component('template4',{
               };
             },
             mounted() {
-              this.value = (this.data.amount_left[3]/this.data.permissible_values[3])*100
+              this.value = +(Math.round((this.data.amount_left[3]/this.data.permissible_values[3])*100+ "e+2")  + "e-2")
             }       
               })
 var template5Vue = Vue.component('template5',{
@@ -772,7 +772,7 @@ var template5Vue = Vue.component('template5',{
               };
             },
             mounted() {
-              this.value = (this.data.amount_left[4]/this.data.permissible_values[4])*100
+              this.value = +(Math.round((this.data.amount_left[4]/this.data.permissible_values[4])*100+ "e+2")  + "e-2")
             }       
               })
 var template6Vue = Vue.component('template6',{
@@ -791,7 +791,7 @@ var template6Vue = Vue.component('template6',{
               };
             },
             mounted() {
-              this.value = (this.data.amount_left[5]/this.data.permissible_values[5])*100
+              this.value = +(Math.round((this.data.amount_left[5]/this.data.permissible_values[5])*100+ "e+2")  + "e-2")
             }       
               })
 var template7Vue = Vue.component('template7',{
@@ -810,7 +810,7 @@ var template7Vue = Vue.component('template7',{
               };
             },
             mounted() {
-              this.value = (this.data.amount_left[6]/this.data.permissible_values[6])*100
+              this.value = +(Math.round((this.data.amount_left[6]/this.data.permissible_values[6])*100+ "e+2")  + "e-2")
             }         
               })
 var template8Vue = Vue.component('template8',{
@@ -829,7 +829,7 @@ var template8Vue = Vue.component('template8',{
               };
             },
             mounted() {
-              this.value = Math.round((this.data.amount_left[7]/this.data.permissible_values[7])*100)
+              this.value = +(Math.round((this.data.amount_left[7]/this.data.permissible_values[7])*100+ "e+2")  + "e-2")
             }       
               })
 var template9Vue = Vue.component('template9',{
@@ -848,7 +848,7 @@ var template9Vue = Vue.component('template9',{
               };
             },
             mounted() {
-              this.value = (this.data.amount_left[8]/this.data.permissible_values[8])*100
+              this.value = +(Math.round((this.data.amount_left[8]/this.data.permissible_values[8])*100 + "e+2")  + "e-2")
             }       
               })
 var template10Vue = Vue.component('template10',{
@@ -867,7 +867,7 @@ var template10Vue = Vue.component('template10',{
               };
             },
             mounted() {
-              this.value = (this.data.amount_left[9]/this.data.permissible_values[9])*100
+              this.value = +(Math.round((this.data.amount_left[9]/this.data.permissible_values[9])*100+ "e+2")  + "e-2")
             }       
               })
 var template11Vue = Vue.component('template11',{
@@ -886,7 +886,7 @@ var template11Vue = Vue.component('template11',{
               };
             },
             mounted() {
-              this.value = (this.data.amount_left[10]/this.data.permissible_values[10])*100
+              this.value = +(Math.round((this.data.amount_left[10]/this.data.permissible_values[10])*100+ "e+2")  + "e-2")
             }       
               })
 var template12Vue = Vue.component('template12',{
@@ -905,8 +905,8 @@ var template12Vue = Vue.component('template12',{
               };
             },
             mounted() {
-              this.value = (this.data.amount_left[11]/this.data.permissible_values[11])*100
-            }       
+              this.value = + (Math.round((this.data.amount_left[11]/this.data.permissible_values[11])*100 + "e+2")  + "e-2")
+                }       
               })
 
 export default {
@@ -1116,6 +1116,8 @@ export default {
             selectedLabel:null,
             module:null,
             isRoot:false,
+            or_head:[],
+            or_dept:[],
             squarePalettesColn: 7,
         circlePaletteColors: {'custom': ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#2196f3', '#03a9f4', '#00bcd4',
                     '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
@@ -1127,7 +1129,8 @@ export default {
      this.key = this.link.split(`head/`).pop()
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
-      this.data = this.list_to_tree_head(response.data)
+        this.or_head = JSON.parse(JSON.stringify(response.data))
+        this.data = this.list_to_tree_head(response.data)
       });
      api.get(`${apiUrl}`+`/super/settings/budget/budSet/get`).then((resp)=>{
           if(resp.data.fin_year_start_month == "Jan"){
@@ -1160,6 +1163,7 @@ export default {
       })
      
      await axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+        this.or_head = JSON.parse(JSON.stringify(res.data))
         this.department = this.list_to_tree_dept(res.data)
       })
      axios.get(`${apiUrl}`+`label/label/find/by/Heads`,{withCredentials:true}).then((res) => {
@@ -1217,7 +1221,7 @@ export default {
           }
           for (i = 0; i < list.length; i += 1) {
               node = list[i];
-              if (node.parent_department != undefined ) {
+              if (node.parent_department != undefined && this.checkExistDept(node.parent_department)) {
                   // if you have dangling branches check that map[node.parentId] exists
                   list[map[node.parent_department]].children.push(node);
               } else {
@@ -1302,7 +1306,11 @@ export default {
           parent_head : this.editinput.parent_head
         }
         api.put(`${apiUrl}`+`head/head/update/one/`+`${this.editinput._id}`,sendData).then((response)=>{
-            this.$router.go(0)
+            api.get(`${apiUrl}`+`head/head/get`)
+            .then((response) => {
+                this.or_head = JSON.parse(JSON.stringify(response.data))
+                this.data = this.list_to_tree_head(response.data)
+              });
           });
         this.editmodal = false
       },
@@ -1323,27 +1331,34 @@ export default {
             head_key:args.data.head_key
           }
           api.put(`${apiUrl}`+`head/head/update/one/`+`${id}`,sendData).then((response) => {
-            this.$router.go(0)
+            api.get(`${apiUrl}`+`head/head/get`)
+            .then((response) => {
+                this.or_head = JSON.parse(JSON.stringify(response.data))
+                this.data = this.list_to_tree_head(response.data)
+              });
           });
         }
       },
       beginEdit(args) {
-        // if(args.rowData.parentItem==null) {
-        //   this.isRoot = true
-        //   if(this.getflag==0) {
-        //   this.head = this.data
-        //   this.getflag=1
-        // }
-        // }
-        // else{
-        //   this.isRoot = false
-        //   if(this.getflag==0) {
-        //   this.head = this.data
-        //   this.getflag=1
-        // }
-        // }
-        // this.editmodal =true
-        // this.editinput = args.rowData
+        if(args.rowData.parentItem==null) {
+          this.isRoot = true
+          if(this.getflag==0) {
+          this.head = this.data
+          this.getflag=1
+        }
+        }
+        else{
+          this.isRoot = false
+          if(this.getflag==0) {
+          this.head = this.data
+          this.getflag=1
+        }
+        }
+        
+
+        this.editmodal =true
+        this.editinput = args.rowData
+        this.editinput.department = args.rowData.department._id
       },
        onClick(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
@@ -1379,7 +1394,7 @@ export default {
           }
           for (i = 0; i < list.length; i += 1) {
               node = list[i];
-              if (node.parent_head != undefined ) {
+              if (node.parent_head != undefined && this.checkExistHead(node.parent_head)) {
                   // if you have dangling branches check that map[node.parentId] exists
                   list[map[node.parent_head]].children.push(node);
               } else {
@@ -1415,7 +1430,11 @@ export default {
             // this.dataSourceSettings.dataSource = res.data[0];
           })
           this.browseModal = false
-          this.$router.go(0)
+          api.get(`${apiUrl}`+`head/head/get`)
+            .then((response) => {
+                this.or_head = JSON.parse(JSON.stringify(response.data))
+                this.data = this.list_to_tree_head(response.data)
+              });
           // axios.post(`${apiUrl}`+`csv/read`,formData,{headers:{'Content-Type':'multipart/form-data'}}).then((res) => {
           //   this.dataSourceSettings.dataSource = res.data
           // })
@@ -1426,7 +1445,20 @@ export default {
         onFileRemove: function (args) {
             args.postRawFile = false;
         },
-  
+        checkExistDept(node) {
+        for (var i=0; i < this.or_dept.length; i++) {
+            if (this.or_dept[i]._id == node)
+                return true;
+        }
+        return false;
+      },
+      checkExistHead(node) {
+        for (var i=0; i < this.or_head.length; i++) {
+            if (this.or_head[i]._id == node)
+                return true;
+        }
+        return false;
+      },
       clickHandler(args){
         if(this.getflag==0) {
           this.head = this.data
@@ -1447,7 +1479,11 @@ export default {
         if(args.item.id == 'delete') {
                             var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
                                api.delete(`${apiUrl}`+`head/head/delete/one/`+`${data[0].head_key}`).then((res)=>{
-                                   this.$router.go(0)
+                                   api.get(`${apiUrl}`+`head/head/get`)
+                                    .then((response) => {
+                                        this.or_head = JSON.parse(JSON.stringify(response.data))
+                                        this.data = this.list_to_tree_head(response.data)
+                                      });
                               });
                               
                             
@@ -1506,6 +1542,7 @@ export default {
 <style>
 #label {
   font-size:12px;
+  font-weight:lighter;
 }
   .badge-f44336 {
     background-color:#f44336;

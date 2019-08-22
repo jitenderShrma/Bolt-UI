@@ -304,7 +304,7 @@ export default {
           labelTemplate: function () {
               return {
                   template: Vue.component('labelTemplate', {
-                      template: `<div ><b-badge style="font-weight:100;margin:3px" v-for="label in data.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
+                      template: `<div ><b-badge style="font-weight:lighter;margin:3px" v-for="label in data.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
                   data: function() {
                           return {
                               data: {},
@@ -704,7 +704,12 @@ export default {
 </style>
 <style>
 #label {
+  font-weight:lighter;
     font-size: 12px;
+}
+#label1 {
+  font-size:17px;
+  font-weight:lighter;
 }
     .badge-f44336 {
     background-color:#f44336;

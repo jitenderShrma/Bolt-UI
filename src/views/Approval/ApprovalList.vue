@@ -1,8 +1,42 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
+  <AppAside fixed id="new_aside" style="height: calc(100vh - 60px);top:-8.7%">
+        <div style="float:right ">
+        <DefaultToggler style="line-height:2"/>
+        </div>
+        <b-tabs>
+    <b-tab>
+      <template slot="title">
+        <i class='icon-list'></i>
+      </template>
+      <b-list-group class="list-group-accent">
+        <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center font-weight-bold text-muted text-uppercase small">
+          Timeline
+        </b-list-group-item>
+        <div v-for="(lg,i) in log.slice().reverse()">
+        <b-list-group-item href="#" :class="color[i]">
+          <div class="avatar float-left mr-1">
+            <img class="img-avatar" src="img/avatars/7.jpg" alt="admin@bootstrapmaster.com">
+          </div>
+          <div>
+            <span v-if="!lg.approved">{{lg.event}}</span>
+            <span id="approved" v-if="lg.approved">{{lg.approved}}</span>
+            <span v-if="lg.approved">{{lg.more}}</span>
+            <span v-if="lg.by"> by <span id="name">{{lg.by}}</span></span>&nbsp;<span style="float:right" v-if="iconEnable && i==0"><i class="fa fa-exclamation-circle"></i></span><span style="float:right" v-if="lg.iconDouble"><i style="color:blue;font-weight:bold" class="icon-check"></i></span><span style="float:right" v-if="lg.iconTick && !lg.iconDouble"><i class="icon-check"></i></span>
+          </div>
+          <small class="text-muted mr-3">
+            <i class="icon-calendar"></i>&nbsp;&nbsp;{{lg.date | moment("MMM Do YY, h:mm a")}}
+          </small>
+        </b-list-group-item>
+        </div>
+      </b-list-group>
+      
+    </b-tab>
+  </b-tabs>
+      </AppAside>
      <div id="target" class="col-lg-15 control-section">
         <div class="content-wrapper">
-            <ejs-toolbar ref="toolbar" id="toolbargrid" :clicked="addEditHandler">
+            <ejs-toolbar ref="toolbar" id="toolbargrid2" :clicked="addEditHandler">
               <e-items>
                   <e-item  align="right" id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
                   <e-item  align="right" id="cancel" :template="cancelTemplate" :text="$ml.get('cancel')"></e-item>
@@ -11,12 +45,12 @@
               </e-items>
             </ejs-toolbar>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc"  :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"
-                :height="height" :enableHover='false'>
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true' :allowReordering='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc" :allowTextWrap='true' :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler" :rowSelected="rowSelected" :rowDeselected="rowDeselected"
+                :height="height" :enableHover='false'> 
                 <e-columns>
                     <e-column :visible="enableColumn" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
                     <e-column :visible="false" field="last_updated" headerText='last_updated' width='140'></e-column>
-                    <e-column field='ref_id' headerText='Ref ID' width="117"  :filter='filter' ></e-column>
+                    <e-column field='ref_id' :template="buttonLM" headerText='Ref ID' width="141"  :filter='filter' ></e-column>
                     <e-column field='status' headerText='Status' width="137" :filter='filter' ></e-column>
                     <e-column field='request_by.user_name' width="120" headerText='Req By'  :filter='filter' ></e-column>
                     <e-column field='month' :template="monthTemplate" width="117" headerText='Month' :filter='filter' ></e-column>
@@ -40,7 +74,7 @@
           <div v-for="(run,i) in editinput.labels" :key="i">
               <b-row>
                   <b-col>
-                  <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="editinput.labels[i].color">{{editinput.labels[i].label_name}}</b-badge>
+                  <b-badge style="font-weight:lighter;margin:5px;font-size:15px;" :variant="editinput.labels[i].color">{{editinput.labels[i].label_name}}</b-badge>
                 </b-col>
                 <b-col>
                   <b-btn v-on:click="editLabel(editinput.labels[i])" size="sm" variant="primary" v-text="$ml.get('edit')"></b-btn>
@@ -54,10 +88,10 @@
                       <label v-text="$ml.get('labels')"></label>
                       <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
                         <div slot="item" slot-scope = "{item :label}">
-                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                          <b-badge style="font-weight:lighter;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
                         </div>
                         <div slot="selection" slot-scope = "{item :label}">
-                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                          <b-badge style="font-weight:lighter;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
                         </div>
                         <div slot="after-items-fixed">
                           <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>
@@ -122,6 +156,11 @@
 import apiUrl from '@/apiUrl'
 import axios from 'axios'
 import Vue from 'vue'
+import { asideMenuCssClasses, validBreakpoints, checkBreakpoint } from '../../shared/classes'
+import toggleClasses from '../../shared/toggle-classes'
+import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
+import AsideToggler from '../../shared/AsideToggler'
+import DefaultToggler from '../../shared/AsideTogglerClose'
 import { Browser } from '@syncfusion/ej2-base';
 import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import VueNotifications from 'vue-notifications'
@@ -133,7 +172,7 @@ import {
   FieldList
 } from "@syncfusion/ej2-vue-pivotview";
 import {CoolSelect} from 'vue-cool-select';
-import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
+import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import { NumericTextBoxPlugin,ColorPickerPlugin } from "@syncfusion/ej2-vue-inputs";
@@ -183,16 +222,24 @@ export default {
     components: {
       ToolbarPlugin,
       CoolSelect,
-      GridPlugin, Filter, Selection, Sort, VirtualScroll,
-        Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
-        NumericTextBoxPlugin,
-        PivotViewPlugin,
-        GroupingBar,
-        FieldList,
-        Edit
+      GridPlugin,
+      AsideToggler,
+        AppHeader,
+        DefaultToggler,
+        AppSidebar,
+        AppAside,
+        TheFooter,
+        Breadcrumb,
+        SidebarForm,
+        SidebarFooter,
+        SidebarToggler,
+        SidebarHeader,
+        SidebarNav,
+        SidebarMinimizer,DatePickerPlugin,
+        NumericTextBoxPlugin
     },
      provide: {
-            grid: [PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser]
+            grid: [PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder]
         },
     data: function () {
       return {
@@ -201,6 +248,37 @@ export default {
                 delete_own:true,
         addModal:false,
         sortOptions:{columns: [{field: 'status', direction: 'Descending'},{field: 'last_updated', direction: 'Descending'}]},
+        buttonLM: function () {
+              return {
+                  template: Vue.component('buttonLM', {
+                      template: `<div style="line-height:4">{{data.ref_id}}<AsideToggler id="toggler"/></div>`,
+                      components:{
+                        AsideToggler,
+                        AppHeader,
+                        AppSidebar,
+                        AppAside,
+                        TheFooter,
+                        Breadcrumb,
+                        SidebarForm,
+                        SidebarFooter,
+                        SidebarToggler,
+                        SidebarHeader,
+                        SidebarNav,
+                        SidebarMinimizer
+                      },
+                  data: function() {
+                          return {
+                              data: {},
+                          }
+                      },
+                  methods: {
+                    gotoPage() {
+                      console.log("aside on")
+                    }
+                  }
+                })
+              }
+          },
         buttonTemplate: function () {
               return {
                 
@@ -209,7 +287,7 @@ export default {
                                 <div v-if="yes">
                                   <b-button @click="acceptReq" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
                                   <b-button @click="rejectReq" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
-                                  </div
+                                  </div>
                                 </div>`,
                   data: function() {
                           return {
@@ -238,6 +316,7 @@ export default {
                           this.designation = data.user.user_type.designation
                           if(this.data.assigned_to_designation == this.designation && this.data.status=="PENDING") {
                             this.yes=true
+                            console.log(data.user.user_type.designation)
                           }
                         }
                         if(data.length == 24 && this.data.status=="PENDING") {
@@ -252,7 +331,7 @@ export default {
         labelTemplate: function () {
               return {
                   template: Vue.component('labelTemplate', {
-                      template: `<div ><b-badge style="font-weight:100;margin:3px" v-for="label in data.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
+                      template: `<div ><b-badge style="font-weight:lighter;margin:3px" v-for="label in data.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
                   data: function() {
                           return {
                               data: {},
@@ -264,7 +343,7 @@ export default {
           headlabelTemplate: function () {
               return {
                   template: Vue.component('labelTemplate', {
-                      template: `<div><b-badge style="font-weight:100;margin:3px" v-for="label in data.budget_head.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
+                      template: `<div><b-badge style="font-weight:lighter;margin:3px" v-for="label in data.budget_head.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
                   data: function() {
                           return {
                               data: {},
@@ -307,7 +386,7 @@ export default {
             cancelTemplate: function () {
               return {
                   template: Vue.component("cancelTemplate", {
-                      template: `<b-badge id="label1" variant="danger" ><i class="fa fa-trash-o"></i>&nbsp<span id="hide" v-text="$ml.get('cancel')"></span></b-badge>`,
+                      template: `<b-badge id="label1" variant="warning" ><i class="fa fa-trash-o"></i>&nbsp<span id="hide" v-text="$ml.get('cancel')"></span></b-badge>`,
                       data() {
                         return {
                           data: {
@@ -403,10 +482,15 @@ export default {
                 filter: {
                     type: 'CheckBox'
                 },
+                log:[],
+                color:['list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-success list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-success list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-success list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-success list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3'],
                 target: '.control-section',
                  alertHeader: 'Copy with Header',
                 alertContent: 'Atleast one row should be selected to copy with header',
                 alertWidth: '300px',
+                iconEnable : false,
+                loglen:0,
+                iconTick :false,
                 animationSettings: { effect: 'None' },
                 alertDlgButtons: [{ click: this.alertDlgBtnClick, buttonModel: { content: 'OK', isPrimary: true } }],
                 selectionSettings: { persistSelection: true, type: 'Multiple' }
@@ -420,6 +504,111 @@ export default {
         console.log(res.data)
       })
       this.$router.go(0)
+    },
+    rowSelected(args) {
+      if(args.target.outerHTML == `<span class="icon-people"></span>`) {
+        api.get(`${apiUrl}approvals/preApp/timeline/get/${args.data._id}`).then((res) =>{
+            if(res.data) {
+              this.log = JSON.parse(JSON.stringify(res.data.log))
+              this.loglen = this.log.length - 1
+              console.log(this.log[this.loglen])
+              if(this.log[this.loglen].event.includes("Request sent to")
+                || this.log[this.loglen].event.includes("Approval sent for")) {
+                this.iconEnable = true
+              }
+              else{
+                this.iconEnable = false
+              }
+              if(this.log[this.loglen].event.includes("Approved at Level")
+                ) {
+                this.log[this.loglen].iconDouble = true
+              console.log("icon")
+              }
+              else{
+                this.log[this.loglen].iconDouble = false
+              }
+              for(var i=0;i<this.log.length;i++) {
+                if(this.log[i].event == "Approved at Level 1") {
+                  if(res.data.approval_id.level1approved.by) {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 1"
+                    this.log[i].by = res.data.approval_id.level1approved.by.personal_details.name
+                    this.log[i].iconTick = true
+                  }
+                  else {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 1"
+                    this.log[i].by = "Admin"
+                    this.log[i].iconTick = true
+                  }
+                }
+                if(this.log[i].event == "Approved at Level 2") {
+                  if(res.data.approval_id.level2approved.by) {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 2"
+                    this.log[i].by = res.data.approval_id.level2approved.by.personal_details.name
+                    this.log[i].iconTick = true
+                  }
+                  else {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 2"
+                    this.log[i].by = "Admin"
+                    this.log[i].iconTick = true
+                  }
+                }
+                if(this.log[i].event == "Approved at Level 3") {
+                  if(res.data.approval_id.level3approved.by) {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 3"
+                    this.log[i].by = res.data.approval_id.level3approved.by.personal_details.name
+                    this.log[i].iconTick = true
+                  }
+                  else {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 3"
+                    this.log[i].by = "Admin"
+                    this.log[i].iconTick = true
+                  }
+                }
+                if(this.log[i].event == "Approved at Level 4") {
+                  if(res.data.approval_id.level4approved.by) {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 4"
+                    this.log[i].by = res.data.approval_id.level4approved.by.personal_details.name
+                    this.log[i].iconTick = true
+                  }
+                  else {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 4"
+                    this.log[i].by = "Admin"
+                    this.log[i].iconTick = true
+                  }
+                }
+                if(this.log[i].event == "Approved at Level 5") {
+                  if(res.data.approval_id.level5approved.by) {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 5"
+                    this.log[i].by = res.data.approval_id.level5approved.by.personal_details.name
+                    this.log[i].iconTick = true
+                  }
+                  else {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 5"
+                    this.log[i].by = "Admin"
+                    this.log[i].iconTick = true
+                  }
+                }
+              }
+            }
+            // for(var i=0;i<this.lineManagers.length;i++) {
+            //   this.designation.push(this.lineManagers[i][0].designation.name)
+            //   this.department.push(this.lineManagers[i][0].department.department_name)
+            // }
+        })
+      }
+    },
+    rowDeselected(args) {
+      this.log = []
     },
     editLabel(args) {
       console.log(args)
@@ -528,8 +717,47 @@ export default {
                 }
                 if(args.item.id == "release") {
                   if(data.length>0) {
+
                     axios.get(`${apiUrl}approvals/preApp/release/${data[0].ref_id}`).then((res) => {
-                        console.log(res)
+                        
+                        api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
+                          console.log(response.data)
+                          var user =  JSON.parse(localStorage['session_key'])
+                            this.datasrc = response.data;
+                            for(var i =0;i<this.datasrc.length;i++) {
+                              if(user.user) {
+                                if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
+                                   this.enableColumn =  true
+                                }
+                              }
+                              else {
+                                console.log("user")
+                                if(this.datasrc[i].status=="PENDING") {
+                                   this.enableColumn =  true
+                                }
+                              }
+                              if(this.datasrc[i].request_by == null) {
+                                this.datasrc[i].request_by = {
+                                  user_name:"No longer exists!"
+                                }
+                              }
+                              if(this.datasrc[i].department == null) {
+                                this.datasrc[i].department = {
+                                  department_name:"No longer exists!"
+                                }
+                              }
+                              if(this.datasrc[i].budget_head == null) {
+                                this.datasrc[i].budget_head = {
+                                  name:"No longer exists!"
+                                }
+                              }
+                              this.datasrc[i].labellist = "";
+                              for(var j=0;j<this.datasrc[i].labels.length;i++) {
+                                this.datasrc[i].labellist = this.datasrc[i].labellist+`${this.datasrc[i].labels[j].label_name},`
+                              }
+                            }
+                            console.log(this.datasrc)
+                })
                     })
                   }
                 }
@@ -563,37 +791,17 @@ export default {
                 this.$refs.dialogObj.hide();
                 this.link = window.location.href;
                 this.key = this.link.split('view/').pop()
-                var user =  JSON.parse(localStorage['session_key'])
-                console.log(user)
-                if(user.user) {
-                  for(var i=0;i<user.permission.length;i++) {
-                    if(user.permission[i].text == "Approval") {
-                      if(!user.permission[i].write) {
-                        this.write =false
-                      }
-                    }
-                  }
-                  for(var i=0;i<user.additional_permissions.length;i++) {
-                    if(user.additional_permissions[i].text == "Approval") {
-                      if(!user.additional_permissions[i].delete_own) {
-                        this.delete_own = false
-                      }
-                    }
-                  }
-                }
-                  this.pending = false
-                api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
-                  console.log(response.data)
+                this.pending = false
+                await api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
+                  var user =  JSON.parse(localStorage['session_key'])
                     this.datasrc = response.data;
-                    for(var i =0;i<this.datasrc.length;i++) {
+                    for(var i=0;i<this.datasrc.length;i++) {
                       if(user.user) {
-                        console.log("user exists")
                         if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
                            this.enableColumn =  true
                         }
                       }
                       else {
-                        console.log("user")
                         if(this.datasrc[i].status=="PENDING") {
                            this.enableColumn =  true
                         }
@@ -614,11 +822,10 @@ export default {
                         }
                       }
                       this.datasrc[i].labellist = "";
-                      for(var j=0;j<this.datasrc[i].labels.length;i++) {
+                      for(var j=0;j<this.datasrc[i].labels.length;j++) {
                         this.datasrc[i].labellist = this.datasrc[i].labellist+`${this.datasrc[i].labels[j].label_name},`
                       }
                     }
-                    console.log(this.datasrc)
                 })
                 api.get(`${apiUrl}`+`label/label/find/by/Approval`).then((res) => {
                   this.labels = res.data
@@ -656,7 +863,14 @@ export default {
 };
 </script>
 <style>
+#approved {
+  color:green;
+}
+#name{
+  color:lightblue;
+}
 #label {
+  font-weight:lighter;
     font-size: 12px;
 }
     .badge-f44336 {
@@ -719,7 +933,7 @@ export default {
 }
 #label1 {
   font-size:17px;
-  font-weight: 100;
+  font-weight:lighter;
 }
 #ddown_primary {
   font-size:17px;
@@ -767,4 +981,69 @@ export default {
 .badge-#ff000 {
   background-color: red;
 }
+#toggler {
+  float:right;
+  margin:10px;
+  border-radius: 50px;
+  height: 20px;
+  width:20px;
+  padding:0;
+  margin-top:5;
+  content:'\E81E';
+}
+#toggler:hover {
+  margin:10px;
+  border-radius: 50px;
+  background: grey;
+  height: 20px;
+  width:20px;
+  content:'\E81E';
+  padding:0;
+  margin-top:5;
+}
+#toggler:focus {
+  margin:10px;
+  border-radius: 50px;
+  height: 20px;
+  background: grey;
+  width:20px;
+  content:'\E81E';
+  padding:0;
+  margin-top:5;
+}
+/*#toggler:focus {
+  margin:10px;
+  border-radius: 50px;
+  height: 20px;
+  background: grey;
+  width:20px;
+  content:'\E81E';
+  padding:0;
+  margin-top:5;
+}*/
+#toggler2 {
+  margin:10px;
+  border-radius: 50px;
+  background: black;
+  height: 20px;
+  width:20px;
+  content:'\E81E';
+  padding:0;
+  margin:0;
+}
+#new_aside {
+  width:350px;
+}
+html:not([dir="rtl"]) #new_aside {
+    margin-right: -350px;
+}
+@media (min-width: 992px) {
+html:not([dir="rtl"]) .aside-menu-show #new_aside, html:not([dir="rtl"]) .aside-menu-lg-show #new_aside {
+    margin-right: -250px;
+}
+html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside-menu-off-canvas .#new_aside {
+    right: 0;
+}
+}
+
 </style>

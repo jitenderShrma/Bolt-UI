@@ -172,9 +172,9 @@
                      <!--  <label v-text="$ml.get('labels')"></label> -->
                       <treeselect @change="selectLabeladd(`${input._id}`)" :placeholder="$ml.get('pholdlabel')" v-model="input.labels" :multiple="true" :options="labels" >
                         <div slot="option-label" slot-scope="{ node, shouldShowCount, count, labelClassName, countClassName }">
-                          <b-badge :variant="node.raw.color">{{node.raw.label}}</b-badge>
+                          <b-badge style="font-weight:lighter" :variant="node.raw.color">{{node.raw.label}}</b-badge>
                         </div>
-                        <div slot="value-label" slot-scope="{ node }"><b-badge :variant="node.raw.color">{{node.raw.label}}</b-badge></div>
+                        <div slot="value-label" slot-scope="{ node }"><b-badge style="font-weight:lighter" :variant="node.raw.color">{{node.raw.label}}</b-badge></div>
                       </treeselect>
                       <!-- <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
                         <div slot="item" slot-scope = "{item :label}">

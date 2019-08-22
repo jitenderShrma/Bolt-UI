@@ -102,7 +102,7 @@
                     <div v-for="(run,i) in input.labels" :key="i">
                       <b-row>
                       <b-col>
-                      <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="input.labels[i].color">{{input.labels[i].label_name}}</b-badge>
+                      <b-badge style="font-weight:lighter;margin:5px;font-size:15px;" :variant="input.labels[i].color">{{input.labels[i].label_name}}</b-badge>
                     </b-col>
                     <b-col>
                       <b-btn v-on:click="editLabeladd(input.labels[i])" size="sm" variant="primary" v-text="$ml.get('edit')"></b-btn>
@@ -116,10 +116,10 @@
                       <label v-text="$ml.get('labels')"></label>
                       <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
                         <div slot="item" slot-scope = "{item :label}">
-                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                          <b-badge style="font-weight:lighter;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
                         </div>
                         <div slot="selection" slot-scope = "{item :label}">
-                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                          <b-badge style="font-weight:lighter;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
                         </div>
                         <div slot="after-items-fixed">
                           <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>
@@ -159,7 +159,7 @@
                     <div v-for="(run,i) in editinput.labels" :key="i">
                       <b-row>
                       <b-col>
-                      <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="editinput.labels[i].color">{{editinput.labels[i].label_name}}</b-badge>
+                      <b-badge style="font-weight:lighter;margin:5px;font-size:15px;" :variant="editinput.labels[i].color">{{editinput.labels[i].label_name}}</b-badge>
                     </b-col>
                     <b-col>
                       <b-btn v-on:click="editLabel(editinput.labels[i])" size="sm" variant="primary" v-text="$ml.get('edit')"></b-btn>
@@ -173,10 +173,10 @@
                       <label v-text="$ml.get('labels')"></label>
                       <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
                         <div slot="item" slot-scope = "{item :label}">
-                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                          <b-badge style="font-weight:lighter;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
                         </div>
                         <div slot="selection" slot-scope = "{item :label}">
-                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
+                          <b-badge style="font-weight:lighter;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
                         </div>
                         <div slot="after-items-fixed">
                           <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>
@@ -677,7 +677,12 @@ export default {
               
               api.post(`${apiUrl}`+`head/head/create`,this.input).then((response) =>{
                 if(this.$route.path == '/heads/list') {
-                this.$router.go(0)
+                    api.get(`${apiUrl}`+`head/head/get`)
+                .then((response) => {
+                  this.or_head = JSON.parse(JSON.stringify(response.data))
+                  this.data = this.list_to_tree_head(response.data)
+                  });
+     
                     this.modal = false       
 
                       this.input={
@@ -685,7 +690,13 @@ export default {
                       }  
                     }
                     else {
-                      this.$router.go(0)
+                      api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
+                        .then((response) => {
+                          this.or_head = JSON.parse(JSON.stringify(response.data))
+                          this.data = this.list_to_tree_head(response.data)
+                          this.input.department = this.key 
+                          });
+     
                     this.modal = false    
 
                       this.input={department:this.key,labels:[]}
@@ -712,8 +723,21 @@ export default {
           parent_head : this.editinput.parent_head
         }
         api.put(`${apiUrl}`+`head/head/update/one/`+`${this.editinput._id}`,sendData).then((response)=>{
-          console.log(response.data)
-            this.$router.go(0)
+            if(this.$route.path == '/heads/list') {
+                api.get(`${apiUrl}`+`head/head/get`)
+            .then((response) => {
+              this.or_head = JSON.parse(JSON.stringify(response.data))
+              this.data = this.list_to_tree_head(response.data)
+              });
+             }
+             else{
+              api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
+                .then((response) => {
+                  this.or_head = JSON.parse(JSON.stringify(response.data))
+                  this.data = this.list_to_tree_head(response.data)
+                  this.input.department = this.key 
+                  });
+             }
           });
         this.editmodal = false
       },
@@ -756,7 +780,7 @@ export default {
         }
         this.editmodal =true
         this.editinput = args.rowData
-        this.editinput.department = args.rowData.name
+        this.editinput.department = args.rowData.department._id
       },
        onClick(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
@@ -832,7 +856,21 @@ export default {
         if(args.item.id == 'delete') {
                             var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
                                api.delete(`${apiUrl}`+`head/head/delete/one/`+`${data[0].head_key}`).then((res)=>{
-                                  this.$router.go(0)
+                                  if(this.$route.path == '/heads/list') {
+                                      api.get(`${apiUrl}`+`head/head/get`)
+                                  .then((response) => {
+                                    this.or_head = JSON.parse(JSON.stringify(response.data))
+                                    this.data = this.list_to_tree_head(response.data)
+                                    });
+                                   }
+                                   else{
+                                    api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
+                                      .then((response) => {
+                                        this.or_head = JSON.parse(JSON.stringify(response.data))
+                                        this.data = this.list_to_tree_head(response.data)
+                                        this.input.department = this.key 
+                                        });
+                                   }
                               });
                               
                             
@@ -890,7 +928,12 @@ export default {
 </style>
 <style>
 #label {
+  font-weight:lighter;
   font-size:12px;
+}
+#label1 {
+  font-weight:lighter;
+  font-size:17px;
 }
   .badge-f44336 {
     background-color:#f44336;

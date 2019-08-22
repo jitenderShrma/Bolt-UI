@@ -4,7 +4,7 @@
  <div id="target" className="animated fadeIn">
      <div class="col-lg-15 control-section">
         <div class="content-wrapper">
-            <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
+            <ejs-toolbar id="toolbargrid2" :clicked="addEditHandler">
                 <e-items >
                  <e-item align="right" id="add" :text="$ml.get('add')" :template="addTemplate"></e-item>
                  <e-item align="right" id="edit" :text="$ml.get('edit')" :template="editTemplate"></e-item>
@@ -13,7 +13,7 @@
                 </ejs-toolbar>
              <div class="control-section">
                 
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' :toolbarClick="clickHandler"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowTextWrap='true' :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' :toolbarClick="clickHandler"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='context' headerText='Context'  :filter='filter' ></e-column>
@@ -117,7 +117,7 @@ import {
   GroupingBar,
   FieldList
 } from "@syncfusion/ej2-vue-pivotview";
-import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
+import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     
     Vue.use(PivotViewPlugin);
@@ -172,7 +172,7 @@ export default {
         Edit
     },
      provide: {
-            grid: [PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser]
+            grid: [PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder]
         },
     data: function () {
       return {
@@ -248,7 +248,7 @@ export default {
         labelTemplate: function () {
               return {
                   template: Vue.component('labelTemplate', {
-                      template: `<div><b-badge style="font-weight:100;margin:3px" id="label" :variant="data.color">{{data.label_name}}</b-badge>&nbsp;</div>`,
+                      template: `<div><b-badge style="font-weight:lighter;margin:3px" id="label" :variant="data.color">{{data.label_name}}</b-badge>&nbsp;</div>`,
                   data: function() {
                           return {
                               data: {},
@@ -517,7 +517,12 @@ export default {
 
 
 #label {
+  font-weight:lighter;
     font-size: 12px;
+}
+#label1 {
+  font-weight:lighter;
+    font-size: 17px;
 }
     .badge-f44336 {
     background-color:#f44336;

@@ -3,7 +3,7 @@
      <div class="col-lg-15 control-section">
         <div class="content-wrapper">
              <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :showColumnMenu='true' :allowResizing='true'  :showColumnChooser='true'  id='overviewgrid'  :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true'
+            <ejs-grid ref='overviewgrid' :allowReordering='true' :rowHeight='rowHeight' :showColumnMenu='true' :allowResizing='true'  :showColumnChooser='true'  id='overviewgrid'  :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true'
                 :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
                     <e-column type='checkbox' :allowFiltering='false' :allowSorting='false'  ></e-column>
@@ -41,7 +41,7 @@ import {
   GroupingBar,
   FieldList
 } from "@syncfusion/ej2-vue-pivotview";
-import { ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent } from "@syncfusion/ej2-vue-grids";
+import { ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     
     Vue.use(PivotViewPlugin);
@@ -87,7 +87,7 @@ export default {
   FieldList
     },
      provide: {
-            grid: [FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser]
+            grid: [FieldList,Reorder,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser]
         },
     data: function () {
       return {

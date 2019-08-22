@@ -7,7 +7,7 @@
         alt="No Profile Pic" />
     </template>\
     <template slot="dropdown">
-      <b-dropdown-header tag="div" class="text-center"><strong @click="reRoute(ssnCompany._id)" v-text="ssnCompany.company_name"></strong>&nbsp; &nbsp; &nbsp;<b-badge variant="primary" @click="toggleNavs" v-text="$ml.get('switch')"></b-badge>
+      <b-dropdown-header tag="div" class="text-center"><strong @click="reRoute(ssnCompany._id)" v-text="ssnCompany.company_name"></strong>&nbsp; &nbsp; &nbsp;<b-badge v-if="!isUser" variant="primary" @click="toggleNavs" v-text="$ml.get('switch')"></b-badge>
       </b-dropdown-header>
       <div v-if="isUser">
       <b-dropdown-item @click = "userDetails">
@@ -44,7 +44,7 @@
         alt="admin@bootstrapmaster.com" />
     </template>\
     <template slot="dropdown">
-      <b-dropdown-header tag="div" class="text-center"><strong  v-text="$ml.get('companylist')"></strong>&nbsp; &nbsp; &nbsp;<b-badge variant="primary" @click="toggleNavs" v-text="$ml.get('switch')"></b-badge>
+      <b-dropdown-header tag="div" class="text-center"><strong  v-text="$ml.get('companylist')"></strong>&nbsp; &nbsp; &nbsp;<b-badge v-if="!isUser" variant="primary" @click="toggleNavs" v-text="$ml.get('switch')"></b-badge>
       </b-dropdown-header>
       <v-for >
       <b-dropdown-item v-for="(run, index) in data"
