@@ -1,6 +1,6 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
-  <AppAside fixed id="new_aside" style="height: calc(100vh - 60px);top:-8.7%">
+  <AppAside id="new_aside" style="height: calc(100vh - 60px);top:-8.7%">
         <div style="float:right ">
         <DefaultToggler style="line-height:2"/>
         </div>
@@ -51,7 +51,7 @@
                     <e-column :visible="enableColumn" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
                     <e-column :visible="false" field="last_updated" headerText='last_updated' width='140'></e-column>
                     <e-column field='ref_id' :template="buttonLM" headerText='Ref ID' width="141"  :filter='filter' ></e-column>
-                    <e-column field='status' headerText='Status' width="137" :filter='filter' ></e-column>
+                    <e-column :sortComparer='sortComparer' field='status' headerText='Status' width="137" :filter='filter' ></e-column>
                     <e-column field='request_by.user_name' width="120" headerText='Req By'  :filter='filter' ></e-column>
                     <e-column field='month' :template="monthTemplate" width="117" headerText='Month' :filter='filter' ></e-column>
                     <e-column field='amount' headerText='Amount' width="126" :filter='filter' ></e-column>
@@ -766,6 +766,14 @@ export default {
             alertDlgBtnClick() {
                     this.$refs.alertDialog.hide();
                 },
+                sortComparer(reference,comparer) {
+                  if(comparer == "PENDING"){
+                    return -1;
+                  }
+                  else{
+                    return 0
+                  }
+                }
             
         },
         watch:{
@@ -1039,15 +1047,10 @@ html:not([dir="rtl"]) #new_aside {
 }
 @media (min-width: 992px) {
 html:not([dir="rtl"]) .aside-menu-show #new_aside, html:not([dir="rtl"]) .aside-menu-lg-show #new_aside {
-    margin-right: -250px;
+    margin-right: 0px;
 }
 html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside-menu-off-canvas .#new_aside {
     right: 0;
-}
-}
-@media (min-width: 992px) {
-.aside-menu-fixed .aside-menu .tab-content {
-    height: calc(100vh - 3.375rem - 55px);
 }
 }
 

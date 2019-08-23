@@ -513,10 +513,19 @@
             else{
               parseInt(this.input.recurring_period)
               console.log(this.input)
-              axios.post(`${apiUrl}`+`approvals/preApp/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
+              axios.post(`${apiUrl}`+`approvals/preApp/create`,this.input,{withCredentials:true}).then((res) => { 
+                if(res.data.message) {
+                  toast({
+                    type: VueNotifications.types.error,
+                    title: 'Error',
+                    message: 'Transaction Amount Error'
+                    })
+                 }
+                 else{ 
                  this.loader = true
+                 setTimeout(function(){window.location.href = ('#/approval/view/all')},2000)
+                }
               })
-              setTimeout(function(){window.location.href = ('#/approval/view/all')},2000)
             }
           });
           },

@@ -1,6 +1,6 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
-      <AppAside fixed id="new_aside" style="height: calc(100vh - 65px);top:-8%">
+      <AppAside id="new_aside" style="height: calc(100vh - 65px);top:-8%">
         <div style="float:right">
         <DefaultToggler style="line-height:2"/>
         </div>
@@ -642,10 +642,13 @@ export default {
                     this.$router.push(`/staff/details/${selected[0]._id}`);
                 }
                 if(args.item.id == "delete") {
-                    axios.delete(`${apiUrl}/user/subuser/delete/${selected[0]._id}`,{withCredentials:true}).then((res) => {
+                  axios.delete(`${apiUrl}staff/staff/delete/one/${selected[0].user_type._id}`,{withCredentials:true}).then((resp) => {
+                    console.log(resp.data)
+                    axios.delete(`${apiUrl}user/subuser/delete/${selected[0]._id}`,{withCredentials:true}).then((res) => {
                         axios.get(`${apiUrl}`+`user/subuser/see/all`,{ withCredentials : true})
                        .then(response => {this.datasrc = response.data})
                     })
+                  })
                 }
               }
               if (args.item.text === 'Export Excel') {
@@ -862,16 +865,10 @@ html:not([dir="rtl"]) #new_aside {
 }
 @media (min-width: 992px) {
 html:not([dir="rtl"]) .aside-menu-show #new_aside, html:not([dir="rtl"]) .aside-menu-lg-show #new_aside {
-  margin-right:-250px;
+  margin-right:0px;
 }
 html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside-menu-off-canvas .#new_aside {
     right: 100px;
-}
-}
-
-@media (min-width: 992px){
-.aside-menu-fixed .aside-menu .tab-content {
-    height: calc(100vh - 3.375rem - 55px);
 }
 }
 </style>
