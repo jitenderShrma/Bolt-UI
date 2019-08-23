@@ -10,7 +10,7 @@
         Approval Matrix
       </template>
       <b-list-group class="list-group-accent">
-      <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center text-muted text-uppercase small">LM-1 <div style="display:inline" v-if="designationBudget[0]!=null && designationBudget[0]!=''">{{designationBudget[0]}} - {{departmentBudget[0]}}</div>
+      <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center text-muted text-uppercase small">Approval Level-1 <div style="display:inline" v-if="designationBudget[0]!=null && designationBudget[0]!=''">{{designationBudget[0]}} - {{departmentBudget[0]}}</div>
       </b-list-group-item>
       <div v-for="(run,i) in lineManagersBudget[0]" :key="i">
       <!-- <div class="p-3"> -->
@@ -28,7 +28,7 @@
     </b-list-group>
     <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-warning py-1 bg-light text-center  text-muted text-uppercase small">
-        LM-2 <div style="display:inline" v-if="designationBudget[1]!=null && designationBudget[1]!=''">{{designationBudget[1]}} - {{departmentBudget[1]}}</div>
+        Approval Level-2 <div style="display:inline" v-if="designationBudget[1]!=null && designationBudget[1]!=''">{{designationBudget[1]}} - {{departmentBudget[1]}}</div>
       </b-list-group-item>
       <div v-for="(run,i) in lineManagersBudget[1]" :key="i">
       <!-- <div class="p-3"> -->
@@ -46,7 +46,7 @@
     </b-list-group>
     <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-info py-1 bg-light text-center  text-muted text-uppercase small">
-        LM-3 <div style="display:inline" v-if="designationBudget[2]!=null && designationBudget[2]!=''">{{designationBudget[2]}} - {{departmentBudget[2]}}</div>
+        Approval Level-3 <div style="display:inline" v-if="designationBudget[2]!=null && designationBudget[2]!=''">{{designationBudget[2]}} - {{departmentBudget[2]}}</div>
       </b-list-group-item>
       <div v-for="(run,i) in lineManagersBudget[2]" :key="i">
       <!-- <div class="p-3"> -->
@@ -64,7 +64,7 @@
     </b-list-group>
     <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-danger py-1 bg-light text-center  text-muted text-uppercase small">
-        LM-4 <div style="display:inline" v-if="designationBudget[3]!=null && designationBudget[3]!=''">{{designationBudget[3]}} - {{departmentBudget[3]}}</div>
+        Approval Level-4 <div style="display:inline" v-if="designationBudget[3]!=null && designationBudget[3]!=''">{{designationBudget[3]}} - {{departmentBudget[3]}}</div>
       </b-list-group-item>
 
       <div v-for="(run,i) in lineManagersBudget[3]" :key="i">
@@ -83,7 +83,7 @@
     </b-list-group>
     <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-success py-1 bg-light text-center  text-muted text-uppercase small">
-        LM-5 <div style="display:inline" v-if="designationBudget[4]!=null && designationBudget[4]!=''">{{designationBudget[4]}} - {{departmentBudget[4]}}</div>
+        Approval Level-5 <div style="display:inline" v-if="designationBudget[4]!=null && designationBudget[4]!=''">{{designationBudget[4]}} - {{departmentBudget[4]}}</div>
       </b-list-group-item>
       <div v-for="(run,i) in lineManagersBudget[4]" :key="i">
       <!-- <div class="p-3"> -->
