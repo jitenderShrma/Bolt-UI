@@ -256,7 +256,7 @@
                             <span v-text="$ml.get('readown')"></span>
                             <br>
                             <span style="margin-bottom:10px;"></span>
-                            <c-switch id="padded" size="sm" class="mx-1" color="primary" name="switch1" v-model="readOwn" @change="setAllReadOwn" :uncheckedValue="false" :checkedValue="true"/>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="readOwn" @change="setAllReadOwn" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col style="padding-right:0px">
                             <span v-text="$ml.get('editown')"></span>
@@ -270,29 +270,29 @@
                             <span style="margin-bottom:10px;"></span>
                             <c-switch id="padded" size="sm" class="mx-1" color="primary" name="switch1" v-model="deleteOwn" @change="setAllDeleteOwn" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
-                          <b-col style="padding-right:0px;">
+                          <b-col style="padding-right:0px">
                             <span v-text="$ml.get('readall')"></span>
                             <br>
                             <span style="margin-bottom:10px;"></span>
-                            <c-switch id="padded" size="sm" class="mx-1" color="primary" name="switch1" v-model="readAll"  @change="setAllReadAll" :uncheckedValue="false" :checkedValue="true"/>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="readAll"  @change="setAllReadAll" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col style="padding-right:0px">
                             <span v-text="$ml.get('create')"></span>
                             <br>
                             <span style="margin-bottom:10px;"></span>
-                            <c-switch id="padded" size="sm" class="mx-1" color="primary" name="switch1" v-model="addAll" @change="setAllAdd" :uncheckedValue="false" :checkedValue="true"/>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="addAll" @change="setAllAdd" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col style="padding-right:0px">
                             <span v-text="$ml.get('editall')"></span>
                             <br>
                             <span style="margin-bottom:10px;"></span>
-                            <c-switch id="padded" size="sm" class="mx-1" color="primary" name="switch1" v-model="editAll" @change="setAllEdit" :uncheckedValue="false" :checkedValue="true"/>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="editAll" @change="setAllEdit" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col style="padding-right:0px">
                             <span v-text="$ml.get('deleteall')"></span>
                             <br>
                             <span style="margin-bottom:10px;"></span>
-                            <c-switch id="padded" size="sm" class="mx-1" color="primary" name="switch1" v-model="deleteAll" @change="setAllDelete" :uncheckedValue="false" :checkedValue="true"/>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="deleteAll" @change="setAllDelete" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col>
                             <span v-text="$ml.get('others')"></span>
@@ -317,7 +317,7 @@
                           </b-col>
                           <b-col style="padding-right:0px">
                             <div v-if="datasrc[i].text == 'User'">
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" />
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" @change="setEditOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true" />
                             </div>
                             <div v-else>
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" disabled/>
@@ -325,14 +325,14 @@
                           </b-col>
                           <b-col style="padding-right:0px">
                             <div v-if="datasrc[i].text == 'Approval' || datasrc[i].text == 'User'">
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" @change="setDeleteOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                             <div v-else>
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own"  :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
-                            <div v-if="datasrc[i].module_name == 'importTrans'">
+                            <div v-if="datasrc[i].module_name == 'importTrans' || datasrc[i].module_name == 'budSet'">
                             <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_all" :uncheckedValue="false" :checkedValue="true" disabled/>
                           </div>
                           <div v-else>
@@ -347,7 +347,7 @@
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].edit" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].edit" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_all" @change="setEditAll(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
@@ -355,7 +355,7 @@
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].delete" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].delete" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_all" @change="setDeleteAll(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                             
                           </b-col>
@@ -373,7 +373,7 @@
                   </div>
               </div>
           </div>
-      </b-tab>
+        </b-tab>
     </b-tabs>
           <b-button type="button" variant="primary" @click="primaryModal = true" style="float:right" class="mr-1" v-text="$ml.get('customattributes')"></b-button>
            <div slot="footer">
@@ -670,7 +670,7 @@ export default {
           additionalpermissionOld:null,
           approval_permissionsOld:null,
       datasrc:[
-              {module_name:"company",text:"Company",read:true,write:false,edit:false,delete:false},{module_name:"subuser",text:"User",read:true,write:false,edit:false,delete:false},
+              {module_name:"company",text:"Company",read:true,write:false,edit:false,delete:false},{module_name:"subuser",text:"User",read:true,write:false,edit:true,delete:false},
               {module_name:"subgroup",text:"User Group",read:true,write:false,edit:false,delete:false},{module_name:"dept",text:"Department",read:true,write:false,edit:false,delete:false},
               {module_name:"desig",text:"Designation",read:true,write:false,edit:false,delete:false},{module_name:"head",text:"Head",read:true,write:false,edit:false,delete:false},
               {module_name:"label",text:"Label",read:true,write:false,edit:false,delete:false},{module_name:"preApp",text:"Approval",read:true,write:true,edit:false,delete:false},
@@ -879,6 +879,28 @@ export default {
     }
   },
   methods : {
+    setEditAll(i) {
+        if(this.additionalpermission[i].edit_all == true) {
+          this.additionalpermission[i].edit_all = true
+          this.datasrc[i].edit = true
+          console.log(this.datasrc[i])
+        }
+        else {
+          this.additionalpermission[i].edit_all = false
+          this.datasrc[i].edit = false
+        }
+      },
+      setDeleteAll(i) {
+        if(this.additionalpermission[i].edit_all == true) {
+          this.additionalpermission[i].edit_all = true
+          this.datasrc[i].edit = true
+          console.log(this.datasrc[i])
+        }
+        else {
+          this.additionalpermission[i].edit_own = false
+          this.datasrc[i].edit = false
+        }
+      },
     checkTab(args) {
       this.permission_override = args
     },

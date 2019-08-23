@@ -180,7 +180,6 @@ var router = new Router({
             },
             {
               path:'/staff',
-              name : `Staff`,
               redirect:'/staff/list',
               meta:{requiresAuth : true},
               component : {
@@ -191,6 +190,7 @@ var router = new Router({
                   
                   meta : { requiresAuth : true },
                   path : `/staff/list`,
+                  name:"Staff List",
                   component : StaffList
                 },
                 {

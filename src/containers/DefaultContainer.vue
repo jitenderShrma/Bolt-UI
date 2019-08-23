@@ -38,10 +38,10 @@
         <!-- <DefaultAside/>
       </AppAside> -->
     </div>
-    <TheFooter>
-      <!--footer-->
+    <!-- <TheFooter>
+      footer
       
-    </TheFooter>
+    </TheFooter> -->
   </div>
 </template>
 

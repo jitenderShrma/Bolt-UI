@@ -19,10 +19,10 @@
 				  		</b-form-group>
 				  	  </b-tab>
 			  		  <b-tab :title="$ml.get('permissions')">
-			  		    <div class="col-lg-15 control-section">
-					        <div class="content-wrapper">
-					             <div class="control-section">
-					            <b-row>
+                <div class="col-lg-15 control-section">
+                  <div class="content-wrapper">
+                       <div class="control-section">
+                      <b-row>
                           <b-col style="padding-right:0px;padding-left:25px;">
                             <span v-text="$ml.get('modulename')"></span>
                           </b-col>
@@ -91,7 +91,7 @@
                           </b-col>
                           <b-col style="padding-right:0px">
                             <div v-if="datasrc[i].text == 'User'">
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" />
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" @change="setEditOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true" />
                             </div>
                             <div v-else>
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" disabled/>
@@ -99,7 +99,7 @@
                           </b-col>
                           <b-col style="padding-right:0px">
                             <div v-if="datasrc[i].text == 'Approval' || datasrc[i].text == 'User'">
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" @change="setDeleteOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                             <div v-else>
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own"  :uncheckedValue="false" :checkedValue="true" disabled/>
@@ -121,7 +121,7 @@
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].edit" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].edit" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_all" @change="setEditAll(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
@@ -129,7 +129,7 @@
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].delete" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].delete" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_all" @change="setDeleteAll(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                             
                           </b-col>
@@ -144,10 +144,10 @@
                           </b-col>
                         </b-row>
                         </div>
-					        </div>
-					    </div>
-					</div>
-			    </b-tab>
+                  </div>
+              </div>
+          </div>
+          </b-tab>
           <b-tab :title="$ml.get('labels')">
             <b-form-group>
                     <div v-for="(run,i) in input.labels" :key="i">
@@ -474,7 +474,7 @@ export default {
           heads:[],
           permissionmodal:false,
           datasrc:[
-              {module_name:"company",text:"Company",read:true,write:false,edit:false,delete:false},{module_name:"subuser",text:"User",read:true,write:false,edit:false,delete:false},
+              {module_name:"company",text:"Company",read:true,write:false,edit:false,delete:false},{module_name:"subuser",text:"User",read:true,write:false,edit:true,delete:false},
               {module_name:"subgroup",text:"User Group",read:true,write:false,edit:false,delete:false},{module_name:"dept",text:"Department",read:true,write:false,edit:false,delete:false},
               {module_name:"desig",text:"Designation",read:true,write:false,edit:false,delete:false},{module_name:"head",text:"Head",read:true,write:false,edit:false,delete:false},
               {module_name:"label",text:"Label",read:true,write:false,edit:false,delete:false},{module_name:"preApp",text:"Approval",read:true,write:true,edit:false,delete:false},
@@ -644,6 +644,28 @@ export default {
     delLabel(args,id,label) {
       console.log(this.input.labels.splice(label,1))
     },
+    setEditAll(i) {
+        if(this.additionalpermission[i].edit_all == true) {
+          this.additionalpermission[i].edit_all = true
+          this.datasrc[i].edit = true
+          console.log(this.datasrc[i])
+        }
+        else {
+          this.additionalpermission[i].edit_all = false
+          this.datasrc[i].edit = false
+        }
+      },
+      setDeleteAll(i) {
+        if(this.additionalpermission[i].edit_all == true) {
+          this.additionalpermission[i].edit_all = true
+          this.datasrc[i].edit = true
+          console.log(this.datasrc[i])
+        }
+        else {
+          this.additionalpermission[i].edit_own = false
+          this.datasrc[i].edit = false
+        }
+      },
     addLabel (args) {
       this.addModal =false
               api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((label)=>{
@@ -655,6 +677,26 @@ export default {
                   })
                 console.log(this.input.labels)
               });
+      },
+      setEditOwn(i) {
+        if(this.additionalpermission.edit_own == false) {
+          this.additionalpermission.edit_own = true
+          this.datasrc[i].edit = true
+        }
+        else {
+          this.additionalpermission[i].edit_own = false
+          this.datasrc[i].edit = false
+        }
+      },
+      setDeleteOwn(i) {
+        if(this.additionalpermission.delete_own == false) {
+          this.additionalpermission.delete_own = true
+          this.datasrc[i].delete = true
+        }
+        else {
+          this.additionalpermission[i].delete_own = false
+          this.datasrc[i].delete = false
+        }
       },
     selectLabel(args) {
         if(this.selectedLabel != null) {

@@ -18,20 +18,20 @@
                 <span style="color:red;float:right;height:2px;font-size:20px">*</span>
             <ejs-textbox required name="User Name" v-model="input.user_name" floatLabelType="Auto" :placeholder="$ml.get('username')"></ejs-textbox>
           </b-col>
-          <b-col v-if="isUser" sm="6">
+          <b-col sm="6">
             <label v-text="$ml.get('department')"></label>
-            <treeselect :placeholder="$ml.get('pholddept')" v-model="staff.department" :multiple="false" :options="department" />
+            <treeselect :disabled="!isUser" :placeholder="$ml.get('pholddept')" v-model="staff.department" :multiple="false" :options="department" />
           </b-col>
         </b-row>
         <b-row>
           <b-col sm="6">
             <span style="color:red;float:right;height:5px;font-size:20px">*</span>
-            <ejs-textbox required name="Password" v-validate="'required'" type="password" v-model="input.password" floatLabelType="Auto" :placeholder="$ml.get('password')"></ejs-textbox>
+            <ejs-textbox  name="Password" type="password" v-model="input.password" floatLabelType="Auto" :placeholder="$ml.get('password')"></ejs-textbox>
           </b-col>
-          <b-col v-if="isUser" sm="6">
+          <b-col sm="6">
             <span style="color:red;float:right;height:5px;font-size:20px;">*</span>
             <label class="e-label-top" v-text="$ml.get('designation')"></label>
-              <treeselect required :placeholder="$ml.get('pholddesig')" v-model="staff.designation" @select="setUserGroup" :multiple="false" :options="designation" />
+              <treeselect :disabled="!isUser" :required="isUser" :placeholder="$ml.get('pholddesig')" v-model="staff.designation" @select="setUserGroup" :multiple="false" :options="designation" />
           </b-col>
         </b-row>
           </b-form-group>
@@ -42,7 +42,7 @@
             <b-row>
               <b-col sm="6">
                 <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-            <ejs-textbox required name="Name" v-model="input.personal_details.name" floatLabelType="Auto" :placeholder="$ml.get('pholdname')"></ejs-textbox>
+            <ejs-textbox :disabled="!isUser" required name="Name" v-model="input.personal_details.name" floatLabelType="Auto" :placeholder="$ml.get('pholdname')"></ejs-textbox>
           </b-col>
           <b-col sm="6">
             <span style="color:red;float:right;height:2px;font-size:20px">*</span>
@@ -252,7 +252,7 @@
                             <span v-text="$ml.get('readown')"></span>
                             <br>
                             <span style="margin-bottom:10px;"></span>
-                            <c-switch id="padded" size="sm" class="mx-1" color="primary" name="switch1" v-model="readOwn" @change="setAllReadOwn" :uncheckedValue="false" :checkedValue="true"/>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="readOwn" @change="setAllReadOwn" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col style="padding-right:0px">
                             <span v-text="$ml.get('editown')"></span>
@@ -266,29 +266,29 @@
                             <span style="margin-bottom:10px;"></span>
                             <c-switch id="padded" size="sm" class="mx-1" color="primary" name="switch1" v-model="deleteOwn" @change="setAllDeleteOwn" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
-                          <b-col style="padding-right:0px;">
+                          <b-col style="padding-right:0px">
                             <span v-text="$ml.get('readall')"></span>
                             <br>
                             <span style="margin-bottom:10px;"></span>
-                            <c-switch id="padded" size="sm" class="mx-1" color="primary" name="switch1" v-model="readAll"  @change="setAllReadAll" :uncheckedValue="false" :checkedValue="true"/>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="readAll"  @change="setAllReadAll" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col style="padding-right:0px">
                             <span v-text="$ml.get('create')"></span>
                             <br>
                             <span style="margin-bottom:10px;"></span>
-                            <c-switch id="padded" size="sm" class="mx-1" color="primary" name="switch1" v-model="addAll" @change="setAllAdd" :uncheckedValue="false" :checkedValue="true"/>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="addAll" @change="setAllAdd" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col style="padding-right:0px">
                             <span v-text="$ml.get('editall')"></span>
                             <br>
                             <span style="margin-bottom:10px;"></span>
-                            <c-switch id="padded" size="sm" class="mx-1" color="primary" name="switch1" v-model="editAll" @change="setAllEdit" :uncheckedValue="false" :checkedValue="true"/>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="editAll" @change="setAllEdit" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col style="padding-right:0px">
                             <span v-text="$ml.get('deleteall')"></span>
                             <br>
                             <span style="margin-bottom:10px;"></span>
-                            <c-switch id="padded" size="sm" class="mx-1" color="primary" name="switch1" v-model="deleteAll" @change="setAllDelete" :uncheckedValue="false" :checkedValue="true"/>
+                            <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="deleteAll" @change="setAllDelete" :uncheckedValue="false" :checkedValue="true"/>
                           </b-col>
                           <b-col>
                             <span v-text="$ml.get('others')"></span>
@@ -313,7 +313,7 @@
                           </b-col>
                           <b-col style="padding-right:0px">
                             <div v-if="datasrc[i].text == 'User'">
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" />
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" @change="setEditOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true" />
                             </div>
                             <div v-else>
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" disabled/>
@@ -321,14 +321,14 @@
                           </b-col>
                           <b-col style="padding-right:0px">
                             <div v-if="datasrc[i].text == 'Approval' || datasrc[i].text == 'User'">
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" @change="setDeleteOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                             <div v-else>
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own"  :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
-                            <div v-if="datasrc[i].module_name == 'importTrans'">
+                            <div v-if="datasrc[i].module_name == 'importTrans' || datasrc[i].module_name == 'budSet'">
                             <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_all" :uncheckedValue="false" :checkedValue="true" disabled/>
                           </div>
                           <div v-else>
@@ -343,7 +343,7 @@
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].edit" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].edit" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_all" @change="setEditAll(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                           </b-col>
                           <b-col style="padding-right:0px">
@@ -351,13 +351,13 @@
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].delete" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].delete" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_all" @change="setDeleteAll(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                             
                           </b-col>
                           <b-col style="padding-right:0px;">
                             <b-tooltip target="exButton1" title="Additional Permissions Available!"></b-tooltip>
-                            <div v-if="datasrc[i].text=='Approval'">
+                            <div v-if="i==7">
                             <b-btn id="exButton1" variant="primary" size="sm" @click="toggle(`${i}`)"><i class="fa fa-plus-square"></i></b-btn>
                           </div>
                           <div v-else>
@@ -671,19 +671,21 @@ export default {
     axios.get(`${apiUrl}/user/subuser/get/${this.key}`,{withCredentials:true}).then((res) => {
       console.log(res.data)
       this.input = res.data
+      this.staff = this.input.user_type
+      this.input.password = undefined
       this.addresslist = this.input.personal_details.address[0]
-      axios.get(`${apiUrl}staff/staff/get/one/${this.input.user_type}`,{withCredentials:true}).then((resp) => {
-        this.staff = resp.data
-        api.get(`${apiUrl}`+`super/group/subgroup/find/by/${this.staff.designation}`).then((res) => {
-            this.datasrcOld = JSON.parse(JSON.stringify(this.OverRide(this.input.user_permissions,res.data.permissions)))
-            this.additionalpermissionOld = JSON.parse(JSON.stringify(this.OverRide(this.input.additional_permissions,res.data.additional_permissions)))
+      if(this.isUser) {
+        api.get(`${apiUrl}`+`super/group/subgroup/find/by/${this.input.user_type.designation}`).then((respn) => {
+          console.log(respn)
+            this.datasrcOld = JSON.parse(JSON.stringify(this.OverRide(this.input.user_permissions,respn.data.permissions)))
+            this.additionalpermissionOld = JSON.parse(JSON.stringify(this.OverRide(this.input.additional_permissions,respn.data.additional_permissions)))
             // this.approval_permissionsOld = JSON.parse(JSON.stringify(this.ObjectOverRide(this.input.approval_permission,res.data.approval_permissions)))
-            this.datasrc = JSON.parse(JSON.stringify(this.OverRide(this.input.user_permissions,res.data.permissions)))
-            this.additionalpermission = JSON.parse(JSON.stringify(this.OverRide(this.input.additional_permissions,res.data.additional_permissions)))
+            this.datasrc = JSON.parse(JSON.stringify(this.OverRide(this.input.user_permissions,respn.data.permissions)))
+            this.additionalpermission = JSON.parse(JSON.stringify(this.OverRide(this.input.additional_permissions,respn.data.additional_permissions)))
             // this.approval_permissions = JSON.parse(JSON.stringify(this.ObjectOverRide(this.input.approval_permissions,res.data.approval_permissions)))
             this.tab = true
         })
-      })
+      }
     })
 
     axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
@@ -1400,6 +1402,28 @@ export default {
         this.identification = {}
         this.idmodal = false
     },
+    setEditAll(i) {
+        if(this.additionalpermission[i].edit_all == true) {
+          this.additionalpermission[i].edit_all = true
+          this.datasrc[i].edit = true
+          console.log(this.datasrc[i])
+        }
+        else {
+          this.additionalpermission[i].edit_all = false
+          this.datasrc[i].edit = false
+        }
+      },
+      setDeleteAll(i) {
+        if(this.additionalpermission[i].edit_all == true) {
+          this.additionalpermission[i].edit_all = true
+          this.datasrc[i].edit = true
+          console.log(this.datasrc[i])
+        }
+        else {
+          this.additionalpermission[i].edit_own = false
+          this.datasrc[i].edit = false
+        }
+      },
     async addAttribute() {
       this.primaryModal = false
       this.attribute.context = "User";
@@ -1434,6 +1458,45 @@ export default {
      else {
       if(this.input.onType=="Staff") {
         this.input.address = [this.addresslist];
+        if(this.isUser == false) {
+          this.input.personal_details.name = undefined
+          this.input.user_type = undefined
+          axios.put(`${apiUrl}`+`user/subuser/edit/${this.input._id}`,this.input, {withCredentials : true}).then((response) =>{
+            console.log(response.data)
+              if(response.data.limit == "exceeded") {
+                toast({
+                    type: VueNotifications.types.warn,
+                    title: 'Limit Exceeded',
+                    message: 'Please Upgrade your License.'
+                    })
+              }
+              else if(response.data.auth == false) {
+                toast({
+                    type: VueNotifications.types.error,
+                    title: 'User Unauthenticated',
+                    message: 'Please Login.'
+                    })
+                  console.log(response)
+              }
+              else {
+                toast({
+                    type: VueNotifications.types.success,
+                    title: 'Success',
+                    message: 'User Created Successfully'
+                    })
+                this.$router.push("/dashboard");
+              }
+            })
+            .catch( function (error){
+              console.log(error)
+              toast({
+                    type: VueNotifications.types.error,
+                    title: 'Oops!',
+                    message: 'Something went wrong.'
+                    })
+            });
+        }
+        else{
         axios.put(`${apiUrl}`+`staff/staff/update/one/${this.input.user_type}`,this.staff,{withCredentials:true}).then((response)=> {
           axios.put(`${apiUrl}`+`user/subuser/edit/${this.input._id}`,this.input, {withCredentials : true}).then((response) =>{
             console.log(response.data)
@@ -1470,6 +1533,7 @@ export default {
                     })
             });
         })
+      }
       }
       else{
               this.input.address = [this.addresslist];

@@ -11,13 +11,7 @@
       </b-dropdown-header>
       <div v-if="isUser">
       <b-dropdown-item @click = "userDetails">
-        <b-card style="border:none">
-          <b-row>
-          <b-col sm="2"><i class="fa fa-user font-2xl"/></b-col>
-          <b-col sm="6"><span v-text="user.user_name"></span>
-          </b-col>
-        </b-row>
-        </b-card>
+        <span v-text="$ml.get('editprofile')"></span> - <span v-text="user.user_name"></span>
       </b-dropdown-item>
     </div>
     <div v-if="isUser && checkPermission">

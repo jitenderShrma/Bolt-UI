@@ -32,10 +32,10 @@
 				  		</b-form-group>
 				  	  </b-tab>
 			  		  <b-tab :title="$ml.get('permissions')">
-			  		    <div class="col-lg-15 control-section">
-					        <div class="content-wrapper">
-					             <div class="control-section">
-                        <b-row>
+                <div class="col-lg-15 control-section">
+                  <div class="content-wrapper">
+                       <div class="control-section">
+                      <b-row>
                           <b-col style="padding-right:0px;padding-left:25px;">
                             <span v-text="$ml.get('modulename')"></span>
                           </b-col>
@@ -104,7 +104,7 @@
                           </b-col>
                           <b-col style="padding-right:0px">
                             <div v-if="datasrc[i].text == 'User'">
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" />
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" @change="setEditOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true" />
                             </div>
                             <div v-else>
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_own" :uncheckedValue="false" :checkedValue="true" disabled/>
@@ -112,7 +112,7 @@
                           </b-col>
                           <b-col style="padding-right:0px">
                             <div v-if="datasrc[i].text == 'Approval' || datasrc[i].text == 'User'">
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own" @change="setDeleteOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                             <div v-else>
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_own"  :uncheckedValue="false" :checkedValue="true" disabled/>
@@ -134,23 +134,22 @@
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].edit" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].edit" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].edit_all" @change="setEditAll(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
-                            
                           </b-col>
                           <b-col style="padding-right:0px">
                             <div v-if="datasrc[i].module_name == 'importTrans'">
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].delete" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                             <div v-else>
-                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].delete" :uncheckedValue="false" :checkedValue="true"/>
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_all" @change="setDeleteAll(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                             
                           </b-col>
                           <b-col style="padding-right:0px;">
                             <b-tooltip target="exButton1" title="Additional Permissions Available!"></b-tooltip>
                             <div v-if="i==7">
-                            <b-btn id="exButton1" variant="primary" size="sm" @click="toggle(`${i}`)" ><i class="fa fa-plus-square"></i></b-btn>
+                            <b-btn id="exButton1" variant="primary" size="sm" @click="toggle(`${i}`)"><i class="fa fa-plus-square"></i></b-btn>
                           </div>
                           <div v-else>
                             <b-btn id="exButton2" variant="primary" size="sm" @click="toggle(`${i}`)" disabled><i class="fa fa-plus-square"></i></b-btn>
@@ -158,20 +157,10 @@
                           </b-col>
                         </b-row>
                         </div>
-					            <!-- <ejs-grid ref='overviewgrid' :editSettings='editSettings' :rowHeight='rowHeight' :allowResizing='true'   id='overviewgrid' :dataSource="datasrc"  :allowSorting='true' :allowSelection="true" :actionComplete="actionComplete" :rowSelected="rowSelected" :rowDeselected="rowDeselected" :selectionSettings="selectionSettings"
-					                 :enableHover='true' :dataBound="dataBound" :load="load">
-					                <e-columns>
-					                    <e-column field='text'  headerText='Module Name'  :isPrimaryKey='true'></e-column>
-					                    <e-column editType= 'booleanedit' :width="60" :displayAsCheckBox='true' field='edit' headerText='Edit'   ></e-column>
-					                    <e-column editType= 'booleanedit' :width="60" :displayAsCheckBox='true' field='delete' headerText='Delete'   ></e-column>
-					                    <e-column editType= 'booleanedit' :width="60" :displayAsCheckBox='true' field='read' headerText='Read'   ></e-column>
-					                    <e-column editType= 'booleanedit' :width="60" :displayAsCheckBox='true' field='write' headerText='Add'   ></e-column>
-					                </e-columns>
-					            </ejs-grid> -->
-					        </div>
-					    </div>
-					</div>
-			    </b-tab>
+                  </div>
+              </div>
+          </div>
+          </b-tab>
           <b-tab :title="$ml.get('labels')">
             <b-form-group>
                     <div v-for="(run,i) in input.labels" :key="i">
@@ -462,7 +451,7 @@ export default {
             selectionSettings : {type:"Single"},
             data: [],
              datasrc:[
-              {module_name:"company",text:"Company",read:true,write:false,edit:false,delete:false},{module_name:"subuser",text:"User",read:true,write:false,edit:false,delete:false},
+              {module_name:"company",text:"Company",read:true,write:false,edit:false,delete:false},{module_name:"subuser",text:"User",read:true,write:false,edit:true,delete:false},
               {module_name:"subgroup",text:"User Group",read:true,write:false,edit:false,delete:false},{module_name:"dept",text:"Department",read:true,write:false,edit:false,delete:false},
               {module_name:"desig",text:"Designation",read:true,write:false,edit:false,delete:false},{module_name:"head",text:"Head",read:true,write:false,edit:false,delete:false},
               {module_name:"label",text:"Label",read:true,write:false,edit:false,delete:false},{module_name:"preApp",text:"Approval",read:true,write:true,edit:false,delete:false},
@@ -589,6 +578,28 @@ export default {
           }
           this.data = this.list_to_tree_desig(response.data)
           })
+      },
+      setEditAll(i) {
+        if(this.additionalpermission[i].edit_all == true) {
+          this.additionalpermission[i].edit_all = true
+          this.datasrc[i].edit = true
+          console.log(this.datasrc[i])
+        }
+        else {
+          this.additionalpermission[i].edit_all = false
+          this.datasrc[i].edit = false
+        }
+      },
+      setDeleteAll(i) {
+        if(this.additionalpermission[i].edit_all == true) {
+          this.additionalpermission[i].edit_all = true
+          this.datasrc[i].edit = true
+          console.log(this.datasrc[i])
+        }
+        else {
+          this.additionalpermission[i].edit_own = false
+          this.datasrc[i].edit = false
+        }
       },
     editdeptLabel() {
       var id = this.editlabel._id
@@ -799,6 +810,27 @@ export default {
           }}
           }
         
+      },
+      setEditOwn(i) {
+        if(this.additionalpermission[i].edit_own == true) {
+          this.additionalpermission[i].edit_own = true
+          this.datasrc[i].edit = true
+          console.log(this.datasrc[i])
+        }
+        else {
+          this.additionalpermission[i].edit_own = false
+          this.datasrc[i].edit = false
+        }
+      },
+      setDeleteOwn(i) {
+        if(this.additionalpermission[i].delete_own == true) {
+          this.additionalpermission[i].delete_own = true
+          this.datasrc[i].delete = true
+        }
+        else {
+          this.additionalpermission[i].delete_own = false
+          this.datasrc[i].delete = false
+        }
       },
     rowSelected(args) {
       this.$refs.overviewgrid.startEdit(args.data)

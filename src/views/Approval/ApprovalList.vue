@@ -1045,5 +1045,10 @@ html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside
     right: 0;
 }
 }
+@media (min-width: 992px) {
+.aside-menu-fixed .aside-menu .tab-content {
+    height: calc(100vh - 3.375rem - 55px);
+}
+}
 
 </style>

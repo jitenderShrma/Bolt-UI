@@ -272,5 +272,6 @@
     "cancel" : "Cancel",
     "editlabels" : "Edit Labels",
     "release" : "Release",
-    "viewlm" : "View Line Managers"
+    "viewlm" : "View Line Managers",
+    "editprofile" : "Edit Profile"
 }

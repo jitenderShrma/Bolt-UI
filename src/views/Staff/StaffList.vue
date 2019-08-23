@@ -1,94 +1,116 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
-      <AppAside id="new_aside" style="height: calc(100vh - 60px);top:-8%">
+      <AppAside fixed id="new_aside" style="height: calc(100vh - 65px);top:-8%">
         <div style="float:right">
         <DefaultToggler style="line-height:2"/>
         </div>
         <b-tabs>
     <b-tab>
       <template slot="title">
-        <i class='icon-list'></i>
+        Approval Matrix
       </template>
-      <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center text-muted text-uppercase small">LM-1 <div style="display:inline" v-if="designation[0]!=null">{{designation[0]}} - {{department[0]}}</div>
+      <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center text-muted text-uppercase small">LM-1 <div style="display:inline" v-if="designationBudget[0]!=null && designationBudget[0]!=''">{{designationBudget[0]}} - {{departmentBudget[0]}}</div>
       </b-list-group-item>
-      <div v-for="(run,i) in lineManagers[0]" :key="i" class="p-1">
+      <div v-for="(run,i) in lineManagersBudget[0]" :key="i">
       <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-secondary py-3">
         <div class="py-1 message">
           <div class=" mr-1 float-left">
             <div class="avatar">
               <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
             </div>
           </div>
-          <div class="text-truncate py-1 ">{{lineManagers[0][i].user.personal_details.name}}</div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[0][i].user.personal_details.name}}</div>
         </div>
+      </b-list-group-item>
       </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-warning py-1 bg-light text-center  text-muted text-uppercase small">
-        LM-2 <div style="display:inline" v-if="designation[1]!=null">{{designation[1]}} - {{department[1]}}</div>
+        LM-2 <div style="display:inline" v-if="designationBudget[1]!=null && designationBudget[1]!=''">{{designationBudget[1]}} - {{departmentBudget[1]}}</div>
       </b-list-group-item>
-      <div v-for="(run,i) in lineManagers[1]" :key="i" class="p-1">
+      <div v-for="(run,i) in lineManagersBudget[1]" :key="i">
       <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-warning py-3">
         <div class="py-1 message">
           <div class=" mr-1 float-left">
             <div class="avatar">
               <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
             </div>
           </div>
-          <div class="text-truncate py-1 ">{{lineManagers[1][i].user.personal_details.name}}</div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[1][i].user.personal_details.name}}</div>
         </div>
+      </b-list-group-item>
       </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-info py-1 bg-light text-center  text-muted text-uppercase small">
-        LM-3 <div style="display:inline" v-if="designation[2]!=null">{{designation[2]}} - {{department[2]}}</div>
+        LM-3 <div style="display:inline" v-if="designationBudget[2]!=null && designationBudget[2]!=''">{{designationBudget[2]}} - {{departmentBudget[2]}}</div>
       </b-list-group-item>
-      <div v-for="(run,i) in lineManagers[2]" :key="i" class="p-1">
+      <div v-for="(run,i) in lineManagersBudget[2]" :key="i">
       <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-info py-3">
         <div class="py-1 message">
           <div class=" mr-1 float-left">
             <div class="avatar">
               <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
             </div>
           </div>
-          <div class="text-truncate py-1 ">{{lineManagers[2][i].user.personal_details.name}}</div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[2][i].user.personal_details.name}}</div>
         </div>
+      </b-list-group-item>
       </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-danger py-1 bg-light text-center  text-muted text-uppercase small">
-        LM-4 <div style="display:inline" v-if="designation[3]!=null">{{designation[3]}} - {{department[3]}}</div>
+        LM-4 <div style="display:inline" v-if="designationBudget[3]!=null && designationBudget[3]!=''">{{designationBudget[3]}} - {{departmentBudget[3]}}</div>
       </b-list-group-item>
 
-      <div v-for="(run,i) in lineManagers[3]" :key="i" class="p-1">
+      <div v-for="(run,i) in lineManagersBudget[3]" :key="i">
       <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-danger py-3">
         <div class="py-1 message">
           <div class=" mr-1 float-left">
             <div class="avatar">
               <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
             </div>
           </div>
-          <div class="text-truncate py-1 ">{{lineManagers[3][i].user.personal_details.name}}</div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[3][i].user.personal_details.name}}</div>
         </div>
-      </div>
-      <b-list-group-item class="list-group-item-accent-success py-1 bg-light text-center  text-muted text-uppercase small">
-        LM-5 <div style="display:inline" v-if="designation[4]!=null">{{designation[4]}} - {{department[4]}}</div>
       </b-list-group-item>
-      <div v-for="(run,i) in lineManagers[4]" :key="i" class="p-1">
+      </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-success py-1 bg-light text-center  text-muted text-uppercase small">
+        LM-5 <div style="display:inline" v-if="designationBudget[4]!=null && designationBudget[4]!=''">{{designationBudget[4]}} - {{departmentBudget[4]}}</div>
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagersBudget[4]" :key="i">
       <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-success py-3">
         <div class="py-1 message">
           <div class=" mr-1 float-left">
             <div class="avatar">
               <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
             </div>
           </div>
-          <div class="text-truncate py-1 ">{{lineManagers[4][i].user.personal_details.name}}</div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[4][i].user.personal_details.name}}</div>
         </div>
+        </b-list-group-item>
       </div>
+    </b-list-group>
     </b-tab>
     <b-tab>
       <template slot="title">
-        <i class='icon-speech'></i>
+        Line Managers
       </template>
+      <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center  text-muted text-uppercase small">
         LM-1 <div style="display:inline" v-if="designation[0]!=null">{{designation[0]}} - {{department[0]}}</div>
       </b-list-group-item>
-      <div v-for="(run,i) in lineManagers[0]" :key="i" class="p-1">
+      <div v-for="(run,i) in lineManagers[0]" :key="i">
       <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-secondary py-3">
         <div class="py-1 message">
           <div class=" mr-1 float-left">
             <div class="avatar">
@@ -97,12 +119,16 @@
           </div>
           <div class="text-truncate py-1 ">{{lineManagers[0][i].user.personal_details.name}}</div>
         </div>
+      </b-list-group-item>
       </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-warning py-1 bg-light text-center  text-muted text-uppercase small">
         LM-2 <div style="display:inline" v-if="designation[1]!=null">{{designation[1]}} - {{department[1]}}</div>
       </b-list-group-item>
-      <div v-for="(run,i) in lineManagers[1]" :key="i" class="p-1">
+      <div v-for="(run,i) in lineManagers[1]" :key="i">
       <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-warning py-3">
         <div class="py-1 message">
           <div class=" mr-1 float-left">
             <div class="avatar">
@@ -111,12 +137,16 @@
           </div>
           <div class="text-truncate py-1 ">{{lineManagers[1][i].user.personal_details.name}}</div>
         </div>
+      </b-list-group-item>
       </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-info py-1 bg-light text-center  text-muted text-uppercase small">
         LM-3 <div style="display:inline" v-if="designation[2]!=null">{{designation[2]}} - {{department[2]}}</div>
       </b-list-group-item>
-      <div v-for="(run,i) in lineManagers[2]" :key="i" class="p-1">
+      <div v-for="(run,i) in lineManagers[2]" :key="i">
       <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-info py-3">
         <div class="py-1 message">
           <div class=" mr-1 float-left">
             <div class="avatar">
@@ -125,13 +155,17 @@
           </div>
           <div class="text-truncate py-1 ">{{lineManagers[2][i].user.personal_details.name}}</div>
         </div>
+      </b-list-group-item>
       </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-danger py-1 bg-light text-center  text-muted text-uppercase small">
         LM-4 <div style="display:inline" v-if="designation[3]!=null">{{designation[3]}} - {{department[3]}}</div>
       </b-list-group-item>
 
-      <div v-for="(run,i) in lineManagers[3]" :key="i" class="p-1">
+      <div v-for="(run,i) in lineManagers[3]" :key="i">
       <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-danger py-3">
         <div class="py-1 message">
           <div class=" mr-1 float-left">
             <div class="avatar">
@@ -140,12 +174,16 @@
           </div>
           <div class="text-truncate py-1 ">{{lineManagers[3][i].user.personal_details.name}}</div>
         </div>
+      </b-list-group-item>
       </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-success py-1 bg-light text-center  text-muted text-uppercase small">
         LM-5 <div style="display:inline" v-if="designation[4]!=null">{{designation[4]}} - {{department[4]}}</div>
       </b-list-group-item>
-      <div v-for="(run,i) in lineManagers[4]" :key="i" class="p-1">
+      <div v-for="(run,i) in lineManagers[4]" :key="i">
       <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-success py-3">
         <div class="py-1 message">
           <div class=" mr-1 float-left">
             <div class="avatar">
@@ -154,7 +192,9 @@
           </div>
           <div class="text-truncate py-1 ">{{lineManagers[4][i].user.personal_details.name}}</div>
         </div>
+      </b-list-group-item>
       </div>
+    </b-list-group>
     </b-tab>
   </b-tabs>
       </AppAside>
@@ -168,7 +208,7 @@
                 </ejs-toolbar>
              <div class="control-section">
                 
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowReordering="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowFiltering='true' :filterSettings='filterOptions' :allowTextWraping="true" :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbarClick="clickHandler" :allowTextWrap='true'
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowReordering="true" :allowExcelExport="true" :pageSettings='pageSettings' :dataSource="datasrc" :allowFiltering='true' :filterSettings='filterOptions' :allowTextWraping="true" :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbarClick="clickHandler" :allowTextWrap='true'
             :recordDoubleClick="editStaff" :toolbar="toolbar" :rowSelected="rowSelected"
             :rowDeselected="rowDeselected"
                 :height="height" :enableHover='false'>
@@ -286,7 +326,7 @@ export default {
         cSwitch
     },
      provide: {
-            grid: [ Group,PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder ]
+            grid: [ Group,PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, ColumnChooser,Reorder ]
     },
     data: function () {
       return {
@@ -352,6 +392,8 @@ export default {
             editSettings: { allowEditing: true, allowAdding: true, allowDeleting: true,mode:'Dialog'},
             department:[],
             designation:[],
+            designationBudget:[],
+            departmentBudget:[],
             editparams: { params: { popupHeight: '300px' }},
            rowHeight: 40,
            addTemplate: function () {
@@ -568,6 +610,16 @@ export default {
                 api.get(`${apiUrl}line/managers/find/settings/${args.data._id}`).then((res) => {
                   this.lineManagersBudget = res.data
                   console.log(res.data)
+                  for(var i=0;i<this.lineManagersBudget.length;i++) {
+                    if(!this.lineManagersBudget[i][0]) {
+                      this.designationBudget.push("")
+                      this.departmentBudget.push("")
+                    }
+                    else {
+                      this.designationBudget.push(this.lineManagersBudget[i][0].designation.name)
+                      this.departmentBudget.push(this.lineManagersBudget[i][0].department.department_name)
+                    }
+                  }
                 })
               }
             },
@@ -575,6 +627,9 @@ export default {
               this.lineManagers = []
               this.department =[]
               this.designation=[]
+              this.lineManagersBudget = []
+              this.departmentBudget =[]
+              this.designationBudget=[]
             },
             addEditHandler(args) {
               var selected = this.$refs.overviewgrid.getSelectedRecords()
@@ -803,20 +858,20 @@ export default {
   width:350px;
 }
 html:not([dir="rtl"]) #new_aside {
-    right: 0;
     margin-right: -350px;
 }
 @media (min-width: 992px) {
 html:not([dir="rtl"]) .aside-menu-show #new_aside, html:not([dir="rtl"]) .aside-menu-lg-show #new_aside {
-    margin-right: 0;
+  margin-right:-250px;
 }
 html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside-menu-off-canvas .#new_aside {
-    right: 0;
+    right: 100px;
 }
 }
 
-/*html:not([dir="rtl"]) .aside-menu-off-canvas #new_aside {
-    right: 0;
-    margin-right: 0px;
-}*/
+@media (min-width: 992px){
+.aside-menu-fixed .aside-menu .tab-content {
+    height: calc(100vh - 3.375rem - 55px);
+}
+}
 </style>
