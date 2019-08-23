@@ -673,10 +673,10 @@ export default {
       this.input = res.data
       this.staff = this.input.user_type
       if(this.staff.education[0].description!=null) {
-        this.G=true
+        this.UG=true
       }
       if(this.staff.education[1].description!=null) {
-        this.UG=true
+        this.G=true
       }
       if(this.staff.education[2].description!=null) {
         this.PG=true
@@ -1471,7 +1471,11 @@ export default {
       if(this.input.onType=="Staff") {
         this.input.address = [this.addresslist];
         if(this.isUser == false) {
-          this.input.user_type = undefined
+          this.staff.designation = undefined
+          this.staff.department = undefined
+          console.log(this.staff)
+          axios.put(`${apiUrl}`+`staff/staff/update/one/${this.staff._id}`,this.staff,{withCredentials:true}).then((response)=> {
+            console.log(response.data)
           axios.put(`${apiUrl}`+`user/subuser/edit/${this.input._id}`,this.input, {withCredentials : true}).then((response) =>{
             console.log(response.data)
               if(response.data.limit == "exceeded") {
@@ -1506,6 +1510,7 @@ export default {
                     message: 'Something went wrong.'
                     })
             });
+          })
         }
         else{
         axios.put(`${apiUrl}`+`staff/staff/update/one/${this.input.user_type}`,this.staff,{withCredentials:true}).then((response)=> {
