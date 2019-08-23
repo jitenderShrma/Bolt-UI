@@ -672,6 +672,18 @@ export default {
       console.log(res.data)
       this.input = res.data
       this.staff = this.input.user_type
+      if(this.staff.education[0].description!=null) {
+        this.G=true
+      }
+      if(this.staff.education[1].description!=null) {
+        this.UG=true
+      }
+      if(this.staff.education[2].description!=null) {
+        this.PG=true
+      }
+      if(this.staff.education[3].description!=null) {
+        this.Doctrate=true
+      }
       this.input.password = undefined
       this.addresslist = this.input.personal_details.address[0]
       if(this.isUser) {

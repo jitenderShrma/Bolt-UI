@@ -157,7 +157,7 @@ export default {
         }
     },
     async mounted () {
-        axios.get(`${apiUrl}`+`context/find`,{withCredentials:true}).then((response) => {
+        axios.get(`${apiUrl}`+`context/context/find`,{withCredentials:true}).then((response) => {
             this.contextlist = response.data;
             this.input.context = this.contextlist[0]._id;
             console.log(response.data)
