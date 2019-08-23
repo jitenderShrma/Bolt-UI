@@ -1471,7 +1471,6 @@ export default {
       if(this.input.onType=="Staff") {
         this.input.address = [this.addresslist];
         if(this.isUser == false) {
-          this.input.personal_details.name = undefined
           this.input.user_type = undefined
           axios.put(`${apiUrl}`+`user/subuser/edit/${this.input._id}`,this.input, {withCredentials : true}).then((response) =>{
             console.log(response.data)
