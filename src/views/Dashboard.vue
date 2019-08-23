@@ -1,7 +1,7 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
     <div id="Dashboard">
-    	<b-row>
+    	<b-row v-if="isPermitted">
     		<b-col sm="6" style="padding-right:3px; padding-left:0px">
     			<b-card no-body style="height:80vh">
 		    		<b-card-body>
@@ -83,6 +83,7 @@ export default {
   data: function() {
   	return {
   		budgetdata : [],
+      isPermitted:false,
   		selectMonth : "Yearly",
   		option:"Total Budget",
   		option1:"Yearly Budget",
@@ -94,6 +95,7 @@ export default {
         chart: {
           type: 'pie',
         },
+        
         plotOptions: {
 	        pie: {
 	            allowPointSelect: true,
@@ -450,6 +452,17 @@ export default {
   	}
   },
   mounted() {
+    var Session = JSON.parse(localStorage.session_key)
+    if(Session.user) {
+    for(var i=0;i<Session.permission.length;i++) {
+      if(Session.permission[i].text=="Head" && (Session.additional_permissions[i].read_all || Session.additional_permissions[i].read_own)) {
+        this.isPermitted =true
+        break;
+      }
+    }
+  }else{
+    this.isPermitted = true
+  }
   	api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
     	this.budgetdata = JSON.parse(JSON.stringify(response.data))
@@ -648,7 +661,7 @@ export default {
 				data[i].y = data[i].y + new_data[i].permissible_values[j]
 			}
 		}
-		data[1].selected=true
+		data[0].selected=true
 		return data;
 	},
 	getApprovedData(new_data) {
@@ -696,7 +709,7 @@ export default {
 		for(var i=0;i<new_data.length;i++) {
 			data[i] = {name:new_data[i].name,y:new_data[i].permissible_values[d]}
 		}
-		data[1].selected=true
+		data[0].selected=true
 		return data;
 	},
 	getApprovedDataMonth(new_data,d) {

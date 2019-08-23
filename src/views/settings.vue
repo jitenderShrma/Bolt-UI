@@ -70,12 +70,7 @@
                 </b-col>
                 <b-col sm="8" v-if="isDesig1">
                   <br>
-              <div v-if="!clicked1">
-              <ejs-dropdownlist :showClearButton="true" @close="switchNow1" v-model="input.level1.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
-            </div>
-            <div v-else>
-              <ejs-dropdownlist :showClearButton="true" v-model="input.level1.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
-            </div>
+                <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddesig')" v-model="input.level1.designation" :multiple="false" :options="designations"/>
           </b-col>
         </b-row>
             </b-form-group>
@@ -92,7 +87,7 @@
         </b-row>
             </b-form-group>
             <b-form-group>
-            <ejs-textbox v-model="input.level1.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
+            <ejs-textbox @change="validateAmount(`${input.level1.amount}`,1,isLevel1)" v-model="input.level1.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
             </b-form-group>
             <b-form-group>
             <ejs-textbox v-model="input.level1.alert_time" floatLabelType="Auto" :placeholder="$ml.get('alerttime')"></ejs-textbox>
@@ -118,13 +113,8 @@
                 </b-col>
                 <b-col sm="8" v-if="isDesig2">
                   <br>
-                  <div v-if="!clicked2">
-            <ejs-dropdownlist :showClearButton="true" @close="switchNow2" v-model="input.level2.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
-          </div>
-          <div v-else>
-            <ejs-dropdownlist :showClearButton="true" v-model="input.level2.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
-          </div>
-          </b-col>
+                  <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddesig')" v-model="input.level2.designation" :multiple="false" :options="designations" />
+                </b-col>
             </b-row>
             </b-form-group>
             <b-form-group v-if="false">
@@ -140,7 +130,7 @@
         </b-row>
             </b-form-group>
             <b-form-group>
-            <ejs-textbox v-model="input.level2.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
+            <ejs-textbox @change="validateAmount(`${input.level2.amount}`,2)" v-model="input.level2.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
             </b-form-group>
             <b-form-group>
             <ejs-textbox v-model="input.level2.alert_time" floatLabelType="Auto" :placeholder="$ml.get('alerttime')"></ejs-textbox>
@@ -167,12 +157,7 @@
                 </b-col>
                 <b-col sm="8" v-if="isDesig3">
                   <br>
-                  <div v-if="!clicked">
-            <ejs-dropdownlist :showClearButton="true" @close="switchNow" v-model="input.level3.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
-          </div>
-          <div v-else>
-            <ejs-dropdownlist :showClearButton="true" v-model="input.level3.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
-          </div> 
+                  <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddesig')" v-model="input.level3.designation" :multiple="false" :options="designations"/>
           </b-col>
         </b-row>
             </b-form-group>
@@ -191,7 +176,7 @@
         </b-row>
             </b-form-group>
             <b-form-group>
-            <ejs-textbox v-model="input.level3.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
+            <ejs-textbox @change="validateAmount(`${input.level3.amount}`,3)" v-model="input.level3.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
             </b-form-group>
             <b-form-group>
             <ejs-textbox v-model="input.level3.alert_time" floatLabelType="Auto" :placeholder="$ml.get('alerttime')"></ejs-textbox>
@@ -218,12 +203,7 @@
                 </b-col>
                 <b-col sm="8" v-if="isDesig4">
                   <br>
-                  <div v-if="!clicked3">
-            <ejs-dropdownlist :showClearButton="true" @close="switchNow3" v-model="input.level4.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
-          </div>
-          <div v-else>
-            <ejs-dropdownlist :showClearButton="true"  v-model="input.level4.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
-          </div>
+            <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddesig')" v-model="input.level4.designation" :multiple="false" :options="designations"/>
           </b-col>
         </b-row>
             </b-form-group>
@@ -240,7 +220,7 @@
         </b-row>
             </b-form-group>
             <b-form-group>
-            <ejs-textbox v-model="input.level4.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
+            <ejs-textbox @change="validateAmount(`${input.level4.amount}`,4)" v-model="input.level4.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
             </b-form-group>
             <b-form-group>
             <ejs-textbox v-model="input.level4.alert_time" floatLabelType="Auto" :placeholder="$ml.get('alerttime')"></ejs-textbox>
@@ -267,12 +247,7 @@
                 </b-col>
                 <b-col sm="8" v-if="isDesig5">
                   <br>
-                  <div v-if="!clicked4">
-            <ejs-dropdownlist :showClearButton="true" @close="switchNow4" v-model="input.level5.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" :groupTemplate="groupTemplate" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
-          </div>
-          <div v-else>
-            <ejs-dropdownlist :showClearButton="true" v-model="input.level5.designation" :dataSource='designations' :fields='desig_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholddesig')"></ejs-dropdownlist>
-          </div>
+            <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddesig')" v-model="input.level1.designation" :multiple="false" :options="designations"/>
           </b-col>
         </b-row>
             </b-form-group>
@@ -289,7 +264,7 @@
         </b-row>
             </b-form-group>
             <b-form-group>
-            <ejs-textbox v-model="input.level5.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
+            <ejs-textbox @change="validateAmount(`${input.level5.amount}`,5)" v-model="input.level5.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
             </b-form-group>
             <b-form-group>
             <ejs-textbox v-model="input.level5.alert_time" floatLabelType="Auto" :placeholder="$ml.get('alerttime')"></ejs-textbox>
@@ -316,6 +291,8 @@ import { Switch as cSwitch } from '@coreui/vue'
 import axios from 'axios'
 import apiUrl from '@/apiUrl'
 import Vue from 'vue'
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import VueNotifications from 'vue-notifications'
   import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
 import miniToastr from 'mini-toastr' 
@@ -373,7 +350,8 @@ var groupVue = Vue.component("groupTemplate", {
 export default {
 	  name: 'settings',
   components: {
-    cSwitch
+    cSwitch,
+    Treeselect
   },
   data: function() {
     return {
@@ -423,20 +401,20 @@ export default {
     clicked3:false,
     clicked4:false,
     designations:[{
-      _id:"LM1",
-      name:"Line Manager 1"
+      id:"LM1",
+      label:"Line Manager 1"
     },{
-      _id:"LM2",
-      name:"Line Manager 2"
+      id:"LM2",
+      label:"Line Manager 2"
     },{
-      _id:"LM3",
-      name:"Line Manager 3"
+      id:"LM3",
+      label:"Line Manager 3"
     },{
-      _id:"LM4",
-      name:"Line Manager 4"
+      id:"LM4",
+      label:"Line Manager 4"
     },{
-      _id:"LM5",
-      name:"Line Manager 5"
+      id:"LM5",
+      label:"Line Manager 5"
     }],
     groupTemplate: function () {
               return {
@@ -482,6 +460,7 @@ export default {
         dataOn: 'yes',
         dataOff: 'no'
       },
+      or_desig:[],
       isDesig1:false,
       isDesig2:false,
       isDesig3:false,
@@ -491,7 +470,8 @@ export default {
       isLabel2:false,
       isLabel3:false,
       isLabel4:false,
-      isLabel5:false
+      isLabel5:false,
+      desig:[]
     }
 
   },
@@ -500,9 +480,11 @@ export default {
       this.label1 = res.data
     });
     api.get(`${apiUrl}`+`designation/desig/get/all`).then((response) =>{
-      for(var i =0;i<response.data.length;i++) {
-        this.designations.push(response.data[i])
-      }
+        this.or_desig = JSON.parse(JSON.stringify(response.data))
+        this.desig=this.list_to_tree_desig(response.data)
+        for(var i=0;i<this.desig.length;i++) {
+          this.designations.push(this.desig[i])
+        }
     });
   	api.get(`${apiUrl}`+`super/com/view`).then((response) =>{
       this.data = response.data
@@ -606,10 +588,132 @@ export default {
     }
   },
   methods : {
+    list_to_tree_desig(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_designation_id != undefined && this.checkExistDesig(node.parent_designation_id)) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_designation_id]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataDesig(roots)
+          return roots
+      },
+      checkExistDesig(node) {
+        for (var i=0; i < this.or_desig.length; i++) {
+            if (this.or_desig[i]._id == node)
+                return true;
+        }
+        return false;
+      },
+      convertDataDesig(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataDesig(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].name;
+        delete roots[i]._id;
+        delete roots[i].name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
+        }
+      },
+    validateAmount(args,i,check) {
+          if(i == 1) {
+            if(args<=0 && this.input.level1.designation != null && args != "") {
+              this.input.level1.amount = 1
+            }
+          }
+          else if(i == 2){
+            if(args<=0 && this.input.level2.designation != null && args != "") {
+              this.input.level2.amount = 1
+            }
+
+          }else if(i == 3){
+            if(args<=0 && this.input.level3.designation != null && args != "") {
+              this.input.level3.amount = 1
+            }
+
+          }else if(i == 4){
+            if(args<=0 && this.input.level4.designation != null && args != "") {
+              this.input.level4.amount = 1
+            }
+
+          }else if(i == 5){
+            if(args<=0 && this.input.level5.designation != null && args != "") {
+              this.input.level5.amount = 1
+            }
+
+          }
+        },
     settingRoute(val) {
       this.$router.push(`/settings/${val}`);
     },
     async sendData() {
+      if(!this.isLevel1) {
+        this.input.level1.designation = undefined
+        this.input.level1.designation_label = undefined
+        this.input.level1.amount = 0
+        this.input.level2.designation = undefined
+        this.input.level2.designation_label = undefined
+        this.input.level2.amount = 0
+        this.input.level3.designation = undefined
+        this.input.level3.designation_label = undefined
+        this.input.level3.amount = 0
+        this.input.level4.designation = undefined
+        this.input.level4.designation_label = undefined
+        this.input.level4.amount = 0
+        this.input.level5.designation = undefined
+        this.input.level5.designation_label = undefined
+        this.input.level5.amount = 0
+      }
+      if(!this.isLevel2) {
+        this.input.level2.designation = undefined
+        this.input.level2.designation_label = undefined
+        this.input.level2.amount = 0
+        this.input.level3.designation = undefined
+        this.input.level3.designation_label = undefined
+        this.input.level3.amount = 0
+        this.input.level4.designation = undefined
+        this.input.level4.designation_label = undefined
+        this.input.level4.amount = 0
+        this.input.level5.designation = undefined
+        this.input.level5.designation_label = undefined
+        this.input.level5.amount = 0
+      }
+      if(!this.isLevel3) {
+        this.input.level3.designation = undefined
+        this.input.level3.designation_label = undefined
+        this.input.level3.amount = 0
+        this.input.level4.designation = undefined
+        this.input.level4.designation_label = undefined
+        this.input.level4.amount = 0
+        this.input.level5.designation = undefined
+        this.input.level5.designation_label = undefined
+        this.input.level5.amount = 0
+      }
+      if(!this.isLevel4) {
+        this.input.level4.designation = undefined
+        this.input.level4.designation_label = undefined
+        this.input.level4.amount = 0
+        this.input.level5.designation = undefined
+        this.input.level5.designation_label = undefined
+        this.input.level5.amount = 0
+      }
+      if(!this.isLevel5) {
+        this.input.level5.designation = undefined
+        this.input.level5.designation_label = undefined
+        this.input.level5.amount = 0
+      }
       await api.put(`${apiUrl}`+`super/settings/budget/budSet/update`,this.input).then((res)=> {
         if(res.data!=null) {
           toast({
@@ -621,22 +725,6 @@ export default {
       })
 
     },
-    switchNow1 () {
-      this.clicked1 = true
-      this.designations = designations
-    },
-    switchNow2 () {
-      this.clicked2 = true
-      this.designations = designations
-    },
-    switchNow3 () {
-      this.clicked3 = true
-      this.designations = designations
-    },
-    switchNow4 () {
-      this.clicked4 = true
-      this.designations = designations
-    }
   }
 };
 </script>

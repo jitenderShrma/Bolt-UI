@@ -108,10 +108,10 @@
       <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center  text-muted text-uppercase small">
         LM-1 <div style="display:inline" v-if="designation[0]!=null">{{designation[0]}} - {{department[0]}}</div>
       </b-list-group-item>
-      <div v-for="(run,i) in lineManagers[0]" :key="i">
+      <div class="py-0 px-0 col-lg-6" v-for="(run,i) in lineManagers[0]" :key="i">
       <!-- <div class="p-3"> -->
         <b-list-group-item class="list-group-item-accent-secondary py-3">
-        <div class="py-1 message">
+        <div class="py-1 message ">
           <div class=" mr-1 float-left">
             <div class="avatar">
               <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
@@ -200,7 +200,7 @@
       </AppAside>
      <div id="target" class="col-lg-15 control-section">
         <div class="content-wrapper">
-            <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
+            <ejs-toolbar id="toolbargrid2" :clicked="addEditHandler">
                 <e-items>
                   <e-item align="right" id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
                   <e-item align="right" id="delete" :template="deleteTemplate" :text="$ml.get('delete')"></e-item>
@@ -210,7 +210,6 @@
                 
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowReordering="true" :allowExcelExport="true" :pageSettings='pageSettings' :dataSource="datasrc" :allowFiltering='true' :filterSettings='filterOptions' :allowTextWraping="true" :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbarClick="clickHandler" :allowTextWrap='true'
             :recordDoubleClick="editStaff" :toolbar="toolbar" :rowSelected="rowSelected"
-            :rowDeselected="rowDeselected"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='personal_details.name' headerText='Name'  :filter='filter' ></e-column>
@@ -600,8 +599,12 @@ export default {
             },
             rowSelected(args) {
               if(args.target.outerHTML == `<span class="icon-people"></span>`) {
+                this.lineManagers = []
+                this.lineManagersBudget = []
                 api.get(`${apiUrl}line/managers/find/all/${args.data._id}`).then((res) =>{
                     this.lineManagers = res.data
+                    this.designation =[]
+                    this.department = []
                     for(var i=0;i<this.lineManagers.length;i++) {
                       this.designation.push(this.lineManagers[i][0].designation.name)
                       this.department.push(this.lineManagers[i][0].department.department_name)
@@ -610,7 +613,10 @@ export default {
                 api.get(`${apiUrl}line/managers/find/settings/${args.data._id}`).then((res) => {
                   this.lineManagersBudget = res.data
                   console.log(res.data)
+                  this.designationBudget =[]
+                    this.departmentBudget = []
                   for(var i=0;i<this.lineManagersBudget.length;i++) {
+                    
                     if(!this.lineManagersBudget[i][0]) {
                       this.designationBudget.push("")
                       this.departmentBudget.push("")
@@ -622,14 +628,6 @@ export default {
                   }
                 })
               }
-            },
-            rowDeselected(args) {
-              this.lineManagers = []
-              this.department =[]
-              this.designation=[]
-              this.lineManagersBudget = []
-              this.departmentBudget =[]
-              this.designationBudget=[]
             },
             addEditHandler(args) {
               var selected = this.$refs.overviewgrid.getSelectedRecords()
@@ -811,42 +809,23 @@ export default {
   float:right;
   margin:10px;
   border-radius: 50px;
-  height: 20px;
-  width:20px;
-  padding:0;
-  margin-top:5;
-  content:'\E81E';
-}
-#toggler:hover {
-  margin:10px;
-  border-radius: 50px;
-  background: grey;
-  height: 20px;
-  width:20px;
+  height: 40px;
+  width:40px;
   content:'\E81E';
   padding:0;
   margin-top:5;
 }
 #toggler:focus {
+  float:right;
+  color:grey;
   margin:10px;
   border-radius: 50px;
-  height: 20px;
-  background: grey;
-  width:20px;
+  height: 40px;
+  width:40px;
   content:'\E81E';
   padding:0;
   margin-top:5;
 }
-/*#toggler:focus {
-  margin:10px;
-  border-radius: 50px;
-  height: 20px;
-  background: grey;
-  width:20px;
-  content:'\E81E';
-  padding:0;
-  margin-top:5;
-}*/
 #toggler2 {
   margin:10px;
   border-radius: 50px;

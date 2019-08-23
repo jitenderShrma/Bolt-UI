@@ -45,13 +45,13 @@
               </e-items>
             </ejs-toolbar>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true' :allowReordering='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc" :allowTextWrap='true' :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler" :rowSelected="rowSelected" :rowDeselected="rowDeselected"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true' :allowReordering='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc" :allowTextWrap='true' :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler" :rowSelected="rowSelected"
                 :height="height" :enableHover='false'> 
                 <e-columns>
                     <e-column :visible="enableColumn" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
-                    <e-column :visible="false" field="last_updated" headerText='last_updated' width='140'></e-column>
-                    <e-column field='ref_id' :template="buttonLM" headerText='Ref ID' width="141"  :filter='filter' ></e-column>
+                    <e-column field='ref_id' :template="buttonLM" headerText='Ref ID' width="167"  :filter='filter' ></e-column>
                     <e-column :sortComparer='sortComparer' field='status' headerText='Status' width="137" :filter='filter' ></e-column>
+                    <e-column :visible="true" field="last_updated" headerText='Last Updated At' :template="dateTemplate"></e-column>
                     <e-column field='request_by.user_name' width="120" headerText='Req By'  :filter='filter' ></e-column>
                     <e-column field='month' :template="monthTemplate" width="117" headerText='Month' :filter='filter' ></e-column>
                     <e-column field='amount' headerText='Amount' width="126" :filter='filter' ></e-column>
@@ -247,7 +247,19 @@ export default {
         write:true,
                 delete_own:true,
         addModal:false,
-        sortOptions:{columns: [{field: 'status', direction: 'Descending'},{field: 'last_updated', direction: 'Descending'}]},
+        sortOptions:{columns: [{field: 'status', direction: 'Descending'},{field: 'last_updated', direction: 'Descending'}],isMulti:true},
+        dateTemplate:function() {
+          return {
+            template:Vue.component('dateTemplate', {
+              template:`<div>{{data.last_updated | moment("MMM Do YY, h:mm a")}}</div>`,
+              data: function() {
+                          return {
+                              data: {},
+                          }
+                      },
+            })
+          }
+        },
         buttonLM: function () {
               return {
                   template: Vue.component('buttonLM', {
@@ -507,6 +519,7 @@ export default {
     },
     rowSelected(args) {
       if(args.target.outerHTML == `<span class="icon-people"></span>`) {
+        this.log = []
         api.get(`${apiUrl}approvals/preApp/timeline/get/${args.data._id}`).then((res) =>{
             if(res.data) {
               this.log = JSON.parse(JSON.stringify(res.data.log))
@@ -606,9 +619,6 @@ export default {
             // }
         })
       }
-    },
-    rowDeselected(args) {
-      this.log = []
     },
     editLabel(args) {
       console.log(args)
@@ -719,7 +729,7 @@ export default {
                   if(data.length>0) {
 
                     axios.get(`${apiUrl}approvals/preApp/release/${data[0].ref_id}`).then((res) => {
-                        
+                        console.log(res.data)
                         api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
                           console.log(response.data)
                           var user =  JSON.parse(localStorage['session_key'])
@@ -993,8 +1003,8 @@ export default {
   float:right;
   margin:10px;
   border-radius: 50px;
-  height: 20px;
-  width:20px;
+  height: 40px;
+  width:40px;
   padding:0;
   margin-top:5;
   content:'\E81E';
@@ -1002,9 +1012,9 @@ export default {
 #toggler:hover {
   margin:10px;
   border-radius: 50px;
-  background: grey;
-  height: 20px;
-  width:20px;
+  color: grey;
+  height: 40px;
+  width:40px;
   content:'\E81E';
   padding:0;
   margin-top:5;
@@ -1012,9 +1022,9 @@ export default {
 #toggler:focus {
   margin:10px;
   border-radius: 50px;
-  height: 20px;
-  background: grey;
-  width:20px;
+  height: 40px;
+  color: grey;
+  width:40px;
   content:'\E81E';
   padding:0;
   margin-top:5;
