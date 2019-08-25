@@ -13,7 +13,7 @@
                 </ejs-toolbar>
              <div class="control-section">
                 
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowReordering='true' :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :allowTextWrap='true'
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowReordering='true' :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
                 :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
                     <e-column field='vendor.vendor_company' headerText='Vendor'  :filter='filter' ></e-column>

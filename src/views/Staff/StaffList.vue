@@ -208,8 +208,8 @@
                 </ejs-toolbar>
              <div class="control-section">
                 
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowReordering="true" :allowExcelExport="true" :pageSettings='pageSettings' :dataSource="datasrc" :allowFiltering='true' :filterSettings='filterOptions' :allowTextWraping="true" :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbarClick="clickHandler" :allowTextWrap='true'
-            :recordDoubleClick="editStaff" :toolbar="toolbar" :rowSelected="rowSelected"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowReordering="true" :allowExcelExport="true" :pageSettings='pageSettings' :dataSource="datasrc" :allowFiltering='true' :filterSettings='filterOptions' :allowTextWraping="true" :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbarClick="clickHandler" 
+             :recordDoubleClick="editStaff" :toolbar="toolbar" :rowSelected="rowSelected"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='personal_details.name' headerText='Name'  :filter='filter' ></e-column>
@@ -806,7 +806,6 @@ export default {
     border-left-color: white;
 }
 #toggler {
-  float:right;
   margin:10px;
   border-radius: 50px;
   height: 40px;
@@ -816,7 +815,6 @@ export default {
   margin-top:5;
 }
 #toggler:focus {
-  float:right;
   color:grey;
   margin:10px;
   border-radius: 50px;

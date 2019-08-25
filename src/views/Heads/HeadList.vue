@@ -18,16 +18,16 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
+            :allowSorting='true' :editSettings='editSettings'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
                     <e-column field='head_key' headerText='Head Key' ></e-column>
+                    <e-column :allowEditing="true" field='department.department_name' headerText='Department' width='170' ></e-column>
                     <e-column field='labels[0].label_name' :template="labelTemplate" headerText='Labels' ></e-column>
                     <e-column field='accounting_head' headerText='Account Head' ></e-column>
                     <e-column field='notes' headerText='Notes'></e-column>
-                    <e-column :allowEditing="true" field='department.department_name' headerText='Department' width='170' ></e-column>
                     <e-column :allowEditing="true" :visible="false" field="parent_head" headerText="Parent Head">
                     </e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->

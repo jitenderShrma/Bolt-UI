@@ -14,7 +14,7 @@
             :allowExcelExport='true'
             :enableCollapseAll="false"
             :recordDoubleClick="beginEdit"
-            :allowSorting='true' :toolbar="toolbar" :toolbarClick="clickHandler" :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :load="load">
+            :allowSorting='true' :toolbar="toolbar" :toolbarClick="clickHandler" :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :load="load">
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <e-column :visible="false" field='_id'></e-column>
@@ -509,6 +509,7 @@ export default {
             api.post(`${apiUrl}`+`department/dept/create`,this.input).then((response)=>{
                 api.get(`${apiUrl}`+`department/dept/get`)
                 .then((response) => {
+                  this.dept = JSON.parse(JSON.stringify(response.data))
                   this.data = this.list_to_tree_dept(response.data)
                   });
                 this.$refs.treegrid.collapseAll()
@@ -524,6 +525,7 @@ export default {
              api.post(`${apiUrl}`+`department/dept/create`,this.input).then((response)=>{
                api.get(`${apiUrl}`+`department/dept/get`)
                 .then((response) => {
+                  this.dept = JSON.parse(JSON.stringify(response.data))
                   this.data = this.list_to_tree_dept(response.data)
                   });
             });

@@ -456,26 +456,68 @@ export default {
     if(Session.user) {
     for(var i=0;i<Session.permission.length;i++) {
       if(Session.permission[i].text=="Head" && (Session.additional_permissions[i].read_all || Session.additional_permissions[i].read_own)) {
-        this.isPermitted =true
+        this.isPermitted = true
         break;
       }
     }
+    if(this.isPermitted && Session.user.user_type.department && Session.additional_permissions[i].read_own) {
+      api.get(`${apiUrl}dropdown/head/find/${Session.user.user_type.department}`).then((response) => {
+        this.budgetdata = JSON.parse(JSON.stringify(response.data))
+        // this.chartOptions1.series[0].data = this.getLeftDataMonth(response.data)
+        this.chartOptions1.title.text = "Year's Budget - Total"
+        this.chartOptions1.tooltip.pointFormat = '{series.name}: <b>{point.y} ({point.percentage:.1f}%) </b>'
+        this.chartOptions1.series[0].name = "Total Budget"
+        this.chartOptions1.series[0].data = this.getTotalData(response.data)
+        this.chartOptions1Bar.series = this.getMonthlyBar1(response.data);
+        this.chartOptions2Bar.series = this.getMonthlyBar2(response.data);
+        this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
+        this.chartOptions3Bar.series = this.getYearlyBar2(response.data);       // this.chartOptions.series[2].data = this.getTransactionData(response.data)
+      })
+    }
+    if(this.isPermitted && Session.user.user_type.department && Session.additional_permissions[i].read_all) {
+      api.get(`${apiUrl}`+`head/head/get`)
+    .then((response) => {
+      this.budgetdata = JSON.parse(JSON.stringify(response.data))
+      // this.chartOptions1.series[0].data = this.getLeftDataMonth(response.data)
+      this.chartOptions1.title.text = "Year's Budget - Total"
+      this.chartOptions1.tooltip.pointFormat = '{series.name}: <b>{point.y} ({point.percentage:.1f}%) </b>'
+      this.chartOptions1.series[0].name = "Total Budget"
+      this.chartOptions1.series[0].data = this.getTotalData(response.data)
+        this.chartOptions1Bar.series = this.getMonthlyBar1(response.data);
+        this.chartOptions2Bar.series = this.getMonthlyBar2(response.data);
+        this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
+        this.chartOptions3Bar.series = this.getYearlyBar2(response.data);       // this.chartOptions.series[2].data = this.getTransactionData(response.data)
+      });
+    }
   }else{
     this.isPermitted = true
-  }
-  	api.get(`${apiUrl}`+`head/head/get`)
+    api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
-    	this.budgetdata = JSON.parse(JSON.stringify(response.data))
-    	// this.chartOptions1.series[0].data = this.getLeftDataMonth(response.data)
-    	this.chartOptions1.title.text = "Year's Budget - Total"
-    	this.chartOptions1.tooltip.pointFormat = '{series.name}: <b>{point.y} ({point.percentage:.1f}%) </b>'
-    	this.chartOptions1.series[0].name = "Total Budget"
-    	this.chartOptions1.series[0].data = this.getTotalData(response.data)
-      	this.chartOptions1Bar.series = this.getMonthlyBar1(response.data);
-      	this.chartOptions2Bar.series = this.getMonthlyBar2(response.data);
-      	this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
-      	this.chartOptions3Bar.series = this.getYearlyBar2(response.data);      	// this.chartOptions.series[2].data = this.getTransactionData(response.data)
+      this.budgetdata = JSON.parse(JSON.stringify(response.data))
+      // this.chartOptions1.series[0].data = this.getLeftDataMonth(response.data)
+      this.chartOptions1.title.text = "Year's Budget - Total"
+      this.chartOptions1.tooltip.pointFormat = '{series.name}: <b>{point.y} ({point.percentage:.1f}%) </b>'
+      this.chartOptions1.series[0].name = "Total Budget"
+      this.chartOptions1.series[0].data = this.getTotalData(response.data)
+        this.chartOptions1Bar.series = this.getMonthlyBar1(response.data);
+        this.chartOptions2Bar.series = this.getMonthlyBar2(response.data);
+        this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
+        this.chartOptions3Bar.series = this.getYearlyBar2(response.data);       // this.chartOptions.series[2].data = this.getTransactionData(response.data)
       });
+  }
+  	// api.get(`${apiUrl}`+`head/head/get`)
+   //  .then((response) => {
+   //  	this.budgetdata = JSON.parse(JSON.stringify(response.data))
+   //  	// this.chartOptions1.series[0].data = this.getLeftDataMonth(response.data)
+   //  	this.chartOptions1.title.text = "Year's Budget - Total"
+   //  	this.chartOptions1.tooltip.pointFormat = '{series.name}: <b>{point.y} ({point.percentage:.1f}%) </b>'
+   //  	this.chartOptions1.series[0].name = "Total Budget"
+   //  	this.chartOptions1.series[0].data = this.getTotalData(response.data)
+   //    	this.chartOptions1Bar.series = this.getMonthlyBar1(response.data);
+   //    	this.chartOptions2Bar.series = this.getMonthlyBar2(response.data);
+   //    	this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
+   //    	this.chartOptions3Bar.series = this.getYearlyBar2(response.data);      	// this.chartOptions.series[2].data = this.getTransactionData(response.data)
+   //    });
   },
   methods: {
   	toggleMonths(args) {

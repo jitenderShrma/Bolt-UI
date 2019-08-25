@@ -1,972 +1,1144 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
-
-    <div id="target" class="col-lg-12 control-section">
-        <div>
-          <ejs-toolbar :clicked="clickHandler">
-            <e-items>
-              <e-item align="right" id="add" :text="$ml.get('add')" :template="addTemplate" ></e-item>
-              <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item>
-            </e-items>
-          </ejs-toolbar>
-          <b-card>
-          <b-row>
-              <b-col>
-                Head Name
-              </b-col>
-              <b-col>
-                Head Key
-              </b-col>
-              <b-col>
-                column 3
-              </b-col>
-              <b-col>
-                column 4
-              </b-col>
-              <b-col>
-                column 5
-              </b-col>
-            </b-row>
-            <hr>
-          <div v-for="(run,index) in data" :key="index">
-            <b-row>
-              <b-col>
-                <span @click="toggle" v-if="data[index].children" style="margin-left:-10px;cursor:point"><i v-bind:class="[hide ? upClass : rightClass ]"></i></span>
-                {{data[index].name}}
-              </b-col>
-                {{data[index].head_key}}
-              <b-col>
-              </b-col>
-              <b-col>
-              </b-col>
-              <b-col>
-              </b-col>
-              <b-col>
-              </b-col>
-            </b-row>
-            <div v-if="data[index].children && hide">
-              <div v-for="(run,j) in data[index].children" :key="j" style="margin-left:30px ">
-                <b-row>
-              <b-col>
-                {{data[index].children[j].name}}
-              </b-col>
-                {{data[index].children[j].head_key}}
-              <b-col>
-              </b-col>
-              <b-col>
-              </b-col>
-              <b-col>
-              </b-col>
-              <b-col>
-              </b-col>
-            </b-row>
+    <div id="Dashboard">
+      <b-row v-if="isPermitted">
+        <b-col sm="6" style="padding-right:3px; padding-left:0px">
+          <b-card no-body style="height:80vh">
+            <b-card-body @click="openModal">
+                  <b-dropdown class="float-right" variant="transparent p-0" right no-caret>
+                    <template slot="button-content">
+                      <i class="icon-settings" style="color:black"></i>
+                    </template><!-- 
+                    <b-dropdown-item @click="toggle1">Total Budget</b-dropdown-item>
+                    <b-dropdown-item @click="toggle1">Approved Budget</b-dropdown-item> -->
+                    <b-dropdown-item v-for="(run,i) in dept" @click="openModal(`${dept[i]._id}`)" :key="i">{{dept[i].department_name}}</b-dropdown-item>
+                  </b-dropdown>
+                  <div v-if="option1 == 'Total Budget'">
+                <highcharts class="chart" :options="chartOptions1Bar" :updateArgs="updateArgs"></highcharts>
               </div>
-            </div>
-          </div>
-        </b-card>
-            <!-- <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-             :treeColumnIndex='1' idMapping="_id" parentIdMapping="parent_head" :height='height' :allowReordering='true' :allowFiltering='true'
-            :allowPdfExport='true'
-            :allowExcelExport='true'
-            :actionComplete="actionComplete"
-            :enableCollapseAll="false" :toolbar="toolbar"
-            :rowSelected="rowSelected" :toolbarClick="clickHandler"
-            :recordDoubleClick="beginEdit"
-            :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
-                <e-columns> -->
-                    <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
-                    <!-- <e-column :visible="false" field='_id'></e-column>
-                    <e-column field='name' headerText='Head Name' ></e-column>
-                    <e-column field='head_key' headerText='Head Key' ></e-column>
-                    <e-column field='labels[0].label_name' :template="labelTemplate" headerText='Labels' ></e-column>
-                    <e-column field='accounting_head' headerText='Account Head' ></e-column>
-                    <e-column field='notes' headerText='Notes'></e-column>
-                    <e-column :allowEditing="true" :template="groupTemplate" field='department' headerText='Department' width='170' ></e-column>
-                    <e-column :allowEditing="true" :visible="false" field="parent_head" headerText="Parent Head">
-                    </e-column> -->
-                     <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
-                <!-- </e-columns>
-            </ejs-treegrid> -->
-            <ejs-dialog id='dialog' height="400" style="max-height:fit-content !important" header='Add A Label' showCloseIcon='true' :isModal='LabelModal' :animationSettings='animationSettings' width='285px' ref='dialogObj'
-            target='#target' >
-            <b-form v-on:submit.prevent="addLabel">
-        <div class="content-wrapper textbox-default">
-        <div class="row">
-        <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
-        </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-              <p>Label Color</p>
-            </div>
-            <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                    <ejs-colorpicker :modeSwitcher="false" value="#000" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
-            </div>
-        </div>
-        <br>
-        <div class="multiline_wrapper">
-            <ejs-textbox v-model="formdata.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
-        </div>
-        </div>
-        <div slot="footer">
-              <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
-          </div>
-          </b-form>
-        </ejs-dialog>
-            <b-modal :title="$ml.get('addhead')" class="modal-primary" v-model="modal" @ok="modal = false" hide-footer>
-              <div>
-                <b-form v-on:submit.prevent="addHead">
-                  <b-tabs>
-                  <b-tab :title="$ml.get('head')" active>
-                  <b-form-group style="padding:5%">
-                 <div class="e-float-input e-control-wrapper">
-                  <input v-validate="'required'" v-model="input.name" class="e-field e-defaultcell" type="text" value="" e-mappinguid="grid-column1" id="_gridcontrolname" name="Head Name" style="text-align:undefined" aria-labelledby="label__gridcontrolname">
-                  <span class="e-float-line"></span>
-                  <span id="errors">{{ errors.first('Head Name') }}</span>
-                  <label class="e-float-text e-label-top" id="label__gridcontrolname" for="_gridcontrolname">Head Name</label>
+              <div v-if="option1 == 'Approved Budget'">
+                <highcharts class="chart" :options="chartOptions2Bar" :updateArgs="updateArgs"></highcharts>
+              </div>
+              <div v-if="option1 == 'Yearly Budget'">
+                <highcharts class="chart"  :options="chartOptionsStacked" :updateArgs="updateArgs"></highcharts>
+                <div>
+                  <!-- <b-row>
+                  <b-col v-for="(run,i) in dept" :key="i">
+                    <span @click="openModal(`${dept[i]._id}`)">{{dept[i].department_name}}</span>
+                  </b-col>
+                </b-row> -->
+                <!-- <hr> -->
+                <b-row class="justify-content-center">
+                    TOTAL : {{summary_total()}}
+                </b-row>
+                <b-row class="justify-content-center">
+                    COMMITTED : {{summary_committed()}}
+                </b-row>
+                <b-row class="justify-content-center">
+                    REMAINING : {{summary_remaining()}}
+                </b-row>
                 </div>
-                  <div class="e-float-input e-control-wrapper">
-                    <input v-validate="'required'" v-model="input.head_key" class="e-field e-defaultcell" type="text" value="" e-mappinguid="grid-column2" id="_gridcontrolhead_key" name="Head Key" style="text-align:undefined" aria-labelledby="label__gridcontrolhead_key">
-                    <span class="e-float-line"></span>
-                    <span id="errors">{{ errors.first('Head Key') }}</span>
-                    <label class="e-float-text e-label-top" id="label__gridcontrolhead_key" for="_gridcontrolhead_key">Head Key</label>
-                  </div>
-                    <div class="e-float-input e-control-wrapper">
-                      <input v-model="input.accounting_head" class="e-field e-defaultcell" type="text" value="" e-mappinguid="grid-column3" id="_gridcontrolaccounting_head" name="accounting_head" style="text-align:undefined" aria-labelledby="label__gridcontrolaccounting_head">
-                      <span class="e-float-line"></span>
-                      <label class="e-float-text e-label-top" id="label__gridcontrolaccounting_head" for="_gridcontrolaccounting_head">Account Head</label>
-                    </div>
-                    <div class="e-float-input e-control-wrapper">
-                      <input v-model="input.notes" class="e-field e-defaultcell" type="text" value="" e-mappinguid="grid-column4" id="_gridcontrolnotes" name="notes" style="text-align:undefined" aria-labelledby="label__gridcontrolnotes">
-                      <span class="e-float-line"></span>
-                      <label class="e-float-text e-label-top" id="label__gridcontrolnotes" for="_gridcontrolnotes">Notes</label>
-                    </div>
-                    <br>
-                    
-                    <label v-text="$ml.get('department')"></label>
-                      <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddept')" v-model="input.department" :multiple="false" :options="department" />
-                    <label v-text="$ml.get('parenthead')"></label>
-                      <treeselect :default-expand-level="10" :placeholder="$ml.get('pholdparenthead')" v-model="input.parent_head" :multiple="false" :options="head" />
-                </b-form-group>
-              </b-tab>
-              <b-tab :title="$ml.get('labels')">
-                  <b-form-group>
-                    <div v-for="(run,i) in input.labels" :key="i">
-                      <b-row>
-                      <b-col>
-                      <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="input.labels[i].color">{{input.labels[i].label_name}}</b-badge>
-                    </b-col>
-                    <b-col>
-                      <b-btn v-on:click="editLabeladd(input.labels[i])" size="sm" variant="primary" v-text="$ml.get('edit')"></b-btn>
-                    </b-col>
-                    <b-col>
-                      <b-btn v-on:click="delLabeladd(`${input.labels[i]._id}`,`${input._id}`,`${i}`)" size="sm" variant="danger"><i class="fa fa-trash-o"></i></b-btn>
-                    </b-col>
-                  </b-row>
-                    </div>
-                    <b-form v-on:submit.prevent = "selectLabeladd(`${input._id}`)">
-                      <label v-text="$ml.get('labels')"></label>
-                      <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
-                        <div slot="item" slot-scope = "{item :label}">
-                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
-                        </div>
-                        <div slot="selection" slot-scope = "{item :label}">
-                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
-                        </div>
-                        <div slot="after-items-fixed">
-                          <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>
-                        </div>
-                      </cool-select>
-                      <br>
-                        <div slot="footer">
-                          <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('add')"><i class="fa fa-dot-circle-o"></i></b-button>
-                        </div>
-                    </b-form>
-                  </b-form-group>
-                </b-tab>
-            </b-tabs>
-                <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
-                </div>
-            </b-modal>
-            <b-modal :title="$ml.get('edithead')+` : `+`${editinput.name}`" class="modal-primary" v-model="editmodal" @ok="editmodal = false" hide-footer>
-
-              <b-form v-on:submit.prevent="editHead">
-                <b-tabs>
-                  <b-tab :title="$ml.get('head')" active>
-                <b-form-group>
-                  <div class="e-float-input e-control-wrapper"><input v-model="editinput.name" class="e-field e-defaultcell" type="text" e-mappinguid="grid-column168" id="_gridcontrolname" name="name" style="text-align:undefined" aria-labelledby="label__gridcontrolname"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolname" for="_gridcontrolname">Head Name</label></div>
-                  <div class="e-float-input e-control-wrapper">
-                    <input v-model="editinput.head_key" class="e-field e-defaultcell" type="text" value="" e-mappinguid="grid-column2" id="_gridcontrolhead_key" name="Head Key" style="text-align:undefined" aria-labelledby="label__gridcontrolhead_key">
-                    <span class="e-float-line"></span>
-                    <label class="e-float-text e-label-top" id="label__gridcontrolhead_key" for="_gridcontrolhead_key">Head Key</label>
-                  </div><div class="e-float-input e-control-wrapper"><input v-model="editinput.accounting_head" class="e-field e-defaultcell" type="text" e-mappinguid="grid-column170" id="_gridcontrolaccounting_head" name="accounting_head" style="text-align:undefined" aria-labelledby="label__gridcontrolaccounting_head"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolaccounting_head" for="_gridcontrolaccounting_head">Account Head</label></div><div class="e-float-input e-control-wrapper"><input v-model="editinput.notes" class="e-field e-defaultcell" type="text"  e-mappinguid="grid-column171" id="_gridcontrolnotes" name="notes" style="text-align:undefined" aria-labelledby="label__gridcontrolnotes"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolnotes" for="_gridcontrolnotes">Notes</label></div>
-                    <label v-text="$ml.get('department')"></label>
-                      <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddept')" v-model="editinput.department" :multiple="false" :options="department" />
-                      <label v-text="$ml.get('parenthead')"></label>
-                      <treeselect @open="checkParent" :default-expand-level="10" :placeholder="$ml.get('pholdparenthead')" v-model="editinput.parent_head" :multiple="false" :options="head" />
-                </b-form-group>
-                </b-tab>
-                <b-tab :title="$ml.get('labels')">
-                  <b-form-group>
-                    <div v-for="(run,i) in editinput.labels" :key="i">
-                      <b-row>
-                      <b-col>
-                      <b-badge style="font-weight:400;margin:5px;font-size:15px;" :variant="editinput.labels[i].color">{{editinput.labels[i].label_name}}</b-badge>
-                    </b-col>
-                    <b-col>
-                      <b-btn v-on:click="editLabel(editinput.labels[i])" size="sm" variant="primary" v-text="$ml.get('edit')"></b-btn>
-                    </b-col>
-                    <b-col>
-                      <b-btn v-on:click="delLabel(`${editinput.labels[i]._id}`,`${editinput._id}`,`${i}`)" size="sm" variant="danger"><i class="fa fa-trash-o"></i></b-btn>
-                    </b-col>
-                  </b-row>
-                    </div>
-                    <b-form v-on:submit.prevent = "selectLabel(`${editinput._id}`)">
-                      <label v-text="$ml.get('labels')"></label>
-                      <cool-select menuItemsMaxHeight="100px" :items="labels" item-text="label_name" item-value="_id" v-model="selectedLabel">
-                        <div slot="item" slot-scope = "{item :label}">
-                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
-                        </div>
-                        <div slot="selection" slot-scope = "{item :label}">
-                          <b-badge style="font-weight:100;" id="label" :variant="label.color">{{label.label_name}}</b-badge>
-                        </div>
-                        <div slot="after-items-fixed">
-                          <b-btn block @click="addModal = true" variant="primary" v-text="$ml.get('label')"></b-btn>
-                        </div>
-                      </cool-select>
-                      <br>
-                        <div slot="footer">
-                          <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('add')"><i class="fa fa-dot-circle-o"></i></b-button>
-                        </div>
-                    </b-form>
-                  </b-form-group>
-                </b-tab>
-                </b-tabs>
-                <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
-              </b-form>
-            </b-modal>
-            <b-modal size="sm" :title="$ml.get('label')" class="modal-primary" v-model="addModal" @ok="addModal = false" hide-footer>
-              <b-form v-on:submit.prevent="addLabel(`${editinput._id}`)">
-              <div class="content-wrapper textbox-default">
-              <div class="row">
-              <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                      <ejs-textbox v-model="formdata.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
               </div>
-              </div>
-              </div>
-              <div slot="footer">
-                    <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
-                </div>
-                </b-form>
-            </b-modal>
-            <b-modal size="sm" :title="$ml.get('editlabel')" class="modal-primary" v-model="editlabelmodal" @ok="editlabelmodal = false" hide-footer>
-              <b-form v-on:submit.prevent="editdeptLabel(`${editinput._id}`)">
-              <div class="content-wrapper textbox-default">
-              <div class="row">
-              <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                      <ejs-textbox v-model="editlabel.label_name" floatLabelType="Auto" placeholder="Label Name" required></ejs-textbox>
-              </div>
-              </div>
-              <br>
-              <div class="row">
-                  <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                    <p>Label Color</p>
-                  </div>
-                  <div class="col-xs-6 col-sm-6 col-lg-6 col-md-6">
-                          <ejs-colorpicker :modeSwitcher="false" :value="editlabel.color" mode="Palette" :columns="squarePalettesColn" :presetColors="circlePaletteColors" :change="onChange" id="color-picker"></ejs-colorpicker>
-                  </div>
-              </div>
-              <br>
-              <div class="multiline_wrapper">
-                  <ejs-textbox v-model="editlabel.description" ref="textareaObj" id="default" :multiline="true" floatLabelType="Auto" placeholder="Description" required></ejs-textbox>
-              </div>
-              </div>
-              <div slot="footer">
-                    <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
-                </div>
-                </b-form>
-            </b-modal>
-        </div>
+            </b-card-body>
+          </b-card>
+        </b-col>
+        <b-col sm="6" style="padding-right:3px; padding-left:0px">
+          <b-card no-body style="height:80vh">
+            <b-card-body @click="openPie">
+                  <b-dropdown class="float-right" variant="transparent p-0" right no-caret>
+                    <template slot="button-content">
+                      <i class="icon-settings" style="color:black"></i>
+                    </template>
+                    <b-dropdown-item @click="toggle">Total Budget</b-dropdown-item>
+                    <b-dropdown-item @click="toggle">Committed Budget</b-dropdown-item>
+                    <b-dropdown-item @click="toggle">Remaining Budget</b-dropdown-item>
+                  </b-dropdown>
+                <highcharts class="chart" :options="chartOptions1" :updateArgs="updateArgs"></highcharts>
+              <b-card-footer footer-bg-variant="transparent" footer-border-variant="none" style="padding:0px;border-top:0px">
+                <b-row class="justify-content-center">
+                <b-button-group>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths" autofocus>Yearly</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Jan</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Feb</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Mar</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Apr</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">May</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Jun</b-button>
+                    </b-button-group>
+                    <b-button-group>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Jul</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Aug</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Sept</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Oct</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Nov</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Dec</b-button>
+                      </b-button-group>
+                      </b-row>
+              </b-card-footer>
+            </b-card-body>
+          </b-card>
+        </b-col>
+    </b-row>
     </div>
-  </div>
-</template>
+    <b-modal size="xl" class="modal-primary" v-model="chartModal" @ok="chartModal = false" hide-footer>
+      <template slot="modal-title">
+        
+      </template>
+      <b-dropdown class="float-right" variant="transparent p-0" right no-caret>
 
+        <template slot="button-content">
+          <i class="icon-settings" style="color:black"></i>
+        </template><!-- 
+        <b-dropdown-item @click="toggle1">Total Budget</b-dropdown-item>
+        <b-dropdown-item @click="toggle1">Approved Budget</b-dropdown-item> -->
+        <b-dropdown-item v-for="(run,i) in child_dept" @click="changeModal(`${child_dept[i]._id}`)" :key="i">{{child_dept[i].department_name}}</b-dropdown-item>
+      </b-dropdown>
+      <div @click="changeModal">
+        <highcharts class="chart2"  :options="chartOptionsStackedchild" :updateArgs="updateArgs"></highcharts>
+      </div>
+                <div>
+                  <!-- <b-row>
+                  <b-col v-for="(run,i) in child_dept" :key="i">
+                    <span @click="openModal(`${child_dept[i]._id}`)">{{child_dept[i].department_name}}</span>
+                  </b-col>
+                </b-row>
+                <hr> -->
+                <b-row class="justify-content-center">
+                    TOTAL : {{summary_total_child()}}
+                </b-row>
+                <b-row class="justify-content-center">
+                    COMMITTED : {{summary_committed_child()}}
+                </b-row>
+                <b-row class="justify-content-center">
+                    REMAINING : {{summary_remaining_child()}}
+                </b-row>
+                </div> 
+    </b-modal>
+    <b-modal size="xl" class="modal-primary" v-model="pieModal" @ok="pieModal = false" hide-footer>
+      <b-card no-body>
+        <template slot="modal-title">
+        
+      </template>
+            <b-card-body>
+                  <b-dropdown class="float-right" variant="transparent p-0" right no-caret>
+                    <template slot="button-content">
+                      <i class="icon-settings" style="color:black"></i>
+                    </template>
+                    <b-dropdown-item @click="toggle">Total Budget</b-dropdown-item>
+                    <b-dropdown-item @click="toggle">Committed Budget</b-dropdown-item>
+                    <b-dropdown-item @click="toggle">Remaining Budget</b-dropdown-item>
+                  </b-dropdown>
+                <highcharts class="chart2" :options="chartOptions1" :updateArgs="updateArgs"></highcharts>
+              <b-card-footer footer-bg-variant="transparent" footer-border-variant="none" style="padding:0px;border-top:0px">
+                <b-row class="justify-content-center">
+                <b-button-group>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths" autofocus>Yearly</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Jan</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Feb</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Mar</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Apr</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">May</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Jun</b-button>
+                    </b-button-group>
+                    <b-button-group>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Jul</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Aug</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Sept</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Oct</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Nov</b-button>
+                        <b-button id="legend" size="sm" variant="transparent" @click="toggleMonths">Dec</b-button>
+                      </b-button-group>
+                      </b-row>
+              </b-card-footer>
+            </b-card-body>
+          </b-card>
+    </b-modal>
+  </div>
+  
+</template>
 
 <script>
 import Vue from 'vue'
+import {Chart} from 'highcharts-vue'
 import axios from 'axios'
-import apiUrl from '@/apiUrl'
-import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { ExcelExport,PdfExport,TreeGridPlugin, Edit, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
-import { addClass, removeClass, getValue } from '@syncfusion/ej2-base';
-// import { addRecord } from "@syncfusion/ej2-vue-grids";
-import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
-import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
-import { NumericTextBoxPlugin,ColorPickerPlugin } from "@syncfusion/ej2-vue-inputs";
-import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
-import {CoolSelect} from 'vue-cool-select'
-  import { MultiSelectPlugin, DropDownListPlugin } from "@syncfusion/ej2-vue-dropdowns";
-  Vue.use(DropDownListPlugin);
-Vue.use(TextBoxPlugin);
+import apiUrl from '@/apiUrl' 
+import VueNotifications from 'vue-notifications'
+  import miniToastr from 'mini-toastr'// https://github.com/se-panfilov/mini-toastr
 
-Vue.use(TreeGridPlugin)
-Vue.use(ToolbarPlugin)
-Vue.use(DialogPlugin)
-Vue.use(NumericTextBoxPlugin);
-Vue.use(ColorPickerPlugin);
-var api = axios.create({
-  withCredentials :true
-})
+  const toastTypes = {
+    success: 'success',
+    error: 'error',
+    info: 'info',
+    warn: 'warn'
+  }
 
-var groupVue1 = Vue.component("groupTemplate1", {
-    template: `<strong>{{val1}}</strong>`,
-    data() {
-      return {
-        data: {
+  miniToastr.init({types: toastTypes})
 
-        },
-        val1:""
-      };
-    },
-    async mounted() {
-      await axios.get(`${apiUrl}`+`department/dept/get/`+`${this.data.parent_department}`,{withCredentials:true}).then((res) => {
-        this.val1 = res.data.department_name
-      });
-    }
-  });
+  function toast ({title, message, type, timeout, cb}) {
+    return miniToastr[type](message, title, timeout, cb)
+  }
 
-var groupVue = Vue.component("groupTemplate", {
-    template: `<strong>{{val1}}</strong>`,
-    data() {
-      return {
-        data: {
+  const options = {
+    success: toast,
+    error: toast,
+    info: toast,
+    warn: toast
+  }
 
-        },
-        val1:""
-      };
-    },
-    async mounted() {
-      if(this.data.department !=null) {
-      await axios.get(`${apiUrl}`+`department/dept/get/`+`${this.data.department}`,{withCredentials:true}).then((res) => {
-        this.val1 = res.data.department_name
-      });
-    }
-    }
-  });
+  Vue.use(VueNotifications, options)
+  var api = axios.create({
+    withCredentials:true
+  })
+
 export default {
-    name: "HeadList",
-    components :  {
-      Treeselect,
-      CoolSelect,
-        TreeGridPlugin,ToolbarPlugin,ExcelExport,PdfExport, Edit,CommandColumn, Filter, Toolbar, TreeGridComponent, Sort, Reorder,Resize, Page
+  name: 'test',
+  components: {
+    highcharts:Chart
+  },
+  data: function() {
+    return {
+      child_dept:[],
+      chartModal:false,
+      summary_remaining: function() {
+        return this.chartOptionsStacked.series[2].data.reduce((a,b) => a+b,0)
+      },
+      summary_committed: function() {
+        return this.chartOptionsStacked.series[1].data.reduce((a,b) => a+b,0)
+      },
+      summary_total: function() {
+        if(this.chartOptionsStacked.series[0].data.length > 0) {
+          return this.chartOptionsStacked.series[0].data.reduce((a,b) => a+b,0)
+        }
+        else {
+          return this.chartOptionsStacked.series[0].data[0]
+        }
+      },
+      summary_remaining_child: function() {
+        if(this.chartOptionsStackedchild.series[2].data.length > 0) {
+          return this.chartOptionsStackedchild.series[2].data.reduce((a,b) => a+b,0)
+        }
+        else {
+          return this.chartOptionsStackedchild.series[2].data[0]
+        }
+      },
+      summary_committed_child: function() {
+        if(this.chartOptionsStackedchild.series[1].data.length > 0) {
+          return this.chartOptionsStackedchild.series[1].data.reduce((a,b) => a+b,0)
+        }
+        else {
+          return this.chartOptionsStackedchild.series[1].data[0]
+        }
+      },
+      summary_total_child: function() {
+        if(this.chartOptionsStackedchild.series[0].data.length > 0) {
+          return this.chartOptionsStackedchild.series[0].data.reduce((a,b) => a+b,0)
+        }
+        else {
+          return this.chartOptionsStackedchild.series[0].data[0]
+        }
+      },
+      budgetdata : [],
+      isPermitted:false,
+      selectMonth : "Yearly",
+      dept:[],
+      option:"Total Budget",
+      option1:"Yearly Budget",
+      updateArgs: [true, true, {duration: 1000}],
+      chartOptions1: {
+        tooltip: {
+          pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+        chart: {
+          type: 'pie',
+        },
+        
+        plotOptions: {
+          pie: {
+              allowPointSelect: true,
+              cursor: 'pointer',
+              center: ['50%', '50%']
+          }
+      },
+        dataLabels:[{
+          align:"center",
+        }],
+        title: {
+          text: ``
+        },
+        series: [
+          {
+            name: '',
+            data: []
+        },
+    ]
     },
-    data : function() {
-        return {
-          
-        addTemplate: function () {
-              return {
-                  template: Vue.component("addTemplate", {
-                      template: `<b-badge id="label1" variant="success" ><i class="fa fa-plus"></i>&nbsp<span id="hide" v-text="$ml.get('add')"></span></b-badge>`,
-                      data() {
-                        return {
-                          data: {
-                          },
-                        };
-                      },
-                    })
-                  }
-                },
-                deleteTemplate: function () {
-              return {
-                  template: Vue.component("deleteTemplate", {
-                      template: `<b-badge id="label1" variant="primary" ><i class="fa fa-trash-o"></i>&nbsp<span id="hide" v-text="$ml.get('delete')"></span></b-badge>`,
-                      data() {
-                        return {
-                          data: {
-                          },
-                        };
-                      },
-                    })
-                  }
-                },
-          labelTemplate: function () {
-              return {
-                  template: Vue.component('labelTemplate', {
-                      template: `<div ><b-badge id="label" style="font-weight:100;margin:3px" v-for="label in data.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
-                  data: function() {
-                          return {
-                              data: {},
-                          }
-                      }
-                })
-              }
-          },
-          labels:[],
-          editlabelmodal:false,
-          editlabel:{},
-          formdata: {
-                  label_name : "",
-                  color : "2196f3",
-                  context : "Heads",
-                  description : ""
-                },
-          editinput:{
-          },
-          editmodal:false,
-          groupTemplate: function () {
-              return {
-                  template: groupVue
-              }
-          },
-          groupTemplate1: function () {
-              return {
-                  template: groupVue1
-              }
-          },
-          hide:true,
-          getflag:0,
-          LabelModal:false,
-          animationSettings: { effect: 'Zoom' },
-          modal:false,
-          link:"",
-          key:"",
-          addModal:false,
-          head:[],
-          selected:false,
-          dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
-             commands: [
-                 { type:"Details",tooltipText : "Double click", buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat',click:this.onClick } },
-                    ],
-                height : window.innerHeight*0.65,
-             filterSettings: { type: "Menu" },
-             pageSettings: { pageSize: 15},
-             editSettings: { allowDeleting: true,mode: 'Dialog', allowAdding: true, newRowPosition: 'Child' },
-             rowHeight: 30,
-              toolbar: [
-          'CsvExport',
-            { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
-            { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
-            { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
-            ],
-            selectionSettings : {type:"Single"},
-            data: [],
-            department:[],
-            input:{
-              labels:[]
-            },
-            upClass:'icon-arrow-down',
-            rightClass:'icon-arrow-right',
-            selectedLabel:null,
-            module:null,
-            isRoot:false,
-            squarePalettesColn: 7,
-        circlePaletteColors: {'custom': ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#2196f3', '#03a9f4', '#00bcd4',
-                    '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
-            
-   };
+    chartOptionsStacked: {
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.2f}%)<br/>',
+            shared: true
+        },
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Department Budget'
+        },
+        plotOptions: {
+            column: {
+                stacking: 'percent'
+            }
+        },
+        xAxis: {
+            categories: []
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Percentage'
+            }
+        },
+        series: [{data:[]},{data:[]},{data:[]}]
+    },
+    chartOptionsStackedchild: {
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.2f}%)<br/>',
+            shared: true
+        },
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Department Budget'
+        },
+        plotOptions: {
+            column: {
+                stacking: 'percent'
+            }
+        },
+        xAxis: {
+            categories: []
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Percentage'
+            }
+        },
+        series: [{data:[]},{data:[]},{data:[]}]
+    },
+    chartOptions1Bar: {
+        chart: {
+          type: 'column',
+        },
+        xAxis: {
+        categories: [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dec'
+        ],
+        crosshair: true
+    },
+    title:{
+      text:'Total Budget'
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Amount ( in Rupees )'
+        },
+    },
+    series: []
+    },
+    pieModal :false,
+    chartOptions2Bar: {
+        chart: {
+          type: 'column',
+        },
+        xAxis: {
+        categories: [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dec'
+        ],
+        crosshair: true
+    },
+    title:{
+      text:'Approved Budget'
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Amount ( in Rupees )'
+        },
+    },
+    series: []
+    },
+    chartOptions3Bar: {
+        chart: {
+          type: 'column',
+        },
+        xAxis: {
+        categories: [],
+        crosshair: true
+    },
+    title:{
+      text:'Yearly Budget'
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Amount ( in Rupees )'
+        },
+    },
+    series: []
+    }
+    }
   },
   watch:{
-    '$route' : async function() {
-      if(this.$route.path == '/heads/list') {
-        await api.get(`${apiUrl}`+`head/head/get`)
-    .then((response) => {
-      this.data = this.list_to_tree_head(response.data)
-      });
-     }
-     else{
-      await api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
-        .then((response) => {
-          this.data = this.list_to_tree_head(response.data)
-          });
-     }
-     await axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
-        this.department = res.data
-      })
+    'option' : function(){
+      if(this.option =="Total Budget") {
+        this.chartOptions1.tooltip.pointFormat = '{series.name}: <b>{point.y} ({point.percentage:.1f}%) </b>'
+        this.chartOptions1.series[0].name = "Total Budget"
+        this.chartOptions1.title.text = "Year's Budget - Total"
+        this.chartOptions1.series[0].data = this.getTotalData(this.budgetdata)
+      }
+      if(this.option == "Committed Budget") {
+        this.chartOptions1.tooltip.pointFormat = '{series.name}: <b>{point.y} ({point.more:.1f}%) </b>'
+        this.chartOptions1.series[0].name = "Committed Budget"
+        this.chartOptions1.title.text = "Year's Budget - Committed"
+        this.chartOptions1.series[0].data = this.getApprovedData(this.budgetdata)
+      }
+      if(this.option == "Remaining Budget") {
+        this.chartOptions1.tooltip.pointFormat = '{series.name}: <b>{point.y} ({point.more:.1f}%) </b>'
+        this.chartOptions1.series[0].name = "Remaining Budget"
+        this.chartOptions1.title.text = "Year's Budget - Remaining"
+        this.chartOptions1.series[0].data = this.getLeftData(this.budgetdata)
+      }
+    },
+    'selectMonth' : function() {
+      if(this.selectMonth == "Yearly") {
+        
+        if(this.option == "Total Budget") {
+          this.chartOptions1.title.text = "Year's Budget - Total"
+          this.chartOptions1.series[0].name = "Total Budget"
+          this.chartOptions1.series[0].data = this.getTotalData(this.budgetdata)
+        }
+        if(this.option == "Committed Budget") {
+          this.chartOptions1.title.text = "Year's Budget - Committed"
+          this.chartOptions1.series[0].name = "Committed Budget"
+
+          this.chartOptions1.series[0].data = this.getApprovedData(this.budgetdata)
+        }
+        if(this.option == "Remaining Budget") {
+          this.chartOptions1.title.text = "Year's Budget - Remaining"
+          this.chartOptions1.series[0].name = "Remaining Budget"
+          this.chartOptions1.series[0].data = this.getLeftData(this.budgetdata)
+        }
+      }
+      if(this.selectMonth == "Jan") {
+        
+        if(this.option == "Total Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Total`
+          this.chartOptions1.series[0].name = "Total Budget"
+          this.chartOptions1.series[0].data = this.getTotalDataMonth(this.budgetdata,0)
+        }
+        if(this.option == "Committed Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Committed`
+          this.chartOptions1.series[0].name = "Committed Budget"
+          this.chartOptions1.series[0].data = this.getApprovedDataMonth(this.budgetdata,0)
+        }
+        if(this.option == "Remaining Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Remaining`
+          this.chartOptions1.series[0].name = "Remaining Budget"
+          this.chartOptions1.series[0].data = this.getLeftDataMonth(this.budgetdata,0)
+        }
+      }
+      if(this.selectMonth == "Feb") {
+        if(this.option == "Total Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Total`
+          this.chartOptions1.series[0].name = "Total Budget"
+          this.chartOptions1.series[0].data = this.getTotalDataMonth(this.budgetdata,1)
+        }
+        if(this.option == "Committed Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Committed`
+          this.chartOptions1.series[0].name = "Committed Budget"
+          this.chartOptions1.series[0].data = this.getApprovedDataMonth(this.budgetdata,1)
+        }
+        if(this.option == "Remaining Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Remaining`
+          this.chartOptions1.series[0].name = "Remaining Budget"
+          this.chartOptions1.series[0].data = this.getLeftDataMonth(this.budgetdata,1)
+        }
+      }
+      if(this.selectMonth == "Mar") {
+        if(this.option == "Total Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Total`
+          this.chartOptions1.series[0].name = "Total Budget"
+          this.chartOptions1.series[0].data = this.getTotalDataMonth(this.budgetdata,2)
+        }
+        if(this.option == "Committed Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Committed`
+          this.chartOptions1.series[0].name = "Committed Budget"
+          this.chartOptions1.series[0].data = this.getApprovedDataMonth(this.budgetdata,2)
+        }
+        if(this.option == "Remaining Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Remaining`
+          this.chartOptions1.series[0].name = "Remaining Budget"
+          this.chartOptions1.series[0].data = this.getLeftDataMonth(this.budgetdata,2)
+        }
+      }
+      if(this.selectMonth == "Apr") {
+        if(this.option == "Total Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Total`
+          this.chartOptions1.series[0].name = "Total Budget"
+          this.chartOptions1.series[0].data = this.getTotalDataMonth(this.budgetdata,3)
+        }
+        if(this.option == "Committed Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Committed`
+          this.chartOptions1.series[0].name = "Committed Budget"
+          this.chartOptions1.series[0].data = this.getApprovedDataMonth(this.budgetdata,3)
+        }
+        if(this.option == "Remaining Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Remaining`
+          this.chartOptions1.series[0].name = "Remaining Budget"
+          this.chartOptions1.series[0].data = this.getLeftDataMonth(this.budgetdata,3)
+        }
+      }
+      if(this.selectMonth == "May") {
+        if(this.option == "Total Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Total`
+          this.chartOptions1.series[0].name = "Total Budget"
+          this.chartOptions1.series[0].data = this.getTotalDataMonth(this.budgetdata,4)
+        }
+        if(this.option == "Committed Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Committed`
+          this.chartOptions1.series[0].name = "Committed Budget"
+          this.chartOptions1.series[0].data = this.getApprovedDataMonth(this.budgetdata,4)
+        }
+        if(this.option == "Remaining Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Remaining`
+          this.chartOptions1.series[0].name = "Remaining Budget"
+          this.chartOptions1.series[0].data = this.getLeftDataMonth(this.budgetdata,4)
+        }
+      }
+      if(this.selectMonth == "Jun") {
+        if(this.option == "Total Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Total`
+          this.chartOptions1.series[0].name = "Total Budget"
+          this.chartOptions1.series[0].data = this.getTotalDataMonth(this.budgetdata,5)
+        }
+        if(this.option == "Committed Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Committed`
+          this.chartOptions1.series[0].name = "Committed Budget"
+          this.chartOptions1.series[0].data = this.getApprovedDataMonth(this.budgetdata,5)
+        }
+        if(this.option == "Remaining Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Remaining`
+          this.chartOptions1.series[0].name = "Remaining Budget"
+          this.chartOptions1.series[0].data = this.getLeftDataMonth(this.budgetdata,5)
+        }
+      }
+      if(this.selectMonth == "Jul") {
+        if(this.option == "Total Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Total`
+          this.chartOptions1.series[0].name = "Total Budget"
+          this.chartOptions1.series[0].data = this.getTotalDataMonth(this.budgetdata,6)
+        }
+        if(this.option == "Committed Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Committed`
+          this.chartOptions1.series[0].name = "Committed Budget"
+          this.chartOptions1.series[0].data = this.getApprovedDataMonth(this.budgetdata,6)
+        }
+        if(this.option == "Remaining Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Remaining`
+          this.chartOptions1.series[0].name = "Remaining Budget"
+          this.chartOptions1.series[0].data = this.getLeftDataMonth(this.budgetdata,6)
+        }
+      }
+      if(this.selectMonth == "Aug") {
+        if(this.option == "Total Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Total`
+          this.chartOptions1.series[0].name = "Total Budget"
+          this.chartOptions1.series[0].data = this.getTotalDataMonth(this.budgetdata,7)
+        }
+        if(this.option == "Committed Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Committed`
+          this.chartOptions1.series[0].name = "Committed Budget"
+          this.chartOptions1.series[0].data = this.getApprovedDataMonth(this.budgetdata,7)
+        }
+        if(this.option == "Remaining Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Remaining`
+          this.chartOptions1.series[0].name = "Remaining Budget"
+          this.chartOptions1.series[0].data = this.getLeftDataMonth(this.budgetdata,7)
+        }
+      }
+      if(this.selectMonth == "Sept") {
+        if(this.option == "Total Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Total`
+          this.chartOptions1.series[0].name = "Total Budget"
+          this.chartOptions1.series[0].data = this.getTotalDataMonth(this.budgetdata,8)
+        }
+        if(this.option == "Committed Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Committed`
+          this.chartOptions1.series[0].name = "Committed Budget"
+          this.chartOptions1.series[0].data = this.getApprovedDataMonth(this.budgetdata,8)
+        }
+        if(this.option == "Remaining Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Remaining`
+          this.chartOptions1.series[0].name = "Remaining Budget"
+          this.chartOptions1.series[0].data = this.getLeftDataMonth(this.budgetdata,8)
+        }
+      }
+      if(this.selectMonth == "Oct") {
+        if(this.option == "Total Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Total`
+          this.chartOptions1.series[0].name = "Total Budget"
+          this.chartOptions1.series[0].data = this.getTotalDataMonth(this.budgetdata,9)
+        }
+        if(this.option == "Committed Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Committed`
+          this.chartOptions1.series[0].name = "Committed Budget"
+          this.chartOptions1.series[0].data = this.getApprovedDataMonth(this.budgetdata,9)
+        }
+        if(this.option == "Remaining Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Remaining`
+          this.chartOptions1.series[0].name = "Remaining Budget"
+          this.chartOptions1.series[0].data = this.getLeftDataMonth(this.budgetdata,9)
+        }
+      }
+      if(this.selectMonth == "Nov") {
+        if(this.option == "Total Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Total`
+          this.chartOptions1.series[0].name = "Total Budget"
+          this.chartOptions1.series[0].data = this.getTotalDataMonth(this.budgetdata,10)
+        }
+        if(this.option == "Committed Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Committed`
+          this.chartOptions1.series[0].name = "Committed Budget"
+          this.chartOptions1.series[0].data = this.getApprovedDataMonth(this.budgetdata,10)
+        }
+        if(this.option == "Remaining Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Remaining`
+          this.chartOptions1.series[0].name = "Remaining Budget"
+          this.chartOptions1.series[0].data = this.getLeftDataMonth(this.budgetdata,10)
+        }
+      }
+      if(this.selectMonth == "Dec") {
+        if(this.option == "Total Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Total`
+          this.chartOptions1.series[0].name = "Total Budget"
+          this.chartOptions1.series[0].data = this.getTotalDataMonth(this.budgetdata,11)
+        }
+        if(this.option == "Committed Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Committed`
+          this.chartOptions1.series[0].name = "Committed Budget"
+          this.chartOptions1.series[0].data = this.getApprovedDataMonth(this.budgetdata,11)
+        }
+        if(this.option == "Remaining Budget") {
+          this.chartOptions1.title.text = `${this.selectMonth}'s Budget - Remaining`
+          this.chartOptions1.series[0].name = "Remaining Budget"
+          this.chartOptions1.series[0].data = this.getLeftDataMonth(this.budgetdata,11)
+        }
+      }
     }
   },
-  async mounted() {
-    this.$refs.dialogObj.hide();
-    this.link = window.location.href;
-     this.key = this.link.split(`head/`).pop()
-     if(this.$route.path == '/heads/list') {
-        await api.get(`${apiUrl}`+`head/head/get`)
-    .then((response) => {
-      this.data = this.list_to_tree_head(response.data)
-      });
-     }
-     else{
-          await api.get(`${apiUrl}`+`head/head/get`)
-    .then((response) => {
-      this.data = this.list_to_tree_head(response.data)
-      console.log(this.data)
-      });
+  mounted() {
+    var Session = JSON.parse(localStorage.session_key)
+    if(Session.user) {
+    for(var i=0;i<Session.permission.length;i++) {
+      if(Session.permission[i].text=="Head" && (Session.additional_permissions[i].read_all || Session.additional_permissions[i].read_own)) {
+        this.isPermitted = true
+        break;
       }
-    },
-  provide: {
-      treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
-   },
-   methods:{
-    checkParent(args) {
-        api.get(`${apiUrl}`+`head/head/get`)
-        .then((response) => {
-          for(var i=0;i<response.data.length;i++) {
-            if(response.data[i]._id == this.editinput._id) {
-              response.data[i].isDisabled = true
-            }
-          }
-          this.head = this.list_to_tree_head(response.data)
-          })
-      },
-    editdeptLabel() {
-      var id = this.editlabel._id
-      this.editlabel._id = undefined
-      api.put(`${apiUrl}label/label/edit/${id}`,this.editlabel).then((res) => {
-        console.log(res.data)
+    }
+    if(this.isPermitted && Session.user.user_type.department && Session.additional_permissions[i].read_own) {
+      api.get(`${apiUrl}dropdown/head/find/${Session.user.user_type.department}`).then((response) => {
+        this.budgetdata = JSON.parse(JSON.stringify(response.data))
+        // this.chartOptions1.series[0].data = this.getLeftDataMonth(response.data)
+        this.chartOptions1.title.text = "Year's Budget - Total"
+        this.chartOptions1.tooltip.pointFormat = '{series.name}: <b>{point.y} ({point.percentage:.1f}%) </b>'
+        this.chartOptions1.series[0].name = "Total Budget"
+        this.chartOptions1.series[0].data = this.getTotalData(response.data)
+        this.chartOptions1Bar.series = this.getMonthlyBar1(response.data);
+        this.chartOptions2Bar.series = this.getMonthlyBar2(response.data);
+        this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
+        this.chartOptions3Bar.series = this.getYearlyBar2(response.data);       // this.chartOptions.series[2].data = this.getTransactionData(response.data)
       })
-      this.$router.go(0)
-    },
-    editLabel(args) {
-      console.log(args)
-      this.editlabelmodal = true
-      this.editlabel._id = args._id
-      this.editlabel.label_name = args.label_name
-      this.editlabel.description =args.description
-      this.editlabel.color =`#`+`${args.color}`
-    },
-    delLabel(args,id,label) {
-      console.log(this.editinput.labels.splice(label,1))
-      var body = {
-        labels : args
-      }
-      console.log(body)
-      api.put(`${apiUrl}head/head/pop/label/${id}`,body).then((res) => {
-        console.log(res.data)
-      })
-      
-    },
-    editLabeladd(args) {
-      this.editlabelmodal = true
-      this.editlabel._id = args._id
-      this.editlabel.label_name = args.label_name
-      this.editlabel.description =args.description
-      this.editlabel.color =`#`+`${args.color}`
-    },
-    delLabeladd(args,id,label) {
-      console.log(this.input.labels.splice(label,1))
-    },
-    selectLabeladd(args) {
-        if(this.selectedLabel != null) {
-        var label;
-        api.get(`${apiUrl}label/label/get/one/${this.selectedLabel}`).then((res) => {
-          label = res.data
-          this.input.labels.push(label);
-        })
-      }
-      },
-    addLabel (args) {
-      this.addModal =false
-              api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((label)=>{
-                var id = {
-                  labels :  label.data._id
-                }
-                  api.get(`${apiUrl}`+`label/label/find/by/Heads`).then((res) => {
-                    this.labels = res.data
-                  })
-                console.log(this.editinput.labels)
-              });
-      },
-      selectLabel(args) {
-        if(this.selectedLabel != null) {
-        var label;
-        api.get(`${apiUrl}label/label/get/one/${this.selectedLabel}`).then((res) => {
-          label = res.data
-          this.editinput.labels.push(label);
-        })
-
-        var data = {
-          labels : this.selectedLabel
-        }
-        api.put(`${apiUrl}head/head/push/label/${args}`,data).then((res) => {
-            
-        })
-      }
-      },
-    list_to_tree_dept(list) {
-          var map = {}, node, roots = [], i;
-          for (i = 0; i < list.length; i += 1) {
-              map[list[i]._id] = i; // initialize the map
-              list[i].children = []; // initialize the children
-          }
-          for (i = 0; i < list.length; i += 1) {
-              node = list[i];
-              if (node.parent_department != undefined ) {
-                  // if you have dangling branches check that map[node.parentId] exists
-                  list[map[node.parent_department]].children.push(node);
-              } else {
-                  roots.push(node);
-              }
-          }
-          this.convertDataDept(roots)
-          return roots
-      },
-      convertDataDept(roots) {
-        for(var i=0;i<roots.length;i++) {
-            if(roots[i].children.length !=0) {
-              this.convertDataDept(roots[i].children);
-            }
-            roots[i].id = roots[i]._id;
-          roots[i].label = roots[i].department_name;
-        delete roots[i]._id;
-        delete roots[i].department_name;
-        if(roots[i].children.length<=0) {
-          delete roots[i].children
-        }
-        }
-      },
-    async load(args) {
-
-
-      if(this.$route.path == '/heads/list') {
-        await api.get(`${apiUrl}`+`head/head/get`)
+    }
+    if(this.isPermitted && Session.user.user_type.department && Session.additional_permissions[i].read_all) {
+      api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
-      this.data = this.list_to_tree_head(response.data)
+      this.budgetdata = JSON.parse(JSON.stringify(response.data))
+      // this.chartOptions1.series[0].data = this.getLeftDataMonth(response.data)
+      this.chartOptions1.title.text = "Year's Budget - Total"
+      this.chartOptions1.tooltip.pointFormat = '{series.name}: <b>{point.y} ({point.percentage:.1f}%) </b>'
+      this.chartOptions1.series[0].name = "Total Budget"
+      this.chartOptions1.series[0].data = this.getTotalData(response.data)
+        this.chartOptions1Bar.series = this.getMonthlyBar1(response.data);
+        this.chartOptions2Bar.series = this.getMonthlyBar2(response.data);
+        this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
+        this.chartOptions3Bar.series = this.getYearlyBar2(response.data);       // this.chartOptions.series[2].data = this.getTransactionData(response.data)
       });
-     }
-     else{
-      await api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
-        .then((response) => {
-          this.data = this.list_to_tree_head(response.data)
-          });
-     }
-     await axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
-        this.department = res.data
-      })
-    },
-    // addLabel (args) {
-    //     this.$refs.dialogObj.hide();
-    //     let val = this.$refs.treegrid.getSelectedRecords()
-    //           api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((response) =>{
-    //             var id = {
-    //               labels :  response.data._id
-    //             }
-    //             api.put(`${apiUrl}`+`head/head/push/label/`+`${val[0]._id}`,id).then((response)=>{
-    //                 api.get(`${apiUrl}`+`head/head/get`)
-    //                 .then((response) => {
-    //                   this.data = response.data
-    //                   });
-    //             });
-    //             this.formdata=null
-    //           });
-            
-    //   },
-    toggle(args) {
-      this.hide = !this.hide
-    },
-    onChange(args) {
-        this.formdata.color = args.currentValue.hex.slice(1);
-        this.editlabel.color = args.currentValue.hex.slice(1);
-      }, 
-      addHead() {
-        this.$validator.validate().then((valid) =>{
-            if (!valid) {
+    }
+  }else{
+    this.isPermitted = true
+    api.get(`${apiUrl}`+`head/head/get`)
+    .then((response) => {
+      this.budgetdata = JSON.parse(JSON.stringify(response.data))
+      // this.chartOptions1.series[0].data = this.getLeftDataMonth(response.data)
+      this.chartOptions1.title.text = "Year's Budget - Total"
+      this.chartOptions1.tooltip.pointFormat = '{series.name}: <b>{point.y} ({point.percentage:.1f}%) </b>'
+      this.chartOptions1.series[0].name = "Total Budget"
+      this.chartOptions1.series[0].data = this.getTotalData(response.data)
+        this.chartOptions1Bar.series = this.getMonthlyBar1(response.data);
+        this.chartOptions2Bar.series = this.getMonthlyBar2(response.data);
+        this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
+        this.chartOptions3Bar.series = this.getYearlyBar2(response.data);       // this.chartOptions.series[2].data = this.getTransactionData(response.data)
+      });
+    api.get(`${apiUrl}department/dept/child/5d5bbb70965ce20a403bb705`).then((res) => {
+      this.dept = JSON.parse(JSON.stringify(res.data))
+      this.chartOptionsStacked.xAxis.categories = this.getDeptList(res.data)
+      this.chartOptionsStacked.series = this.getDeptHeadData(res.data)
 
-            }
-            else{
-              let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-              
-              api.post(`${apiUrl}`+`head/head/create`,this.input).then((response) =>{
-                if(this.$route.path == '/heads/list') {
-                this.$router.go(0)
-                    this.modal = false       
-
-                      this.input={
-                        labels:[]
-                      }  
-                    }
-                    else {
-                      this.$router.go(0)
-                    this.modal = false    
-
-                      this.input={department:this.key,labels:[]}
-                    }
-              });
-            
-              
-            }
-          });
-      },  
-      editHead() {
-        if(this.editinput.parent_head == undefined) {
-          this.editinput.parent_head =null
-        }
-        if(this.editinput.department == undefined) {
-          this.editinput.department =null
-        }
-        var sendData = {
-          name:this.editinput.name,
-          head_key:this.editinput.head_key,
-          accounting_head:this.editinput.accounting_head,
-          notes:this.editinput.notes,
-          department:this.editinput.department,
-          parent_head : this.editinput.parent_head
-        }
-        api.put(`${apiUrl}`+`head/head/update/one/`+`${this.editinput._id}`,sendData).then((response)=>{
-          console.log(response.data)
-            this.$router.go(0)
-          });
-        this.editmodal = false
-      },
-      rowSelected(args) {
-        this.selected = true
-      },
-      rowDeselecting(args) {
-        this.selected = false
-      },
-      actionComplete(args) {
-        if(args.action=="edit") {
-          var id=args.data._id
-          var sendData = {
-            name:args.data.name,
-            accounting_head:args.data.accounting_head,
-            notes:args.data.notes,
-            department:args.data.department,
-            head_key:args.data.head_key
-          }
-          api.put(`${apiUrl}`+`head/head/update/one/`+`${id}`,sendData).then((response) => {
-            this.$router.go(0)
-          });
-        }
-      },
-      beginEdit(args) {
-        if(args.rowData.parentItem==null) {
-          this.isRoot = true
-          if(this.getflag==0) {
-
-          this.head = this.data
-          this.getflag=1
-        }
-        }
-        else{
-          this.isRoot = false
-          if(this.getflag==0) {
-          this.head = this.data
-          this.getflag=1
-        }
-        }
-        
-
-        this.editmodal =true
-        this.editinput = args.rowData
-      },
-       onClick(args) {
-            let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-            if(data[0].user_type == "SuperAdmin" || 
-               data[0].user_type == "Staff" || 
-               data[0].user_type == "Vendor" ||
-               data[0].user_type == "Student" || 
-               data[0].user_type == "Guest") {
-                this.$router.push(`/usertype/per/`+`${data[0].user_type}`)
-            }
-            else {
-                this.$router.push(`/usertype/`+`${data[0].parentItem.user_type}/per/`+`${data[0]._id}`)
-            }
-       },
-
-       Add(args) {
-           let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
-            if(data.user_type == "SuperAdmin" || 
-                        data.user_type == "Staff" || 
-                        data.user_type == "Vendor" ||
-                        data.user_type == "Student" || 
-                        data.user_type == "Guest") {
-            }
-       },
-       failure: function(args) {
-        debugger;
-      },
-      list_to_tree_head(list) {
-          var map = {}, node, roots = [], i;
-          for (i = 0; i < list.length; i += 1) {
-              map[list[i]._id] = i; // initialize the map
-              list[i].children = []; // initialize the children
-          }
-          for (i = 0; i < list.length; i += 1) {
-              node = list[i];
-              if (node.parent_head != undefined ) {
-                  // if you have dangling branches check that map[node.parentId] exists
-                  list[map[node.parent_head]].children.push(node);
-              } else {
-                  roots.push(node);
-              }
-          }
-          this.convertDataHead(roots)
-          return roots
-      },
-      convertDataHead(roots) {
-        for(var i=0;i<roots.length;i++) {
-            if(roots[i].children.length !=0) {
-              this.convertDataHead(roots[i].children);
-            }
-            roots[i].id = roots[i]._id;
-          roots[i].label = roots[i].name;
-        if(roots[i].children.length<=0) {
-          delete roots[i].children
-        }
-        }
-      },
-      clickHandler(args){
-        if(this.getflag==0) {
-          this.head = this.data
-      this.getflag=1
-        }
-        
-        if(args.item.id === 'add') {
-          this.modal =true
-          }
-          if(args.item.id == 'collapse') {
-            this.$refs.treegrid.collapseAll()
-          }
-          if(args.item.id == 'expand') {
-            this.$refs.treegrid.expandAll()
-          }
-        if(args.item.id == 'delete') {
-                            var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
-                               api.delete(`${apiUrl}`+`head/head/delete/one/`+`${data[0].head_key}`).then((res)=>{
-                                  this.$router.go(0)
-                              });
-                              
-                            
-                          }
-        if (args.item.text === 'PDF Export') {
-            this.$refs.treegrid.pdfExport({hierarchyExportMode: 'All'});
-        }
-         if (args.item.text === 'CSV Export') {
-            this.$refs.treegrid.csvExport({hierarchyExportMode: 'All'});
-        }
-        if(args.item.id == 'label') {
-            if(this.$refs.treegrid.getSelectedRecords().length>0) {
-              this.$refs.dialogObj.show();
-            }
-            else { 
-              alert("Please select a record to label it");
-            }
-          }
-        if (args.item.id === 'small') {
-            this.rowHeight = 20;
-            }
-        
-        if (args.item.id === 'medium') {
-            this.rowHeight = 30;
-        }
-        if (args.item.id === 'big') {
-            this.rowHeight = 60;
-        }
-      },
-    //    rowDataBound(args) {
-    //             let value = this.$refs.rows.ej2Instances.value;
-    //             let rowval = getValue('taskID', args.data );
-    //             if (value.indexOf(rowval) !== -1) {
-    //                 addClass([args.row as Element], 'disableRow');
-    //             } else {
-    //                 removeClass([args.row as Element], 'disableRow');
-    //             }
-    //         },
+    })
+  }
+    // api.get(`${apiUrl}`+`head/head/get`)
+   //  .then((response) => {
+   //   this.budgetdata = JSON.parse(JSON.stringify(response.data))
+   //   // this.chartOptions1.series[0].data = this.getLeftDataMonth(response.data)
+   //   this.chartOptions1.title.text = "Year's Budget - Total"
+   //   this.chartOptions1.tooltip.pointFormat = '{series.name}: <b>{point.y} ({point.percentage:.1f}%) </b>'
+   //   this.chartOptions1.series[0].name = "Total Budget"
+   //   this.chartOptions1.series[0].data = this.getTotalData(response.data)
+   //     this.chartOptions1Bar.series = this.getMonthlyBar1(response.data);
+   //     this.chartOptions2Bar.series = this.getMonthlyBar2(response.data);
+   //     this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
+   //     this.chartOptions3Bar.series = this.getYearlyBar2(response.data);       // this.chartOptions.series[2].data = this.getTransactionData(response.data)
+   //    });
   },
+  methods: {
+    openPie(args) {
+      if(args.chartX) {
+        this.pieModal = true
+      }
+    },
+    openModal(args) {
+      if(args.point.category) {
+        var val = args.point.category.split('<span style="display:none">').pop()
+        var id = val.split('</span>')
+        api.get(`${apiUrl}department/dept/child/${id[0]}`).then((res) => {
+          if(res.data.length > 0) {
+            this.child_dept = JSON.parse(JSON.stringify(res.data))
+            this.chartOptionsStackedchild.xAxis.categories = this.getDeptList(res.data)
+            this.chartOptionsStackedchild.series = this.getDeptHeadData(res.data)
+            this.chartModal=true
+          }
+          else {
+            toast({
+              type: VueNotifications.types.info,
+              title: 'No Sub-Departments'
+            })
+          }
+        })
+      }
+      // api.get(`${apiUrl}department/dept/child/${args}`).then((res) => {
+      //   if(res.data.length > 0) {
+      //     this.child_dept = JSON.parse(JSON.stringify(res.data))
+      //     this.chartOptionsStackedchild.xAxis.categories = this.getDeptList(res.data)
+      //     this.chartOptionsStackedchild.series = this.getDeptHeadData(res.data)
+      //     this.chartModal=true
+      //   }
+      //   else {
+      //     toast({
+      //       type: VueNotifications.types.info,
+      //       title: 'No Sub-Departments'
+      //     })
+      //   }
+      // })
+    }, 
+    changeModal(args) {
+      if(args.point) {
+        if(args.point.category) {
+        var val = args.point.category.split('<span style="display:none">').pop()
+        var id = val.split('</span>')
+        api.get(`${apiUrl}department/dept/child/${id}`).then((res) => {
+          if(res.data.length > 0) {
+            this.child_dept = JSON.parse(JSON.stringify(res.data))
+            this.chartOptionsStackedchild.xAxis.categories = this.getDeptList(res.data)
+            this.chartOptionsStackedchild.series = this.getDeptHeadData(res.data)
+          }
+          else {
+            toast({
+              type: VueNotifications.types.info,
+              title: 'No Sub-Departments'
+            })
+          }
+        })
+      }
+      else{
+        api.get(`${apiUrl}department/dept/child/${args}`).then((res) => {
+          if(res.data.length > 0) {
+            this.child_dept = JSON.parse(JSON.stringify(res.data))
+            this.chartOptionsStackedchild.xAxis.categories = this.getDeptList(res.data)
+            this.chartOptionsStackedchild.series = this.getDeptHeadData(res.data)
+          }
+          else {
+            toast({
+              type: VueNotifications.types.info,
+              title: 'No Sub-Departments'
+            })
+          }
+        })
+      
+
+      }
+      }
+      else{
+        api.get(`${apiUrl}department/dept/child/${args}`).then((res) => {
+          if(res.data.length > 0) {
+            this.child_dept = JSON.parse(JSON.stringify(res.data))
+            this.chartOptionsStackedchild.xAxis.categories = this.getDeptList(res.data)
+            this.chartOptionsStackedchild.series = this.getDeptHeadData(res.data)
+          }
+          else {
+            toast({
+              type: VueNotifications.types.info,
+              title: 'No Sub-Departments'
+            })
+          }
+        })
+      
+
+      }
+            
+    }, 
+    getDeptList(nodes) {
+      var data = []
+      for(var i=0;i<nodes.length;i++) {
+        data.push(`<span>${nodes[i].department_name}</span><span style="display:none">${nodes[i]._id}</span>`);
+      }
+      return data
+    },
+    getDeptHeadData(nodes) {
+      var data = []
+      var total_data = []
+      var committed_data = []
+      var remaining_data = []
+      for(var i=0;i<nodes.length;i++) {
+        api.get(`${apiUrl}dropdown/head/only/${nodes[i]._id}`).then((res) => {
+          var total = 0
+          var committed = 0
+          var remaining = 0
+          for(var j=0;j<res.data.length;j++) {
+            total = total + res.data[j].permissible_values.reduce((a,b) => a+b,0)
+            committed = committed + res.data[j].permissible_values.reduce((a,b) => a+b,0) - res.data[j].amount_left.reduce((a,b) => a+b,0)
+            remaining = remaining + res.data[j].amount_left.reduce((a,b) => a+b,0)
+          }
+          total_data.push(total)
+          committed_data.push(committed)
+          remaining_data.push(remaining)
+        })
+      }
+      data.push({
+        name:"Total",
+        data:total_data
+      })
+      data.push({
+        name:"Committed",
+        data:committed_data
+      })
+      data.push({
+        name:"Remaining",
+        data:remaining_data
+      })
+      return data
+    },
+    toggleMonths(args) {
+      this.selectMonth = args.target.textContent
+    },
+    getMonth() {
+    var month="";
+    var d = new Date().getMonth()
+    switch(d) {
+      case 0: month = "January"
+              break;
+      case 1: month = "February"
+              break;
+      case 2: month = "March"
+              break;
+      case 3: month = "April"
+              break;
+      case 4: month = "May"
+              break;
+     case 5: month = "June"
+              break;        
+      case 6: month = "July"
+              break;
+      case 7: month = "August"
+              break;
+      case 8: month = "September"
+              break;
+      case 9: month = "October"
+              break;        
+      case 10: month = "November"
+              break;        
+      case 11: month = "December"
+              break;
+     }
+     return month
+    },
+    switchMonth(d) {
+      var month=""
+      switch(d) {
+      case 0: month = "January"
+              break;
+      case 1: month = "February"
+              break;
+      case 2: month = "March"
+              break;
+      case 3: month = "April"
+              break;
+      case 4: month = "May"
+              break;
+     case 5: month = "June"
+              break;        
+      case 6: month = "July"
+              break;
+      case 7: month = "August"
+              break;
+      case 8: month = "September"
+              break;
+      case 9: month = "October"
+              break;        
+      case 10: month = "November"
+              break;        
+      case 11: month = "December"
+              break;
+     }
+     return month
+    },
+    getMonthlyBar1(new_data) {
+      var data =[]
+      for(var i=0;i<new_data.length;i++) {
+        data[i] = {name:null,data:null}
+      }
+      for(var i=0;i<new_data.length;i++) {
+        data[i].name = new_data[i].name
+        data[i].data = new_data[i].permissible_values
+      }
+      return data
+    },
+    getMonthlyBar2(new_data) {
+      var data =[]
+      for(var i=0;i<new_data.length;i++) {
+        data[i] = {name:null,data:null}
+      }
+      for(var i=0;i<new_data.length;i++) {
+        data[i].name = new_data[i].name
+        data[i].data = new_data[i].amount_left
+      }
+      return data
+    },
+    getYearlyBar1(new_data) {
+      var data =[]
+      for(var i=0;i<new_data.length;i++) {
+        data.push("")
+        new_data[i].total = 0
+      }
+      for(var i=0;i<new_data.length;i++) {
+        for(var j=0;j<12;j++) {
+          new_data[i].total = new_data[i].total + new_data[i].permissible_values[j]
+        }
+      }
+      new_data.sort(function(a, b){
+        return a.total-b.total
+    })
+    new_data.reverse()
+    if(new_data.length>5) {
+      for(var i=0;i<5;i++) {
+          data[i] = new_data[i].name
+        }
+    }
+    else {
+      for(var i=0;i<new_data.length;i++) {
+          data[i] = new_data[i].name
+        }
+    }
+      return data
+    },
+    getYearlyBar2(new_data) {
+      var data =[]
+      var total = 0
+      for(var i=0;i<3;i++) {
+        data[i] = {name:null,data:[]}
+      }
+      for(var i=0;i<new_data.length;i++) {
+        new_data[i].total = 0
+      }
+      for(var i=0;i<new_data.length;i++) {
+        for(var j=0;j<12;j++) {
+          new_data[i].total = new_data[i].total + new_data[i].permissible_values[j]
+        }
+      }
+      new_data.sort(function(a, b){
+        return a.total-b.total
+    })
+    new_data.reverse()
+      for(var i=0;i<3;i++) {
+        if(i ==0) {
+          data[i].name = "Total"
+          for(var j=0;j<new_data.length;j++) {
+            total = 0
+            for(var k=0;k<12;k++) {
+              total = total + new_data[j].permissible_values[k]
+            }
+            data[i].data.push(total)
+          }
+        }
+        if(i ==1) {
+          data[i].name = "Committed"
+          for(var j=0;j<new_data.length;j++) {
+            total = 0
+            for(var k=0;k<12;k++) {
+              total = total + (new_data[j].permissible_values[k]-new_data[j].amount_left[k])
+            }
+            data[i].data.push(total)
+          }
+        }
+        if(i ==2) {
+          data[i].name = "Remaining"
+          for(var j=0;j<new_data.length;j++) {
+            total = 0
+            for(var k=0;k<12;k++) {
+              total = total + new_data[j].amount_left[k]
+            }
+            data[i].data.push(total)
+          }
+        }
+      }
+      return data
+    },
+    toggle(args) {
+      this.option = args.target.text
+      this.selectMonth = "Yearly"
+    },
+    toggle1(args) {
+      this.option1 = args.target.text
+    },
+    getTotalData(new_data) {
+    var data = []
+    for(var i=0;i<new_data.length;i++) {
+      data[i] = {name:new_data[i].name,y:0}
+      for(var j=0;j<12;j++) {
+        data[i].y = data[i].y + new_data[i].permissible_values[j]
+      }
+    }
+    data[0].selected=true
+    return data;
+  },
+  getApprovedData(new_data) {
+    var data = []
+    var total = []
+    var i=0;
+    for(i=0;i<new_data.length;i++) {
+      total.push(0)
+      data[i] = {name:new_data[i].name,y:0,more:0}
+      for(var j=0;j<12;j++) {
+        data[i].y = data[i].y + (new_data[i].permissible_values[j] - new_data[i].amount_left[j])
+        total[i] = total[i] + new_data[i].permissible_values[j]
+      }
+      data[i].more = data[i].y/total[i]*100
+  }
+    return data;
+  },
+  getLeftData(new_data) {
+    var data = []
+    var total = []
+    var i=0;
+    for(i=0;i<new_data.length;i++) {
+      total.push(0)
+      data[i] = {name:new_data[i].name,y:0,more:0}
+      for(var j=0;j<12;j++) {
+        data[i].y = data[i].y + (new_data[i].amount_left[j])
+        total[i] = total[i] + new_data[i].permissible_values[j]
+      }
+      data[i].more = data[i].y/total[i]*100
+  }
   
-        
+    return data;
+  },
+  getLeftDataMonth(new_data,d) {
+    var data = []
+    var i=0;
+    for(i=0;i<new_data.length;i++) {
+      data[i]={name:new_data[i].name,y:new_data[i].amount_left[d],more:new_data[i].amount_left[d]/new_data[i].permissible_values[d]*100}
+    }
+    return data;
+  },
+  getTotalDataMonth(new_data,d) {
+    var data = []
+    for(var i=0;i<new_data.length;i++) {
+      data[i] = {name:new_data[i].name,y:new_data[i].permissible_values[d]}
+    }
+    data[0].selected=true
+    return data;
+  },
+  getApprovedDataMonth(new_data,d) {
+    var data = []
+    var total = 0
+    var i=0;
+    for(i=0;i<new_data.length;i++) {
+      data[i] = {name:new_data[i].name,y:new_data[i].permissible_values[d] - new_data[i].amount_left[d],more:(new_data[i].permissible_values[d] - new_data[i].amount_left[d])/new_data[i].permissible_values[d]*100}
+  }
+    return data;
+  },
+  getTransactionData(new_data) {
+    var data = []
+    for(var i=0;i<new_data.length;i++) {
+      api.get(`${apiUrl}transaction/trans/find/by/${new_data[i]._id}`).then((res) => {
+        data[i] = {y:res.data.amount}
+      })
+    }
+  }
+  }
 };
 </script>
-
-
 <style>
-@import '../styles/ejs-vue-base.css';
-@import "../styles/ej2-vue-richtexteditor/styles/material.css";
-@import "../styles/ej2-vue-lists/styles/material.css";
-@import "../styles/ej2-vue-navigations/styles/material.css";
-@import "../styles/ej2-vue-popups/styles/material.css";
-@import "../styles/ej2-vue-splitbuttons/styles/material.css";
-@import "../styles/ej2-vue-buttons/styles/material.css";
-@import "../styles/ej2-vue-inputs/styles/material.css";
-</style>
-<style>
-#label {
-  font-size:12px;
+#legend {
+  color:grey;
+  font-size:14px
 }
-  .badge-f44336 {
-    background-color:#f44336;
-    color:white;
-  }
-  .badge-e91e63{
-    background-color:#e91e63;
-    color:white;
-  }
-  .badge-9c27b0{
-    background-color:#9c27b0;
-    color:white;
-  }
-  .badge-673ab7{
-    background-color:#673ab7;
-    color:white;
-  }
-  .badge-2196f3{
-    background-color:#2196f3;
-    color:white;
-  }
-  .badge-03a9f4{
-    background-color:#03a9f4;
-    color:white;
-  }
-  .badge-00bcd4{
-    background-color:#00bcd4;
-    color:white;
-  }
-  .badge-009688{
-    background-color:#009688;
-    color:white;
-  }
-  .badge-8bc34a{
-    background-color:#8bc34a;
-    color:white;
-  }
-  .badge-cddc39{
-    background-color:#cddc39;
-    color:black;
-  }
-  .badge-ffeb3b{
-    background-color:#ffeb3b;
-    color:black;
-  }
-  .badge-ffc107{
-    background-color:#ffc107;
-    color:black;
-  }
-    @font-face {
-font-family: 'e-grid-rowheight';
-src:
-url(data:application/x-font-ttf;charset=utf-8;base64,AAEAAAAKAIAAAwAgT1MvMj1uSfkAAAEoAAAAVmNtYXDOLM5rAAABkAAAAEJnbHlm/CWF1QAAAeAAAAGIaGVhZBRfqPEAAADQAAAANmhoZWEIUQQFAAAArAAAACRobXR4EAAAAAAAAYAAAAAQbG9jYQDyALYAAAHUAAAACm1heHABFAB4AAABCAAAACBuYW1l2jjwtgAAA2gAAAKRcG9zdJYOJ5oAAAX8AAAARgABAAAEAAAAAFwEAAAAAAAD9AABAAAAAAAAAAAAAAAAAAAABAABAAAAAQAAWBvKcl8PPPUACwQAAAAAANimsgAAAAAA2KayAAAAAAAD9AP0AAAACAACAAAAAAAAAAEAAAAEAGwABgAAAAAAAgAAAAoACgAAAP8AAAAAAAAAAQQAAZAABQAAAokCzAAAAI8CiQLMAAAB6wAyAQgAAAIABQMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUGZFZABA5wHnBwQAAAAAXAQAAAAAAAABAAAAAAAABAAAAAQAAAAEAAAABAAAAAAAAAIAAAADAAAAFAADAAEAAAAUAAQALgAAAAYABAABAALnAucH//8AAOcB5wf//wAAAAAAAQAGAAgAAAACAAEAAwAAAAAAAAAuALYAxAAAAAYAAAAAA8UD9AADAAcACwAPABMAFwAANyE1ISchNSE1ITUhNyE1ITchNSEnITUhPQOH/HkCA4f8eQOH/HkCA4f8eQEDh/x5AQOH/HkMX1dfVl9WXlVfV18AAAAAAwAAAAAD9ANtACMARwBrAAA3FR8HIT8HNS8HIQ8GAxUfByE/BzUvByEPBgMVHwchPwc1LwchDwYMAQIDBQUHBwgDnAgHBwUFAwIBAQIDBQUHBwj8ZAgHBwUFAwIBAQIDBQUHBwgDnAgHBwUFAwIBAQIDBQUHBwj8ZAgHBwUFAwIBAQIDBQUHBwgDnAgHBwUFAwIBAQIDBQUHBwj8ZAgHBwUFAwLgJwgIBgYEBAIBAQIEBAYGCAgnCAcHBQUDAgEBAgMFBQcHASsmCQcHBQUDAgEBAgMFBQcHCSYICAcFBQMCAQECAwUFBwgBLCcIBwcFBQMCAQECAwUFBwcIJwgIBgYEBAIBAQIEBAYGCAAAAAABAAAAAAP0AlIAAwAAEyE1IQwD6PwYAa2mAAAAAAASAN4AAQAAAAAAAAABAAAAAQAAAAAAAQAQAAEAAQAAAAAAAgAHABEAAQAAAAAAAwAQABgAAQAAAAAABAAQACgAAQAAAAAABQALADgAAQAAAAAABgAQAEMAAQAAAAAACgAsAFMAAQAAAAAACwASAH8AAwABBAkAAAACAJEAAwABBAkAAQAgAJMAAwABBAkAAgAOALMAAwABBAkAAwAgAMEAAwABBAkABAAgAOEAAwABBAkABQAWAQEAAwABBAkABgAgARcAAwABBAkACgBYATcAAwABBAkACwAkAY8gZS1ncmlkLXJvd2hlaWdodFJlZ3VsYXJlLWdyaWQtcm93aGVpZ2h0ZS1ncmlkLXJvd2hlaWdodFZlcnNpb24gMS4wZS1ncmlkLXJvd2hlaWdodEZvbnQgZ2VuZXJhdGVkIHVzaW5nIFN5bmNmdXNpb24gTWV0cm8gU3R1ZGlvd3d3LnN5bmNmdXNpb24uY29tACAAZQAtAGcAcgBpAGQALQByAG8AdwBoAGUAaQBnAGgAdABSAGUAZwB1AGwAYQByAGUALQBnAHIAaQBkAC0AcgBvAHcAaABlAGkAZwBoAHQAZQAtAGcAcgBpAGQALQByAG8AdwBoAGUAaQBnAGgAdABWAGUAcgBzAGkAbwBuACAAMQAuADAAZQAtAGcAcgBpAGQALQByAG8AdwBoAGUAaQBnAGgAdABGAG8AbgB0ACAAZwBlAG4AZQByAGEAdABlAGQAIAB1AHMAaQBuAGcAIABTAHkAbgBjAGYAdQBzAGkAbwBuACAATQBlAHQAcgBvACAAUwB0AHUAZABpAG8AdwB3AHcALgBzAHkAbgBjAGYAdQBzAGkAbwBuAC4AYwBvAG0AAAAAAgAAAAAAAAAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAQIBAwEEAQUADWFsaWduLWp1c3RpZnkEbWVudQVtaW51cwAAAAA=) format('truetype');
-font-weight: normal;
-font-style: normal;
+#legend:focus {
+  outline: 0;
+    -webkit-box-shadow: 0 0 0 0 rgba(32, 168, 216, 0.25);
+    box-shadow: 0 0 0 0 rgba(32, 168, 216, 0.25);
 }
-
-    .e-small-icon::before {
-        font-family: 'e-grid-rowheight';
-        content: '\e707';
-    }
-
-   .e-medium-icon::before {
-        font-family: 'e-grid-rowheight';
-        content: '\e701';
-    }
-
-    .e-big-icon::before {
-        font-family: 'e-grid-rowheight';
-        content: '\e702';
-    }
-    #errors {
-  color:red;
+#legend:focus {
+  font-weight: bold;
+  color:black;
+}
+.chart {
+  max-width:550px;
+}
+.chart2 {
+  max-width:100%;
 }
 </style>

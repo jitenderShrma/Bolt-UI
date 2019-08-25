@@ -18,13 +18,13 @@
             :rowDeselecting="rowDeselecting"
             :enableCollapseAll="false"
             :toolbar="toolbar" :toolbarClick="clickHandler"
-            :allowSorting='true' :recordDoubleClick="editPage" :allowTextWrap='true'  :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
+            :allowSorting='true' :recordDoubleClick="editPage" :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <e-column :visible="false" field='id'></e-column>
                     <e-column  field='label' headerText='Designation Name' ></e-column>
-                    <e-column  field='labels[0].label_name' :allowEditing="false" :template="labelTemplate" headerText='Labels' ></e-column>
                     <e-column field='department.department_name' headerText='Department' width='170' ></e-column>
+                    <e-column  field='labels[0].label_name' :allowEditing="false" :template="labelTemplate" headerText='Labels' ></e-column>
                      <!-- <e-column headerText='Manage Permissions' width='140' :commands='commands'></e-column> -->
                 </e-columns>
             </ejs-treegrid>

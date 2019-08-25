@@ -45,22 +45,24 @@
               </e-items>
             </ejs-toolbar>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true' :allowReordering='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc" :allowTextWrap='true' :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler" :rowSelected="rowSelected"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true' :allowReordering='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc" :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler" :rowSelected="rowSelected"
                 :height="height" :enableHover='false'> 
                 <e-columns>
                     <e-column :visible="enableColumn" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
                     <e-column field='ref_id' :template="buttonLM" headerText='Ref ID' width="167"  :filter='filter' ></e-column>
                     <e-column :sortComparer='sortComparer' field='status' headerText='Status' width="137" :filter='filter' ></e-column>
+                    <e-column field='amount' headerText='Amount' width="126" :filter='filter' ></e-column>
+                    <e-column field='department.department_name' headerText='Department' width="145" :filter='filter' ></e-column>
+                    <e-column field='budget_head.name' headerText='Head' width="110" :filter='filter' ></e-column>
                     <e-column :visible="true" field="last_updated" headerText='Last Updated At' :template="dateTemplate"></e-column>
                     <e-column field='request_by.user_name' width="120" headerText='Req By'  :filter='filter' ></e-column>
                     <e-column field='month' :template="monthTemplate" width="117" headerText='Month' :filter='filter' ></e-column>
-                    <e-column field='amount' headerText='Amount' width="126" :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type' width="108" :filter='filter' ></e-column>
                     <e-column field='labels[0].label_name' width="116" headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
                     
                     <e-column field='recurring_rate' headerText='Recur Rate' width="138" :filter='filter' ></e-column>
-                    <e-column field='budget_head.name' headerText='Head' width="110" :filter='filter' ></e-column>
-                    <e-column field='department.department_name' headerText='Department' width="145" :filter='filter' ></e-column>
+                    
+                    
                     <e-column field='description' headerText='Description' width="143" :filter='filter' ></e-column>
                 </e-columns>
                 </ejs-grid>
@@ -727,8 +729,7 @@ export default {
                 }
                 if(args.item.id == "release") {
                   if(data.length>0) {
-
-                    axios.get(`${apiUrl}approvals/preApp/release/${data[0].ref_id}`).then((res) => {
+                    api.get(`${apiUrl}approvals/preApp/release/${data[0].ref_id}`).then((res) => {
                         console.log(res.data)
                         api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
                           console.log(response.data)
@@ -1000,7 +1001,6 @@ export default {
   background-color: red;
 }
 #toggler {
-  float:right;
   margin:10px;
   border-radius: 50px;
   height: 40px;

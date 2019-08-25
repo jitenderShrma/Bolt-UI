@@ -27,7 +27,8 @@
         <b-row>
           <b-col sm="6">
             <span style="color:red;float:right;height:20px;font-size:20px">*</span>
-            <ejs-textbox required name="Password" v-validate="'required'" type="password" v-model="input.password" floatLabelType="Auto" :placeholder="$ml.get('password')"></ejs-textbox>
+            <ejs-textbox ref="password" required name="Password" v-validate="'required'" type="password" v-model="input.password" floatLabelType="Auto" :placeholder="$ml.get('password')"></ejs-textbox>
+            <span class="icon-eye" @click="seePassword" style="cursor:pointer;position:relative;top:-34%;float: right;"></span>
           </b-col>
           <b-col sm="6">
             <span style="color:red;float:right;height:5px;font-size:20px;">*</span>
@@ -1728,9 +1729,17 @@ export default {
       }
       }
           })
-      
+
       
 
+  },
+  seePassword() {
+    if(this.$refs.password.type=="password") {
+      this.$refs.password.type = "text"
+    }
+    else {
+      this.$refs.password.type="password"
+    }
   }
   }
 };
