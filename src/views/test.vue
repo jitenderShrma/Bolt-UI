@@ -4,22 +4,18 @@
       <b-row v-if="isPermitted">
         <b-col sm="6" style="padding-right:3px; padding-left:0px">
           <b-card no-body style="height:80vh">
-            <b-card-body @click="openModal">
+            <b-card-body>
                   <b-dropdown class="float-right" variant="transparent p-0" right no-caret>
                     <template slot="button-content">
                       <i class="icon-settings" style="color:black"></i>
-                    </template><!-- 
-                    <b-dropdown-item @click="toggle1">Total Budget</b-dropdown-item>
-                    <b-dropdown-item @click="toggle1">Approved Budget</b-dropdown-item> -->
-                    <b-dropdown-item v-for="(run,i) in dept" @click="openModal(`${dept[i]._id}`)" :key="i">{{dept[i].department_name}}</b-dropdown-item>
+                    </template>
+                    <b-dropdown-item @click="toggle1">Budget By Heads</b-dropdown-item>
+                    <b-dropdown-item @click="toggle1">Budget by Departments</b-dropdown-item>
                   </b-dropdown>
-                  <div v-if="option1 == 'Total Budget'">
-                <highcharts class="chart" :options="chartOptions1Bar" :updateArgs="updateArgs"></highcharts>
+              <div v-if="option1 == 'Budget By Heads'">
+                <highcharts class="chart" :options="chartOptions3Bar" :updateArgs="updateArgs"></highcharts>
               </div>
-              <div v-if="option1 == 'Approved Budget'">
-                <highcharts class="chart" :options="chartOptions2Bar" :updateArgs="updateArgs"></highcharts>
-              </div>
-              <div v-if="option1 == 'Yearly Budget'">
+              <div v-else @click="openModal">
                 <highcharts class="chart"  :options="chartOptionsStacked" :updateArgs="updateArgs"></highcharts>
                 <div>
                   <!-- <b-row>
@@ -88,14 +84,16 @@
 
         <template slot="button-content">
           <i class="icon-settings" style="color:black"></i>
-        </template><!-- 
-        <b-dropdown-item @click="toggle1">Total Budget</b-dropdown-item>
-        <b-dropdown-item @click="toggle1">Approved Budget</b-dropdown-item> -->
-        <b-dropdown-item v-for="(run,i) in child_dept" @click="changeModal(`${child_dept[i]._id}`)" :key="i">{{child_dept[i].department_name}}</b-dropdown-item>
+        </template>
+        <b-dropdown-item @click="toggle1">Budget By Heads</b-dropdown-item>
+        <b-dropdown-item @click="toggle1">Budget by Departments</b-dropdown-item>
       </b-dropdown>
-      <div @click="changeModal">
-        <highcharts class="chart2"  :options="chartOptionsStackedchild" :updateArgs="updateArgs"></highcharts>
+      <div v-if="option1=='Budget By Heads'">
+        <highcharts class="chart" :options="chartOptions3Bar" :updateArgs="updateArgs"></highcharts>
       </div>
+      <div @click="changeModal" v-if="option1=='Budget by Departments'">
+        <highcharts class="chart2"  :options="chartOptionsStackedchild" :updateArgs="updateArgs"></highcharts>
+      
                 <div>
                   <!-- <b-row>
                   <b-col v-for="(run,i) in child_dept" :key="i">
@@ -113,6 +111,7 @@
                     REMAINING : {{summary_remaining_child()}}
                 </b-row>
                 </div> 
+              </div>
     </b-modal>
     <b-modal size="xl" class="modal-primary" v-model="pieModal" @ok="pieModal = false" hide-footer>
       <b-card no-body>
@@ -242,7 +241,7 @@ export default {
       selectMonth : "Yearly",
       dept:[],
       option:"Total Budget",
-      option1:"Yearly Budget",
+      option1:"Budget By Departments",
       updateArgs: [true, true, {duration: 1000}],
       chartOptions1: {
         tooltip: {
@@ -299,6 +298,7 @@ export default {
         },
         series: [{data:[]},{data:[]},{data:[]}]
     },
+    tree_dept:[],
     chartOptionsStackedchild: {
         tooltip: {
             pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.2f}%)<br/>',
@@ -391,6 +391,8 @@ export default {
     },
     series: []
     },
+    child_flag:false,
+    child_tree_dept:[],
     chartOptions3Bar: {
         chart: {
           type: 'column',
@@ -413,6 +415,14 @@ export default {
     }
   },
   watch:{
+    'chartModal' : function() {
+      if(this.chartModal) {
+        this.child_flag = true
+      }
+      else{
+        this.child_flag=false
+      }
+    },
     'option' : function(){
       if(this.option =="Total Budget") {
         this.chartOptions1.tooltip.pointFormat = '{series.name}: <b>{point.y} ({point.percentage:.1f}%) </b>'
@@ -715,9 +725,9 @@ export default {
       });
     api.get(`${apiUrl}department/dept/child/5d5bbb70965ce20a403bb705`).then((res) => {
       this.dept = JSON.parse(JSON.stringify(res.data))
+      this.tree_dept = this.list_to_tree_dept(res.data)
       this.chartOptionsStacked.xAxis.categories = this.getDeptList(res.data)
-      this.chartOptionsStacked.series = this.getDeptHeadData(res.data)
-
+      this.chartOptionsStacked.series = [{name:"Total",data:this.tree_dept.total_data},{name:"Committed",data:this.tree_dept.committed_data},{name:"Remaining",data:this.tree_dept.remaining_data}]
     })
   }
     // api.get(`${apiUrl}`+`head/head/get`)
@@ -735,6 +745,79 @@ export default {
    //    });
   },
   methods: {
+    child_list_to_tree_dept(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_department != undefined && this.child_checkExist(node.parent_department)) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_department]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.getHeadBudget(roots)
+          return roots
+      },
+      child_checkExist(node) {
+            for (var i=0; i < this.child_dept.length; i++) {
+              if (this.child_dept[i]._id == node)
+                  return true;
+          }
+        
+        return false;
+      },
+    list_to_tree_dept(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_department != undefined && this.checkExist(node.parent_department)) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_department]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.getHeadBudget(roots)
+          return roots
+      },
+      getHeadBudget(roots) {
+        roots.total_data = []
+        roots.committed_data = []
+        roots.remaining_data = []
+        for(var i=0;i<roots.length;i++) {
+            api.get(`${apiUrl}dropdown/head/only/${roots[i]._id}`).then((res) => {
+              console.log(res.data)
+            var total = 0
+            var committed = 0
+            var remaining = 0
+            for(var j=0;j<res.data.length;j++) {
+              total = total + res.data[j].permissible_values.reduce((a,b) => a+b,0)
+              committed = committed + res.data[j].permissible_values.reduce((a,b) => a+b,0) - res.data[j].amount_left.reduce((a,b) => a+b,0)
+              remaining = remaining + res.data[j].amount_left.reduce((a,b) => a+b,0)
+            }
+            roots.total_data.push(total)
+            roots.committed_data.push(committed)
+            roots.remaining_data.push(remaining)
+          })
+        }
+        return roots
+      },
+      checkExist(node) {
+            for (var i=0; i < this.dept.length; i++) {
+              if (this.dept[i]._id == node)
+                  return true;
+          }
+        return false;
+      },
     openPie(args) {
       if(args.chartX) {
         this.pieModal = true
@@ -746,10 +829,11 @@ export default {
         var id = val.split('</span>')
         api.get(`${apiUrl}department/dept/child/${id[0]}`).then((res) => {
           if(res.data.length > 0) {
+            this.chartModal = true
             this.child_dept = JSON.parse(JSON.stringify(res.data))
+            this.child_tree_dept = this.child_list_to_tree_dept(res.data)
             this.chartOptionsStackedchild.xAxis.categories = this.getDeptList(res.data)
-            this.chartOptionsStackedchild.series = this.getDeptHeadData(res.data)
-            this.chartModal=true
+            this.chartOptionsStackedchild.series = [{name:"Total",data:this.child_tree_dept.total_data},{name:"Committed",data:this.child_tree_dept.committed_data},{name:"Remaining",data:this.child_tree_dept.remaining_data}]
           }
           else {
             toast({
@@ -779,11 +863,12 @@ export default {
         if(args.point.category) {
         var val = args.point.category.split('<span style="display:none">').pop()
         var id = val.split('</span>')
-        api.get(`${apiUrl}department/dept/child/${id}`).then((res) => {
+        api.get(`${apiUrl}department/dept/child/${id[0]}`).then((res) => {
           if(res.data.length > 0) {
             this.child_dept = JSON.parse(JSON.stringify(res.data))
+            this.child_tree_dept = this.child_list_to_tree_dept(res.data)
             this.chartOptionsStackedchild.xAxis.categories = this.getDeptList(res.data)
-            this.chartOptionsStackedchild.series = this.getDeptHeadData(res.data)
+            this.chartOptionsStackedchild.series = [{name:"Total",data:this.child_tree_dept.total_data},{name:"Committed",data:this.child_tree_dept.committed_data},{name:"Remaining",data:this.child_tree_dept.remaining_data}]
           }
           else {
             toast({
@@ -793,42 +878,13 @@ export default {
           }
         })
       }
-      else{
-        api.get(`${apiUrl}department/dept/child/${args}`).then((res) => {
-          if(res.data.length > 0) {
-            this.child_dept = JSON.parse(JSON.stringify(res.data))
-            this.chartOptionsStackedchild.xAxis.categories = this.getDeptList(res.data)
-            this.chartOptionsStackedchild.series = this.getDeptHeadData(res.data)
-          }
-          else {
-            toast({
+    }
+    else{
+      toast({
               type: VueNotifications.types.info,
               title: 'No Sub-Departments'
-            })
-          }
-        })
-      
-
-      }
-      }
-      else{
-        api.get(`${apiUrl}department/dept/child/${args}`).then((res) => {
-          if(res.data.length > 0) {
-            this.child_dept = JSON.parse(JSON.stringify(res.data))
-            this.chartOptionsStackedchild.xAxis.categories = this.getDeptList(res.data)
-            this.chartOptionsStackedchild.series = this.getDeptHeadData(res.data)
-          }
-          else {
-            toast({
-              type: VueNotifications.types.info,
-              title: 'No Sub-Departments'
-            })
-          }
-        })
-      
-
-      }
-            
+      })
+    }     
     }, 
     getDeptList(nodes) {
       var data = []
@@ -1042,6 +1098,7 @@ export default {
     },
     toggle1(args) {
       this.option1 = args.target.text
+      console.log(args.target.text)
     },
     getTotalData(new_data) {
     var data = []
