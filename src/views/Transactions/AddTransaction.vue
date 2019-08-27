@@ -3,29 +3,49 @@
 
 	<b-row>
       <b-col md="12">
-        <b-card>
+        <b-card style="position:relative">
+          <b-card class="bg-info" v-if="verified" style="position: absolute; top: 20%; right: 1%;">
+            <b-row>
+              <b-col>
+                Total Approved Amount
+              </b-col>
+              <b-col>
+                Amount Used
+              </b-col>
+              <b-col>
+                Amount Left
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                {{totalamount}}
+              </b-col>
+              <b-col>
+                {{totalamount - boundaryAmount}}
+              </b-col>
+              <b-col>
+                {{boundaryAmount}}
+              </b-col>
+            </b-row>
+          </b-card>
           <div slot="header">
             <span v-text="$ml.get('transactionform')"></span>
           </div>
           <b-form action="UserList" v-on:keydown.enter.prevent="prevent" v-on:submit.prevent="sendData">
           <b-form-group
-            :label="$ml.get('approval')"
+            :label="$ml.get('refid')"
             label-for="basicName"
-            :label-cols="3"
+            :label-cols="2"
             :horizontal="true"
             >
             <b-row>
-              <b-col sm="4">
-              <b-form-group>
-                  <label v-text="$ml.get('isapproved')"></label>
-                  <br>
-                  <c-switch class="mx-1" color="secondary" unchecked name="switch1" v-model="input.isApproved" @change="changeVerified" :uncheckedValue="false" :checkedValue="true"/>
-                </b-form-group>
-                </b-col>
-                <b-col sm="4">
-                <div v-if="input.isApproved">
-                    <ejs-textbox v-on:keydown.enter='changeFields' floatLabelType="Auto" v-model="input.approvalCode" :placeholder="$ml.get('pholdapprovalcode')" ></ejs-textbox>
-                </div>
+                <b-col sm="8">
+                  <b-form v-on:submit.prevent="changeFields">
+                    <b-row>
+                    <b-col>
+                      <ejs-textbox v-on:keydown.enter='changeFields' v-model="input.approvalCode" :placeholder="$ml.get('pholdrefid')" ></ejs-textbox>
+                    </b-col><b-col><b-button type="submit" size="sm" variant="primary" v-text="$ml.get('go')"><i class="fa fa-dot-circle-o"></i></b-button></b-col></b-row>
+                  </b-form>
                 </b-col>
               </b-row>
             </b-form-group>
@@ -33,12 +53,11 @@
           <b-form-group
             :label="$ml.get('transactype')"
             label-for="basicName"
-            :label-cols="3"
+            :label-cols="2"
             :horizontal="true">
             <b-row>
             <b-col sm="4">
             <cool-select
-                :disabled="input.isApproved"
                 v-model="input.transaction_type"
                 :items="types"
                 :placeholder="$ml.get('pholdtransactype')"
@@ -50,7 +69,7 @@
           <b-form-group
             :label="$ml.get('transaccategory')"
             label-for="basicName"
-            :label-cols="3"
+            :label-cols="2"
             :horizontal="true">
             <b-row>
             <b-col sm="4">
@@ -68,7 +87,7 @@
           <b-form-group
               :label="$ml.get('department')"
               label-for="basicText"
-              :label-cols="3"
+              :label-cols="2"
               :horizontal="true">
               <b-row>
                 <b-col sm="4">
@@ -79,7 +98,7 @@
             <b-form-group
               :label="$ml.get('head')"
               label-for="basicText"
-              :label-cols="3"
+              :label-cols="2"
               :horizontal="true">
               <b-row>
                 <b-col sm="4">
@@ -90,7 +109,7 @@
             <b-form-group
               :label="$ml.get('month')"
               label-for="basicText"
-              :label-cols="3"
+              :label-cols="2"
               :horizontal="true">
               <b-row>
               <b-col sm="4">
@@ -108,7 +127,7 @@
             <b-form-group
               :label="$ml.get('transacammount')"
               label-for="basicText"
-              :label-cols="3"
+              :label-cols="2"
               :horizontal="true">
               <b-row>
               <b-col sm="2">
@@ -130,7 +149,7 @@
           <b-form-group
             :label="$ml.get('po')"
             label-for="basicName"
-            :label-cols="3"
+            :label-cols="2"
             :horizontal="true">
             <b-row>
               <b-col sm="4">
@@ -172,7 +191,7 @@
           <b-form-group
             :label="$ml.get('quotations')"
             label-for="basicName"
-            :label-cols="3"
+            :label-cols="2"
             :horizontal="true">
             <b-row>
               <b-col sm="4">
@@ -191,7 +210,7 @@
           <b-form-group
             :label="$ml.get('vendorcompany')"
             label-for="basicName"
-            :label-cols="3"
+            :label-cols="2"
             :horizontal="true"
             >
             <b-row>
@@ -211,7 +230,7 @@
           </b-form-group>
         </div>
         </div>
-           <div slot="footer">
+           <div slot="footer" v-if="verified">
               <b-button :disabled="!verified" type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
           </div>
           </b-form>
@@ -342,7 +361,7 @@
              <b-form-group
               :label="$ml.get('vendorcompany')"
               label-for="basicName"
-              :label-cols="3"
+              :label-cols="2"
               :horizontal="true"
               >
               <b-row>
@@ -378,7 +397,7 @@
             <b-form-group
               :label="$ml.get('uploadquote')"
               label-for="basicName"
-              :label-cols="3"
+              :label-cols="2"
               :horizontal="true">
               <b-row>
                 <b-col sm="12">
@@ -403,7 +422,7 @@
                   <b-form-group
               :label="$ml.get('purchaseorder')"
               label-for="basicName"
-              :label-cols="3"
+              :label-cols="2"
               :horizontal="true"
               >
               <b-row>
@@ -447,7 +466,6 @@
                 </b-col>
               </b-row>
               
-            
              <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
             </b-form>
           </b-modal>
@@ -579,6 +597,7 @@ Vue.use(TextBoxPlugin);
         phone : "",
         email : ""
       },
+      totalamount:0,
         vendor : {
         vendor_company:"",
         pan:"",
@@ -616,11 +635,9 @@ Vue.use(TextBoxPlugin);
 				],
         disableCategory:false,
 				category:[
-					"Purchase Order","Bill","Invoice","Reimburstement"
+					"Purchase Order","Bill/Invoice","Imprest"
 				],
         month:[ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"}
-        
-        
         ],
         department:[
         ],
@@ -767,7 +784,7 @@ Vue.use(TextBoxPlugin);
             e.updateData(department, query);
         },
         sendData() {
-          if(this.input.isApproved == true && this.input.approvalCode!=null) {
+          if(this.input.approvalCode!=null) {
             this.input.status = "Approved"
           }
           if(this.input.amount > this.boundaryAmount) {
@@ -839,7 +856,7 @@ Vue.use(TextBoxPlugin);
         });
         },
         changeFields(args) {
-          axios.get(`${apiUrl}`+`approvals/preApp/get/one/`+`${args.target.value}`,{withCredentials:true}).then((res) => {
+          axios.get(`${apiUrl}`+`approvals/preApp/get/one/`+`${this.input.approvalCode}`,{withCredentials:true}).then((res) => {
             console.log(res.data)
             if(res.data==null || res.data.status=="PENDING" || res.data.status=="CANCELLED") {
               toast({
@@ -851,6 +868,8 @@ Vue.use(TextBoxPlugin);
             else{
               this.month = [ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"}]
               this.verified = true
+
+              this.totalamount = res.data.amount
               this.input.transaction_type = res.data.approval_type
               this.input.department = res.data.department
               this.input.head = res.data.budget_head
@@ -863,7 +882,7 @@ Vue.use(TextBoxPlugin);
               }
               else{
                 this.category = [
-                        "Purchase Order","Bill","Invoice","Reimburstement"
+                        "Purchase Order","Bill/Invoice","Imprest"
                       ]
               }
             }

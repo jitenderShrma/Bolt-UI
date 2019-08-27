@@ -271,7 +271,11 @@
     "savepermissions" : "Save Permissions",
     "cancel" : "Cancel",
     "editlabels" : "Edit Labels",
-    "release" : "Release",
+    "release" : "Closed",
     "viewlm" : "View Line Managers",
-    "editprofile" : "Edit Profile"
+    "editprofile" : "Edit Profile",
+    "transactionmade" : "Transaction Made for",
+    "refid" : "Reference ID",
+    "pholdrefid" : "Enter the Approval Ref ID",
+    "go" : "Go"
 }

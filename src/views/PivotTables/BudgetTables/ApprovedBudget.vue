@@ -10,7 +10,7 @@
               <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item>
             </e-items>
           </ejs-toolbar>
-          <b-col sm="1" id="xs" style="position: fixed; top: -6%; right: 3%;width:55px;z-index:1001">
+          <b-col sm="1" id="xs" style="position: fixed; top: -6%; right: 6%;width:55px;z-index:1001">
             <b-dropdown size="sm" id="ddown_primary" :text="currentView" variant="primary" class="m-0">
               <b-dropdown-item @click="switchGraph"><span v-text="$ml.get('graph')"></span></b-dropdown-item>
               <b-dropdown-item @click="switchValue"><span v-text="$ml.get('budget')"></span></b-dropdown-item>
@@ -1620,4 +1620,7 @@ font-style: normal;
 .bg-darkred { 
   background-color: #ce0000; 
  }
+ .e-grid-min-height .e-rowcell {
+     line-height: 1;
+}
 </style>

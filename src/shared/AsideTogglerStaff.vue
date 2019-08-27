@@ -5,7 +5,7 @@
     :class="classList"
     type="button"
     @click="asideToggle">
-    <span class="icon-hourglass" />
+    <span class="icon-people" />
   </button>
 </template>
 

@@ -200,7 +200,7 @@
       </AppAside>
      <div id="target" class="col-lg-15 control-section">
         <div class="content-wrapper">
-            <ejs-toolbar id="toolbargrid2" :clicked="addEditHandler">
+            <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
                 <e-items>
                   <e-item align="right" id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
                   <e-item align="right" id="delete" :template="deleteTemplate" :text="$ml.get('delete')"></e-item>
@@ -234,7 +234,7 @@ import Vue from 'vue'
 import { asideMenuCssClasses, validBreakpoints, checkBreakpoint } from '../../shared/classes'
 import toggleClasses from '../../shared/toggle-classes'
 import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
-import AsideToggler from '../../shared/AsideToggler'
+import AsideTogglerStaff from '../../shared/AsideTogglerStaff'
 import DefaultToggler from '../../shared/AsideTogglerClose'
 import { Browser } from '@syncfusion/ej2-base';
 import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
@@ -309,7 +309,7 @@ export default {
     components: {
       ToolbarPlugin,
       GridPlugin,
-        AsideToggler,
+        AsideTogglerStaff,
         AppHeader,
         DefaultToggler,
         AppSidebar,
@@ -345,9 +345,9 @@ export default {
           buttonLM: function () {
               return {
                   template: Vue.component('buttonLM', {
-                      template: `<div style="line-height:4">{{data.user_type.designation.name}}<AsideToggler id="toggler"/></div>`,
+                      template: `<div style="line-height:4">{{data.user_type.designation.name}}<AsideTogglerStaff id="toggler"/></div>`,
                       components:{
-                        AsideToggler,
+                        AsideTogglerStaff,
                         AppHeader,
                         AppSidebar,
                         AppAside,
@@ -450,10 +450,10 @@ export default {
             LMTemplate: function () {
               return {
                   template: Vue.component("LMTemplate", {
-                      template: `<b-badge id="label1" variant="primary" ><i class="icon-people"></i>&nbsp<span v-text="$ml.get('viewlm')"><AsideToggler/></span></b-badge>
+                      template: `<b-badge id="label1" variant="primary" ><i class="icon-people"></i>&nbsp<span v-text="$ml.get('viewlm')"><AsideTogglerStaff/></span></b-badge>
                       `,
                       components:{
-                        AsideToggler
+                        AsideTogglerStaff
                       },
                       data() {
                         return {
@@ -806,20 +806,20 @@ export default {
     border-left-color: white;
 }
 #toggler {
-  margin:10px;
+  margin-top:10px;
   border-radius: 50px;
-  height: 40px;
-  width:40px;
+  height: 30px;
+  width:30px;
   content:'\E81E';
   padding:0;
   margin-top:5;
 }
 #toggler:focus {
   color:grey;
-  margin:10px;
+  margin-top:10px;
   border-radius: 50px;
-  height: 40px;
-  width:40px;
+  height: 30px;
+  width:30px;
   content:'\E81E';
   padding:0;
   margin-top:5;

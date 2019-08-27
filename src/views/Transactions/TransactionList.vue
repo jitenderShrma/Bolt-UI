@@ -16,18 +16,19 @@
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowReordering='true' :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
                 :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
-                    <e-column field='vendor.vendor_company' headerText='Vendor'  :filter='filter' ></e-column>
+                    <e-column field='approvalCode' headerText='Ref ID'  :filter='filter' ></e-column>
                     <e-column field='status' headerText='Status'  :filter='filter' ></e-column>
-                    <e-column field='user.user_name' headerText='Requested By'  :filter='filter' ></e-column>
-                    <e-column field='approvalCode' headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
-                    <e-column field='po_raised.purchase_id' headerText='PO Number'  :filter='filter' ></e-column>
-                    <e-column field='approvalCode' headerText='Approval Code'  :filter='filter' ></e-column>
-                    <e-column field='transaction_type'  headerText='Type' :filter='filter' :isPrimaryKey='true'></e-column>
-                    <e-column field='category' headerText='Category'  :filter='filter' ></e-column>
+                    <e-column field='amount' headerText='Amount' :filter='filter'></e-column>
                     <e-column field='department.department_name' headerText='Department' :filter='filter'  ></e-column>
                     <e-column field='head.name' headerText='Head' :filter='filter'></e-column>
-                    <e-column field='amount' headerText='Amount' :filter='filter'></e-column>
                     <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' ></e-column>
+                    <e-column field='labels[0].label_name' headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
+                    <e-column field='user.user_name' headerText='Requested By'  :filter='filter' ></e-column>
+                    <e-column field='transaction_type'  headerText='Type' :filter='filter' :isPrimaryKey='true'></e-column>
+                    <e-column field='category' headerText='Category'  :filter='filter' ></e-column>
+                    <e-column field='vendor.vendor_company' headerText='Vendor'  :filter='filter' ></e-column>
+                    <e-column field='po_raised.purchase_id' headerText='PO Number'  :filter='filter' ></e-column>
+                    
                 </e-columns>
                 </ejs-grid>
                  </div>

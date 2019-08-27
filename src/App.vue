@@ -22,38 +22,41 @@ export default {
     max-width : 26.66667% !important;
   }
 }
+.content-wrapper {
+  position:relative;
+}
 #label1 {
   font-size:17px;
-  font-weight: 1;
+  font-weight: lighter;
 }
 #toolbargrid {
     position: absolute;
     right: 0%;
-    top: -6vh;
+    top: -7.5%;
     height: 38px !important;
 }
 #toolbargrid2 {
     position: absolute;
     right: 0%;
-    top: -6.5vh;
+    top: -6.5%;
     height: 38px !important;
 }
 #toolbar {
     position: absolute;
     right: 0%;
-    top: -6.3vh;
+    top: -7.3%;
     height: 38px !important;
 }
 #toolbarbudget {
     position: absolute;
     right: 11%;
-    top: -6.5vh;
+    top: -7.5%;
     height: 38px !important;
 }
 #toolbarpivot {
     position: absolute;
     right: 0%;
-    top: 8.5vh;
+    top: 8.5%;
     height: 38px !important;
 }
 .e-grid .e-groupcaption, .e-grid .e-indentcell, .e-grid .e-recordplusexpand, .e-grid .e-recordpluscollapse {

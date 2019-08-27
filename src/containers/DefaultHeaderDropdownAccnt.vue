@@ -2,7 +2,7 @@
   <AppHeaderDropdown right no-caret v-if="tab">
     <template slot="header">
       <img
-        src="img/avatars/6.jpg"
+        src="https://www.static-contents.youth4work.com/university/Documents/Colleges/collegeLogo/673.jpg"
         class="img-avatar"
         alt="No Profile Pic" />
     </template>\
@@ -33,7 +33,7 @@
   <AppHeaderDropdown right no-caret v-else-if="!tab">
     <template slot="header">
       <img
-        src="img/avatars/6.jpg"
+        src="https://www.static-contents.youth4work.com/university/Documents/Colleges/collegeLogo/673.jpg"
         class="img-avatar"
         alt="admin@bootstrapmaster.com" />
     </template>\

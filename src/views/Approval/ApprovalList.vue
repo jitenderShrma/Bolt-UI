@@ -7,12 +7,9 @@
         <b-tabs>
     <b-tab>
       <template slot="title">
-        <i class='icon-list'></i>
+        Timeline
       </template>
       <b-list-group class="list-group-accent">
-        <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center font-weight-bold text-muted text-uppercase small">
-          Timeline
-        </b-list-group-item>
         <div v-for="(lg,i) in log.slice().reverse()">
         <b-list-group-item href="#" :class="color[i]">
           <div class="avatar float-left mr-1">
@@ -32,11 +29,31 @@
       </b-list-group>
       
     </b-tab>
+    <b-tab>
+      <template slot="title">
+        Transactions
+      </template>
+      <b-list-group class="list-group-accent">
+        <div v-for="(lg,i) in transactions.slice().reverse()">
+        <b-list-group-item href="#" :class="color[i]">
+          <div class="avatar float-left mr-1">
+            <img class="img-avatar" src="img/avatars/7.jpg" alt="admin@bootstrapmaster.com">
+          </div>
+          <div>
+            <span v-text="$ml.get('transactionmade')"></span>
+            <span> Rs. {{lg.amount}} </span>
+            <span>for Head : {{lg.head.name}} in Department : {{lg.department.department_name}} </span>
+            <span>by {{lg.user.personal_details.name}}.</span>
+          </div>
+        </b-list-group-item>
+        </div>
+      </b-list-group>
+    </b-tab>
   </b-tabs>
       </AppAside>
      <div id="target" class="col-lg-15 control-section">
         <div class="content-wrapper">
-            <ejs-toolbar ref="toolbar" id="toolbargrid2" :clicked="addEditHandler">
+            <ejs-toolbar ref="toolbar" id="toolbargrid" :clicked="addEditHandler">
               <e-items>
                   <e-item  align="right" id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
                   <e-item  align="right" id="cancel" :template="cancelTemplate" :text="$ml.get('cancel')"></e-item>
@@ -265,7 +282,7 @@ export default {
         buttonLM: function () {
               return {
                   template: Vue.component('buttonLM', {
-                      template: `<div style="line-height:4">{{data.status}}<AsideToggler id="toggler"/></div>`,
+                      template: `<div style="line-height:4"><b-badge id="label" :variant="data.status">{{data.status}}</b-badge><AsideToggler id="toggler"/></div>`,
                       components:{
                         AsideToggler,
                         AppHeader,
@@ -296,7 +313,7 @@ export default {
           buttonCopy: function () {
               return {
                   template: Vue.component('buttonLM', {
-                      template: `<div style="line-height:4">{{data.ref_id}}<b-button class="bg-transparent py-0 px-0" style="border:0px"><i class="icon-hourglass px-3"></i></b-button></div>`,
+                      template: `<div style="line-height:4">{{data.ref_id}}<b-button class="bg-transparent py-0 px-0" style="border:0px"><i class="fa fa-copy px-3"></i></b-button></div>`,
                   data: function() {
                           return {
                               data: {},
@@ -383,6 +400,7 @@ export default {
                 })
               }
           },
+          transactions:[],
           module:null,
           formdata: {
                   label_name : "",
@@ -537,11 +555,16 @@ export default {
       this.$router.go(0)
     },
     rowSelected(args) {
-      if(args.target.outerHTML == `<i class="icon-hourglass px-3"></i>`) {
+      if(args.target.outerHTML == `<i class="fa fa-copy px-3"></i>`) {
         this.$refs.overviewgrid.copy()
       }
-      if(args.target.outerHTML == `<span class="icon-people"></span>`) {
+
+      if(args.target.outerHTML == `<span class="icon-hourglass"></span>`) {
         this.log = []
+        this.transactions = []
+        api.get(`${apiUrl}transaction/trans/get/for/an/${args.data.ref_id}`).then((res) => {
+          this.transactions = res.data
+        })
         api.get(`${apiUrl}approvals/preApp/timeline/get/${args.data._id}`).then((res) =>{
             if(res.data) {
               this.log = JSON.parse(JSON.stringify(res.data.log))
@@ -1059,31 +1082,53 @@ export default {
 .badge-#ff000 {
   background-color: red;
 }
+.badge-CLOSED {
+  background-color:grey;
+}
+.badge-PENDING {
+  background-color:yellow;
+}
+.badge-RELEASED {
+  background-color:grey;
+}
+.badge-APPROVED {
+  background-color:lightgreen;
+}
+.badge-CANCELLED {
+  background-color:red;
+  color:white;
+}
+.badge-AUTO-REJECTED {
+  background-color:red;
+}
+.badge-COMPLETED {
+  background-color:orange;
+}
 #toggler {
-  margin:10px;
+  margin-top:10px;
   border-radius: 50px;
-  height: 40px;
-  width:40px;
+  height: 30px;
+  width:30px;
   padding:0;
   margin-top:5;
   content:'\E81E';
 }
 #toggler:hover {
-  margin:10px;
+  margin-top:10px;
   border-radius: 50px;
   color: grey;
-  height: 40px;
-  width:40px;
+  height: 30px;
+  width:30px;
   content:'\E81E';
   padding:0;
   margin-top:5;
 }
 #toggler:focus {
-  margin:10px;
+  margin-top:10px;
   border-radius: 50px;
-  height: 40px;
+  height: 30px;
   color: grey;
-  width:40px;
+  width:30px;
   content:'\E81E';
   padding:0;
   margin-top:5;
@@ -1099,11 +1144,11 @@ export default {
   margin-top:5;
 }*/
 #toggler2 {
-  margin:10px;
+  margin-top:10px;
   border-radius: 50px;
   background: black;
-  height: 20px;
-  width:20px;
+  height: 30px;
+  width:30px;
   content:'\E81E';
   padding:0;
   margin:0;
