@@ -29,31 +29,31 @@ export default {
 #toolbargrid {
     position: absolute;
     right: 0%;
-    top: -7%;
+    top: -6vh;
     height: 38px !important;
 }
 #toolbargrid2 {
     position: absolute;
     right: 0%;
-    top: -7.5%;
+    top: -6.5vh;
     height: 38px !important;
 }
 #toolbar {
     position: absolute;
     right: 0%;
-    top: -7.3%;
+    top: -6.3vh;
     height: 38px !important;
 }
 #toolbarbudget {
     position: absolute;
     right: 11%;
-    top: -7.5%;
+    top: -6.5vh;
     height: 38px !important;
 }
 #toolbarpivot {
     position: absolute;
     right: 0%;
-    top: 8.5%;
+    top: 8.5vh;
     height: 38px !important;
 }
 .e-grid .e-groupcaption, .e-grid .e-indentcell, .e-grid .e-recordplusexpand, .e-grid .e-recordpluscollapse {

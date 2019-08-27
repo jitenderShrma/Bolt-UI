@@ -45,12 +45,12 @@
               </e-items>
             </ejs-toolbar>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true' :allowReordering='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc" :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler" :rowSelected="rowSelected"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true' :allowReordering='true'  id='overviewgrid' :allowPaging="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc" :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :pageSettings="pageSettings" :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler" :rowSelected="rowSelected" :beforeCopy="beforeCopy"
                 :height="height" :enableHover='false'> 
                 <e-columns>
                     <e-column :visible="enableColumn" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
-                    <e-column field='ref_id' :template="buttonLM" headerText='Ref ID' width="167"  :filter='filter' ></e-column>
-                    <e-column :sortComparer='sortComparer' field='status' headerText='Status' width="137" :filter='filter' ></e-column>
+                    <e-column field='ref_id' :template="buttonCopy" headerText='Ref ID' width="167"  :filter='filter' ></e-column>
+                    <e-column :sortComparer='sortComparer' :template="buttonLM" field='status' headerText='Status' width="137" :filter='filter' ></e-column>
                     <e-column field='amount' headerText='Amount' width="126" :filter='filter' ></e-column>
                     <e-column field='department.department_name' headerText='Department' width="145" :filter='filter' ></e-column>
                     <e-column field='budget_head.name' headerText='Head' width="110" :filter='filter' ></e-column>
@@ -265,7 +265,7 @@ export default {
         buttonLM: function () {
               return {
                   template: Vue.component('buttonLM', {
-                      template: `<div style="line-height:4">{{data.ref_id}}<AsideToggler id="toggler"/></div>`,
+                      template: `<div style="line-height:4">{{data.status}}<AsideToggler id="toggler"/></div>`,
                       components:{
                         AsideToggler,
                         AppHeader,
@@ -280,6 +280,23 @@ export default {
                         SidebarNav,
                         SidebarMinimizer
                       },
+                  data: function() {
+                          return {
+                              data: {},
+                          }
+                      },
+                  methods: {
+                    gotoPage() {
+                      console.log("aside on")
+                    }
+                  }
+                })
+              }
+          },
+          buttonCopy: function () {
+              return {
+                  template: Vue.component('buttonLM', {
+                      template: `<div style="line-height:4">{{data.ref_id}}<b-button class="bg-transparent py-0 px-0" style="border:0px"><i class="icon-hourglass px-3"></i></b-button></div>`,
                   data: function() {
                           return {
                               data: {},
@@ -507,7 +524,7 @@ export default {
                 iconTick :false,
                 animationSettings: { effect: 'None' },
                 alertDlgButtons: [{ click: this.alertDlgBtnClick, buttonModel: { content: 'OK', isPrimary: true } }],
-                selectionSettings: { persistSelection: true, type: 'Multiple' }
+                selectionSettings: { persistSelection: true, type: 'Multiple',mode:"Both" }
             };
         },
   methods: {
@@ -520,6 +537,9 @@ export default {
       this.$router.go(0)
     },
     rowSelected(args) {
+      if(args.target.outerHTML == `<i class="icon-hourglass px-3"></i>`) {
+        this.$refs.overviewgrid.copy()
+      }
       if(args.target.outerHTML == `<span class="icon-people"></span>`) {
         this.log = []
         api.get(`${apiUrl}approvals/preApp/timeline/get/${args.data._id}`).then((res) =>{
@@ -622,6 +642,9 @@ export default {
         })
       }
     },
+    beforeCopy(args) {
+      args.data = args.data.slice(1,9)
+    },
     editLabel(args) {
       console.log(args)
       this.editlabelmodal = true
@@ -629,7 +652,6 @@ export default {
       this.editlabel.label_name = args.label_name
       this.editlabel.description =args.description
       this.editlabel.color =`#`+`${args.color}`
-      
     },
     delLabel(args,id,label) {
       console.log(this.editinput.labels.splice(label,1))
@@ -722,8 +744,45 @@ export default {
                 }
                 if(args.item.id == "cancel") {
                   if(data.length>0) {
-                    axios.put(`${apiUrl}approvals/preApp/cancel/label/${data[0].ref_id}`).then((res) => {
-                        console.log(res)
+                    api.put(`${apiUrl}approvals/preApp/cancel/label/${data[0].ref_id}`).then((res) => {
+                        api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
+                          console.log(response.data)
+                          var user =  JSON.parse(localStorage['session_key'])
+                            this.datasrc = response.data;
+                            for(var i =0;i<this.datasrc.length;i++) {
+                              if(user.user) {
+                                if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
+                                   this.enableColumn =  true
+                                }
+                              }
+                              else {
+                                console.log("user")
+                                if(this.datasrc[i].status=="PENDING") {
+                                   this.enableColumn =  true
+                                }
+                              }
+                              if(this.datasrc[i].request_by == null) {
+                                this.datasrc[i].request_by = {
+                                  user_name:"No longer exists!"
+                                }
+                              }
+                              if(this.datasrc[i].department == null) {
+                                this.datasrc[i].department = {
+                                  department_name:"No longer exists!"
+                                }
+                              }
+                              if(this.datasrc[i].budget_head == null) {
+                                this.datasrc[i].budget_head = {
+                                  name:"No longer exists!"
+                                }
+                              }
+                              this.datasrc[i].labellist = "";
+                              for(var j=0;j<this.datasrc[i].labels.length;i++) {
+                                this.datasrc[i].labellist = this.datasrc[i].labellist+`${this.datasrc[i].labels[j].label_name},`
+                              }
+                            }
+                            console.log(this.datasrc)
+                })
                     })
                   }
                 }

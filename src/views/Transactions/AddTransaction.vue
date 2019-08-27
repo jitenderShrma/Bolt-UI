@@ -57,6 +57,7 @@
             <cool-select
                 :disabled="disableCategory"
                 v-model="input.category"
+                v-validate="'required'"
                 :items="category"
                 :placeholder="$ml.get('pholdtransaccategory')"
                >
@@ -71,7 +72,7 @@
               :horizontal="true">
               <b-row>
                 <b-col sm="4">
-                  <treeselect :placeholder="$ml.get('pholddept')" v-model="input.department" :multiple="false" :options="department" />
+                  <treeselect disabled :placeholder="$ml.get('pholddept')" v-model="input.department" :multiple="false" :options="department" />
                 </b-col>
               </b-row>
             </b-form-group>
@@ -82,7 +83,7 @@
               :horizontal="true">
               <b-row>
                 <b-col sm="4">
-                  <treeselect required :placeholder="$ml.get('pholdhead')" v-model="input.budget_head" :multiple="false" :options="head" />
+                  <treeselect disabled required :placeholder="$ml.get('pholdhead')" v-model="input.head" :multiple="false" :options="head" />
                 </b-col>
               </b-row>
             </b-form-group>
@@ -769,9 +770,17 @@ Vue.use(TextBoxPlugin);
           if(this.input.isApproved == true && this.input.approvalCode!=null) {
             this.input.status = "Approved"
           }
+          if(this.input.amount > this.boundaryAmount) {
+            toast({
+                type: VueNotifications.types.error,
+                title: 'Invalid Amount'
+            })
+          }
+          else{
           console.log(this.input)
           axios.post(`${apiUrl}`+`transaction/trans/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
             this.$router.push("/transaction/list")});
+          }
         },
         addVendor() {
           this.vendor.address = this.addresslist
@@ -843,12 +852,11 @@ Vue.use(TextBoxPlugin);
               this.month = [ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"}]
               this.verified = true
               this.input.transaction_type = res.data.approval_type
+              this.input.department = res.data.department
               this.input.head = res.data.budget_head
               this.input.month = res.data.month
               this.month = this.month.splice(res.data.month)
-              if(this.$session.has('user')){
-                this.boundaryAmount = res.data.amount
-              } 
+                this.boundaryAmount = res.data.approval_amount_left[res.data.month]
               this.is_po_raised = res.data.request_for_quote
               if(res.data.imprest_required != null) {
                 this.category.push("Imperest/Advance")

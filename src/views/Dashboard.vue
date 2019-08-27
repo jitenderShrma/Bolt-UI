@@ -707,6 +707,13 @@ export default {
         this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
         this.chartOptions3Bar.series = this.getYearlyBar2(response.data);       // this.chartOptions.series[2].data = this.getTransactionData(response.data)
       });
+    api.get(`${apiUrl}department/dept/child/${Session.user.user_type.department}`).then((res) => {
+      console.log(res.data)
+      this.dept = JSON.parse(JSON.stringify(res.data))
+      this.tree_dept = this.list_to_tree_dept(res.data)
+      this.chartOptionsStacked.xAxis.categories = this.getDeptList(res.data)
+      this.chartOptionsStacked.series = [{name:"Total",data:this.tree_dept.total_data},{name:"Committed",data:this.tree_dept.committed_data},{name:"Remaining",data:this.tree_dept.remaining_data}]
+    })
     }
   }else{
     this.isPermitted = true
@@ -723,7 +730,7 @@ export default {
         this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
         this.chartOptions3Bar.series = this.getYearlyBar2(response.data);       // this.chartOptions.series[2].data = this.getTransactionData(response.data)
       });
-    api.get(`${apiUrl}department/dept/child/5d5bbb70965ce20a403bb705`).then((res) => {
+    api.get(`${apiUrl}department/dept/get`).then((res) => {
       this.dept = JSON.parse(JSON.stringify(res.data))
       this.tree_dept = this.list_to_tree_dept(res.data)
       this.chartOptionsStacked.xAxis.categories = this.getDeptList(res.data)
