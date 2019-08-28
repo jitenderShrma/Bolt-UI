@@ -6,19 +6,18 @@
             <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
                 <e-items>
                   <e-item align="right" id="add" :text="$ml.get('add')" :template="addTemplate"></e-item>
-                 <e-item align="right" id="edit" :text="$ml.get('edit')" :template="editTemplate"></e-item>
-                 <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item>
+                 <!-- <e-item align="right" id="edit" :text="$ml.get('edit')" :template="editTemplate"></e-item> --><!-- 
+                 <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item> -->
                   <e-item align="right" id="upload" :template="uploadTemplate" :text="$ml.get('upload')"></e-item>
                 </e-items>
                 </ejs-toolbar>
              <div class="control-section">
-                
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowReordering='true' :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
+            <ejs-grid ref='overviewgrid' :allowGrouping='true' :groupSettings='groupOptions'  :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowReordering='true' :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
+            :rowSelected="rowSelected"
                 :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
                     <e-column field='approvalCode' headerText='Ref ID'  :filter='filter' ></e-column>
-                    <e-column field='status' headerText='Status'  :filter='filter' ></e-column>
-                    <e-column field='amount' headerText='Amount' :filter='filter'></e-column>
+                    <e-column field='amount' :template="printTemplate" headerText='Amount' :filter='filter'></e-column>
                     <e-column field='department.department_name' headerText='Department' :filter='filter'  ></e-column>
                     <e-column field='head.name' headerText='Head' :filter='filter'></e-column>
                     <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' ></e-column>
@@ -28,7 +27,6 @@
                     <e-column field='category' headerText='Category'  :filter='filter' ></e-column>
                     <e-column field='vendor.vendor_company' headerText='Vendor'  :filter='filter' ></e-column>
                     <e-column field='po_raised.purchase_id' headerText='PO Number'  :filter='filter' ></e-column>
-                    
                 </e-columns>
                 </ejs-grid>
                  </div>
@@ -40,7 +38,38 @@
           <div id="modalTarget" class="control-section; position:relative" style="height:300px;">
               <ejs-uploader ref="uploadObj" id='defaultfileupload' :multiple = "false" :success="onUploadSuccess" :progress="onProgress" :failure="onUploadFailed"  :allowedExtensions="extensions" :asyncSettings="path" name="UploadFiles"></ejs-uploader>
             </div>
-    
+  </b-modal>
+  <b-modal :title="$ml.get('print')" class="modal-primary" v-model="printModal" size="lg" @ok="printModal = false" hide-footer>
+    <template slot="modal-header">
+      <h5 v-text="$ml.get('print')"></h5>
+      <div>
+      <b-button type="submit" size="sm" variant="primary" @click="printPDF"><i class="icon-printer font-2xl"></i></b-button>
+      &nbsp;&nbsp;
+      <b-button class="bg-transparent" style="border:none" type="submit" size="sm" @click="printModal = false" variant="secondary"><i class="icon-close font-2xl"></i></b-button>
+    </div>
+    </template>
+    <div ref="pdf">
+      <b-table striped hover :items="printData" thead-class="hidden_header">
+      </b-table>
+      <br>
+      <b-table striped hover :items="log">
+      </b-table>
+    </div>
+  </b-modal>
+  <b-modal :title="$ml.get('paymentorder')" class="modal-primary" v-model="paymentModal" size="md" @ok="paymentModal = false" hide-footer>
+    <b-form style="padding:3%" v-on:submit.prevent="paymentDone">
+      <b-form-group>
+        <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" :dataSource='paymentTypes' v-model="payment.payment_method" :placeholder="$ml.get('pholdpaymenttype')">
+        </ejs-dropdownlist>
+      </b-form-group>
+      <b-form-group>
+        <ejs-textbox v-model="payment.payment_ref_number" floatLabelType="Auto" :placeholder="$ml.get('paymentref')" required></ejs-textbox>
+      </b-form-group>
+      <b-form-group>
+        <ejs-textbox v-model="payment.notes" floatLabelType="Auto" :placeholder="$ml.get('notes')"></ejs-textbox>
+      </b-form-group>
+      <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
+    </b-form>
   </b-modal>
   </div>
  </div>
@@ -48,7 +77,11 @@
 <script>
 import apiUrl from '@/apiUrl'
 import axios from 'axios'
+import moment from 'moment'
+
+Vue.prototype.moment = moment
 import Vue from 'vue'
+import html2pdf from 'html2pdf.js'
 import { UploaderPlugin } from '@syncfusion/ej2-vue-inputs';
 import { Browser } from '@syncfusion/ej2-base';
 import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
@@ -56,7 +89,7 @@ import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import VueNotifications from 'vue-notifications'
 import { DatePickerPlugin } from "@syncfusion/ej2-vue-calendars";
 import { NumericTextBox } from "@syncfusion/ej2-inputs";
-import { NumericTextBoxPlugin } from "@syncfusion/ej2-vue-inputs";
+import { TextBoxPlugin } from "@syncfusion/ej2-vue-inputs";
 import miniToastr from 'mini-toastr' 
 import {
   PivotViewPlugin,
@@ -64,7 +97,7 @@ import {
   FieldList
 } from "@syncfusion/ej2-vue-pivotview";
 import {
-PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
+PdfExport,ExcelExport, Edit,Group, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     Vue.use(UploaderPlugin);
     
@@ -75,7 +108,7 @@ PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, G
     Vue.use(DialogPlugin);
     Vue.use(DropDownListPlugin);
     Vue.use(DatePickerPlugin);
-    Vue.use(NumericTextBoxPlugin)
+    Vue.use(TextBoxPlugin)
 var api = axios.create({
   withCredentials :true
 })
@@ -111,17 +144,33 @@ export default {
     components: {      ToolbarPlugin,
       GridPlugin, Filter, Selection, Sort, VirtualScroll,
         Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
-        NumericTextBoxPlugin,
+        TextBoxPlugin,
         PivotViewPlugin,
   GroupingBar,
   FieldList,
   Edit
     },
      provide: {
-            grid: [PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder]
+            grid: [PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder,Group]
         },
     data: function () {
       return {
+        groupOptions:{
+          columns:['approvalCode'],
+          showDropArea: false,
+          captionTemplate: function() {
+            return {
+              template : Vue.component('captionTemplate',{
+                template:`<div>{{data.headerText}} - {{data.key}}</div>`,
+                data () {
+                  return {
+                    data:{}
+                  }
+                }
+              })
+            }
+          }},
+        printData:[],
         addTemplate: function () {
               return {
                   template: Vue.component("addTemplate", {
@@ -135,6 +184,20 @@ export default {
                     })
                   }
                 },
+                printTemplate: function() {
+                  return {
+                    template: Vue.component("printTemplate", {
+                      template : `<div style="line-height:4">{{data.amount}}<b-button class="bg-transparent py-0 px-2" style="border:0px"><i class="icon-printer"></i></b-button>&nbsp;&nbsp;<span v-if="data.status == 'PAID'"><b-button class="bg-success py-0 px-2" style="border:0px"><i class="cui-task secondary"></i></b-button></span><span v-else><b-button class="bg-transparent py-0 px-2" style="border:0px"><i class="cui-task"></i></b-button></span></div>`,
+                      data()  {
+                        return {
+                          data: {}
+                        };
+                      }
+                    
+                    })
+                  }
+                },
+                log:[],
                 deleteTemplate: function () {
               return {
                   template: Vue.component("deleteTemplate", {
@@ -174,6 +237,9 @@ export default {
                     })
                   }
                 },
+                paymentTypes:['Cash','Cheque','NEFT','RTGS','IMPS','E-Wallet','UPI'],
+                selectedTrans:{},
+                printModal:false,
         browseModal:false,
       allowCalculatedField:true,
           complete:false,
@@ -192,6 +258,7 @@ export default {
             this.$refs.uploadObj.sequentialUpload = args.checked;
             this.$refs.uploadObj.clearAll();
         },
+
         labelTemplate: function() {
           return {
             template:Vue.component('labelTemplate', {
@@ -275,7 +342,8 @@ export default {
                 dReady: false,
                 showCloseIcon: false,
                 isDataChanged: true,
-                
+                payment:{},
+                paymentModal:false,
                 filterOptions: {
                     type: 'Menu'
                 },
@@ -292,6 +360,53 @@ export default {
             };
         },
   methods: {
+    paymentDone() {
+      if(this.payment.payment_method == null || this.payment.payment_method == "") {
+        toast({
+          type:VueNotifications.types.warn,
+          title:"Please Select a Payment Mode"
+        })
+      }
+      else {
+        api.post(`${apiUrl}payments/paymentorder/create`,this.payment).then((res) => {
+          api.put(`${apiUrl}transaction/trans/edit/${this.payment.transaction_id}`,{status:"PAID"}).then((trans) => {
+            api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
+                    this.datasrc = response.data;
+                    for(var i =0;i<this.datasrc.length;i++) {
+                      if(this.datasrc[i].user == null) {
+                        this.datasrc[i].user = {
+                          user_name:"No longer exists!"
+                        }
+                      }
+                      if(this.datasrc[i].department == null) {
+                        this.datasrc[i].department = {
+                          department_name:"No longer exists!"
+                        }
+                      }
+                      if(this.datasrc[i].head == null) {
+                        this.datasrc[i].head = {
+                          name:"No longer exists!"
+                        }
+                      }
+                    }
+                    this.paymentModal =false
+              })
+          })
+          
+        })
+      }
+    },
+    printPDF() {
+      var pdf = new html2pdf()
+      var source = this.$refs.pdf
+      var opt = {
+        margin:       [.5,.5,.5,.5],
+        filename:     `${this.selectedTrans.approvalCode}.pdf`,
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(source).output("dataurlnewwindow")
+    },
     onProgress(args) {
       },
        onUploadSuccess: function (args) {
@@ -389,6 +504,51 @@ export default {
             alertDlgBtnClick() {
                     this.$refs.alertDialog.hide();
                 },
+                rowSelected(args) {
+                  if(args.target.outerHTML == `<i class="cui-task"></i>`) {
+                    this.paymentModal = true
+                    this.payment.transaction_id = args.data._id
+                  }
+                  if(args.target.outerHTML == `<i class="icon-printer"></i>`) {
+                    this.printModal = true
+                    var new_val =[]
+                    this.log = []
+                    this.selectedTrans= args.data
+                    if(args.data.approvalCode)
+                      new_val.push({name:"Reference ID",text:args.data.approvalCode})
+                    if(args.data.bill_number)
+                      new_val.push({name:"Bill Number",text:args.data.bill_number})
+                    if(args.data.amount)
+                      new_val.push({name:"Amount",text:args.data.amount})
+                    if(args.data.department.department_name)
+                    new_val.push({name:"Department",text:args.data.department.department_name})
+                    if(args.data.head.name)
+                      new_val.push({name:"Head",text:args.data.head.name})
+                    if(args.data.month)
+                      new_val.push({name:"Month",text:`${parseInt(args.data.month)+1}`})
+                    if(args.data.labels)
+                      new_val.push({name:"Labels",text:args.data.labels})
+                    if(args.data.user.user_name)
+                      new_val.push({name:"Requested By",text:args.data.user.user_name})
+                    if(args.data.type)
+                      new_val.push({name:"Type",text:args.data.type})
+                    if(args.data.category)
+                      new_val.push({name:"Category",text:args.data.category})
+                    if(args.data.vendor)
+                      new_val.push({name:"Vendor",text:args.data.vendor.vendor_company})
+                    if(args.data.po_raised)
+                      new_val.push({name:"Purchase Order",text:args.data.po_raised.purchase_id})
+                    this.printData = new_val
+                    api.get(`${apiUrl}/approvals/preApp/get/one/${args.data.approvalCode}`).then((res) =>{
+                      api.get(`${apiUrl}approvals/preApp/timeline/get/${res.data._id}`).then((resp) =>{
+                        for(var i=resp.data.log.length-1;i>=0;i--) {
+                          this.log.push({Approval_Log:resp.data.log[i].event,Time:moment(resp.data.log[i].date).format('MMM Do YYYY, h:mm a')})
+                        }
+                      })
+                    })
+                  }
+                  
+                }
             
         },
         async mounted () { 
@@ -411,7 +571,6 @@ export default {
                         }
                       }
                     }
-                    console.log(this.datasrc)
                 })
             
         }

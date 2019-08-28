@@ -3,27 +3,27 @@
 
 	<b-row>
       <b-col md="12">
-        <b-card style="position:relative">
-          <b-card class="bg-info" v-if="verified" style="position: absolute; top: 20%; right: 1%;">
+        <b-card  style="position:relative">
+          <b-card id="xs" class="col-sm-6 bg-info" v-if="verified" style="position: absolute; top: 20%; right: 1%;">
             <b-row>
-              <b-col>
+              <b-col sm="4">
                 Total Approved Amount
               </b-col>
-              <b-col>
+              <b-col sm="4">
                 Amount Used
               </b-col>
-              <b-col>
+              <b-col sm="4">
                 Amount Left
               </b-col>
             </b-row>
             <b-row>
-              <b-col>
+              <b-col sm="4">
                 {{totalamount}}
               </b-col>
-              <b-col>
+              <b-col sm="4">
                 {{totalamount - boundaryAmount}}
               </b-col>
-              <b-col>
+              <b-col sm="4">
                 {{boundaryAmount}}
               </b-col>
             </b-row>
@@ -32,6 +32,7 @@
             <span v-text="$ml.get('transactionform')"></span>
           </div>
           <b-form action="UserList" v-on:keydown.enter.prevent="prevent" v-on:submit.prevent="sendData">
+            <div ref="pdf">
           <b-form-group
             :label="$ml.get('refid')"
             label-for="basicName"
@@ -43,6 +44,7 @@
                   <b-form v-on:submit.prevent="changeFields">
                     <b-row>
                     <b-col>
+                      <span style="color:red;float:right;height:2px;font-size:20px">*</span>
                       <ejs-textbox v-on:keydown.enter='changeFields' v-model="input.approvalCode" :placeholder="$ml.get('pholdrefid')" ></ejs-textbox>
                     </b-col><b-col><b-button type="submit" size="sm" variant="primary" v-text="$ml.get('go')"><i class="fa fa-dot-circle-o"></i></b-button></b-col></b-row>
                   </b-form>
@@ -57,7 +59,9 @@
             :horizontal="true">
             <b-row>
             <b-col sm="4">
+            <span style="color:red;float:right;height:2px;font-size:20px">*</span>
             <cool-select
+              disabled
                 v-model="input.transaction_type"
                 :items="types"
                 :placeholder="$ml.get('pholdtransactype')"
@@ -73,10 +77,10 @@
             :horizontal="true">
             <b-row>
             <b-col sm="4">
+            <span style="color:red;float:right;height:2px;font-size:20px">*</span>
             <cool-select
                 :disabled="disableCategory"
                 v-model="input.category"
-                v-validate="'required'"
                 :items="category"
                 :placeholder="$ml.get('pholdtransaccategory')"
                >
@@ -102,6 +106,7 @@
               :horizontal="true">
               <b-row>
                 <b-col sm="4">
+                  <span style="color:red;float:right;height:2px;font-size:20px">*</span>
                   <treeselect disabled required :placeholder="$ml.get('pholdhead')" v-model="input.head" :multiple="false" :options="head" />
                 </b-col>
               </b-row>
@@ -113,6 +118,7 @@
               :horizontal="true">
               <b-row>
               <b-col sm="4">
+              <span style="color:red;float:right;height:2px;font-size:20px">*</span>
               <cool-select
                 v-model="input.month"
                 :items="month"
@@ -130,11 +136,11 @@
               :label-cols="2"
               :horizontal="true">
               <b-row>
-              <b-col sm="2">
-              <ejs-textbox type="number" floatLabelType="Auto" v-model="input.amount"  :placeholder="$ml.get('pholdtransacammount')"></ejs-textbox>
+              <b-col sm="4">
+              <span style="color:red;float:right;height:2px;font-size:20px">*</span>
+              <ejs-textbox required type="number" v-model="input.amount"  :placeholder="$ml.get('pholdtransacammount')"></ejs-textbox>
             </b-col>
-            <b-col sm="2">
-              <br>
+            <b-col sm="1" id="xs">
               <i class="fa fa-rupee font-2xl"></i>
               &nbsp;
               &nbsp;
@@ -146,6 +152,7 @@
             </b-col>
           </b-row>
             </b-form-group>
+            <div v-if="input.category == 'Purchase Order'">
           <b-form-group
             :label="$ml.get('po')"
             label-for="basicName"
@@ -187,7 +194,20 @@
             </b-col>
             </b-row>
           </b-form-group>
-          <div v-if="this.input.po_required">
+        </div>
+          <div v-if="input.category == 'Bill/Invoice'">
+            <b-form-group
+              :label="$ml.get('billno')"
+              label-for="basicText"
+              :label-cols="2"
+              :horizontal="true">
+              <b-row>
+              <b-col sm="4">
+              <span style="color:red;float:right;height:2px;font-size:20px">*</span>
+              <ejs-textbox required type="text" v-model="input.bill_number"  :placeholder="$ml.get('pholdbillno')"></ejs-textbox>
+            </b-col>
+          </b-row>
+            </b-form-group>
           <b-form-group
             :label="$ml.get('quotations')"
             label-for="basicName"
@@ -215,6 +235,7 @@
             >
             <b-row>
               <b-col sm="4">
+                <span style="color:red;float:right;height:2px;font-size:20px">*</span>
             <cool-select
                 v-model="input.vendor"
                 :items="vendors"
@@ -229,15 +250,18 @@
             </b-col></b-row>
           </b-form-group>
         </div>
+        <div v-else>
         </div>
+        </div>
+      </div>
            <div slot="footer" v-if="verified">
               <b-button :disabled="!verified" type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
           </div>
           </b-form>
         </b-card>
         </b-col>
-        <b-modal :title="$ml.get('addvendor')" size="lg" class="modal-primary" v-model="vendorModal" @ok="vendorModal = false" hide-footer>
-            <b-form v-on:submit.prevent="addVendor">
+        <b-modal :title="$ml.get('addvendor')" size="xl" class="modal-primary" v-model="vendorModal" @ok="vendorModal = false" hide-footer>
+            <b-form style="padding:3%" v-on:submit.prevent="addVendor">
               <ejs-textbox floatLabelType="Auto" v-model="vendor.vendor_company" :placeholder="$ml.get('vendorcompany')"></ejs-textbox>
             
               <b-row>
@@ -258,7 +282,7 @@
             <b-col sm="6">
             
             
-            <ejs-textbox floatLabelType="Auto" v-model="vendor.acc_name" type="text" id="street" :placeholder="$ml.get('pholdaccountname')" required></ejs-textbox>
+            <ejs-textbox floatLabelType="Auto" v-model="vendor.acc_name" type="text" id="street" :placeholder="$ml.get('pholdaccountholdername')" required></ejs-textbox>
           
           </b-col>
           <b-col sm="6">
@@ -456,9 +480,6 @@
                   </ejs-textbox>
                 </b-col>
               </b-row>
-            
-              
-            
               <b-row>
                 <b-col sm="12">
                   <ejs-textbox floatLabelType="Auto" v-model="purchase_order.amount" type="text" id="street" :placeholder="$ml.get('pholdamount')">
@@ -682,6 +703,7 @@ Vue.use(TextBoxPlugin);
         this.approvals = res.data
       });
       axios.get(`${apiUrl}`+`vendor/get/all`,{withCredentials:true}).then((res) => {
+        console.log(res.data)
         this.vendors = res.data
       });
       axios.get(`${apiUrl}`+`po/get/all`,{withCredentials:true}).then((res) => {
@@ -787,12 +809,25 @@ Vue.use(TextBoxPlugin);
           if(this.input.approvalCode!=null) {
             this.input.status = "Approved"
           }
-          if(this.input.amount > this.boundaryAmount) {
-            toast({
-                type: VueNotifications.types.error,
-                title: 'Invalid Amount'
-            })
+          console.log(this.input)
+          if(this.input.amount > this.boundaryAmount || this.input.amount==0 || this.input.amount=="") {
+              toast({
+                  type: VueNotifications.types.warn,
+                  title: 'Invalid Amount'
+              })
           }
+          else if(this.input.category=="" || this.input.category == null) {
+              toast({
+                  type: VueNotifications.types.warn,
+                  title: 'Please Select a Transaction Category'
+              })
+            }
+            else if(this.input.category == "Bill/Invoice" && this.input.vendor == null || this.input.vendor == "") {
+              toast({
+                  type: VueNotifications.types.warn,
+                  title: 'Please Select a Vendor'
+              })
+            }
           else{
           console.log(this.input)
           axios.post(`${apiUrl}`+`transaction/trans/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
@@ -816,6 +851,7 @@ Vue.use(TextBoxPlugin);
         vfd.append('pan_copy',this.vendor.pan_copy)
         vfd.append('gst_certi',this.vendor.gst_certi)
         axios.post(`${apiUrl}`+`vendor/create`,vfd,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((response)=> {
+          console.log(response.data)
           this.input.user_type=response.data._id
             })
         axios.get(`${apiUrl}`+`vendor/get/all`,{withCredentials:true}).then((res) => {
@@ -858,24 +894,33 @@ Vue.use(TextBoxPlugin);
         changeFields(args) {
           axios.get(`${apiUrl}`+`approvals/preApp/get/one/`+`${this.input.approvalCode}`,{withCredentials:true}).then((res) => {
             console.log(res.data)
-            if(res.data==null || res.data.status=="PENDING" || res.data.status=="CANCELLED") {
+            if(res.data==null || res.data.status=="PENDING" || res.data.status=="CANCELLED" || res.data.status=="CLOSED" || res.data.status=="RELEASED") {
               toast({
                 type: VueNotifications.types.error,
                 title: 'Not Approved',
-                message: 'Approval is either Pending or Cancelled'
+                message: 'Approval is Pending or Cancelled or Released'
               })
             }
             else{
-              this.month = [ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"}]
+              var date = new Date()
+              var year = date.getFullYear()
+              this.month = [ {name:`January`,value:`0`},{name:`February`,value:`1`},{name:`March`,value:`2`},{name:`April`,value:`3`},{name:`May`,value:`4`},{name:`June`,value:`5`},{name:`July`,value:`6`},{name:`August`,value:`7`},{name:`September`,value:`8`},{name:`October`,value:`9`},{name:`November`,value:`10`},{name:`December`,value:`11`}]
               this.verified = true
-
               this.totalamount = res.data.amount
               this.input.transaction_type = res.data.approval_type
               this.input.department = res.data.department
               this.input.head = res.data.budget_head
               this.input.month = res.data.month
-              this.month = this.month.splice(res.data.month)
-                this.boundaryAmount = res.data.approval_amount_left[res.data.month]
+              var rest_months = this.month.slice(0,res.data.month)
+              var select_month = this.month.slice(res.data.month,12)
+              for(var i=0;i<rest_months.length;i++) {
+                rest_months[i].name = `${rest_months[i].name} - ${year+1}`
+              }
+              for(var i=0;i<select_month.length;i++) {
+                select_month[i].name = `${select_month[i].name} - ${year}`
+              }
+              this.month = select_month.concat(rest_months)
+              this.boundaryAmount = res.data.approval_amount_left[res.data.month]
               this.is_po_raised = res.data.request_for_quote
               if(res.data.imprest_required != null) {
                 this.category.push("Imperest/Advance")
@@ -906,7 +951,6 @@ Vue.use(TextBoxPlugin);
     }
 	};
 </script>
-
 <style>
   .e-ddl .e-dropdownbase .e-fixed-head {
   visibility: hidden;

@@ -91,7 +91,7 @@
       <div v-if="option1=='Budget By Heads'">
         <highcharts class="chart" :options="chartOptions3Bar" :updateArgs="updateArgs"></highcharts>
       </div>
-      <div @click="changeModal" v-if="option1=='Budget by Departments'">
+      <div @click="changeModal" v-else>
         <highcharts class="chart2"  :options="chartOptionsStackedchild" :updateArgs="updateArgs"></highcharts>
       
                 <div>
@@ -733,7 +733,7 @@ export default {
     api.get(`${apiUrl}department/dept/get`).then((res) => {
       this.dept = JSON.parse(JSON.stringify(res.data))
       this.tree_dept = this.list_to_tree_dept(res.data)
-      this.chartOptionsStacked.xAxis.categories = this.getDeptList(res.data)
+      this.chartOptionsStacked.xAxis.categories = this.getDeptList(this.tree_dept)
       this.chartOptionsStacked.series = [{name:"Total",data:this.tree_dept.total_data},{name:"Committed",data:this.tree_dept.committed_data},{name:"Remaining",data:this.tree_dept.remaining_data}]
     })
   }
@@ -793,6 +793,7 @@ export default {
                   roots.push(node);
               }
           }
+          console.log(roots)
           this.getHeadBudget(roots)
           return roots
       },

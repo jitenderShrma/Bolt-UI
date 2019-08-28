@@ -271,11 +271,25 @@
     "savepermissions" : "Save Permissions",
     "cancel" : "Cancel",
     "editlabels" : "Edit Labels",
-    "release" : "Closed",
+    "release" : "Close",
     "viewlm" : "View Line Managers",
     "editprofile" : "Edit Profile",
     "transactionmade" : "Transaction Made for",
     "refid" : "Reference ID",
     "pholdrefid" : "Enter the Approval Ref ID",
-    "go" : "Go"
+    "go" : "Go",
+    "addremarks" : "Add Remarks",
+    "remarks" : "Remarks",
+    "print" : "Print Preview",
+    "confirm" : "Confirm?",
+    "confirmcancel" : "Are you sure you want to cancel this approval?",
+    "confirmrelease" : "Are you sure you want to close this approval?",
+    "copied" : "Copied To Clipboard",
+    "billno" : "Bill Number",
+    "pholdbillno" : "Enter the Bill Number",
+    "paymentorder" : "Payment Order",
+    "pholdpaymenttype" : "Select a Payment Mode",
+    "paymentref":"Payment Reference Number",
+    "notes" : "Notes"
+
 }

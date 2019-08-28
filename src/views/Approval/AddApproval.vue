@@ -350,7 +350,16 @@
         this.labels = this.convertDataLabel(res.data)
         console.log(this.labels)
       })
-      this.month.splice(0,new Date().getMonth()) //Set months
+       //Set months
+      var rest_months = this.month.slice(0,new Date().getMonth())
+      var select_month = this.month.splice(new Date().getMonth(),12)
+      for(var i=0;i<rest_months.length;i++) {
+                rest_months[i].name = `${rest_months[i].name} - ${new Date().getFullYear()+1}`
+              }
+              for(var i=0;i<select_month.length;i++) {
+                select_month[i].name = `${select_month[i].name} - ${new Date().getFullYear()}`
+              }
+              this.month = select_month.concat(rest_months)
       // Department Tree
       axios.get(`${apiUrl}`+`dropdown/department/get/all`,{withCredentials:true}).then((res) => {
         this.dept = JSON.parse(JSON.stringify(res.data))

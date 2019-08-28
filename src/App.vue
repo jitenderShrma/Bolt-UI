@@ -9,6 +9,16 @@ export default {
 </script>
 
 <style lang="scss">
+.aside-menu .tab-content {
+  height:calc( 100vh - 90px)
+}
+.btn-secondary:focus, .btn-secondary.focus {
+    -webkit-box-shadow: 0 0 0 0.0rem rgba(175, 181, 186, 0.5);
+    box-shadow: 0 0 0 0.0rem transparent !important;
+}
+.hidden_header {
+  display: none;
+}
 .e-search {
   width:130px !important;
 }
@@ -19,9 +29,10 @@ export default {
 }
 @media (max-width: 580px) {
   #xs{
-    max-width : 26.66667% !important;
+    display:none;
   }
 }
+
 .content-wrapper {
   position:relative;
 }

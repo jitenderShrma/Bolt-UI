@@ -1,6 +1,6 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
-  <AppAside id="new_aside" style="height: calc(100vh - 60px);top:-8.7%">
+  <AppAside id="new_aside" style="height: calc(100vh - 60px);top:-7.9%">
         <div style="float:right ">
         <DefaultToggler style="line-height:2"/>
         </div>
@@ -168,6 +168,12 @@
                 </div>
                 </b-form>
             </b-modal>
+            <b-modal size="sm" :title="$ml.get('confirm')" class="modal-primary" v-model="cancelModal" @ok="cancelApproval">
+              <h5 v-text="$ml.get('confirmcancel')"></h5>
+            </b-modal>
+            <b-modal size="sm" :title="$ml.get('confirm')" class="modal-primary" v-model="releaseModal" @ok="releaseApproval">
+              <h5 v-text="$ml.get('confirmrelease')"></h5>
+            </b-modal>
   </div>
  </div>
 </template>
@@ -333,26 +339,44 @@ export default {
                   template: Vue.component('buttonTemplate', {
                       template: `<div>
                                 <div v-if="yes">
-                                  <b-button @click="acceptReq" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
-                                  <b-button @click="rejectReq" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
+                                  <b-button @click="accept_remarks = true" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
+                                  <b-button @click="reject_remarks = true" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
                                   </div>
+                                
+                                <b-modal size="sm" :title="$ml.get('addremarks')" class="modal-primary" v-model="accept_remarks" @ok="accept_remarks = false" hide-footer>
+                                  <ejs-textbox v-model="input.remarks" floatLabelType="Auto" :placeholder="$ml.get('remarks')"></ejs-textbox>
+                                   <br> 
+                                  <b-button @click="acceptReq" type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
+                                </b-modal>
+                                <b-modal size="sm" :title="$ml.get('addremarks')" class="modal-primary" v-model="reject_remarks" @ok="reject_remarks = false" hide-footer>
+                                  <ejs-textbox v-model="input.remarks" floatLabelType="Auto" :placeholder="$ml.get('remarks')"></ejs-textbox>
+                                  <br>
+                                  <b-button @click="rejectReq" type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
+                                </b-modal>
                                 </div>`,
                   data: function() {
                           return {
                               data: {},
+                              input:{},
+                              accept_remarks:false,
+                              reject_remarks:false,
                               designation:null,
                               yes:false
                           }
                       },
                       methods : {
                         acceptReq() {
-                          axios.get(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
+                          console.log(this.input)
+                          this.accept_remarks=false
+                          axios.post(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,this.input,{withCredentials:true}).then((res) => {
                             console.log(res.data)
                             window.location.reload();
                           })
                         },
                         rejectReq() {
-                          axios.get(`${apiUrl}`+`/approval/level1/reject/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
+                          console.log(this.input)
+                          this.reject_remarks=false
+                          axios.post(`${apiUrl}`+`/approval/level1/reject/${this.data.ref_id}`,this.input,{withCredentials:true}).then((res) => {
                             console.log(res.data)
                             window.location.reload();
                           })
@@ -500,6 +524,8 @@ export default {
                     })
               }
           },
+          cancelModal:false,
+          releaseModal:false,
           enableColumn:false,
           link:'',
           key:'',
@@ -546,6 +572,93 @@ export default {
             };
         },
   methods: {
+    cancelApproval() {
+      var data = this.$refs.overviewgrid.getSelectedRecords()
+      api.put(`${apiUrl}approvals/preApp/cancel/label/${data[0].ref_id}`).then((res) => {
+                        api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
+                          console.log(response.data)
+                          var user =  JSON.parse(localStorage['session_key'])
+                            this.datasrc = response.data;
+                            for(var i =0;i<this.datasrc.length;i++) {
+                              if(user.user) {
+                                if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
+                                   this.enableColumn =  true
+                                }
+                              }
+                              else {
+                                console.log("user")
+                                if(this.datasrc[i].status=="PENDING") {
+                                   this.enableColumn =  true
+                                }
+                              }
+                              if(this.datasrc[i].request_by == null) {
+                                this.datasrc[i].request_by = {
+                                  user_name:"No longer exists!"
+                                }
+                              }
+                              if(this.datasrc[i].department == null) {
+                                this.datasrc[i].department = {
+                                  department_name:"No longer exists!"
+                                }
+                              }
+                              if(this.datasrc[i].budget_head == null) {
+                                this.datasrc[i].budget_head = {
+                                  name:"No longer exists!"
+                                }
+                              }
+                              this.datasrc[i].labellist = "";
+                              for(var j=0;j<this.datasrc[i].labels.length;i++) {
+                                this.datasrc[i].labellist = this.datasrc[i].labellist+`${this.datasrc[i].labels[j].label_name},`
+                              }
+                            }
+                            console.log(this.datasrc)
+                })
+                    })
+    },
+    releaseApproval() {
+      var data = this.$refs.overviewgrid.getSelectedRecords()
+      api.get(`${apiUrl}approvals/preApp/release/${data[0].ref_id}`).then((res) => {
+                        console.log(res.data)
+                        api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
+                          console.log(response.data)
+                          var user =  JSON.parse(localStorage['session_key'])
+                            this.datasrc = response.data;
+                            for(var i =0;i<this.datasrc.length;i++) {
+                              if(user.user) {
+                                if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
+                                   this.enableColumn =  true
+                                }
+                              }
+                              else {
+                                console.log("user")
+                                if(this.datasrc[i].status=="PENDING") {
+                                   this.enableColumn =  true
+                                }
+                              }
+                              if(this.datasrc[i].request_by == null) {
+                                this.datasrc[i].request_by = {
+                                  user_name:"No longer exists!"
+                                }
+                              }
+                              if(this.datasrc[i].department == null) {
+                                this.datasrc[i].department = {
+                                  department_name:"No longer exists!"
+                                }
+                              }
+                              if(this.datasrc[i].budget_head == null) {
+                                this.datasrc[i].budget_head = {
+                                  name:"No longer exists!"
+                                }
+                              }
+                              this.datasrc[i].labellist = "";
+                              for(var j=0;j<this.datasrc[i].labels.length;i++) {
+                                this.datasrc[i].labellist = this.datasrc[i].labellist+`${this.datasrc[i].labels[j].label_name},`
+                              }
+                            }
+                            console.log(this.datasrc)
+                })
+                    })
+    },
     editdeptLabel() {
       var id = this.editlabel._id
       this.editlabel._id = undefined
@@ -667,6 +780,10 @@ export default {
     },
     beforeCopy(args) {
       args.data = args.data.slice(1,9)
+      toast({
+          type: VueNotifications.types.success,
+          title: 'Copied To Clipboard'
+      })
     },
     editLabel(args) {
       console.log(args)
@@ -767,91 +884,93 @@ export default {
                 }
                 if(args.item.id == "cancel") {
                   if(data.length>0) {
-                    api.put(`${apiUrl}approvals/preApp/cancel/label/${data[0].ref_id}`).then((res) => {
-                        api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
-                          console.log(response.data)
-                          var user =  JSON.parse(localStorage['session_key'])
-                            this.datasrc = response.data;
-                            for(var i =0;i<this.datasrc.length;i++) {
-                              if(user.user) {
-                                if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
-                                   this.enableColumn =  true
-                                }
-                              }
-                              else {
-                                console.log("user")
-                                if(this.datasrc[i].status=="PENDING") {
-                                   this.enableColumn =  true
-                                }
-                              }
-                              if(this.datasrc[i].request_by == null) {
-                                this.datasrc[i].request_by = {
-                                  user_name:"No longer exists!"
-                                }
-                              }
-                              if(this.datasrc[i].department == null) {
-                                this.datasrc[i].department = {
-                                  department_name:"No longer exists!"
-                                }
-                              }
-                              if(this.datasrc[i].budget_head == null) {
-                                this.datasrc[i].budget_head = {
-                                  name:"No longer exists!"
-                                }
-                              }
-                              this.datasrc[i].labellist = "";
-                              for(var j=0;j<this.datasrc[i].labels.length;i++) {
-                                this.datasrc[i].labellist = this.datasrc[i].labellist+`${this.datasrc[i].labels[j].label_name},`
-                              }
-                            }
-                            console.log(this.datasrc)
-                })
-                    })
+                    this.cancelModal = true
+                //     api.put(`${apiUrl}approvals/preApp/cancel/label/${data[0].ref_id}`).then((res) => {
+                //         api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
+                //           console.log(response.data)
+                //           var user =  JSON.parse(localStorage['session_key'])
+                //             this.datasrc = response.data;
+                //             for(var i =0;i<this.datasrc.length;i++) {
+                //               if(user.user) {
+                //                 if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
+                //                    this.enableColumn =  true
+                //                 }
+                //               }
+                //               else {
+                //                 console.log("user")
+                //                 if(this.datasrc[i].status=="PENDING") {
+                //                    this.enableColumn =  true
+                //                 }
+                //               }
+                //               if(this.datasrc[i].request_by == null) {
+                //                 this.datasrc[i].request_by = {
+                //                   user_name:"No longer exists!"
+                //                 }
+                //               }
+                //               if(this.datasrc[i].department == null) {
+                //                 this.datasrc[i].department = {
+                //                   department_name:"No longer exists!"
+                //                 }
+                //               }
+                //               if(this.datasrc[i].budget_head == null) {
+                //                 this.datasrc[i].budget_head = {
+                //                   name:"No longer exists!"
+                //                 }
+                //               }
+                //               this.datasrc[i].labellist = "";
+                //               for(var j=0;j<this.datasrc[i].labels.length;i++) {
+                //                 this.datasrc[i].labellist = this.datasrc[i].labellist+`${this.datasrc[i].labels[j].label_name},`
+                //               }
+                //             }
+                //             console.log(this.datasrc)
+                // })
+                //     })
                   }
                 }
                 if(args.item.id == "release") {
                   if(data.length>0) {
-                    api.get(`${apiUrl}approvals/preApp/release/${data[0].ref_id}`).then((res) => {
-                        console.log(res.data)
-                        api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
-                          console.log(response.data)
-                          var user =  JSON.parse(localStorage['session_key'])
-                            this.datasrc = response.data;
-                            for(var i =0;i<this.datasrc.length;i++) {
-                              if(user.user) {
-                                if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
-                                   this.enableColumn =  true
-                                }
-                              }
-                              else {
-                                console.log("user")
-                                if(this.datasrc[i].status=="PENDING") {
-                                   this.enableColumn =  true
-                                }
-                              }
-                              if(this.datasrc[i].request_by == null) {
-                                this.datasrc[i].request_by = {
-                                  user_name:"No longer exists!"
-                                }
-                              }
-                              if(this.datasrc[i].department == null) {
-                                this.datasrc[i].department = {
-                                  department_name:"No longer exists!"
-                                }
-                              }
-                              if(this.datasrc[i].budget_head == null) {
-                                this.datasrc[i].budget_head = {
-                                  name:"No longer exists!"
-                                }
-                              }
-                              this.datasrc[i].labellist = "";
-                              for(var j=0;j<this.datasrc[i].labels.length;i++) {
-                                this.datasrc[i].labellist = this.datasrc[i].labellist+`${this.datasrc[i].labels[j].label_name},`
-                              }
-                            }
-                            console.log(this.datasrc)
-                })
-                    })
+                    this.releaseModal = true
+                //     api.get(`${apiUrl}approvals/preApp/release/${data[0].ref_id}`).then((res) => {
+                //         console.log(res.data)
+                //         api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
+                //           console.log(response.data)
+                //           var user =  JSON.parse(localStorage['session_key'])
+                //             this.datasrc = response.data;
+                //             for(var i =0;i<this.datasrc.length;i++) {
+                //               if(user.user) {
+                //                 if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
+                //                    this.enableColumn =  true
+                //                 }
+                //               }
+                //               else {
+                //                 console.log("user")
+                //                 if(this.datasrc[i].status=="PENDING") {
+                //                    this.enableColumn =  true
+                //                 }
+                //               }
+                //               if(this.datasrc[i].request_by == null) {
+                //                 this.datasrc[i].request_by = {
+                //                   user_name:"No longer exists!"
+                //                 }
+                //               }
+                //               if(this.datasrc[i].department == null) {
+                //                 this.datasrc[i].department = {
+                //                   department_name:"No longer exists!"
+                //                 }
+                //               }
+                //               if(this.datasrc[i].budget_head == null) {
+                //                 this.datasrc[i].budget_head = {
+                //                   name:"No longer exists!"
+                //                 }
+                //               }
+                //               this.datasrc[i].labellist = "";
+                //               for(var j=0;j<this.datasrc[i].labels.length;i++) {
+                //                 this.datasrc[i].labellist = this.datasrc[i].labellist+`${this.datasrc[i].labels[j].label_name},`
+                //               }
+                //             }
+                //             console.log(this.datasrc)
+                // })
+                //     })
                   }
                 }
                 

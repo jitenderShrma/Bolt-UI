@@ -247,7 +247,7 @@
                 </b-col>
                 <b-col sm="8" v-if="isDesig5">
                   <br>
-            <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddesig')" v-model="input.level1.designation" :multiple="false" :options="designations"/>
+            <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddesig')" v-model="input.level5.designation" :multiple="false" :options="designations"/>
           </b-col>
         </b-row>
             </b-form-group>
