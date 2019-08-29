@@ -354,12 +354,12 @@ export default {
                                   <b-button @click="accept_remarks = false" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
                                 </template>
                                 <b-row>
-                                  <b-col  class="px-1" sm="4">
+                                  <b-col  class="px-0 bg-secondary" sm="4">
                                   <b-card no-body style="border:0px">
-                                  <b-card-body class="bg-primary px-0 py-0">
+                                  <b-card-body class="bg-primary px-1 py-0">
                                   Requested By :
                                   <b-row>
-                                  <b-col sm="3">
+                                  <b-col  sm="3">
                                   <div class="avatar py-1">
                                     <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
                                     </div>
@@ -376,6 +376,9 @@ export default {
                                         Department : {{data.request_by.user_type.department.department_name}}
                                       </b-row>
                                       <b-row>
+                                        Head : {{data.budget_head.name}}
+                                      </b-row>
+                                      <b-row>
                                         Amount Requested : {{data.amount}}
                                       </b-row>
                                     
@@ -384,18 +387,20 @@ export default {
                                   </b-card-body>
                                   </b-card>
                                   <br>
+                                  <div class="px-1">
                                   <label v-text="$ml.get('approvepartially')"></label>
+                                  <c-switch class="py-1" color="primary" unchecked name="switch1" v-model="partial" :uncheckedValue="false" :checkedValue="true"/>
                                   <br>
-                                  <c-switch class="mx-1" color="primary" unchecked name="switch1" v-model="partial" :uncheckedValue="false" :checkedValue="true"/>
-                                    <ejs-textbox v-model="input.partial_amount" :disabled="!partial" floatLabelType="Auto" :placeholder="$ml.get('partialamount')"></ejs-textbox>
-                                    <br>
+                                  <label v-text="$ml.get('partialamount')"></label>
+                                  <b-input v-model="input.partial_amount" :disabled="!partial" floatLabelType="Auto" :placeholder="$ml.get('partialamount')"></b-input>
                                     <br>
                                   <b-textarea v-model="input.remarks" floatLabelType="Auto" :placeholder="$ml.get('remarks')"></b-textarea>
                                    <br>
                                    <b-button @click="acceptReq" type="submit" size="sm" variant="primary" v-text="$ml.get('approve')"></b-button>
+                                   </div>
                                   </b-col>
                                   
-                                  <b-col sm="8" class="px-0" style="border-left:1px solid black;height:316px;overflow:auto;overflow-x:hidden">
+                                  <b-col sm="8" class="px-0" style="height:316px;overflow:auto;overflow-x:hidden">
                                   <b-list-group class="list-group-accent">
                                   <span v-if="data.level1approved">
                                       <b-row>
@@ -412,7 +417,7 @@ export default {
                                       </span>
                                       
                                     <div v-if="data.level1approved">
-                                    <b-list-group-item class="list-group-item-accent-warning list-group-item-divider">
+                                    <b-list-group-item class="warning px-1 py-0 list-group-item-divider">
                                       <span>
                                       <b-row>
                                       <b-col>Level 1</b-col> 
@@ -430,7 +435,7 @@ export default {
                                     </b-list-group-item>
                                     </div>
                                     <div v-if="data.level2approved">
-                                    <b-list-group-item class="list-group-item-accent-info list-group-item-divider">
+                                    <b-list-group-item class="info px-1 py-0 list-group-item-divider">
                                       <span>
                                       <b-row>
                                       <b-col>Level 2</b-col> 
@@ -448,7 +453,7 @@ export default {
                                       </b-list-group-item>
                                     </div>
                                     <div v-if="data.level3approved">
-                                    <b-list-group-item class="list-group-item-accent-success list-group-item-divider">
+                                    <b-list-group-item class="success px-1 py-0 list-group-item-divider">
                                       <span>
                                       <b-row>
                                       <b-col>Level 3</b-col> 
@@ -466,7 +471,7 @@ export default {
                                       </b-list-group-item>
                                     </div>
                                     <div v-if="data.level4approved">
-                                    <b-list-group-item class="list-group-item-accent-info list-group-item-divider">
+                                    <b-list-group-item class="info  px-1 py-0list-group-item-divider">
                                       <span>
                                       <b-row>
                                       <b-col>Level 4</b-col> 
@@ -484,7 +489,7 @@ export default {
                                       </b-list-group-item>
                                     </div>
                                     <div v-if="data.level5approved">
-                                    <b-list-group-item class="list-group-item-accent-secondary list-group-item-divider">
+                                    <b-list-group-item class="secondary px-1 py-0 list-group-item-divider">
                                       <span>
                                       <b-row>
                                       <b-col>Level 5</b-col> 
