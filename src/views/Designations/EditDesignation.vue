@@ -460,7 +460,8 @@ export default {
               {module_name:"trans",text:"Transaction",read:true,write:true,edit:false,delete:false},
               {module_name:"importTrans",text:"Transaction Upload",write:false},
               {module_name:"budtrans",text:"Budget Transfer",read:true,write:false,edit:false,delete:false},
-              {module_name:"paymentorder",text:"Purchase Order",read:true,write:false,edit:false,delete:false}
+              {module_name:"paymentorder",text:"Purchase Order",read:true,write:false,edit:false,delete:false},
+              {module_name:"vendor",text:"Vendor",read:true,write:false,edit:false,delete:false}
               ],
               additionalpermission:[
               {module_name:"company",text:"Company",read_own:true,read_all:false,delete_own:false,edit_own:false},{module_name:"subuser",text:"User",read_own:true,read_all:false,delete_own:true,edit_own:true},{module_name:"subgroup",text:"User Group",read_own:false,read_all:false,delete_own:false,edit_own:false},
@@ -472,7 +473,8 @@ export default {
               {module_name:"trans",text:'Transcation',read_own:true,read_all:false,delete_own:false,edit_own:false},
               {module_name:"importTrans",text:"Transaction Upload",read_own:false,read_all:false},
               {module_name:"budtrans",text:"Budget Transfer",read_own:false,read_all:false,delete_own:false,edit_own:false},
-              {module_name:"paymentorder",text:"Payment Order",read_own:false,read_all:false,delete_own:false,edit_own:false}
+              {module_name:"paymentorder",text:"Payment Order",read_own:false,read_all:false,delete_own:false,edit_own:false},
+              {module_name:"vendor",text:"Vendor",read_own:false,read_all:false,delete_own:false,edit_own:false}
               ],
               selectedLabel:null,
             modal :false,
@@ -502,6 +504,7 @@ export default {
   },
   
   async mounted() {
+    var vendorExist = false
   	this.link = window.location.href
   	this.key = this.link.split('edit/').pop()
   	api.get(`${apiUrl}`+`designation/desig/get/one/${this.key}`).then((res) =>{
@@ -511,29 +514,68 @@ export default {
       this.input.name = res.data.name
       this.input.labels = res.data.labels
       console.log(this.input.labels)
-  	})
+  	}).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
     api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
         this.labels = res.data
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
     api.get(`${apiUrl}/super/group/subgroup/find/by/${this.key}`).then((res) => {
       this.datasrc = res.data.permissions
       this.additionalpermission = res.data.additional_permissions
       this.approval_permissions = res.data.approval_permissions
+      for(var i=0;i<this.datasrc.length;i++) {
+        if(this.datasrc[i].module_name == "vendor") {
+          vendorExist = true
+        }
+      }
+      if(vendorExist == false) {
+        this.datasrc.push({module_name:"vendor",text:"Vendor",read:true,write:false,edit:false,delete:false})
+        this.additionalpermission.push({module_name:"vendor",text:"Vendor",read_own:false,read_all:false,delete_own:false,edit_own:false})
+      }
       this.by_heads = this.approval_permissions.by_heads.status
       this.by_dept = this.approval_permissions.by_department.status
-    })
+    }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
     axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = this.list_to_tree_dept(res.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
       axios.get(`${apiUrl}`+`designation/desig/get/all`,{withCredentials:true}).then((res) => {
         this.or_desig = JSON.parse(JSON.stringify(res.data))
         this.data = this.list_to_tree_desig(res.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
       api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
       this.or_head = JSON.parse(JSON.stringify(response.data))
       this.heads = this.list_to_tree_head(response.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       });
 
     },
@@ -557,13 +599,23 @@ export default {
         axios.get(`${apiUrl}dropdown/designation/no/dept`,{withCredentials:true}).then((res) => {
           this.or_desig = JSON.parse(JSON.stringify(res.data))
           this.data = this.list_to_tree_desig(res.data)
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
       }
       else {
         axios.get(`${apiUrl}dropdown/designation/find/${this.input.department}`,{withCredentials:true}).then((res) => {
           this.or_desig = JSON.parse(JSON.stringify(res.data))
           this.data = this.list_to_tree_desig(res.data)
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
       }
     }
   },
@@ -577,7 +629,12 @@ export default {
             }
           }
           this.data = this.list_to_tree_desig(response.data)
-          })
+          }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
       },
       setEditAll(i) {
         if(this.additionalpermission[i].edit_all == true) {
@@ -606,6 +663,11 @@ export default {
       this.editlabel._id = undefined
       api.put(`${apiUrl}label/label/edit/${id}`,this.editlabel).then((res) => {
         console.log(res.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
       this.$router.go(0)
     },
@@ -862,6 +924,11 @@ export default {
           this.input.labels = res.data.labels
           console.log(this.input.labels)
         })
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
       
     },
@@ -875,7 +942,12 @@ export default {
                     this.labels = res.data
                   })
                 console.log(this.input.labels)
-              });
+              }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
       },
     selectLabel(args) {
         if(this.selectedLabel != null) {
@@ -884,14 +956,24 @@ export default {
           label = res.data
           this.input.labels.push(label);
           this.selectedLabel = null
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
 
         var data = {
           labels : this.selectedLabel
         }
         api.put(`${apiUrl}designation/desig/push/label/${args}`,data).then((res) => {
             
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
       }
       },
     list_to_tree_desig(list) {
@@ -997,7 +1079,12 @@ export default {
                         console.log(res)
                         this.$router.push('/designation/list')
                     })
-                })
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
             }
             
           })
@@ -1041,12 +1128,22 @@ export default {
       	if(this.input.department == null || this.input.department == "") {
           axios.get(`${apiUrl}dropdown/designation/no/dept`,{withCredentials:true}).then((res) => {
             this.data = this.list_to_tree_desig(res.data)
-          })
+          }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
         }
         else {
           axios.get(`${apiUrl}dropdown/designation/find/${this.input.department}`,{withCredentials:true}).then((res) => {
             this.data = this.list_to_tree_desig(res.data)
-          })
+          }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
         }
       },
       clickHandler(args){
@@ -1068,7 +1165,12 @@ export default {
                                 .then((res) => {
                                   this.data = res.data
                                   });
-                              });
+                              }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
                             
                           }
         if (args.item.id === 'exportPdf') {

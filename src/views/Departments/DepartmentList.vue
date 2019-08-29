@@ -392,9 +392,19 @@ export default {
     .then((response) => {
       this.dept = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_dept(response.data);
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
     api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
         this.labels = res.data
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
     }
   },
@@ -403,18 +413,38 @@ export default {
     .then((response) => {
       this.dept = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_dept(response.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
     api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
         this.labels = res.data
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
     },
     created() {
      api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
       this.data = this.list_to_tree_dept(response.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
     api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
         this.labels = res.data
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
     },
   provide: {
@@ -426,6 +456,11 @@ export default {
       this.editlabel._id = undefined
       api.put(`${apiUrl}label/label/edit/${id}`,this.editlabel).then((res) => {
         console.log(res.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
       this.$router.go(0)
     },
@@ -446,6 +481,11 @@ export default {
       console.log(body)
       api.put(`${apiUrl}department/dept/pop/label/${id}`,body).then((res) => {
         console.log(res.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
       
     },
@@ -468,16 +508,31 @@ export default {
         api.get(`${apiUrl}label/label/get/one/${this.selectedLabel}`).then((res) => {
           label = res.data
           this.input.labels.push(label);
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
       }
     },
     async load(args) {
       api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
       this.data = this.list_to_tree_dept(response.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
     api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
         this.labels = res.data
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
     },
     addLabel (args) {
@@ -490,7 +545,12 @@ export default {
                     this.labels = res.data
                   })
                 console.log(this.editinput.labels)
-              });
+              }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
       },
     onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
@@ -514,7 +574,12 @@ export default {
                   });
                 this.$refs.treegrid.collapseAll()
                 this.$refs.treegrid.expandAll()            
-                });
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
             this.modal=false
             this.input = {
               labels:[]
@@ -528,7 +593,12 @@ export default {
                   this.dept = JSON.parse(JSON.stringify(response.data))
                   this.data = this.list_to_tree_dept(response.data)
                   });
-            });
+            }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
             this.input = {
               labels:[]
             }
@@ -549,7 +619,12 @@ export default {
                 .then((response) => {
                   this.data = this.list_to_tree_dept(response.data)
               });
-          });
+          }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
         this.editmodal=false
       },
         
@@ -620,7 +695,12 @@ export default {
                                 .then((response) => {
                                   this.data = this.list_to_tree_dept(response.data)
                                   })
-                              });
+                              }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
                               this.$refs.treegrid.collapseAll()
                               this.$refs.treegrid.expandAll()
                     }
@@ -649,14 +729,24 @@ export default {
         api.get(`${apiUrl}label/label/get/one/${this.selectedLabel}`).then((res) => {
           label = res.data
           this.editinput.labels.push(label);
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
 
         var data = {
           labels : this.selectedLabel
         }
         api.put(`${apiUrl}department/dept/push/label/${args}`,data).then((res) => {
             
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
       }
       },
       cellSave(args) {
@@ -669,7 +759,12 @@ export default {
                 .then((response) => {
                   this.data = this.list_to_tree_dept(response.data)
                   })
-          })
+          }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
         }
       },
       // disableProp(args) {
@@ -699,7 +794,12 @@ export default {
             }
           }
           this.treedept = this.list_to_tree_dept(response.data)
-          })
+          }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
       },
       list_to_tree_dept(list) {
           var map = {}, node, roots = [], i;

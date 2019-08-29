@@ -348,18 +348,167 @@ export default {
                                   <b-button @click="accept_remarks = true" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
                                   <b-button @click="reject_remarks = true" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
                                   </div>
-                                <b-modal size="sm" :title="$ml.get('addremarks')" class="modal-primary" v-model="accept_remarks" @ok="accept_remarks = false" hide-footer>
-                                  <ejs-textbox v-model="input.remarks" floatLabelType="Auto" :placeholder="$ml.get('remarks')"></ejs-textbox>
-                                  <br>
+                                <b-modal size="lg" class="modal-primary" v-model="accept_remarks" @ok="accept_remarks = false" hide-footer>
+                                <template slot="modal-header">
+                                  <h5>Level {{data.atLevel+1}} Approval</h5>
+                                  <b-button @click="accept_remarks = false" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
+                                </template>
+                                <b-row>
+                                  <b-col  class="px-1" sm="4">
+                                  <b-card no-body style="border:0px">
+                                  <b-card-body class="bg-primary px-0 py-0">
+                                  Requested By :
+                                  <b-row>
+                                  <b-col sm="3">
+                                  <div class="avatar py-1">
+                                    <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    </div>
+                                  </b-col>
+                                  <b-col>
+                                    
+                                      <b-row>
+                                        Name : {{data.request_by.personal_details.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Designation : {{data.request_by.user_type.designation.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Department : {{data.request_by.user_type.department.department_name}}
+                                      </b-row>
+                                      <b-row>
+                                        Amount Requested : {{data.amount}}
+                                      </b-row>
+                                    
+                                  </b-col>
+                                  
+                                  </b-card-body>
+                                  </b-card>
                                   <br>
                                   <label v-text="$ml.get('approvepartially')"></label>
                                   <br>
                                   <c-switch class="mx-1" color="primary" unchecked name="switch1" v-model="partial" :uncheckedValue="false" :checkedValue="true"/>
-                                  <div v-if="partial">
-                                    <ejs-textbox v-model="input.partial_amount" floatLabelType="Auto" :placeholder="$ml.get('partialamount')"></ejs-textbox>
-                                  </div>
-                                   <br> 
-                                  <b-button @click="acceptReq" type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
+                                    <ejs-textbox v-model="input.partial_amount" :disabled="!partial" floatLabelType="Auto" :placeholder="$ml.get('partialamount')"></ejs-textbox>
+                                    <br>
+                                    <br>
+                                  <b-textarea v-model="input.remarks" floatLabelType="Auto" :placeholder="$ml.get('remarks')"></b-textarea>
+                                   <br>
+                                   <b-button @click="acceptReq" type="submit" size="sm" variant="primary" v-text="$ml.get('approve')"></b-button>
+                                  </b-col>
+                                  
+                                  <b-col sm="8" class="px-0" style="border-left:1px solid black;height:316px;overflow:auto;overflow-x:hidden">
+                                  <b-list-group class="list-group-accent">
+                                  <span v-if="data.level1approved">
+                                      <b-row>
+                                        <b-col class="px-0 py-0">
+                                        </b-col>
+                                        <b-col class="px-0 py-0">
+                                        Designation
+                                        </b-col>
+                                        <b-col class="px-0 py-0">
+                                        Department
+                                        </b-col>
+                                      </b-row>
+                                      <hr>
+                                      </span>
+                                      
+                                    <div v-if="data.level1approved">
+                                    <b-list-group-item class="list-group-item-accent-warning list-group-item-divider">
+                                      <span>
+                                      <b-row>
+                                      <b-col>Level 1</b-col> 
+                                      <b-col>({{data.level1approved.by.user_type.designation.name}})</b-col>
+                                      <b-col> {{data.level1approved.by.user_type.department.department_name}}
+                                      </b-col>
+                                      </b-row>
+                                      </span>
+                                      <br>
+                                      <span>
+                                      <b-row>
+                                      <b-col>{{data.level1approved.by.personal_details.name}}</b-col>
+                                      <b-col> {{data.level1approved.partial_amount}}</b-col>
+                                      <b-col> <b-button @click="acceptpartial(1)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button></b-col></b-row></span>
+                                    </b-list-group-item>
+                                    </div>
+                                    <div v-if="data.level2approved">
+                                    <b-list-group-item class="list-group-item-accent-info list-group-item-divider">
+                                      <span>
+                                      <b-row>
+                                      <b-col>Level 2</b-col> 
+                                      <b-col>({{data.level2approved.by.user_type.designation.name}})</b-col>
+                                      <b-col> {{data.level2approved.by.user_type.department.department_name}}
+                                      </b-col>
+                                      </b-row>
+                                      </span>
+                                      <br>
+                                      <span>
+                                      <b-row>
+                                      <b-col>{{data.level2approved.by.personal_details.name}}</b-col>
+                                      <b-col> {{data.level2approved.partial_amount}}</b-col>
+                                      <b-col> <b-button @click="acceptpartial(2)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button></b-col></b-row></span>
+                                      </b-list-group-item>
+                                    </div>
+                                    <div v-if="data.level3approved">
+                                    <b-list-group-item class="list-group-item-accent-success list-group-item-divider">
+                                      <span>
+                                      <b-row>
+                                      <b-col>Level 3</b-col> 
+                                      <b-col>({{data.level3approved.by.user_type.designation.name}})</b-col>
+                                      <b-col> {{data.level3approved.by.user_type.department.department_name}}
+                                      </b-col>
+                                      </b-row>
+                                      </span>
+                                      <br>
+                                      <span>
+                                      <b-row>
+                                      <b-col>{{data.level3approved.by.personal_details.name}}</b-col>
+                                      <b-col> {{data.level3approved.partial_amount}}</b-col>
+                                      <b-col> <b-button @click="acceptpartial(3)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button></b-col></b-row></span>
+                                      </b-list-group-item>
+                                    </div>
+                                    <div v-if="data.level4approved">
+                                    <b-list-group-item class="list-group-item-accent-info list-group-item-divider">
+                                      <span>
+                                      <b-row>
+                                      <b-col>Level 4</b-col> 
+                                      <b-col>({{data.level4approved.by.user_type.designation.name}})</b-col>
+                                      <b-col> {{data.level4approved.by.user_type.department.department_name}}
+                                      </b-col>
+                                      </b-row>
+                                      </span>
+                                      <br>
+                                      <span>
+                                      <b-row>
+                                      <b-col>{{data.level4approved.by.personal_details.name}}</b-col>
+                                      <b-col> {{data.level4approved.partial_amount}}</b-col>
+                                      <b-col> <b-button @click="acceptpartial(4)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button></b-col></b-row></span>
+                                      </b-list-group-item>
+                                    </div>
+                                    <div v-if="data.level5approved">
+                                    <b-list-group-item class="list-group-item-accent-secondary list-group-item-divider">
+                                      <span>
+                                      <b-row>
+                                      <b-col>Level 5</b-col> 
+                                      <b-col>({{data.level5approved.by.user_type.designation.name}})</b-col>
+                                      <b-col> {{data.level5approved.by.user_type.department.department_name}}
+                                      </b-col>
+                                      </b-row>
+                                      </span>
+                                      <br>
+                                      <span>
+                                      <b-row>
+                                      <b-col>{{data.level5approved.by.personal_details.name}}</b-col>
+                                      <b-col> {{data.level5approved.partial_amount}}</b-col>
+                                      <b-col> <b-button @click="acceptpartial(5)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button></b-col></b-row></span>
+                                      </b-list-group-item>
+                                      
+                                    </div>
+                                    <div v-else>
+                                    </div>
+                                    </b-list-group>
+                                  </b-col>
+                                  </b-row>
+                                  <br>
+                                  
                                 </b-modal>
                                 <b-modal size="sm" :title="$ml.get('addremarks')" class="modal-primary" v-model="reject_remarks" @ok="reject_remarks = false" hide-footer>
                                   <ejs-textbox v-model="input.remarks" floatLabelType="Auto" :placeholder="$ml.get('remarks')"></ejs-textbox>
@@ -383,13 +532,35 @@ export default {
                           }
                       },
                       methods : {
+                        acceptpartial(i) {
+                          console.log(i)
+                        },
                         acceptReq() {
                           console.log(this.input)
                           this.accept_remarks=false
-                          axios.get(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
-                            console.log(res.data)
-                            window.location.reload();
-                          })
+                          if(this.partial && this.data.amount == this.input.partial_amount) {
+                            axios.get(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
+                              console.log(res.data)
+                              window.location.reload();
+                            }).catch((err)=> {
+                              toast({
+                                type: VueNotifications.types.error,
+                                title: 'Network Error'
+                              })
+                            })
+                          }
+                          else{
+                            this.input.partial_amount = undefined
+                            axios.get(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
+                              console.log(res.data)
+                              window.location.reload();
+                            }).catch((err)=> {
+                              toast({
+                                type: VueNotifications.types.error,
+                                title: 'Network Error'
+                              })
+                            })
+                          }
                         },
                         rejectReq() {
                           console.log(this.input)
@@ -397,11 +568,17 @@ export default {
                           axios.get(`${apiUrl}`+`/approval/level1/reject/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
                             console.log(res.data)
                             window.location.reload();
+                          }).catch((err)=> {
+                            toast({
+                              type: VueNotifications.types.error,
+                              title: 'Network Error'
+                            })
                           })
                         }
                       },
                       mounted() {
                         var data =  JSON.parse(localStorage['session_key'])
+                        this.input.partial_amount = this.data.amount
                         if(data.user) {
                           this.designation = data.user.user_type.designation
                           if(this.data.assigned_to_designation == this.designation && this.data.status=="PENDING") {
@@ -631,7 +808,12 @@ export default {
                             }
                             console.log(this.datasrc)
                 })
-                    })
+                    }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
     },
     releaseApproval() {
       var data = this.$refs.overviewgrid.getSelectedRecords()
@@ -675,13 +857,23 @@ export default {
                             }
                             console.log(this.datasrc)
                 })
-                    })
+                    }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
     },
     editdeptLabel() {
       var id = this.editlabel._id
       this.editlabel._id = undefined
       api.put(`${apiUrl}label/label/edit/${id}`,this.editlabel).then((res) => {
         console.log(res.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
       this.$router.go(0)
     },
@@ -695,7 +887,12 @@ export default {
         this.transactions = []
         api.get(`${apiUrl}transaction/trans/get/for/an/${args.data.ref_id}`).then((res) => {
           this.transactions = res.data
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
         api.get(`${apiUrl}approvals/preApp/timeline/get/${args.data._id}`).then((res) =>{
             if(res.data) {
               this.log = JSON.parse(JSON.stringify(res.data.log))
@@ -793,7 +990,12 @@ export default {
             //   this.designation.push(this.lineManagers[i][0].designation.name)
             //   this.department.push(this.lineManagers[i][0].department.department_name)
             // }
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
       }
     },
     beforeCopy(args) {
@@ -819,6 +1021,11 @@ export default {
       console.log(body)
       api.put(`${apiUrl}approvals/preApp/pop/label/${id}`,body).then((res) => {
         console.log(res.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
       
     },
@@ -835,7 +1042,12 @@ export default {
                     this.labels = res.data
                   })
                 console.log(this.editinput.labels)
-              });
+              }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
       },
     onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
@@ -847,14 +1059,24 @@ export default {
         api.get(`${apiUrl}label/label/get/one/${this.selectedLabel}`).then((res) => {
           label = res.data
           this.editinput.labels.push(label);
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
 
         var data = {
           labels : this.selectedLabel
         }
         api.put(`${apiUrl}approvals/preApp/push/label/${args}`,data).then((res) => {
             
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
       }
       },
             clickHandler (args) {
@@ -1014,13 +1236,23 @@ export default {
               if(to.params.id == 'pending') {
                 api.get(`${apiUrl}`+`approvals/preApp/view/requests`).then((response) => {
                     this.datasrc = response.data;
-                })
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
                 this.pending = true
               }
               else {
                 api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
                     this.datasrc = response.data;
-                })
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
                 this.pending = false
               }
             }
@@ -1033,6 +1265,7 @@ export default {
                 await api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
                   var user =  JSON.parse(localStorage['session_key'])
                     this.datasrc = response.data;
+                    console.log(this.datasrc)
                     for(var i=0;i<this.datasrc.length;i++) {
                       if(user.user) {
                         if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
@@ -1064,10 +1297,20 @@ export default {
                         this.datasrc[i].labellist = this.datasrc[i].labellist+`${this.datasrc[i].labels[j].label_name},`
                       }
                     }
-                })
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
                 api.get(`${apiUrl}`+`label/label/find/by/Approval`).then((res) => {
                   this.labels = res.data
-                })
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
               
               // else{
               //   this.pending = true

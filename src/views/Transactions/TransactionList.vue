@@ -119,10 +119,6 @@ const toastTypes = {
   warn: 'warn'
 }
 
-
-var api = axios.create({
-  withCredentials:true
-})
 miniToastr.init({types: toastTypes})
 
 function toast ({title, message, type, timeout, cb}) {
@@ -275,7 +271,12 @@ export default {
                             if(res.data !=null) {
                               this.labels = res.data.labels
                             }
-                        })
+                        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
                       }
                 })
           }
@@ -393,7 +394,12 @@ export default {
               })
           })
           
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
       }
     },
     printPDF() {
@@ -417,7 +423,12 @@ export default {
             api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
                     this.datasrc = response.data;
                 })
-          })
+          }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
           this.browseModal = false
         },
         onUploadFailed: function (args) {
@@ -491,7 +502,12 @@ export default {
                                 axios.get(`${apiUrl}`+`transaction/trans/get/all`,{withCredentials:true}).then((response) => {
                             this.datasrc = response.data;
                         })
-                    })
+                    }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
                     }
                 }
             },
@@ -539,7 +555,12 @@ export default {
                           this.log.push({Approval_Log:resp.data.log[i].event,Time:moment(resp.data.log[i].date).format('MMM Do YYYY, h:mm a')})
                         }
                       })
-                    })
+                    }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
                   }
                   
                 }
@@ -565,7 +586,12 @@ export default {
                         }
                       }
                     }
-                })
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
             
         }
 };

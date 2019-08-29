@@ -436,6 +436,11 @@ Vue.use(TextBoxPlugin);
       axios.get(`${apiUrl}`+`department/dept/get/`+`${this.data.parent_department}`,{withCredentials:true}).then((res) => {
         console.log(res.data)
         this.val1 = res.data.department_name
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       });
     }
   });
@@ -453,6 +458,11 @@ Vue.use(TextBoxPlugin);
       axios.get(`${apiUrl}`+`head/head/view/one/`+`${this.data.parent_head}`,{withCredentials:true}).then((res) => {
         console.log(res.data)
         this.val2 = res.data.name
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       });
     
     }
@@ -554,19 +564,44 @@ Vue.use(TextBoxPlugin);
       var key = window.location.href.split('/edit').pop()
       axios.get(`${apiUrl}`+`transaction/trans/get/one`+`${key}`,{withCredentials:true}).then((res) => {
         this.input = res.data
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       });
       axios.get(`${apiUrl}`+`vendor/get/all`,{withCredentials:true}).then((res) => {
         this.vendors = res.data
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       });
       axios.get(`${apiUrl}`+`po/get/all`,{withCredentials:true}).then((res) => {
         this.purchase_orders = res.data
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       });
       axios.get(`${apiUrl}`+`/department/dept/get`,{withCredentials:true}).then((res) => {
         this.department = res.data
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
       axios.get(`${apiUrl}`+`/head/head/get`,{withCredentials:true}).then((res) => {
         console.log(res.data);
         this.head = res.data
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
 		},
 		watch :{
@@ -604,10 +639,20 @@ Vue.use(TextBoxPlugin);
         vfd.append('gst_certi',this.vendor.gst_certi)
         axios.post(`${apiUrl}`+`vendor/create`,vfd,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((response)=> {
           this.input.user_type=response.data._id
-            })
+            }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
         axios.get(`${apiUrl}`+`vendor/get/all`,{withCredentials:true}).then((res) => {
           this.vendors = res.data
-        });
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
         this.vendorModal =false
         },
         addQuote() {
@@ -624,7 +669,12 @@ Vue.use(TextBoxPlugin);
           axios.post(`${apiUrl}`+`quote/create`,qfd,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((response)=> {
             console.log(response.data)
                   this.input.quotes.push(response.data._id)
-            })
+            }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
 
         },
         switchPO() {
@@ -636,11 +686,21 @@ Vue.use(TextBoxPlugin);
           axios.post(`${apiUrl}`+`po/create`,this.purchase_order,{withCredentials:true}).then((res)=>{
             this.poModal = false
             this.quote.purchase_order = res.data._id
-          });
+          }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
 
           axios.get(`${apiUrl}`+`po/get/all`,{withCredentials:true}).then((res) => {
           this.purchase_orders = res.data
-        });
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
         }
       
     }

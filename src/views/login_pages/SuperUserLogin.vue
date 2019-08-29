@@ -132,11 +132,19 @@ export default {
               this.$router.push(this.$route.query.redirect || '/dashboard')
             })
             .catch(function(error) {
-                toast({
-                    type: VueNotifications.types.error,
-                    title: 'Login Error',
-                    message: 'Wrong Username or Password'
+                if(error.toString().includes('401')) {
+                  toast({
+                      type: VueNotifications.types.error,
+                      title: 'Login Error',
+                      message: 'Wrong Username or Password'
                     })
+                }
+                else {
+                  toast({
+                      type: VueNotifications.types.error,
+                      title: 'Network Error'
+                    })
+                }
             });
       },
   }

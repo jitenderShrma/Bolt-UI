@@ -105,7 +105,7 @@ var router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/dashboard',
+      redirect: '/login',
       name: 'Dashboard',
       component: DefaultContainer,
       children: [

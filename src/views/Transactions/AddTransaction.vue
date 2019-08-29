@@ -3,7 +3,7 @@
 
 	<b-row>
       <b-col md="12">
-        <b-card  style="position:relative">
+        <b-card style="position:relative;height:auto">
           <b-card id="xs" class="col-sm-6 bg-info" v-if="verified" style="position: absolute; top: 20%; right: 1%;">
             <b-row>
               <b-col sm="4">
@@ -241,6 +241,7 @@
                 :items="vendors"
                 item-text="vendor_company"
                 item-value="_id"
+                menuItemsMaxHeight="40px"
                 :placeholder="$ml.get('pholdvendorcompany')"
                >
                <div slot="after-items-fixed" class="slot slot--after">
@@ -260,126 +261,140 @@
           </b-form>
         </b-card>
         </b-col>
-        <b-modal :title="$ml.get('addvendor')" size="xl" class="modal-primary" v-model="vendorModal" @ok="vendorModal = false" hide-footer>
-            <b-form style="padding:3%" v-on:submit.prevent="addVendor">
-              <ejs-textbox floatLabelType="Auto" v-model="vendor.vendor_company" :placeholder="$ml.get('vendorcompany')"></ejs-textbox>
-            
-              <b-row>
-                <b-col sm="4">
-            
-            <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('pholdpan')" v-model="vendor.pan" id="vendor_company"></ejs-textbox>
-              </b-col>
-              <b-col sm="8">
-                <b-form-group>
-                  <label for="street" v-text="$ml.get('pancopy')"></label>
-                  <b-form-file v-model="vendor.pan_copy" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" required></b-form-file>
-              </b-form-group>
-              </b-col>
-            </b-row>
-          </b-form-group>
-            
-            <b-row>
-            <b-col sm="6">
-            
-            
-            <ejs-textbox floatLabelType="Auto" v-model="vendor.acc_name" type="text" id="street" :placeholder="$ml.get('pholdaccountholdername')" required></ejs-textbox>
-          
-          </b-col>
-          <b-col sm="6">
-              
-            <ejs-textbox floatLabelType="Auto" v-model="vendor.acc_no" type="number" id="street" :placeholder="$ml.get('pholdaccountno')"></ejs-textbox>
-          </b-col>
-          </b-row>
-          <b-row>
-            <b-col sm="8">
-              
-                
-                <ejs-textbox floatLabelType="Auto"  v-model="vendor.bank_name" type="text" id="city" :placeholder="$ml.get('pholdbankname')"></ejs-textbox>
-            </b-col>
-            <b-col sm="4">
-              
-                
-                <ejs-textbox floatLabelType="Auto" v-model="vendor.ifsc" type="text" id="postal-code" :placeholder="$ml.get('pholdifsc')"></ejs-textbox>
-              
-            </b-col>
-          </b-row>
-          
-            
-              <ejs-textbox floatLabelType="Auto" type="number" v-model="vendor.turnover" id="vendor_company" :placeholder="$ml.get('pholdturnover')" ></ejs-textbox>
-            
-            <b-row>
-            <b-col sm="6">
-              
-                
-                <ejs-textbox floatLabelType="Auto"  v-model="vendor.kcp_name" type="text" id="city" :placeholder="$ml.get('pholdkcpname')"></ejs-textbox>
-              
-            </b-col>
-            <b-col sm="6">
-              
-                
-                <ejs-textbox floatLabelType="Auto" v-model="vendor.kcp_phone" type="number" id="postal-code" :placeholder="$ml.get('pholdkcpno')"></ejs-textbox>
-              
-            </b-col>
-          </b-row>
-        
-        
-              <b-row>
-                <b-col sm="4">
-                  
-                  <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('gst')" v-model="vendor.gst" id="vendor_company"></ejs-textbox>
-                    </b-col>
-                    <b-col sm="8">
-                      <b-form-group>
-                        <label for="street" v-text="$ml.get('gstcerti')"></label>
+
+        <!-- Vendor Form -->
+        <b-modal :title="$ml.get('addvendor')" size="lg" class="modal-primary" v-model="vendorModal" @ok="vendorModal = false" hide-footer>
+            <b-form v-on:submit.prevent="addVendor">
+              <b-form-group
+              :label="$ml.get('vendordetails')"
+              label-for="basicName"
+              :label-cols="3"
+              label-size="md"
+              label-class="py-3"
+              :horizontal="true"
+              >
+                <b-row>
+                  <b-col>
+                    <ejs-textbox floatLabelType="Auto" v-model="vendor.vendor_company" :placeholder="$ml.get('vendorcompany')"></ejs-textbox>
+                  </b-col>
+                  <b-col>
+                      <ejs-textbox floatLabelType="Auto"  v-model="vendor.kcp_name" type="text" id="city" :placeholder="$ml.get('pholdkcpname')"></ejs-textbox>
+                  </b-col>
+                  <b-col>
+                      <ejs-textbox floatLabelType="Auto" v-model="vendor.kcp_phone" type="number" id="postal-code" :placeholder="$ml.get('pholdkcpno')"></ejs-textbox>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col class="py-2">
+                    <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('pholdpan')" v-model="vendor.pan" id="vendor_company"></ejs-textbox>
+                  </b-col>
+                  <b-col>
+                    <b-form-group>
+                      <label for="street" v-text="$ml.get('pancopy')"></label>
+                      <b-form-file v-model="vendor.pan_copy" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" required></b-form-file>
+                  </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col class="py-2">
+                    <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('gst')" v-model="vendor.gst" id="vendor_company"></ejs-textbox>
+                  </b-col>
+                  <b-col>
+                    <b-form-group>
+                      <label for="street" v-text="$ml.get('gstcerti')"></label>
                         <b-form-file v-model="vendor.gst_certi" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" required></b-form-file>
-                </b-form-group>
-              </b-col>
-            </b-row>
-            
-            <ejs-textbox floatLabelType="Auto" v-model="addresslist.compAdd" type="text" id="street" :placeholder="$ml.get('placeholderaddressline1')"></ejs-textbox>
-          
-            <b-row>
-            <b-col sm="6">
-            
-            
-            <ejs-textbox floatLabelType="Auto" v-model="addresslist.email" type="email" id="street" :placeholder="$ml.get('placeholderemail')" required></ejs-textbox>
-          
-          </b-col>
-          <b-col sm="6">
-              
-            
-            <ejs-textbox floatLabelType="Auto" v-model="addresslist.phone" type="number" id="street" :placeholder="$ml.get('placeholderphone')"></ejs-textbox>
-          
-          </b-col>
-          </b-row>
-          <b-row>
-            <b-col sm="8">
-              
-                
-                <ejs-textbox floatLabelType="Auto"  v-model="addresslist.state" type="text" id="city" :placeholder="$ml.get('placeholderstate')"></ejs-textbox>
-              
-            </b-col>
-            <b-col sm="4">
-              
-                
-                <ejs-textbox floatLabelType="Auto" v-model="addresslist.zip" type="text" id="postal-code" :placeholder="$ml.get('placeholderpostalcode')"></ejs-textbox>
-              
-            </b-col>
-          </b-row>
-          <b-form-group>
-            <label for="country" v-text="$ml.get('country')"></label>
-            <cool-select
-                v-model="addresslist.country"
-                :items="countrylist"
-                item-text="name"
-                item-value="name"
-                :placeholder="$ml.get('placeholdercompany')"
-                required>
-              </cool-select>
-          </b-form-group>
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+              </b-form-group>
+              <b-row class="justify-content-center">
+                <b-btn size="md" href="#" v-b-toggle.expand variant="primary"><i class="cui-chevron-bottom"></i>&nbsp;<span v-text="$ml.get('more')"></span></b-btn>
+              </b-row>
+              <b-collapse id="expand">
+                <b-btn style="float:right" size="sm" href="#" v-b-toggle.bank variant="primary"><i class="cui-chevron-bottom"></i></b-btn>
+              <b-form-group
+              :label="$ml.get('bankaccountdetails')"
+              label-for="basicName"
+              :label-cols="3"
+              label-size="md"
+              label-class="py-3"
+              :horizontal="true"
+              >
+              <b-collapse id="bank" accordion="my-accordion">
+                <b-row>
+                  <b-col sm="6">
+                  <ejs-textbox floatLabelType="Auto" v-model="vendor.acc_name" type="text" id="street" :placeholder="$ml.get('pholdaccountholdername')" ></ejs-textbox>
+                </b-col>
+                <b-col sm="6">
+                  <ejs-textbox floatLabelType="Auto" v-model="vendor.acc_no" type="number" id="street" :placeholder="$ml.get('pholdaccountno')"></ejs-textbox>
+                </b-col>
+                </b-row>
+                <b-row>
+                  <b-col sm="8">
+                      <ejs-textbox floatLabelType="Auto"  v-model="vendor.bank_name" type="text" id="city" :placeholder="$ml.get('pholdbankname')"></ejs-textbox>
+                  </b-col>
+                  <b-col sm="4">
+                      <ejs-textbox floatLabelType="Auto" v-model="vendor.ifsc" type="text" id="postal-code" :placeholder="$ml.get('pholdifsc')"></ejs-textbox>
+                  </b-col>
+                </b-row>
+              </b-collapse>
+            </b-form-group>
+              <b-btn style="float:right" size="sm" href="#" v-b-toggle.additional variant="primary"><i class="cui-chevron-bottom"></i></b-btn>
+            <b-form-group
+              :label="$ml.get('additionaldetails')"
+              label-for="basicName"
+              :label-cols="3"
+              label-size="md"
+              label-class="py-3"
+              :horizontal="true"
+              >
+              <b-collapse id="additional" accordion="my-accordion">
+                <b-row>
+                  <b-col sm="4">
+                  <ejs-textbox floatLabelType="Auto" type="number" v-model="vendor.turnover" id="vendor_company" :placeholder="$ml.get('pholdturnover')" ></ejs-textbox>
+                  </b-col>
+                </b-row>
+              </b-collapse>
+            </b-form-group>
+            <b-btn style="float:right" size="sm" href="#" v-b-toggle.address variant="primary"><i class="cui-chevron-bottom"></i></b-btn>
+            <b-form-group
+              :label="$ml.get('address')"
+              label-for="basicName"
+              :label-cols="3"
+              label-size="md"
+              label-class="py-3"
+              :horizontal="true">
+                <b-collapse id="address" accordion="my-accordion">
+                    <ejs-textbox v-model="addresslist.compAdd" floatLabelType="Auto" :placeholder="$ml.get('placeholderaddressline1')"></ejs-textbox>
+                    <b-row>
+                      <b-col sm="6">
+                        <ejs-textbox floatLabelType="Auto" v-model="addresslist.email" type="email" id="street" :placeholder="$ml.get('placeholdervendoremail')"></ejs-textbox>
+                      </b-col>
+                      <b-col sm="6">
+                        <ejs-textbox floatLabelType="Auto" v-model="addresslist.phone" type="number" id="street" :placeholder="$ml.get('placeholdervendorphone')"></ejs-textbox>
+                      </b-col>
+                    </b-row>
+                    <b-row>
+                      <b-col sm="4">
+                        <ejs-textbox v-model="addresslist.state" floatLabelType="Auto" :placeholder="$ml.get('state')"></ejs-textbox>
+                      </b-col>
+                      <b-col sm="4">
+                        <ejs-textbox v-model="addresslist.zip" floatLabelType="Auto" :placeholder="$ml.get('postalcode')"></ejs-textbox>
+                      </b-col>
+                      <b-col sm="4">
+                        <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="addresslist.country" :allowFiltering="true" :fields="country_fields" :dataSource='countrylist' popupHeight='200' :placeholder="$ml.get('country')"></ejs-dropdownlist>
+                      </b-col>
+                    </b-row>
+              </b-collapse>
+            </b-form-group>
+          </b-collapse>
              <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
             </b-form>
           </b-modal>
+
+          <!-- //End Vendor Modal -->
+
+
           <b-modal :title="$ml.get('addquotations')" class="modal-primary" v-model="quoteModal" size="large" @ok="quoteModal = false" hide-footer>
             <b-form v-on:submit.prevent="addQuote">
              <b-form-group
@@ -498,6 +513,7 @@
   import apiUrl from '@/apiUrl';
   import axios from 'axios';
   import Vue from 'vue';
+  import countries from '@/resources/countries'
   import { CoolSelect } from 'vue-cool-select'
     import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
@@ -594,6 +610,7 @@ Vue.use(TextBoxPlugin);
           },
           quotes:[
           ],
+          countrylist : countries,
           verified:false,
 				input:{
 					transaction_type:"",
@@ -634,6 +651,7 @@ Vue.use(TextBoxPlugin);
         gst_certi:null,
         address:this.addresslist
       },
+      country_fields:{text:"name",value:"name"},
         vendors:[],
         is_po_rasied:false,
         quotation:false,
@@ -681,13 +699,23 @@ Vue.use(TextBoxPlugin);
           axios.get(`${apiUrl}dropdown/head/no/dept`,{withCredentials:true}).then((res) => {
             this.or_head = JSON.parse(JSON.stringify(res.data))
             this.head = this.list_to_tree_head(res.data)
-          })
+          }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
         }
         else {
           axios.get(`${apiUrl}dropdown/head/find/${this.input.department}`,{withCredentials:true}).then((res) => {
             this.or_head = JSON.parse(JSON.stringify(res.data))
             this.head = this.list_to_tree_head(res.data)
-          })
+          }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
         }
       }
     },
@@ -701,21 +729,46 @@ Vue.use(TextBoxPlugin);
       }
       axios.get(`${apiUrl}`+`approvals/preApp/get/all`,{withCredentials:true}).then((res) => {
         this.approvals = res.data
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       });
-      axios.get(`${apiUrl}`+`vendor/get/all`,{withCredentials:true}).then((res) => {
+      axios.get(`${apiUrl}`+`vendor/vendor/get/all`,{withCredentials:true}).then((res) => {
         console.log(res.data)
         this.vendors = res.data
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       });
       axios.get(`${apiUrl}`+`po/get/all`,{withCredentials:true}).then((res) => {
         this.purchase_orders = res.data
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       });
       axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = this.list_to_tree_dept(res.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
       axios.get(`${apiUrl}`+`head/head/get`,{withCredentials:true}).then((res) => {
         this.or_head = JSON.parse(JSON.stringify(res.data))
         this.head = this.list_to_tree_head(res.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
 		},
 		methods : {
@@ -831,7 +884,12 @@ Vue.use(TextBoxPlugin);
           else{
           console.log(this.input)
           axios.post(`${apiUrl}`+`transaction/trans/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
-            this.$router.push("/transaction/list")});
+            this.$router.push("/transaction/list")}).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
           }
         },
         addVendor() {
@@ -850,13 +908,18 @@ Vue.use(TextBoxPlugin);
         console.log(this.vendor.pan_copy,this.vendor.gst_certi);
         vfd.append('pan_copy',this.vendor.pan_copy)
         vfd.append('gst_certi',this.vendor.gst_certi)
-        axios.post(`${apiUrl}`+`vendor/create`,vfd,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((response)=> {
+        axios.post(`${apiUrl}`+`vendor/vendor/create`,vfd,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((response)=> {
           console.log(response.data)
-          this.input.user_type=response.data._id
-            })
-        axios.get(`${apiUrl}`+`vendor/get/all`,{withCredentials:true}).then((res) => {
-          this.vendors = res.data
-        });
+            this.input.user_type=response.data._id
+            axios.get(`${apiUrl}`+`vendor/vendor/get/all`,{withCredentials:true}).then((res) => {
+            this.vendors = res.data
+          });
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
         this.vendorModal =false
         },
         addQuote() {
@@ -873,7 +936,12 @@ Vue.use(TextBoxPlugin);
           axios.post(`${apiUrl}`+`quote/create`,qfd,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((response)=> {
             console.log(response.data)
                   this.input.quotes.push(response.data._id)
-            })
+            }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
 
         },
         switchPO() {
@@ -885,11 +953,21 @@ Vue.use(TextBoxPlugin);
           axios.post(`${apiUrl}`+`po/create`,this.purchase_order,{withCredentials:true}).then((res)=>{
             this.poModal = false
             this.quote.purchase_order = res.data._id
-          });
+          }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
 
           axios.get(`${apiUrl}`+`po/get/all`,{withCredentials:true}).then((res) => {
           this.purchase_orders = res.data
-        });
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
         },
         changeFields(args) {
           axios.get(`${apiUrl}`+`approvals/preApp/get/one/`+`${this.input.approvalCode}`,{withCredentials:true}).then((res) => {
@@ -931,7 +1009,12 @@ Vue.use(TextBoxPlugin);
                       ]
               }
             }
-          })
+          }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
         },
         validateAmount(args) {
           console.log(args)

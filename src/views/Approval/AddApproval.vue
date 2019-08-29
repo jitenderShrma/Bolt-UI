@@ -349,6 +349,11 @@
       axios.get(`${apiUrl}`+`label/label/find/by/Approval`,{withCredentials:true}).then((res) => {
         this.labels = this.convertDataLabel(res.data)
         console.log(this.labels)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
        //Set months
       var rest_months = this.month.slice(0,new Date().getMonth())
@@ -364,12 +369,22 @@
       axios.get(`${apiUrl}`+`dropdown/department/get/all`,{withCredentials:true}).then((res) => {
         this.dept = JSON.parse(JSON.stringify(res.data))
         this.department = this.list_to_tree_dept(res.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
       // Head Tree
       axios.get(`${apiUrl}`+`head/head/get`,{withCredentials:true}).then((res) => {
         console.log(res.data);
         this.or_head = JSON.parse(JSON.stringify(res.data))
         this.head = this.list_to_tree_head(res.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
 		},
     watch : {
@@ -379,13 +394,23 @@
           axios.get(`${apiUrl}dropdown/head/no/dept`,{withCredentials:true}).then((res) => {
             this.or_head = JSON.parse(JSON.stringify(res.data))
             this.head = this.list_to_tree_head(res.data)
-          })
+          }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
         }
         else {
           axios.get(`${apiUrl}dropdown/head/find/${this.input.department}`,{withCredentials:true}).then((res) => {
             this.or_head = JSON.parse(JSON.stringify(res.data))
             this.head = this.list_to_tree_head(res.data)
-          })
+          }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
         }
       }
     },
@@ -407,7 +432,12 @@
           label = res.data
           this.input.labels.push(label);
           console.log(this.input.labels)
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
       }
       },
       addLabel (args) {
@@ -420,7 +450,12 @@
                     this.labels = res.data
                   })
                 console.log(this.editinput.labels)
-              });
+              }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
       },
       onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
@@ -534,7 +569,12 @@
                  this.loader = true
                  setTimeout(function(){window.location.href = ('#/approval/view/all')},2000)
                 }
-              })
+              }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
             }
           });
           },

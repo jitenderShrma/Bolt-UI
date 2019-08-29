@@ -346,12 +346,17 @@ export default {
         async mounted () { 
                 axios.get(`${apiUrl}`+`sms/template/view`,{withCredentials:true}).then((response) => {
                     this.datasrc = response.data;
-                })
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
                 this.data = this.datasrc.slice(0)
                 return this.data
             
         },
-}
+};
 </script>
 
 <style>

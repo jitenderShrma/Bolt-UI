@@ -737,15 +737,30 @@ export default {
     .then((response) => {
       this.or_head = JSON.parse(JSON.stringify(response.data))
       this.heads = this.list_to_tree_head(response.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       });
     this.isStaff = true
     axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = this.list_to_tree_dept(res.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
       axios.get(`${apiUrl}`+`designation/desig/get/all`,{withCredentials:true}).then((res) => {
         this.or_desig = JSON.parse(JSON.stringify(res.data))
         this.designation = this.list_to_tree_desig(res.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
     axios.get(`${apiUrl}`+`super/attrib/view/`,{ withCredentials:true })
     .then(
@@ -757,6 +772,11 @@ export default {
           }
         }
         console.log(this.addattr)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
   },
   watch : {
@@ -864,13 +884,23 @@ export default {
         axios.get(`${apiUrl}dropdown/designation/no/dept`,{withCredentials:true}).then((res) => {
           this.or_desig = JSON.parse(JSON.stringify(res.data))
           this.designation = this.list_to_tree_desig(res.data)
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
       }
       else {
         axios.get(`${apiUrl}dropdown/designation/find/${this.staff.department}`,{withCredentials:true}).then((res) => {
           this.or_desig = JSON.parse(JSON.stringify(res.data))
           this.designation = this.list_to_tree_desig(res.data)
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
       }
     },
     'staff.designation' : function(){
@@ -963,6 +993,11 @@ export default {
           by_heads:{}
         }
 
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
       },
       savePermissions() {
@@ -1558,6 +1593,11 @@ export default {
       console.log(this.attribute);
       axios.post(`${apiUrl}`+`super/attrib/add`,this.attribute,{withCredentials : true}).then((response) => {
         console.log(response);
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
     },
     setUserGroup(args) {
@@ -1573,6 +1613,11 @@ export default {
         this.additionalpermission = JSON.parse(JSON.stringify(res.data.additional_permissions))
         this.approval_permissions = JSON.parse(JSON.stringify(res.data.approval_permissions))
         this.tab = true
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
     },
     click() {
@@ -1638,7 +1683,12 @@ export default {
                     message: 'Something went wrong.'
                     })
             });
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
       }
       if(this.input.onType=="Staff") {
         this.input.address = [this.addresslist];
@@ -1677,14 +1727,12 @@ export default {
                 this.$router.push("/staff");
               }
             })
-            .catch( function (error){
-              console.log(error)
-              toast({
-                    type: VueNotifications.types.error,
-                    title: 'Oops!',
-                    message: 'Something went wrong.'
-                    })
-            });
+            .catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
         })
       }
       else{
@@ -1718,14 +1766,12 @@ export default {
                 this.$router.push("/user");
               }
             })
-            .catch( function (error){
-              console.log(error)
-              toast({
-                    type: VueNotifications.types.error,
-                    title: 'Oops!',
-                    message: 'Something went wrong.'
-                    })
-            });
+            .catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
       }
       }
           })

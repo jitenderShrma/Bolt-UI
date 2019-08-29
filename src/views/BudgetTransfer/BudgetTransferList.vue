@@ -221,12 +221,22 @@ export default {
                           api.post(`${apiUrl}`+`transfer/budtrans/accept/requests/${this.data._id}`).then((res) => {
                             console.log(res.data)
                             window.location.reload();
+                          }).catch((err)=> {
+                            toast({
+                              type: VueNotifications.types.error,
+                              title: 'Network Error'
+                            })
                           })
                         },
                         rejectReq() {
                           api.post(`${apiUrl}`+`transfer/budtrans/reject/requests/${this.data._id}`).then((res) => {
                             console.log(res.data)
                             window.location.reload();
+                          }).catch((err)=> {
+                            toast({
+                              type: VueNotifications.types.error,
+                              title: 'Network Error'
+                            })
                           })
                         }
                       },
@@ -380,6 +390,11 @@ export default {
       console.log(body)
       api.put(`${apiUrl}approvals/preApp/pop/label/${id}`,body).then((res) => {
         console.log(res.data)
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
       
     },
@@ -396,7 +411,12 @@ export default {
                     this.labels = res.data
                   })
                 console.log(this.editinput.labels)
-              });
+              }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
       },
     onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
@@ -407,14 +427,24 @@ export default {
         api.get(`${apiUrl}label/label/get/one/${this.selectedLabel}`).then((res) => {
           label = res.data
           this.editinput.labels.push(label);
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
 
         var data = {
           labels : this.selectedLabel
         }
         api.put(`${apiUrl}approvals/preApp/push/label/${args}`,data).then((res) => {
             
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
       }
       },
             clickHandler (args) {
@@ -578,10 +608,20 @@ export default {
                       
                     }
                     console.log(this.datasrc)
-                })
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
                 api.get(`${apiUrl}`+`label/label/find/by/Approval`).then((res) => {
                   this.labels = res.data
-                })
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
               }
               else{
                 this.pending = true
@@ -611,7 +651,12 @@ export default {
                       
                     }
                     console.log(response.data)
-                })
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
               }
         },
 };

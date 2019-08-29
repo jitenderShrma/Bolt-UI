@@ -292,6 +292,10 @@
     "paymentref":"Payment Reference Number",
     "notes" : "Notes",
     "approvepartially" : "Approve Partially?",
-    "partialamount" : "Partial Amount"
+    "partialamount" : "Partial Amount",
+    "additionaldetails" : "Additional Details",
+    "placeholdervendoremail" : "Enter Vendor's Email",
+    "placeholdervendorphone" : "Enter Vendor's Phone Number",
+    "approve" : "Approve"
 
 }

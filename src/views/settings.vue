@@ -340,8 +340,11 @@ var groupVue = Vue.component("groupTemplate", {
         console.log(res.data)
         this.data.parent_designation_id = res.data.name
         designation.push(this.data)
-      }).catch((error) => {
-        console.log("asda");
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
     }
     }
@@ -478,18 +481,33 @@ export default {
    async mounted (){
     api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
       this.label1 = res.data
-    });
+    }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
     api.get(`${apiUrl}`+`designation/desig/get/all`).then((response) =>{
         this.or_desig = JSON.parse(JSON.stringify(response.data))
         this.desig=this.list_to_tree_desig(response.data)
         for(var i=0;i<this.desig.length;i++) {
           this.designations.push(this.desig[i])
         }
-    });
+    }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
   	api.get(`${apiUrl}`+`super/com/view`).then((response) =>{
       this.data = response.data
       console.log(response.data);
-  	});
+  	}).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
     api.get(`${apiUrl}/super/settings/budget/budSet/get`,{withCredentials:true}).then((res) => {
       this.input = res.data
       if(this.input.level1.designation) {
@@ -533,7 +551,12 @@ export default {
         this.isLabel5 = true 
       }
       console.log(res.data)
-    });
+    }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
   },
   watch:{
     'isDesig1' : function(args) {
@@ -722,6 +745,11 @@ export default {
             message: 'Budget Settings are Updated'
           })
         }
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
       })
 
     },

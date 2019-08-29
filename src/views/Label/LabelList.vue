@@ -139,10 +139,6 @@ const toastTypes = {
   warn: 'warn'
 }
 
-
-var api = axios.create({
-  withCredentials:true
-})
 miniToastr.init({types: toastTypes})
 
 function toast ({title, message, type, timeout, cb}) {
@@ -376,21 +372,36 @@ export default {
       'label' : function() {
         api.get(`${apiUrl}`+`label/label/get/all`).then((response) => {
                     this.datasrc = response.data;
-                })
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
       }
     },
   methods: {
             addLabel(args) {
               axios.post(`${apiUrl}`+`label/label/create`,this.formdata1,{withCredentials:true}).then((res) => {
                 this.label++
-              });
+              }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
               this.$refs.dialogObj.hide()
             },
             editLabel(args) {
               var id = this.$refs.overviewgrid.getSelectedRecords()
               axios.put(`${apiUrl}`+`label/label/edit/`+`${id[0]._id}`,this.formdata,{withCredentials:true}).then((res) => {
                 this.label++
-              });
+              }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
               this.$refs.dialogObj1.hide()
             },
             onChange(args) {
@@ -452,7 +463,12 @@ export default {
                     if(selected.length>0) {
                         axios.delete(`${apiUrl}`+`label/label/delete/`+`${selected[0]._id}`,{withCredentials:true}).then((response) => {
                             this.label++;
-                    })
+                    }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
                     }
                 }
                 if(args.item.id == 'edit') {
@@ -462,7 +478,12 @@ export default {
                     axios.get(`${apiUrl}`+`label/label/get/one/`+`${id[0]._id}`,{withCredentials:true}).then((res) => {
                         this.formdata = res.data
                         this.formdata.color = `#${res.data.color}`
-                    });
+                    }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
                   }
                   else { 
                     alert("Please select a record to label it");
@@ -495,7 +516,12 @@ export default {
                 api.get(`${apiUrl}`+`label/label/get/all`).then((response) => {
                     this.datasrc = response.data;
                     console.log(response.data)
-                })
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
             
         }
 };

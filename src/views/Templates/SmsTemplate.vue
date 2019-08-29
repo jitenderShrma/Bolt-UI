@@ -130,21 +130,36 @@ export default {
             axios.get(`${apiUrl}`+`context/find/one/`+`${this.input.context}`,{withCredentials:true}).then((response) => {
               this.data = response.data.short_codes
             })
+        }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
         })
+      })
   },
   watch : {
       'input.context': function() { 
         axios.get(`${apiUrl}`+`context/find/one/`+`${this.input.context}`,{withCredentials:true}).then((response) => {
               this.data = response.data.short_codes
-            })
+            }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
       }
     },
   methods : {
       sendData () {
             axios.post(`${apiUrl}`+`/sms/template/add`,this.input,{withCredentials:true}).then((response) => {
               console.log(response.data);
-            });
+            }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
         },
   }
-}
+};
 </script>

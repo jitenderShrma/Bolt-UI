@@ -609,7 +609,12 @@ export default {
                       this.designation.push(this.lineManagers[i][0].designation.name)
                       this.department.push(this.lineManagers[i][0].department.department_name)
                     }
-                })
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
                 api.get(`${apiUrl}line/managers/find/settings/${args.data._id}`).then((res) => {
                   this.lineManagersBudget = res.data
                   console.log(res.data)
@@ -626,7 +631,12 @@ export default {
                       this.departmentBudget.push(this.lineManagersBudget[i][0].department.department_name)
                     }
                   }
-                })
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
               }
             },
             addEditHandler(args) {
@@ -646,7 +656,12 @@ export default {
                         axios.get(`${apiUrl}`+`user/subuser/see/all`,{ withCredentials : true})
                        .then(response => {this.datasrc = response.data})
                     })
-                  })
+                  }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
                 }
               }
               if (args.item.text === 'Export Excel') {
@@ -678,7 +693,12 @@ export default {
                 axios.get(`${apiUrl}`+`user/subuser/see/all`,{ withCredentials : true})
               .then(response => {
                 console.log(response.data)
-                this.datasrc = response.data})
+                this.datasrc = response.data}).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
         },
         computed: {
             getTradeData: async function () {

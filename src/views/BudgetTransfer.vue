@@ -117,7 +117,12 @@
 		    .then((response) => {
 		    	this.or_head = JSON.parse(JSON.stringify(response.data))
 		      this.heads = this.list_to_tree_head(response.data)
-		      });
+		      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
 		},
 		methods:{
 			transferBudget() {
@@ -135,7 +140,12 @@
 								})
 								this.input = {}
 							}
-						})
+						}).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
 					}
 				})
 			},
