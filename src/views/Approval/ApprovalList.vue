@@ -76,10 +76,7 @@
                     <e-column field='month' :template="monthTemplate" width="117" headerText='Month' :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type' width="108" :filter='filter' ></e-column>
                     <e-column field='labels[0].label_name' width="116" headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
-                    
                     <e-column field='recurring_rate' headerText='Recur Rate' width="138" :filter='filter' ></e-column>
-                    
-                    
                     <e-column field='description' headerText='Description' width="143" :filter='filter' ></e-column>
                 </e-columns>
                 </ejs-grid>
@@ -191,6 +188,7 @@ import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import VueNotifications from 'vue-notifications'
 import { DatePickerPlugin } from "@syncfusion/ej2-vue-calendars";
 import miniToastr from 'mini-toastr' 
+import moment from 'moment'
 import {
   PivotViewPlugin,
   GroupingBar,
@@ -202,6 +200,7 @@ import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser,
     import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import { NumericTextBoxPlugin,ColorPickerPlugin } from "@syncfusion/ej2-vue-inputs";
 import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
+import { Switch as cSwitch } from '@coreui/vue'
 
 Vue.use(TextBoxPlugin)
 Vue.use(ColorPickerPlugin);
@@ -245,27 +244,11 @@ Vue.use(VueNotifications, options)
 export default {
     name: 'ApprovalList',
     components: {
-      ToolbarPlugin,
-      CoolSelect,
-      GridPlugin,
-      AsideToggler,
-        AppHeader,
-        DefaultToggler,
-        AppSidebar,
-        AppAside,
-        TheFooter,
-        Breadcrumb,
-        SidebarForm,
-        SidebarFooter,
-        SidebarToggler,
-        SidebarHeader,
-        SidebarNav,
-        SidebarMinimizer,DatePickerPlugin,
-        NumericTextBoxPlugin
+      ToolbarPlugin, CoolSelect, GridPlugin, AsideToggler, AppHeader, DefaultToggler, AppSidebar, AppAside, TheFooter, Breadcrumb, SidebarForm, SidebarFooter, SidebarToggler, SidebarHeader, SidebarNav, cSwitch, SidebarMinimizer,DatePickerPlugin, NumericTextBoxPlugin 
     },
-     provide: {
-            grid: [PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder]
-        },
+    provide: {
+         grid: [PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder]
+    },
     data: function () {
       return {
         labels:[],
@@ -276,12 +259,35 @@ export default {
         dateTemplate:function() {
           return {
             template:Vue.component('dateTemplate', {
-              template:`<div>{{data.last_updated | moment("MMM Do YY, h:mm a")}}</div>`,
+              template:`<div>{{date_final}}</div>`,
               data: function() {
                           return {
                               data: {},
+                              date:null,
+                              date_final : null
                           }
                       },
+              mounted() {
+                  var date2 = Date.now()
+                  var date1 = moment(this.data.last_updated)
+                  this.date = (date2 - date1)/1000
+                  var seconds = Number(JSON.parse(JSON.stringify(this.date)));
+                  var d = Math.floor(seconds / (3600*24));
+                  var h = Math.floor(seconds % (3600*24) / 3600);
+                  var m = Math.floor(seconds % 3600 / 60);
+                  var s = Math.floor(seconds % 60);
+                  var dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : "";
+                  var hDisplay = h > 0 ? h + (h == 1 ? " hr, " : " hrs, ") : "";
+                  var mDisplay = m > 0 ? m + (m == 1 ? " min " : " mins ") : "";
+                  // var sDisplay = s > 0 ? s + (s == 1 ? " s" : " s") : "";
+                  if(m==0) {
+                    this.date_final = "Just Now"
+                  }
+                  else{
+                    this.date_final = dDisplay + hDisplay + mDisplay + "Ago";
+                  }
+                }
+              
             })
           }
         },
@@ -342,9 +348,16 @@ export default {
                                   <b-button @click="accept_remarks = true" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
                                   <b-button @click="reject_remarks = true" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
                                   </div>
-                                
                                 <b-modal size="sm" :title="$ml.get('addremarks')" class="modal-primary" v-model="accept_remarks" @ok="accept_remarks = false" hide-footer>
                                   <ejs-textbox v-model="input.remarks" floatLabelType="Auto" :placeholder="$ml.get('remarks')"></ejs-textbox>
+                                  <br>
+                                  <br>
+                                  <label v-text="$ml.get('approvepartially')"></label>
+                                  <br>
+                                  <c-switch class="mx-1" color="primary" unchecked name="switch1" v-model="partial" :uncheckedValue="false" :checkedValue="true"/>
+                                  <div v-if="partial">
+                                    <ejs-textbox v-model="input.partial_amount" floatLabelType="Auto" :placeholder="$ml.get('partialamount')"></ejs-textbox>
+                                  </div>
                                    <br> 
                                   <b-button @click="acceptReq" type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
                                 </b-modal>
@@ -354,10 +367,15 @@ export default {
                                   <b-button @click="rejectReq" type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
                                 </b-modal>
                                 </div>`,
+                  components :{
+                    cSwitch
+                  },
                   data: function() {
                           return {
                               data: {},
-                              input:{},
+                              input:{
+                              },
+                              partial:false,
                               accept_remarks:false,
                               reject_remarks:false,
                               designation:null,
@@ -368,7 +386,7 @@ export default {
                         acceptReq() {
                           console.log(this.input)
                           this.accept_remarks=false
-                          axios.post(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,this.input,{withCredentials:true}).then((res) => {
+                          axios.get(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
                             console.log(res.data)
                             window.location.reload();
                           })
@@ -376,7 +394,7 @@ export default {
                         rejectReq() {
                           console.log(this.input)
                           this.reject_remarks=false
-                          axios.post(`${apiUrl}`+`/approval/level1/reject/${this.data.ref_id}`,this.input,{withCredentials:true}).then((res) => {
+                          axios.get(`${apiUrl}`+`/approval/level1/reject/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
                             console.log(res.data)
                             window.location.reload();
                           })

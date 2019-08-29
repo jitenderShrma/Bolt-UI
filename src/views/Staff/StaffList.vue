@@ -200,7 +200,7 @@
       </AppAside>
      <div id="target" class="col-lg-15 control-section">
         <div class="content-wrapper">
-            <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
+            <ejs-toolbar id="toolbargrid2" :clicked="addEditHandler">
                 <e-items>
                   <e-item align="right" id="add" :template="addTemplate" :text="$ml.get('add')"></e-item>
                   <e-item align="right" id="delete" :template="deleteTemplate" :text="$ml.get('delete')"></e-item>

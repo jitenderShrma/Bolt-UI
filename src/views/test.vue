@@ -160,6 +160,7 @@
 import Vue from 'vue'
 import {Chart} from 'highcharts-vue'
 import axios from 'axios'
+import moment from 'moment'
 import apiUrl from '@/apiUrl' 
 import VueNotifications from 'vue-notifications'
   import miniToastr from 'mini-toastr'// https://github.com/se-panfilov/mini-toastr
@@ -188,6 +189,14 @@ import VueNotifications from 'vue-notifications'
   var api = axios.create({
     withCredentials:true
   })
+
+    var date1 = Date.now()
+      setTimeout(function(){
+      var date2 = Date.now()
+      var date3 = ((date2 - date1)/1000)
+      console.log(date3)
+    },10000)
+
 
 export default {
   name: 'test',

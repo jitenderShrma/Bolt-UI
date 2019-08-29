@@ -290,6 +290,8 @@
     "paymentorder" : "Payment Order",
     "pholdpaymenttype" : "Select a Payment Mode",
     "paymentref":"Payment Reference Number",
-    "notes" : "Notes"
+    "notes" : "Notes",
+    "approvepartially" : "Approve Partially?",
+    "partialamount" : "Partial Amount"
 
 }

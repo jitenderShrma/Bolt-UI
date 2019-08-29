@@ -43,13 +43,13 @@ export default {
 #toolbargrid {
     position: absolute;
     right: 0%;
-    top: -7.5%;
+    top: -7%;
     height: 38px !important;
 }
 #toolbargrid2 {
     position: absolute;
     right: 0%;
-    top: -6.5%;
+    top: -7.5%;
     height: 38px !important;
 }
 #toolbar {

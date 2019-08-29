@@ -4,7 +4,7 @@
  <div id="target" className="animated fadeIn">
      <div class="col-lg-15 control-section">
         <div class="content-wrapper">
-            <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
+            <ejs-toolbar id="toolbargrid2" :clicked="addEditHandler">
                 <e-items >
                  <e-item align="right" id="add" :text="$ml.get('add')" :template="addTemplate"></e-item>
                  <e-item align="right" id="edit" :text="$ml.get('edit')" :template="editTemplate"></e-item>

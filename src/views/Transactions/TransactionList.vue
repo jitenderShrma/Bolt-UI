@@ -271,7 +271,7 @@ export default {
                       },
                       mounted() {
                         axios.get(`${apiUrl}`+`approvals/preApp/get/one/${this.data.approvalCode}`,{withCredentials:true}).then((res) => {
-                          console.log(res.data)
+                          
                             if(res.data !=null) {
                               this.labels = res.data.labels
                             }
@@ -412,11 +412,8 @@ export default {
        onUploadSuccess: function (args) {
           var formData = new FormData();
           formData.append('csv',args.file.rawFile);
-          console.log(formData);
           this.upload = true
-          console.log("req called");
           api.post(`${apiUrl}`+`import/importTrans/transactions/all`,formData,{headers:{'Content-Type':'multipart/form-data'}}).then((res)=>{
-            console.log(res);
             api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
                     this.datasrc = response.data;
                 })
@@ -424,13 +421,11 @@ export default {
           this.browseModal = false
         },
         onUploadFailed: function (args) {
-            console.log('Upload fails');
         },
         onFileRemove: function (args) {
             args.postRawFile = false;
         },
             actionBegin: function(args) {
-                console.log(args)
             },
             
             load: function() {
@@ -478,7 +473,6 @@ export default {
             },
             addEditHandler(args) {
                 if(args.item.id == "add") {
-                    console.log(args)
                     this.$router.push('/transaction/add');
                 }
                 if(args.item.id=="upload") {
