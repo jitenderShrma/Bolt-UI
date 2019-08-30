@@ -9,6 +9,10 @@ export default {
 </script>
 
 <style lang="scss">
+.modal-header {
+    padding-bottom: 0.5rem !important;
+    padding-top: 0.5rem !important;
+}
 .aside-menu .tab-content {
   height:calc( 100vh - 90px)
 }

@@ -152,7 +152,7 @@
     "pholddept":"Select a Department",
     "pholdparentdept":"Select a Parent Department",
     "pholdsubdept":"Select a Sub-Department",
-    "po" : "Purchase Order",
+    "ponumber" : "PO Number",
     "porequired":"Purchase Order Required?",
     "head" : "Head",
     "heads" : "Heads",
@@ -165,9 +165,9 @@
     "quotations" : "Quotations",
     "poraised" : "Purchase Order Raised?",
     "addquotations" : "Add Quotations",
-    "ponumber":"Purchase Order Number",
     "pholdponumber":"Enter the Purchase Order Number",
     "addvendor" : "Add Vendor",
+    "editvendor" : "Edit Vendor",
     "title" : "Title",
     "pholdtitle" : "Enter Quote's Title",
     "uploadquote" : "Upload Quote",
@@ -296,6 +296,8 @@
     "additionaldetails" : "Additional Details",
     "placeholdervendoremail" : "Enter Vendor's Email",
     "placeholdervendorphone" : "Enter Vendor's Phone Number",
-    "approve" : "Approve"
+    "approve" : "Approve",
+    "markaspaid" : "Mark As Paid",
+    "paid" : "Paid"
 
 }

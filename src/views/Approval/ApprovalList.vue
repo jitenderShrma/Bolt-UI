@@ -5,9 +5,104 @@
         <DefaultToggler style="line-height:2"/>
         </div>
         <b-tabs>
+          <b-tab>
+      <template slot="title">
+        <small>Approval Matrix</small>
+      </template>
+      <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center text-muted text-uppercase small">Approval Level-1 <div style="display:inline" v-if="designationBudget[0]!=null && designationBudget[0]!=''">{{designationBudget[0]}} - {{departmentBudget[0]}}</div>
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagersBudget[0]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-secondary py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[0][i].user.personal_details.name}}</div>
+        </div>
+      </b-list-group-item>
+      </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-warning py-1 bg-light text-center  text-muted text-uppercase small">
+        Approval Level-2 <div style="display:inline" v-if="designationBudget[1]!=null && designationBudget[1]!=''">{{designationBudget[1]}} - {{departmentBudget[1]}}</div>
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagersBudget[1]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-warning py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[1][i].user.personal_details.name}}</div>
+        </div>
+      </b-list-group-item>
+      </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-info py-1 bg-light text-center  text-muted text-uppercase small">
+        Approval Level-3 <div style="display:inline" v-if="designationBudget[2]!=null && designationBudget[2]!=''">{{designationBudget[2]}} - {{departmentBudget[2]}}</div>
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagersBudget[2]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-info py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[2][i].user.personal_details.name}}</div>
+        </div>
+      </b-list-group-item>
+      </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-danger py-1 bg-light text-center  text-muted text-uppercase small">
+        Approval Level-4 <div style="display:inline" v-if="designationBudget[3]!=null && designationBudget[3]!=''">{{designationBudget[3]}} - {{departmentBudget[3]}}</div>
+      </b-list-group-item>
+
+      <div v-for="(run,i) in lineManagersBudget[3]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-danger py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[3][i].user.personal_details.name}}</div>
+        </div>
+      </b-list-group-item>
+      </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-success py-1 bg-light text-center  text-muted text-uppercase small">
+        Approval Level-5 <div style="display:inline" v-if="designationBudget[4]!=null && designationBudget[4]!=''">{{designationBudget[4]}} - {{departmentBudget[4]}}</div>
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagersBudget[4]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-success py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[4][i].user.personal_details.name}}</div>
+        </div>
+        </b-list-group-item>
+      </div>
+    </b-list-group>
+    </b-tab>
     <b-tab>
       <template slot="title">
-        Timeline
+        <small>Timeline</small>
       </template>
       <b-list-group class="list-group-accent">
         <div v-for="(lg,i) in log.slice().reverse()">
@@ -31,7 +126,7 @@
     </b-tab>
     <b-tab>
       <template slot="title">
-        Transactions
+        <small>Transactions</small>
       </template>
       <b-list-group class="list-group-accent">
         <div v-for="(lg,i) in transactions.slice().reverse()">
@@ -325,7 +420,7 @@ export default {
           buttonCopy: function () {
               return {
                   template: Vue.component('buttonLM', {
-                      template: `<div style="line-height:4">{{data.ref_id}}<b-button class="bg-transparent py-0 px-0" style="border:0px"><i class="fa fa-copy px-3"></i></b-button></div>`,
+                      template: `<div style="line-height:4">{{data.ref_id}}<b-button class="bg-transparent py-0 px-0" style="border:0px"><i class="fa fa-copy px-3"></i></b-button><b-button class="bg-transparent py-0 px-0" style="border:0px"><i class="icon-plus px-3"></i></b-button></div>`,
                   data: function() {
                           return {
                               data: {},
@@ -348,7 +443,7 @@ export default {
                                   <b-button @click="accept_remarks = true" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
                                   <b-button @click="reject_remarks = true" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
                                   </div>
-                                <b-modal size="lg" class="modal-primary" v-model="accept_remarks" @ok="accept_remarks = false" hide-footer>
+                                <b-modal size="lg" class="modal-primary py-0" v-model="accept_remarks" @ok="accept_remarks = false" hide-footer>
                                 <template slot="modal-header">
                                   <h5>Level {{data.atLevel+1}} Approval</h5>
                                   <b-button @click="accept_remarks = false" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
@@ -387,12 +482,12 @@ export default {
                                   </b-card-body>
                                   </b-card>
                                   <br>
-                                  <div class="px-1">
+                                  <div class="px-1 py-1">
                                   <label v-text="$ml.get('approvepartially')"></label>
-                                  <c-switch class="py-1" color="primary" unchecked name="switch1" v-model="partial" :uncheckedValue="false" :checkedValue="true"/>
+                                  <c-switch @change="changeField" class="py-1" color="primary" unchecked name="switch1" v-model="partial" :uncheckedValue="false" :checkedValue="true"/>
                                   <br>
-                                  <label v-text="$ml.get('partialamount')"></label>
-                                  <b-input v-model="input.partial_amount" :disabled="!partial" floatLabelType="Auto" :placeholder="$ml.get('partialamount')"></b-input>
+                                  <label v-text="amount_type"></label>
+                                  <b-input ref="input" @update="changeAmount" type="number" v-model="input.partially_approved_amount" :disabled="!partial" floatLabelType="Auto" :placeholder="$ml.get('partialamount')"></b-input>
                                     <br>
                                   <b-textarea v-model="input.remarks" floatLabelType="Auto" :placeholder="$ml.get('remarks')"></b-textarea>
                                    <br>
@@ -400,116 +495,162 @@ export default {
                                    </div>
                                   </b-col>
                                   
-                                  <b-col sm="8" class="px-0" style="height:316px;overflow:auto;overflow-x:hidden">
-                                  <b-list-group class="list-group-accent">
-                                  <span v-if="data.level1approved">
-                                      <b-row>
-                                        <b-col class="px-0 py-0">
-                                        </b-col>
-                                        <b-col class="px-0 py-0">
-                                        Designation
-                                        </b-col>
-                                        <b-col class="px-0 py-0">
-                                        Department
-                                        </b-col>
-                                      </b-row>
-                                      <hr>
-                                      </span>
-                                      
-                                    <div v-if="data.level1approved">
-                                    <b-list-group-item class="warning px-1 py-0 list-group-item-divider">
-                                      <span>
-                                      <b-row>
-                                      <b-col>Level 1</b-col> 
-                                      <b-col>({{data.level1approved.by.user_type.designation.name}})</b-col>
-                                      <b-col> {{data.level1approved.by.user_type.department.department_name}}
-                                      </b-col>
-                                      </b-row>
-                                      </span>
-                                      <br>
-                                      <span>
-                                      <b-row>
-                                      <b-col>{{data.level1approved.by.personal_details.name}}</b-col>
-                                      <b-col> {{data.level1approved.partial_amount}}</b-col>
-                                      <b-col> <b-button @click="acceptpartial(1)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button></b-col></b-row></span>
-                                    </b-list-group-item>
+                                  <b-col sm="8" class="px-0" style="height:384px;overflow:auto;overflow-x:hidden">
+                                  <b-row class="px-3">
+                                    <b-card no-body style="border:0px;width: 100%;">
+                                  <b-card-body class="bg-warn px-1 py-0">
+                                  Level 1 Approval :
+                                  <div v-if="data.level1approved">
+                                  <b-row>
+                                  <b-col  sm="3">
+                                  <div class="avatar py-1">
+                                    <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
                                     </div>
-                                    <div v-if="data.level2approved">
-                                    <b-list-group-item class="info px-1 py-0 list-group-item-divider">
-                                      <span>
+                                  </b-col>
+                                  <b-col>
+                                    
                                       <b-row>
-                                      <b-col>Level 2</b-col> 
-                                      <b-col>({{data.level2approved.by.user_type.designation.name}})</b-col>
-                                      <b-col> {{data.level2approved.by.user_type.department.department_name}}
-                                      </b-col>
+                                        Name : <span v-if="data.level1approved"> {{data.level1approved.by.personal_details.name}}
                                       </b-row>
-                                      </span>
-                                      <br>
-                                      <span>
                                       <b-row>
-                                      <b-col>{{data.level2approved.by.personal_details.name}}</b-col>
-                                      <b-col> {{data.level2approved.partial_amount}}</b-col>
-                                      <b-col> <b-button @click="acceptpartial(2)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button></b-col></b-row></span>
-                                      </b-list-group-item>
-                                    </div>
-                                    <div v-if="data.level3approved">
-                                    <b-list-group-item class="success px-1 py-0 list-group-item-divider">
-                                      <span>
-                                      <b-row>
-                                      <b-col>Level 3</b-col> 
-                                      <b-col>({{data.level3approved.by.user_type.designation.name}})</b-col>
-                                      <b-col> {{data.level3approved.by.user_type.department.department_name}}
-                                      </b-col>
+                                        Designation : <span v-if="data.level1approved"> {{data.level1approved.by.user_type.designation.name}}
                                       </b-row>
-                                      </span>
-                                      <br>
-                                      <span>
                                       <b-row>
-                                      <b-col>{{data.level3approved.by.personal_details.name}}</b-col>
-                                      <b-col> {{data.level3approved.partial_amount}}</b-col>
-                                      <b-col> <b-button @click="acceptpartial(3)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button></b-col></b-row></span>
-                                      </b-list-group-item>
-                                    </div>
-                                    <div v-if="data.level4approved">
-                                    <b-list-group-item class="info  px-1 py-0list-group-item-divider">
-                                      <span>
-                                      <b-row>
-                                      <b-col>Level 4</b-col> 
-                                      <b-col>({{data.level4approved.by.user_type.designation.name}})</b-col>
-                                      <b-col> {{data.level4approved.by.user_type.department.department_name}}
-                                      </b-col>
+                                        Department : <span v-if="data.level1approved"> {{data.level1approved.by.user_type.department.department_name}}
                                       </b-row>
-                                      </span>
-                                      <br>
-                                      <span>
                                       <b-row>
-                                      <b-col>{{data.level4approved.by.personal_details.name}}</b-col>
-                                      <b-col> {{data.level4approved.partial_amount}}</b-col>
-                                      <b-col> <b-button @click="acceptpartial(4)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button></b-col></b-row></span>
-                                      </b-list-group-item>
-                                    </div>
-                                    <div v-if="data.level5approved">
-                                    <b-list-group-item class="secondary px-1 py-0 list-group-item-divider">
-                                      <span>
-                                      <b-row>
-                                      <b-col>Level 5</b-col> 
-                                      <b-col>({{data.level5approved.by.user_type.designation.name}})</b-col>
-                                      <b-col> {{data.level5approved.by.user_type.department.department_name}}
-                                      </b-col>
+                                        Head : {{data.budget_head.name}}
                                       </b-row>
-                                      </span>
-                                      <br>
-                                      <span>
                                       <b-row>
-                                      <b-col>{{data.level5approved.by.personal_details.name}}</b-col>
-                                      <b-col> {{data.level5approved.partial_amount}}</b-col>
-                                      <b-col> <b-button @click="acceptpartial(5)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button></b-col></b-row></span>
-                                      </b-list-group-item>
-                                      
+                                        Amount Requested : <span v-if="data.level1approved.partially_approved_amount"> {{data.level1approved.partially_approved_amount}}</span>
+                                        <span v-else>{{data.amount}}</span>
+                                      </b-row>
+                                    
+                                  </b-col>
+                                  <b-col>
+                                    <b-button @click="changePartial(1)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
+                                  </b-col>
+                                  </div>
+                                  </b-card-body>
+                                  </b-card>
+                                  </b-row>
+                                  
+                                  <b-row class="px-3">
+                                    <b-card no-body style="border:0px;width: 100%;">
+                                  <b-card-body class="bg-secondary px-1 py-0">
+                                  Level 2 Approval :
+                                  <div v-if="data.level2approved">
+                                  <b-row>
+                                  <b-col  sm="3">
+                                  <div class="avatar py-1">
+                                    <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
                                     </div>
-                                    <div v-else>
+                                  </b-col>
+                                  <b-col>
+                                    
+                                      <b-row>
+                                        Name : <span v-if="data.level2approved"> {{data.level2approved.by.personal_details.name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Designation : <span v-if="data.level2approved"> {{data.level2approved.by.user_type.designation.name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Department : <span v-if="data.level2approved"> {{data.level2approved.by.user_type.department.department_name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Head : {{data.budget_head.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Amount Requested : <span v-if="data.level2approved.partially_approved_amount"> {{data.level2approved.partially_approved_amount}}</span>
+                                        <span v-else>{{data.amount}}</span>
+                                      </b-row>
+                                    
+                                  </b-col>
+                                  <b-col>
+                                    <b-button @click="changePartial(2)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
+                                  </b-col>
+                                  </div>
+                                  </b-card-body>
+                                  </b-card>
+                                  </b-row>
+                                  
+                                  <b-row class="px-3">
+                                    <b-card no-body style="border:0px;width: 100%;">
+                                  <b-card-body class="bg-warn px-1 py-0">
+                                  Level 3 Approval :
+                                  <div v-if="data.level3approved">
+                                  <b-row>
+                                  <b-col  sm="3">
+                                  <div class="avatar py-1">
+                                    <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
                                     </div>
-                                    </b-list-group>
+                                  </b-col>
+                                  <b-col>
+                                    
+                                      <b-row>
+                                        Name : <span v-if="data.level3approved"> {{data.level3approved.by.personal_details.name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Designation : <span v-if="data.level3approved"> {{data.level3approved.by.user_type.designation.name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Department : <span v-if="data.level3approved"> {{data.level3approved.by.user_type.department.department_name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Head : {{data.budget_head.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Amount Requested : <span v-if="data.level3approved.partially_approved_amount"> {{data.level3approved.partially_approved_amount}}</span>
+                                        <span v-else>{{data.amount}}</span>
+                                      </b-row>
+                                  </b-col>
+                                  <b-col>
+                                    <b-button @click="changePartial(3)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
+                                  </b-col>
+                                  </div>
+                                  </b-card-body>
+                                  </b-card>
+                                  </b-row>
+                                  
+                                  <b-row class="px-3">
+                                    <b-card no-body style="border:0px;width: 100%;">
+                                  <b-card-body class="bg-secondary px-1 py-0">
+                                  Level 4 Approval :
+                                  <div v-if="data.level4approved">
+                                  <b-row>
+                                  <b-col  sm="3">
+                                  <div class="avatar py-1">
+                                    <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    </div>
+                                  </b-col>
+                                  <b-col>
+                                    
+                                      <b-row>
+                                        Name : <span v-if="data.level4approved"> {{data.level4approved.by.personal_details.name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Designation : <span v-if="data.level4approved"> {{data.level4approved.by.user_type.designation.name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Department : <span v-if="data.level4approved"> {{data.level4approved.by.user_type.department.department_name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Head : {{data.budget_head.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Amount Requested : <span v-if="data.level4approved.partially_approved_amount"> {{data.level4approved.partially_approved_amount}}</span>
+                                        <span v-else>{{data.amount}}</span>
+                                      </b-row>
+                                    
+                                  </b-col>
+                                  <b-col>
+                                    <b-button @click="changePartial(4)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
+                                  </b-col>
+                                  </div>
+                                  </b-card-body>
+                                  </b-card>
+                                  </b-row>
+                                  
                                   </b-col>
                                   </b-row>
                                   <br>
@@ -529,22 +670,69 @@ export default {
                               data: {},
                               input:{
                               },
+                              amount_type:"Total Amount",
                               partial:false,
                               accept_remarks:false,
                               reject_remarks:false,
                               designation:null,
-                              yes:false
+                              yes:false,
+                              partial_amount:null
                           }
                       },
                       methods : {
+                        changePartial(i) {
+                          if(i==1) {
+                            this.input.partially_approved_amount = this.data.level1approved.partially_approved_amount
+                            this.partial = true
+                            console.log(this.input.partially_approved_amount)
+                          }
+                          if(i==2) {
+                            this.input.partially_approved_amount = this.data.level2approved.partially_approved_amount
+                            this.partial = true
+
+                          }
+                          if(i==3) {
+                            this.input.partially_approved_amount = this.data.level3approved.partially_approved_amount
+                            this.partial = true
+
+                          }
+                          if(i==4) {
+                            this.input.partially_approved_amount = this.data.level4approved.partially_approved_amount
+                            this.partial = true
+                            
+                          }
+                          this.acceptReq()
+                        },
+                        changeField() {
+                          if(this.partial) {
+                            if(this.partial_amount!=null) {
+                              this.input.partially_approved_amount = this.partial_amount
+                            }
+                            this.amount_type = "Partial Amount"
+                          }
+                          if(!this.partial) {
+                            this.partial_amount = JSON.parse(JSON.stringify(this.input.partially_approved_amount))
+                            this.input.partially_approved_amount = this.data.amount
+                            this.amount_type = "Total Amount"
+                          }
+                        },
+                        changeAmount(args) {
+                            if(args.value<=0) {
+                              this.input.partially_approved_amount = 1
+                            }
+                            if(args.value > this.data.amount) {
+                              this.input.partially_approved_amount = this.data.amount
+                            }
+                        },
                         acceptpartial(i) {
                           console.log(i)
                         },
                         acceptReq() {
-                          console.log(this.input)
+                          
                           this.accept_remarks=false
-                          if(this.partial && this.data.amount == this.input.partial_amount) {
-                            axios.get(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
+                          if(this.partial && this.data.amount != this.input.partially_approved_amount) {
+                            console.log(this.input)
+                            axios.post(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,this.input,{withCredentials:true}).then((res) => {
                               console.log(res.data)
                               window.location.reload();
                             }).catch((err)=> {
@@ -555,8 +743,9 @@ export default {
                             })
                           }
                           else{
-                            this.input.partial_amount = undefined
-                            axios.get(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
+                            this.input.partially_approved_amount = undefined
+                            console.log(this.input)
+                            axios.post(`${apiUrl}`+`/approval/level1/accept/${this.data.ref_id}`,this.input,{withCredentials:true}).then((res) => {
                               console.log(res.data)
                               window.location.reload();
                             }).catch((err)=> {
@@ -570,7 +759,7 @@ export default {
                         rejectReq() {
                           console.log(this.input)
                           this.reject_remarks=false
-                          axios.get(`${apiUrl}`+`/approval/level1/reject/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
+                          axios.post(`${apiUrl}`+`/approval/level1/reject/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
                             console.log(res.data)
                             window.location.reload();
                           }).catch((err)=> {
@@ -583,7 +772,7 @@ export default {
                       },
                       mounted() {
                         var data =  JSON.parse(localStorage['session_key'])
-                        this.input.partial_amount = this.data.amount
+                        this.input.partially_approved_amount = this.data.amount
                         if(data.user) {
                           this.designation = data.user.user_type.designation
                           if(this.data.assigned_to_designation == this.designation && this.data.status=="PENDING") {
@@ -730,6 +919,9 @@ export default {
           link:'',
           key:'',
           pending:false,
+          lineManagersBudget:[],
+          designationBudget:[],
+          departmentBudget:[],
            height : window.innerHeight*0.695,
           toolbar: [
           'CsvExport',
@@ -886,6 +1078,9 @@ export default {
       if(args.target.outerHTML == `<i class="fa fa-copy px-3"></i>`) {
         this.$refs.overviewgrid.copy()
       }
+      if(args.target.outerHTML == `<i class="icon-plus px-3"></i>`) {
+        this.$router.push({name:"Add Transaction", params:{ref_id : args.data.ref_id}})
+      }
 
       if(args.target.outerHTML == `<span class="icon-hourglass"></span>`) {
         this.log = []
@@ -893,6 +1088,28 @@ export default {
         api.get(`${apiUrl}transaction/trans/get/for/an/${args.data.ref_id}`).then((res) => {
           this.transactions = res.data
         }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
+        this.lineManagersBudget = []
+        api.get(`${apiUrl}line/managers/find/settings/${args.data.request_by._id}`).then((res) => {
+                  this.lineManagersBudget = res.data
+                  this.designationBudget =[]
+                    this.departmentBudget = []
+                  for(var i=0;i<this.lineManagersBudget.length;i++) {
+                    
+                    if(!this.lineManagersBudget[i][0]) {
+                      this.designationBudget.push("")
+                      this.departmentBudget.push("")
+                    }
+                    else {
+                      this.designationBudget.push(this.lineManagersBudget[i][0].designation.name)
+                      this.departmentBudget.push(this.lineManagersBudget[i][0].department.department_name)
+                    }
+                  }
+                }).catch((err)=> {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
@@ -1346,6 +1563,7 @@ export default {
               //   })
               // }
         },
+        
 };
 </script>
 <style>
@@ -1553,4 +1771,12 @@ html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside
 }
 }
 
+.modal-body {
+    position: relative;
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    height: auto;
+    flex: 1 1 auto;
+    padding: 0 1rem 0 1rem;
+}
 </style>

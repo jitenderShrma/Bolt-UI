@@ -108,6 +108,13 @@ export default {
                   icon: 'icon-user'
             })
             }
+            if(permission[i].text=="Vendor") {
+                this.navItems.push({
+                name : "Vendor",
+                url : "/vendor",
+                icon : "icon-star"
+              },)
+            }
             if(permission[i].text=="Department") {
               
                 this.navItems.push({
@@ -136,6 +143,7 @@ export default {
                 icon : "icon-star"
               },)
             }
+            
             if(permission[i].text=="Head") {
               
                 this.navItems.push(  {
@@ -206,6 +214,11 @@ export default {
   {
         name: 'Staff',
         url: '/staff',
+        icon: 'icon-user'
+  },
+  {
+        name: 'Vendor',
+        url: '/vendor',
         icon: 'icon-user'
   },
   {

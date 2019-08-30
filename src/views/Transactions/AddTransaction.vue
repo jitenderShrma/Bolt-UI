@@ -130,72 +130,29 @@
             </b-col>
           </b-row>
             </b-form-group>
+            <div v-if="input.category == 'Bill/Invoice' || input.category=='Imprest' ">
             <b-form-group
-              :label="$ml.get('transacammount')"
-              label-for="basicText"
-              :label-cols="2"
-              :horizontal="true">
-              <b-row>
-              <b-col sm="4">
-              <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-              <ejs-textbox required type="number" v-model="input.amount"  :placeholder="$ml.get('pholdtransacammount')"></ejs-textbox>
-            </b-col>
-            <b-col sm="1" id="xs">
-              <i class="fa fa-rupee font-2xl"></i>
-              &nbsp;
-              &nbsp;
-              &nbsp;
-              <!-- <div v-if="visible">
-              <label v-text="$ml.get('maxamount')"></label>&nbsp;:&nbsp;
-              <span v-text="boundaryAmount"></span>
-            </div> -->
-            </b-col>
-          </b-row>
-            </b-form-group>
-            <div v-if="input.category == 'Purchase Order'">
-          <b-form-group
-            :label="$ml.get('po')"
+            :label="$ml.get('vendorcompany')"
             label-for="basicName"
             :label-cols="2"
-            :horizontal="true">
+            :horizontal="true"
+            >
             <b-row>
               <b-col sm="4">
-                <b-form-group>
-                <label v-text="$ml.get('porequired')"></label>
-                <br>
-                <c-switch class="mx-1" color="primary" unchecked name="switch1" v-model="input.po_required" :uncheckedValue="false" @change="switchPO"  :checkedValue="true"/>
-              </b-form-group>
-              </b-col>
-              <b-col sm="4">
-              <div v-if="this.input.po_required">
-                  <b-form-group>
-                  <label v-text="$ml.get('poraised')"></label>
-                  <br>
-                  <c-switch class="mx-1" color="secondary" unchecked name="switch1" v-model="is_po_rasied" :uncheckedValue="false" :checkedValue="true"/>
-                </b-form-group>
-              </div>
-              </b-col>
-              <b-col sm="4">
-              <div v-if="is_po_rasied">
-              <label v-text="$ml.get('ponumber')"></label>
-              <cool-select
-                  v-model="input.po_raised"
-                  :items="purchase_orders"
-                  item-text="purchase_id"
-                  item-value="_id"
-                  :placeholder="$ml.get('pholdpo')"
-                 >
-                 <div slot="after-items-fixed" class="slot slot--after">
-                   <b-button type="button" size="sm" block variant="secondary" @click="poModal = true" class="mr-1"><i class="fa fa-plus"></i>&nbsp;<span v-text="$ml.get('addpo')"></span></b-button>
-                 </div>
-                </cool-select>
-              
-              </div>
-            </b-col>
-            </b-row>
+                <span v-if="!isImprest" style="color:red;float:right;height:2px;font-size:20px">*</span>
+            <cool-select
+                v-model="input.vendor"
+                :items="vendors"
+                item-text="vendor_company"
+                item-value="_id"
+                :placeholder="$ml.get('pholdvendorcompany')"
+               >
+               <div slot="after-items-fixed" class="slot slot--after">
+                 <b-button type="button" size="sm" block variant="secondary" @click="vendorModal = true" class="mr-1"><i class="fa fa-plus"></i>&nbsp;<span v-text="$ml.get('addvendor')"></span></b-button>
+               </div>
+              </cool-select>
+            </b-col></b-row>
           </b-form-group>
-        </div>
-          <div v-if="input.category == 'Bill/Invoice'">
             <b-form-group
               :label="$ml.get('billno')"
               label-for="basicText"
@@ -203,8 +160,23 @@
               :horizontal="true">
               <b-row>
               <b-col sm="4">
-              <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-              <ejs-textbox required type="text" v-model="input.bill_number"  :placeholder="$ml.get('pholdbillno')"></ejs-textbox>
+              <span v-if="!isImprest" style="color:red;float:right;height:2px;font-size:20px">*</span>
+              <div v-if="isImprest"><ejs-textbox type="text" v-model="input.bill_number"  :placeholder="$ml.get('pholdbillno')"></ejs-textbox></div>
+              <div v-else>
+                <ejs-textbox required type="text" v-model="input.bill_number"  :placeholder="$ml.get('pholdbillno')"></ejs-textbox>
+              </div>
+            </b-col>
+          </b-row>
+            </b-form-group>
+            <b-form-group
+              :label="$ml.get('ponumber')"
+              label-for="basicText"
+              :label-cols="2"
+              :horizontal="true">
+              <b-row>
+              <b-col sm="4">
+              <!-- <span style="color:red;float:right;height:2px;font-size:20px">*</span> -->
+              <ejs-textbox type="text" v-model="input.po_raised"  :placeholder="$ml.get('ponumber')"></ejs-textbox>
             </b-col>
           </b-row>
             </b-form-group>
@@ -227,30 +199,34 @@
         </div>
           </b-row>
           </b-form-group>
-          <b-form-group
-            :label="$ml.get('vendorcompany')"
-            label-for="basicName"
-            :label-cols="2"
-            :horizontal="true"
-            >
-            <b-row>
-              <b-col sm="4">
-                <span style="color:red;float:right;height:2px;font-size:20px">*</span>
-            <cool-select
-                v-model="input.vendor"
-                :items="vendors"
-                item-text="vendor_company"
-                item-value="_id"
-                menuItemsMaxHeight="40px"
-                :placeholder="$ml.get('pholdvendorcompany')"
-               >
-               <div slot="after-items-fixed" class="slot slot--after">
-                 <b-button type="button" size="sm" block variant="secondary" @click="vendorModal = true" class="mr-1"><i class="fa fa-plus"></i>&nbsp;<span v-text="$ml.get('addvendor')"></span></b-button>
-               </div>
-              </cool-select>
-            </b-col></b-row>
-          </b-form-group>
+          
         </div>
+            <b-form-group
+              :label="$ml.get('transacammount')"
+              label-for="basicText"
+              :label-cols="2"
+              :horizontal="true">
+              <b-row>
+              <b-col sm="4">
+              <span style="color:red;float:right;height:2px;font-size:20px">*</span>
+              <ejs-textbox @change="validateAmount" required type="number" v-model="input.amount"  :placeholder="$ml.get('pholdtransacammount')"></ejs-textbox>
+            </b-col>
+            <b-col sm="1" id="xs">
+              <i class="fa fa-rupee font-2xl"></i>
+              &nbsp;
+              &nbsp;
+              &nbsp;
+              <!-- <div v-if="visible">
+              <label v-text="$ml.get('maxamount')"></label>&nbsp;:&nbsp;
+              <span v-text="boundaryAmount"></span>
+            </div> -->
+            </b-col>
+          </b-row>
+            </b-form-group>
+            <div v-if="input.category == 'Purchase Order'">
+         
+        </div>
+          
         <div v-else>
         </div>
         </div>
@@ -452,34 +428,6 @@
                   </ejs-textbox>
                 </b-col>
               </b-row>
-              <b-form-group>
-                  <label v-text="$ml.get('ispurchased')"></label>
-                  <br>
-                  <c-switch class="mx-1" color="secondary" unchecked name="switch1" v-model="quote.isPurchased" :uncheckedValue="false" :checkedValue="true"/>
-                </b-form-group>
-                <div v-if="quote.isPurchased">
-                  <b-form-group
-              :label="$ml.get('purchaseorder')"
-              label-for="basicName"
-              :label-cols="2"
-              :horizontal="true"
-              >
-              <b-row>
-                <b-col sm="12">
-              <cool-select
-                  v-model="quote.purchase_order"
-                  :items="purchase_orders"
-                  item-text="purchase_id"
-                  item-value="_id"
-                  :placeholder="$ml.get('pholdpo')"
-                 >
-                 <div slot="after-items-fixed" class="slot slot--after">
-                   <b-button type="button" size="sm" block variant="secondary" @click="poModal = true" class="mr-1"><i class="fa fa-plus"></i>&nbsp;<span v-text="$ml.get('addpo')"></span></b-button>
-                 </div>
-                </cool-select>
-              </b-col></b-row>
-            </b-form-group>
-                </div>
             
              <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
             </b-form>
@@ -588,6 +536,7 @@ Vue.use(TextBoxPlugin);
 
 
 	export default {
+    props:['ref_id'],
 		name : 'AddTransaction',
 		components : {
       CoolSelect,
@@ -651,6 +600,7 @@ Vue.use(TextBoxPlugin);
         gst_certi:null,
         address:this.addresslist
       },
+      isImprest:false,
       country_fields:{text:"name",value:"name"},
         vendors:[],
         is_po_rasied:false,
@@ -674,7 +624,7 @@ Vue.use(TextBoxPlugin);
 				],
         disableCategory:false,
 				category:[
-					"Purchase Order","Bill/Invoice","Imprest"
+					"Bill/Invoice","Imprest"
 				],
         month:[ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"}
         ],
@@ -694,6 +644,14 @@ Vue.use(TextBoxPlugin);
 			}
 		},
     watch : {
+      'input.category' : function(){
+        if(this.input.category == "Imprest") {
+          this.isImprest = true
+        }
+        else{
+          this.isImprest =false
+        }
+      },
       'input.department' : function() {
         if(this.input.department == null || this.input.department == "") {
           axios.get(`${apiUrl}dropdown/head/no/dept`,{withCredentials:true}).then((res) => {
@@ -720,6 +678,7 @@ Vue.use(TextBoxPlugin);
       }
     },
 		async mounted() {
+      this.input.approvalCode = this.ref_id
       this.month.splice(0,new Date().getMonth())
       if(this.$session.has('subuser')) {
         this.visible = false
@@ -1005,7 +964,7 @@ Vue.use(TextBoxPlugin);
               }
               else{
                 this.category = [
-                        "Purchase Order","Bill/Invoice","Imprest"
+                        "Bill/Invoice","Imprest"
                       ]
               }
             }
@@ -1017,8 +976,10 @@ Vue.use(TextBoxPlugin);
       })
         },
         validateAmount(args) {
-          console.log(args)
-          if(args.value>this.boundaryAmount || args.value<0) {
+          if(args.value<0) {
+            this.input.amount = 1
+          }
+          if(args.value>this.boundaryAmount) {
             this.input.amount = this.boundaryAmount
           }
         },

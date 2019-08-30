@@ -12,7 +12,7 @@
                 </e-items>
                 </ejs-toolbar>
              <div class="control-section">
-            <ejs-grid ref='overviewgrid' :allowGrouping='true' :groupSettings='groupOptions'  :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowReordering='true' :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
+            <ejs-grid ref='overviewgrid' :allowGrouping='true' :groupSettings='groupOptions'  :rowHeight='rowHeight' :sortSettings='sortOptions' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowReordering='true' :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
             :rowSelected="rowSelected"
                 :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
@@ -27,6 +27,7 @@
                     <e-column field='category' headerText='Category'  :filter='filter' ></e-column>
                     <e-column field='vendor.vendor_company' headerText='Vendor'  :filter='filter' ></e-column>
                     <e-column field='po_raised.purchase_id' headerText='PO Number'  :filter='filter' ></e-column>
+                    <e-column field='createdAt' :visible="false" :filter='filter' ></e-column>
                 </e-columns>
                 </ejs-grid>
                  </div>
@@ -43,12 +44,17 @@
     <template slot="modal-header">
       <h5 v-text="$ml.get('print')"></h5>
       <div>
+      <span v-if="printData[0]">Ref-ID : {{printData[0].text}} </span>
+      <br>
+      <span v-if="printData[1]">Category : {{printData[1].text}}</span>
+    </div>
+      <div>
       <b-button type="submit" size="sm" variant="primary" @click="printPDF"><i class="icon-printer font-2xl"></i></b-button>
       &nbsp;&nbsp;
       <b-button class="bg-transparent" style="border:none" type="submit" size="sm" @click="printModal = false" variant="secondary"><i class="icon-close font-2xl"></i></b-button>
     </div>
     </template>
-    <div ref="pdf">
+    <div ref="pdf" id="print">
       <b-table striped hover :items="printData" thead-class="hidden_header">
       </b-table>
       <br>
@@ -99,6 +105,10 @@ import {
 import {
 PdfExport,ExcelExport, Edit,Group, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
+    import VueHtmlToPaper from 'vue-html-to-paper';
+ 
+ 
+    Vue.use(VueHtmlToPaper);
     Vue.use(UploaderPlugin);
     
     Vue.use(PivotViewPlugin);
@@ -136,6 +146,8 @@ const options = {
 Vue.use(VueNotifications, options)
 
 export default {
+  props:[
+  'ref_id'],
     name: 'TransactionList',
     components: {      ToolbarPlugin,
       GridPlugin, Filter, Selection, Sort, VirtualScroll,
@@ -183,7 +195,7 @@ export default {
                 printTemplate: function() {
                   return {
                     template: Vue.component("printTemplate", {
-                      template : `<div style="line-height:4">{{data.amount}}<b-button class="bg-transparent py-0 px-2" style="border:0px"><i class="icon-printer"></i></b-button>&nbsp;&nbsp;<span v-if="data.status == 'PAID'"><b-button class="bg-success py-0 px-2" style="border:0px"><i class="cui-task secondary"></i></b-button></span><span v-else><b-button class="bg-transparent py-0 px-2" style="border:0px"><i class="cui-task"></i></b-button></span></div>`,
+                      template : `<div style="line-height:4">{{data.amount}}<b-button class="bg-transparent py-0 px-2" style="border:0px"><i class="icon-printer"></i></b-button>&nbsp;&nbsp;<span v-if="data.status == 'PAID'"><b-button class="bg-success py-0 px-2" style="border:0px"><b-badge id="label" variant="success" v-text="$ml.get('paid')"></b-badge></b-button></span><span v-else><b-button class="bg-transparent py-0 px-2" style="border:0px"><b-badge variant="warning" id="label" v-text="$ml.get('markaspaid')"></b-badge></b-button></span></div>`,
                       data()  {
                         return {
                           data: {}
@@ -357,7 +369,8 @@ export default {
                 alertWidth: '300px',
                 animationSettings: { effect: 'None' },
                 alertDlgButtons: [{ click: this.alertDlgBtnClick, buttonModel: { content: 'OK', isPrimary: true } }],
-                selectionSettings: { persistSelection: true, type: 'Multiple' }
+                selectionSettings: { persistSelection: true, type: 'Multiple' },
+                sortOptions:{columns: [{field: 'approvalCode', direction: 'Descending'},{field: 'createdAt', direction: 'Descending'}],isMulti:true},
             };
         },
   methods: {
@@ -403,15 +416,16 @@ export default {
       }
     },
     printPDF() {
-      var pdf = new html2pdf()
-      var source = this.$refs.pdf
-      var opt = {
-        margin:       [.5,.5,.5,.5],
-        filename:     `${this.selectedTrans.approvalCode}.pdf`,
-        html2canvas:  { scale: 2 },
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-      };
-      html2pdf().set(opt).from(source).output("dataurlnewwindow")
+      this.$htmlToPaper('print');
+      // var pdf = new html2pdf()
+      // var source = this.$refs.pdf
+      // var opt = {
+      //   margin:       [.5,.5,.5,.5],
+      //   filename:     `${this.selectedTrans.approvalCode}.pdf`,
+      //   html2canvas:  { scale: 2 },
+      //   jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      // };
+      // html2pdf().set(opt).from(source).output("dataurlnewwindow")
     },
     onProgress(args) {
       },
@@ -515,7 +529,7 @@ export default {
                     this.$refs.alertDialog.hide();
                 },
                 rowSelected(args) {
-                  if(args.target.outerHTML == `<i class="cui-task"></i>`) {
+                  if(args.target.outerHTML == `<span id="label" class="badge badge-warning">Mark As Paid</span>`) {
                     this.paymentModal = true
                     this.payment.transaction_id = args.data._id
                   }
@@ -526,6 +540,8 @@ export default {
                     this.selectedTrans= args.data
                     if(args.data.approvalCode)
                       new_val.push({name:"Reference ID",text:args.data.approvalCode})
+                    if(args.data.category)
+                      new_val.push({name:"Category",text:args.data.category})
                     if(args.data.bill_number)
                       new_val.push({name:"Bill Number",text:args.data.bill_number})
                     if(args.data.amount)
@@ -542,8 +558,6 @@ export default {
                       new_val.push({name:"Requested By",text:args.data.user.user_name})
                     if(args.data.type)
                       new_val.push({name:"Type",text:args.data.type})
-                    if(args.data.category)
-                      new_val.push({name:"Category",text:args.data.category})
                     if(args.data.vendor)
                       new_val.push({name:"Vendor",text:args.data.vendor.vendor_company})
                     if(args.data.po_raised)
@@ -567,8 +581,10 @@ export default {
             
         },
         async mounted () { 
+          console.log(this.ref_id);
                 api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
                     this.datasrc = response.data;
+                    console.log(response.data)
                     for(var i =0;i<this.datasrc.length;i++) {
                       if(this.datasrc[i].user == null) {
                         this.datasrc[i].user = {

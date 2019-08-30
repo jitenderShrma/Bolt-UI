@@ -93,6 +93,9 @@ const DesignationList = () => import('@/views/Designations/DesignationList');
 const AddDesignation = () => import('@/views/Designations/AddDesignation');
 const EditDesignation = () => import('@/views/Designations/EditDesignation');
 
+//Vendor Routes
+const VendorList = () => import('@/views/Vendor/VendorList');
+
 //Error Pages
 const NotFound = () => import('@/views/NotFound');
 
@@ -541,6 +544,7 @@ var router = new Router({
                   name:'Add Transaction',
                   meta : { requiresAuth : true },
                   path:'/transaction/add',
+                  props:true,
                   component : AddTransaction
                 },
                 {
@@ -586,6 +590,21 @@ var router = new Router({
                   path : "/label",
                   meta : { requiresAuth : true },
                   component : LabelList
+                }
+              ]
+            },
+            {
+              path : "/vendor",
+              meta : { requiresAuth : true },
+              component : {
+                render (c) { return c('router-view') }
+              },
+              children : [
+                {
+                  name:"Vendors",
+                  path : "/vendor",
+                  meta : { requiresAuth : true },
+                  component : VendorList
                 }
               ]
             },
