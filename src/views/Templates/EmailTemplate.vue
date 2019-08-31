@@ -165,10 +165,12 @@ export default {
               this.data = response.data.short_codes
             })
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
         // axios.get('',{withCredentials:true}).then((response) => {
         
@@ -189,11 +191,14 @@ export default {
         axios.get(`${apiUrl}`+`context/find/one/`+`${this.input.context}`,{withCredentials:true}).then((response) => {
               this.data = response.data.short_codes
             }).catch((err)=> {
+              if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
+
       }
     },
     methods : {
@@ -203,10 +208,12 @@ export default {
             axios.post(`${apiUrl}`+`/mail/template/add`,this.input,{withCredentials:true}).then((response) => {
               console.log(response.data);
             }).catch((err)=> {
+              if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
         },
         

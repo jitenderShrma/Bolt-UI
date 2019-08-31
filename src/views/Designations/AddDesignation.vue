@@ -79,13 +79,13 @@
                             <span>{{datasrc[i].text}}</span>
                           </b-col>
                           <b-col style="padding-right:0px">
-                            <div v-if="datasrc[i].module_name == 'importTrans'">
+                            <div v-if="datasrc[i].module_name == 'importTrans' || datasrc[i].module_name == 'vendor'">
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_own" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                             <div v-if="datasrc[i].module_name == 'budSet'">
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].read" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
-                            <div v-else>
+                            <div v-if="datasrc[i].module_name != 'importTrans' && datasrc[i].module_name != 'vendor' && datasrc[i].module_name != 'budSet'">
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_own" @change="setReadOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                           </b-col>
@@ -355,10 +355,12 @@ var groupVue1 = Vue.component("groupTemplate1", {
         this.data.parent_department = res.data.department_name
         departments.push(this.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     }
     }
@@ -381,10 +383,12 @@ var desigVue = Vue.component("desigTemplate", {
         this.data.parent_designation_id = res.data.name
         designations.push(this.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     }
     }
@@ -429,10 +433,12 @@ var addDesigVue = Vue.component("addDesignation", {
     	api.get(`${apiUrl}`+`department/dept/get`).then((res) => {
         this.department = res.data
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     },
     methods:{
@@ -443,10 +449,12 @@ var addDesigVue = Vue.component("addDesignation", {
     		api.post(`${apiUrl}`+`department/dept/create`,this.input).then((response) => {
     			this.modal = false
     		}).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     	}
     }
@@ -515,7 +523,7 @@ export default {
               {module_name:"importTrans",text:"Transaction Upload",read_own:false,read_all:false},
               {module_name:"budtrans",text:"Budget Transfer",read_own:false,read_all:false,delete_own:false,edit_own:false},
               {module_name:"paymentorder",text:"Payment Order",read_own:false,read_all:false,delete_own:false,edit_own:false},
-              {module_name:"vendor",text:"Vendor",read_own:false,read_all:false,delete_own:false,edit_own:false}
+              {module_name:"vendor",text:"Vendor",read_own:false,read_all:true,delete_own:false,edit_own:false}
               ],
        		addDesignation : function() {
        			return {
@@ -595,10 +603,12 @@ export default {
       this.or_head = JSON.parse(JSON.stringify(response.data))
       this.heads = this.list_to_tree_head(response.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
   	this.link = window.location.href
   	this.key = this.link.split('add/').pop()
@@ -606,36 +616,44 @@ export default {
   	api.get(`${apiUrl}`+`designation/desig/get/one/${this.key}`).then((res) =>{
   		this.input.department = res.data.department
   	}).catch((err)=> {
+      if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
         this.labels = res.data
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = this.list_to_tree_dept(res.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       axios.get(`${apiUrl}`+`designation/desig/get/all`,{withCredentials:true}).then((res) => {
         this.or_desig = JSON.parse(JSON.stringify(res.data))
         this.data = this.list_to_tree_desig(res.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
 
     },
@@ -659,10 +677,12 @@ export default {
           this.or_desig = JSON.parse(JSON.stringify(res.data))
           this.data = this.list_to_tree_desig(res.data)
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
       else {
@@ -670,10 +690,12 @@ export default {
           this.or_desig = JSON.parse(JSON.stringify(res.data))
           this.data = this.list_to_tree_desig(res.data)
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
     }
@@ -685,10 +707,12 @@ export default {
       api.put(`${apiUrl}label/label/edit/${id}`,this.editlabel).then((res) => {
         console.log(res.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       this.$router.go(0)
     },
@@ -737,10 +761,12 @@ export default {
                   })
                 console.log(this.input.labels)
               }).catch((err)=> {
+                if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
       },
       setEditOwn(i) {
@@ -771,10 +797,12 @@ export default {
           this.input.labels.push(label);
           this.selectedLabel = null
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
       },
@@ -1088,10 +1116,12 @@ export default {
   		              	console.log(res.data)
 	                  });
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
               
         // }
@@ -1153,10 +1183,12 @@ export default {
       	api.get(`${apiUrl}`+`department/dept/get`).then((res) => {
 	        this.department = res.data
 	      }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       },
       clickHandler(args){
@@ -1179,10 +1211,12 @@ export default {
                                   this.data = res.data
                                   });
                               }).catch((err)=> {
+                                if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
                             
                           }

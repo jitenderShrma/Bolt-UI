@@ -147,7 +147,7 @@
                 item-value="_id"
                 :placeholder="$ml.get('pholdvendorcompany')"
                >
-               <div slot="after-items-fixed" class="slot slot--after">
+               <div v-if="isPermittedVendor" slot="after-items-fixed" class="slot slot--after">
                  <b-button type="button" size="sm" block variant="secondary" @click="vendorModal = true" class="mr-1"><i class="fa fa-plus"></i>&nbsp;<span v-text="$ml.get('addvendor')"></span></b-button>
                </div>
               </cool-select>
@@ -240,9 +240,9 @@
 
         <!-- Vendor Form -->
         <b-modal :title="$ml.get('addvendor')" size="lg" class="modal-primary" v-model="vendorModal" @ok="vendorModal = false" hide-footer>
-            <b-form v-on:submit.prevent="addVendor">
+            <b-form v-on:submit.prevent="addVendor" class="py-1">
               <b-form-group
-              :label="$ml.get('vendordetails')"
+              :label="$ml.get('basic')"
               label-for="basicName"
               :label-cols="3"
               label-size="md"
@@ -251,35 +251,45 @@
               >
                 <b-row>
                   <b-col>
-                    <ejs-textbox floatLabelType="Auto" v-model="vendor.vendor_company" :placeholder="$ml.get('vendorcompany')"></ejs-textbox>
+                    <ejs-textbox floatLabelType="Auto" v-model="vendor.name" :placeholder="$ml.get('name')" required></ejs-textbox>
                   </b-col>
                   <b-col>
-                      <ejs-textbox floatLabelType="Auto"  v-model="vendor.kcp_name" type="text" id="city" :placeholder="$ml.get('pholdkcpname')"></ejs-textbox>
+                    <ejs-textbox floatLabelType="Auto" v-model="vendor.vendor_company" :placeholder="$ml.get('company')" required></ejs-textbox>
+                  </b-col>
+                </b-row>
+                  <b-row>
+                  <b-col>
+                      <ejs-textbox floatLabelType="Auto"  v-model="addresslist.phone" type="number" id="city" :placeholder="$ml.get('contact1')"></ejs-textbox>
                   </b-col>
                   <b-col>
-                      <ejs-textbox floatLabelType="Auto" v-model="vendor.kcp_phone" type="number" id="postal-code" :placeholder="$ml.get('pholdkcpno')"></ejs-textbox>
+                      <ejs-textbox floatLabelType="Auto" v-model="vendor.kcp_phone" type="number" id="postal-code" :placeholder="$ml.get('contact2')"></ejs-textbox>
                   </b-col>
                 </b-row>
                 <b-row>
                   <b-col class="py-2">
-                    <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('pholdpan')" v-model="vendor.pan" id="vendor_company"></ejs-textbox>
+                    <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('panno')" v-model="vendor.pan" id="vendor_company"></ejs-textbox>
                   </b-col>
+                  <b-col class="py-2">
+                    <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('gst')" v-model="vendor.gst" id="vendor_company"></ejs-textbox>
+                  </b-col>
+                </b-row>
+                <b-row>
                   <b-col>
                     <b-form-group>
                       <label for="street" v-text="$ml.get('pancopy')"></label>
-                      <b-form-file v-model="vendor.pan_copy" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" required></b-form-file>
+                      <b-form-file v-model="vendor.pan_copy" accept="image/*" id="fileInput"></b-form-file>
                   </b-form-group>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <b-col class="py-2">
-                    <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('gst')" v-model="vendor.gst" id="vendor_company"></ejs-textbox>
                   </b-col>
                   <b-col>
                     <b-form-group>
                       <label for="street" v-text="$ml.get('gstcerti')"></label>
-                        <b-form-file v-model="vendor.gst_certi" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" required></b-form-file>
+                        <b-form-file v-model="vendor.gst_certi" accept="image/*" id="fileInput"></b-form-file>
                     </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col sm="6">
+                    <ejs-textbox floatLabelType="Auto" type="number" :placeholder="$ml.get('turnover')" v-model="vendor.turnover"></ejs-textbox>
                   </b-col>
                 </b-row>
               </b-form-group>
@@ -289,7 +299,7 @@
               <b-collapse id="expand">
                 <b-btn style="float:right" size="sm" href="#" v-b-toggle.bank variant="primary"><i class="cui-chevron-bottom"></i></b-btn>
               <b-form-group
-              :label="$ml.get('bankaccountdetails')"
+              :label="$ml.get('bankinfo')"
               label-for="basicName"
               :label-cols="3"
               label-size="md"
@@ -299,35 +309,18 @@
               <b-collapse id="bank" accordion="my-accordion">
                 <b-row>
                   <b-col sm="6">
-                  <ejs-textbox floatLabelType="Auto" v-model="vendor.acc_name" type="text" id="street" :placeholder="$ml.get('pholdaccountholdername')" ></ejs-textbox>
+                  <ejs-textbox floatLabelType="Auto" v-model="vendor.acc_name" type="text" id="street" :placeholder="$ml.get('beneficiaryname')" ></ejs-textbox>
                 </b-col>
                 <b-col sm="6">
-                  <ejs-textbox floatLabelType="Auto" v-model="vendor.acc_no" type="number" id="street" :placeholder="$ml.get('pholdaccountno')"></ejs-textbox>
+                  <ejs-textbox floatLabelType="Auto" v-model="vendor.acc_no" type="number" id="street" :placeholder="$ml.get('accno')"></ejs-textbox>
                 </b-col>
                 </b-row>
                 <b-row>
-                  <b-col sm="8">
-                      <ejs-textbox floatLabelType="Auto"  v-model="vendor.bank_name" type="text" id="city" :placeholder="$ml.get('pholdbankname')"></ejs-textbox>
+                  <b-col>
+                      <ejs-textbox floatLabelType="Auto"  v-model="vendor.bank_name" type="text" id="city" :placeholder="$ml.get('bankname')"></ejs-textbox>
                   </b-col>
-                  <b-col sm="4">
-                      <ejs-textbox floatLabelType="Auto" v-model="vendor.ifsc" type="text" id="postal-code" :placeholder="$ml.get('pholdifsc')"></ejs-textbox>
-                  </b-col>
-                </b-row>
-              </b-collapse>
-            </b-form-group>
-              <b-btn style="float:right" size="sm" href="#" v-b-toggle.additional variant="primary"><i class="cui-chevron-bottom"></i></b-btn>
-            <b-form-group
-              :label="$ml.get('additionaldetails')"
-              label-for="basicName"
-              :label-cols="3"
-              label-size="md"
-              label-class="py-3"
-              :horizontal="true"
-              >
-              <b-collapse id="additional" accordion="my-accordion">
-                <b-row>
-                  <b-col sm="4">
-                  <ejs-textbox floatLabelType="Auto" type="number" v-model="vendor.turnover" id="vendor_company" :placeholder="$ml.get('pholdturnover')" ></ejs-textbox>
+                  <b-col>
+                      <ejs-textbox floatLabelType="Auto" v-model="vendor.ifsc" type="text" id="postal-code" :placeholder="$ml.get('ifsc')"></ejs-textbox>
                   </b-col>
                 </b-row>
               </b-collapse>
@@ -341,13 +334,10 @@
               label-class="py-3"
               :horizontal="true">
                 <b-collapse id="address" accordion="my-accordion">
-                    <ejs-textbox v-model="addresslist.compAdd" floatLabelType="Auto" :placeholder="$ml.get('placeholderaddressline1')"></ejs-textbox>
+                    <b-textarea v-model="addresslist.compAdd" floatLabelType="Auto" :placeholder="$ml.get('address')"></b-textarea>
                     <b-row>
                       <b-col sm="6">
-                        <ejs-textbox floatLabelType="Auto" v-model="addresslist.email" type="email" id="street" :placeholder="$ml.get('placeholdervendoremail')"></ejs-textbox>
-                      </b-col>
-                      <b-col sm="6">
-                        <ejs-textbox floatLabelType="Auto" v-model="addresslist.phone" type="number" id="street" :placeholder="$ml.get('placeholdervendorphone')"></ejs-textbox>
+                        <ejs-textbox floatLabelType="Auto" v-model="addresslist.email" type="email" id="street" :placeholder="$ml.get('email')"></ejs-textbox>
                       </b-col>
                     </b-row>
                     <b-row>
@@ -577,12 +567,6 @@ Vue.use(TextBoxPlugin);
 					cash:"",
 				},
         addresslist : {
-        compAdd : "",
-        country : "",
-        state : "",
-        zip : "",
-        phone : "",
-        email : ""
       },
       totalamount:0,
         vendor : {
@@ -614,6 +598,7 @@ Vue.use(TextBoxPlugin);
           isPurchased:false,
           purchase_order:""
         },
+        isPermittedVendor:false,
         purchase_orders:[],
         purchase_order:{},
         poModal:false,
@@ -658,10 +643,12 @@ Vue.use(TextBoxPlugin);
             this.or_head = JSON.parse(JSON.stringify(res.data))
             this.head = this.list_to_tree_head(res.data)
           }).catch((err)=> {
+            if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
         }
         else {
@@ -669,15 +656,29 @@ Vue.use(TextBoxPlugin);
             this.or_head = JSON.parse(JSON.stringify(res.data))
             this.head = this.list_to_tree_head(res.data)
           }).catch((err)=> {
+            if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
         }
       }
     },
 		async mounted() {
+      var Session = JSON.parse(localStorage.session_key)
+    if(Session.user) {
+      for(var i=0;i<Session.permission.length;i++) {
+      if(Session.permission[i].text=="Vendor" && (Session.permission[i].write)) {
+        this.isPermittedVendor = true
+        break;
+      }
+    }
+    }
+    else{
+      this.isPermittedVendor = true
+    }
       this.input.approvalCode = this.ref_id
       this.month.splice(0,new Date().getMonth())
       if(this.$session.has('subuser')) {
@@ -689,46 +690,57 @@ Vue.use(TextBoxPlugin);
       axios.get(`${apiUrl}`+`approvals/preApp/get/all`,{withCredentials:true}).then((res) => {
         this.approvals = res.data
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
-      axios.get(`${apiUrl}`+`vendor/vendor/get/all`,{withCredentials:true}).then((res) => {
-        console.log(res.data)
-        this.vendors = res.data
-      }).catch((err)=> {
-        toast({
-          type: VueNotifications.types.error,
-          title: 'Network Error'
-        })
-      });
+      
       axios.get(`${apiUrl}`+`po/get/all`,{withCredentials:true}).then((res) => {
         this.purchase_orders = res.data
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
       axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = this.list_to_tree_dept(res.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       axios.get(`${apiUrl}`+`head/head/get`,{withCredentials:true}).then((res) => {
         this.or_head = JSON.parse(JSON.stringify(res.data))
         this.head = this.list_to_tree_head(res.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
+      axios.get(`${apiUrl}`+`vendor/vendor/get/all`,{withCredentials:true}).then((res) => {
+        console.log(res.data)
+        this.vendors = res.data
+      }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      }
+      });
 		},
 		methods : {
       checkExistDept(node) {
@@ -844,24 +856,34 @@ Vue.use(TextBoxPlugin);
           console.log(this.input)
           axios.post(`${apiUrl}`+`transaction/trans/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
             this.$router.push("/transaction/list")}).catch((err)=> {
+              if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
           }
         },
         addVendor() {
           this.vendor.address = this.addresslist
           var vfd = new FormData();
+          vfd.append('name',this.vendor.name);
         vfd.append('vendor_company',this.vendor.vendor_company);
-        vfd.append('address',this.vendor.address);
+        vfd.append('compAdd',this.vendor.address.compAdd);
+        vfd.append('country',this.vendor.address.country);
+        vfd.append('email',this.vendor.address.email);
+        vfd.append('phone',this.vendor.address.phone);
+        vfd.append('state',this.vendor.address.state);
+        vfd.append('zip',this.vendor.address.zip);
         vfd.append('pan',this.vendor.pan)
         vfd.append('gst',this.vendor.gst)
         vfd.append('turnover',this.vendor.turnover)
         vfd.append('kcp_name',this.vendor.kcp_name)
         vfd.append('kcp_phone',this.vendor.kcp_phone)
         vfd.append('acc_no',this.vendor.acc_no)
+        vfd.append('acc_name',this.vendor.acc_name)
+
         vfd.append('ifsc',this.vendor.ifsc)
         vfd.append('bank_name',this.vendor.bank_name)
         console.log(this.vendor.pan_copy,this.vendor.gst_certi);
@@ -874,10 +896,12 @@ Vue.use(TextBoxPlugin);
             this.vendors = res.data
           });
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
         this.vendorModal =false
         },
@@ -896,10 +920,12 @@ Vue.use(TextBoxPlugin);
             console.log(response.data)
                   this.input.quotes.push(response.data._id)
             }).catch((err)=> {
+              if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
 
         },
@@ -913,19 +939,23 @@ Vue.use(TextBoxPlugin);
             this.poModal = false
             this.quote.purchase_order = res.data._id
           }).catch((err)=> {
+            if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
 
           axios.get(`${apiUrl}`+`po/get/all`,{withCredentials:true}).then((res) => {
           this.purchase_orders = res.data
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
         },
         changeFields(args) {
@@ -969,10 +999,12 @@ Vue.use(TextBoxPlugin);
               }
             }
           }).catch((err)=> {
+            if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
         },
         validateAmount(args) {

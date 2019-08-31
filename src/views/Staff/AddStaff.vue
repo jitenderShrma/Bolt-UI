@@ -306,13 +306,13 @@
                             <span>{{datasrc[i].text}}</span>
                           </b-col>
                           <b-col style="padding-right:0px">
-                            <div v-if="datasrc[i].module_name == 'importTrans'">
+                            <div v-if="datasrc[i].module_name == 'importTrans' || datasrc[i].module_name == 'vendor'">
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_own" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
                             <div v-if="datasrc[i].module_name == 'budSet'">
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].read" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
-                            <div v-else>
+                            <div v-if="datasrc[i].module_name != 'importTrans' && datasrc[i].module_name != 'vendor' && datasrc[i].module_name != 'budSet'">
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].read_own" @change="setReadOwn(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                           </b-col>
@@ -738,29 +738,35 @@ export default {
       this.or_head = JSON.parse(JSON.stringify(response.data))
       this.heads = this.list_to_tree_head(response.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
     this.isStaff = true
     axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
         this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = this.list_to_tree_dept(res.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       axios.get(`${apiUrl}`+`designation/desig/get/all`,{withCredentials:true}).then((res) => {
         this.or_desig = JSON.parse(JSON.stringify(res.data))
         this.designation = this.list_to_tree_desig(res.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     axios.get(`${apiUrl}`+`super/attrib/view/`,{ withCredentials:true })
     .then(
@@ -773,10 +779,12 @@ export default {
         }
         console.log(this.addattr)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
   },
   watch : {
@@ -885,10 +893,12 @@ export default {
           this.or_desig = JSON.parse(JSON.stringify(res.data))
           this.designation = this.list_to_tree_desig(res.data)
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
       else {
@@ -896,10 +906,12 @@ export default {
           this.or_desig = JSON.parse(JSON.stringify(res.data))
           this.designation = this.list_to_tree_desig(res.data)
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
     },
@@ -988,16 +1000,28 @@ export default {
         this.addAll = false
         this.input.user_permissions=[]
         this.input.additional_permissions = []
+        var vendorExist = false
+        for(var i=0;i<this.datasrc.length;i++) {
+          if(this.datasrc[i].module_name == "vendor") {
+            vendorExist = true
+          }
+        }
+        if(vendorExist == false) {
+          this.datasrc.push({module_name:"vendor",text:"Vendor",read:true,write:false,edit:false,delete:false})
+          this.additionalpermission.push({module_name:"vendor",text:"Vendor",read_own:false,read_all:false,delete_own:false,edit_own:false})
+        }
         this.input.approval_permissions = {
           by_department:{},
           by_heads:{}
         }
 
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       },
       savePermissions() {
@@ -1594,10 +1618,12 @@ export default {
       axios.post(`${apiUrl}`+`super/attrib/add`,this.attribute,{withCredentials : true}).then((response) => {
         console.log(response);
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     },
     setUserGroup(args) {
@@ -1612,12 +1638,24 @@ export default {
         this.datasrc = JSON.parse(JSON.stringify(res.data.permissions))
         this.additionalpermission = JSON.parse(JSON.stringify(res.data.additional_permissions))
         this.approval_permissions = JSON.parse(JSON.stringify(res.data.approval_permissions))
+        var vendorExist = false
+        for(var i=0;i<this.datasrc.length;i++) {
+          if(this.datasrc[i].module_name == "vendor") {
+            vendorExist = true
+          }
+        }
+        if(vendorExist == false) {
+          this.datasrc.push({module_name:"vendor",text:"Vendor",read:true,write:false,edit:false,delete:false})
+          this.additionalpermission.push({module_name:"vendor",text:"Vendor",read_own:false,read_all:false,delete_own:false,edit_own:false})
+        }
         this.tab = true
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     },
     click() {
@@ -1684,10 +1722,12 @@ export default {
                     })
             });
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
       if(this.input.onType=="Staff") {
@@ -1728,10 +1768,12 @@ export default {
               }
             })
             .catch((err)=> {
+              if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
         })
       }
@@ -1767,10 +1809,12 @@ export default {
               }
             })
             .catch((err)=> {
+              if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
       }

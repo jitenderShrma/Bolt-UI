@@ -409,10 +409,12 @@ export default {
         this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = res.data
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     if(this.$route.path == '/designation/list') {
     await api.get(`${apiUrl}`+`designation/desig/get/all`)
@@ -420,10 +422,12 @@ export default {
       this.or_desig = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_desig(response.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
   }
   else{
@@ -437,19 +441,23 @@ export default {
         }
       }
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
   }
     await api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
         this.labels = res.data
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     }
   },
@@ -461,10 +469,12 @@ export default {
       this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = res.data
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     if(this.$route.path == '/designation/list') {
     await api.get(`${apiUrl}`+`designation/desig/get/all`)
@@ -472,10 +482,12 @@ export default {
       this.or_desig = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_desig(response.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
   }
   else{
@@ -490,19 +502,23 @@ export default {
         }
       }
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
   }
     await api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
         this.labels = res.data
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     },
   provide: {
@@ -524,10 +540,12 @@ export default {
                     this.$router.go(0)
                 });
               }).catch((err)=> {
+                if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
             
       },
@@ -593,18 +611,22 @@ export default {
                 this.modal = false
                 this.input = {}
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
               api.post(`${apiUrl}`+`super/group/subgroup/add`,user_group).then((res) => {
                 this.permissions = {}
               }).catch((err)=> {
+                if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
         }
           else {
@@ -617,10 +639,12 @@ export default {
                 this.modal = false
                 this.input = {}
           }).catch((err)=> {
+            if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
         }
             }
@@ -636,10 +660,12 @@ export default {
                   
                     this.$router.go(0)
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
       },
       actionComplete(args) {
@@ -657,10 +683,12 @@ export default {
                   this.data = res.data
                   });
           }).catch((err)=> {
+            if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
         }
       },
@@ -741,10 +769,12 @@ export default {
                                   this.data = this.list_to_tree_desig(res.data)
                                   });
                               }).catch((err)=> {
+                                if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
                             
                           }

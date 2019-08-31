@@ -24,9 +24,9 @@
                 </ejs-grid>
         <b-modal :title="$ml.get('addvendor')" size="lg" class="modal-primary" v-model="vendorModal" @ok="vendorModal = false" hide-footer>
           <b-row class="px-1 py-1">
-            <b-form style="width:95%" v-on:submit.prevent="addVendor">
+            <b-form v-on:submit.prevent="addVendor" class="py-1">
               <b-form-group
-              :label="$ml.get('vendordetails')"
+              :label="$ml.get('basic')"
               label-for="basicName"
               :label-cols="3"
               label-size="md"
@@ -35,35 +35,45 @@
               >
                 <b-row>
                   <b-col>
-                    <ejs-textbox floatLabelType="Auto" v-model="vendor.vendor_company" :placeholder="$ml.get('vendorcompany')"></ejs-textbox>
+                    <ejs-textbox floatLabelType="Auto" v-model="vendor.name" :placeholder="$ml.get('name')" required></ejs-textbox>
                   </b-col>
                   <b-col>
-                      <ejs-textbox floatLabelType="Auto"  v-model="vendor.kcp_name" type="text" id="city" :placeholder="$ml.get('pholdkcpname')"></ejs-textbox>
+                    <ejs-textbox floatLabelType="Auto" v-model="vendor.vendor_company" :placeholder="$ml.get('company')" required></ejs-textbox>
+                  </b-col>
+                </b-row>
+                  <b-row>
+                  <b-col>
+                      <ejs-textbox floatLabelType="Auto"  v-model="addresslist.phone" type="number" id="city" :placeholder="$ml.get('contact1')"></ejs-textbox>
                   </b-col>
                   <b-col>
-                      <ejs-textbox floatLabelType="Auto" v-model="vendor.kcp_phone" type="number" id="postal-code" :placeholder="$ml.get('pholdkcpno')"></ejs-textbox>
+                      <ejs-textbox floatLabelType="Auto" v-model="vendor.kcp_phone" type="number" id="postal-code" :placeholder="$ml.get('contact2')"></ejs-textbox>
                   </b-col>
                 </b-row>
                 <b-row>
                   <b-col class="py-2">
-                    <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('pholdpan')" v-model="vendor.pan" id="vendor_company"></ejs-textbox>
+                    <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('panno')" v-model="vendor.pan" id="vendor_company"></ejs-textbox>
                   </b-col>
+                  <b-col class="py-2">
+                    <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('gst')" v-model="vendor.gst" id="vendor_company"></ejs-textbox>
+                  </b-col>
+                </b-row>
+                <b-row>
                   <b-col>
                     <b-form-group>
                       <label for="street" v-text="$ml.get('pancopy')"></label>
-                      <b-form-file v-model="vendor.pan_copy" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" required></b-form-file>
+                      <b-form-file v-model="vendor.pan_copy" accept="image/*" id="fileInput"></b-form-file>
                   </b-form-group>
-                  </b-col>
-                </b-row>
-                <b-row>
-                  <b-col class="py-2">
-                    <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('gst')" v-model="vendor.gst" id="vendor_company"></ejs-textbox>
                   </b-col>
                   <b-col>
                     <b-form-group>
                       <label for="street" v-text="$ml.get('gstcerti')"></label>
-                        <b-form-file v-model="vendor.gst_certi" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" required></b-form-file>
+                        <b-form-file v-model="vendor.gst_certi" accept="image/*" id="fileInput"></b-form-file>
                     </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col sm="6">
+                    <ejs-textbox floatLabelType="Auto" type="number" :placeholder="$ml.get('turnover')" v-model="vendor.turnover"></ejs-textbox>
                   </b-col>
                 </b-row>
               </b-form-group>
@@ -73,7 +83,7 @@
               <b-collapse id="expand">
                 <b-btn style="float:right" size="sm" href="#" v-b-toggle.bank variant="primary"><i class="cui-chevron-bottom"></i></b-btn>
               <b-form-group
-              :label="$ml.get('bankaccountdetails')"
+              :label="$ml.get('bankinfo')"
               label-for="basicName"
               :label-cols="3"
               label-size="md"
@@ -83,35 +93,18 @@
               <b-collapse id="bank" accordion="my-accordion">
                 <b-row>
                   <b-col sm="6">
-                  <ejs-textbox floatLabelType="Auto" v-model="vendor.acc_name" type="text" id="street" :placeholder="$ml.get('pholdaccountholdername')" ></ejs-textbox>
+                  <ejs-textbox floatLabelType="Auto" v-model="vendor.acc_name" type="text" id="street" :placeholder="$ml.get('beneficiaryname')" ></ejs-textbox>
                 </b-col>
                 <b-col sm="6">
-                  <ejs-textbox floatLabelType="Auto" v-model="vendor.acc_no" type="number" id="street" :placeholder="$ml.get('pholdaccountno')"></ejs-textbox>
+                  <ejs-textbox floatLabelType="Auto" v-model="vendor.acc_no" type="number" id="street" :placeholder="$ml.get('accno')"></ejs-textbox>
                 </b-col>
                 </b-row>
                 <b-row>
-                  <b-col sm="8">
-                      <ejs-textbox floatLabelType="Auto"  v-model="vendor.bank_name" type="text" id="city" :placeholder="$ml.get('pholdbankname')"></ejs-textbox>
+                  <b-col>
+                      <ejs-textbox floatLabelType="Auto"  v-model="vendor.bank_name" type="text" id="city" :placeholder="$ml.get('bankname')"></ejs-textbox>
                   </b-col>
-                  <b-col sm="4">
-                      <ejs-textbox floatLabelType="Auto" v-model="vendor.ifsc" type="text" id="postal-code" :placeholder="$ml.get('pholdifsc')"></ejs-textbox>
-                  </b-col>
-                </b-row>
-              </b-collapse>
-            </b-form-group>
-              <b-btn style="float:right" size="sm" href="#" v-b-toggle.additional variant="primary"><i class="cui-chevron-bottom"></i></b-btn>
-            <b-form-group
-              :label="$ml.get('additionaldetails')"
-              label-for="basicName"
-              :label-cols="3"
-              label-size="md"
-              label-class="py-3"
-              :horizontal="true"
-              >
-              <b-collapse id="additional" accordion="my-accordion">
-                <b-row>
-                  <b-col sm="4">
-                  <ejs-textbox floatLabelType="Auto" type="number" v-model="vendor.turnover" id="vendor_company" :placeholder="$ml.get('pholdturnover')" ></ejs-textbox>
+                  <b-col>
+                      <ejs-textbox floatLabelType="Auto" v-model="vendor.ifsc" type="text" id="postal-code" :placeholder="$ml.get('ifsc')"></ejs-textbox>
                   </b-col>
                 </b-row>
               </b-collapse>
@@ -125,13 +118,10 @@
               label-class="py-3"
               :horizontal="true">
                 <b-collapse id="address" accordion="my-accordion">
-                    <ejs-textbox v-model="addresslist.compAdd" floatLabelType="Auto" :placeholder="$ml.get('placeholderaddressline1')"></ejs-textbox>
+                    <b-textarea v-model="addresslist.compAdd" floatLabelType="Auto" :placeholder="$ml.get('address')"></b-textarea>
                     <b-row>
                       <b-col sm="6">
-                        <ejs-textbox floatLabelType="Auto" v-model="addresslist.email" type="email" id="street" :placeholder="$ml.get('placeholdervendoremail')"></ejs-textbox>
-                      </b-col>
-                      <b-col sm="6">
-                        <ejs-textbox floatLabelType="Auto" v-model="addresslist.phone" type="number" id="street" :placeholder="$ml.get('placeholdervendorphone')"></ejs-textbox>
+                        <ejs-textbox floatLabelType="Auto" v-model="addresslist.email" type="email" id="street" :placeholder="$ml.get('email')"></ejs-textbox>
                       </b-col>
                     </b-row>
                     <b-row>
@@ -157,10 +147,9 @@
           <!-- VENDOR EDIT -->
 
           <b-modal :title="$ml.get('editvendor')" size="lg" class="modal-primary" v-model="editvendorModal" @ok="editvendorModal = false" hide-footer>
-          <b-row class="px-1 py-1">
-            <b-form style="width:95%" v-on:submit.prevent="editVendor">
+            <b-form v-on:submit.prevent="editVendor" class="py-1">
               <b-form-group
-              :label="$ml.get('vendordetails')"
+              :label="$ml.get('basic')"
               label-for="basicName"
               :label-cols="3"
               label-size="md"
@@ -169,37 +158,33 @@
               >
                 <b-row>
                   <b-col>
-                    <ejs-textbox floatLabelType="Auto" v-model="editvendor.vendor_company" :placeholder="$ml.get('vendorcompany')"></ejs-textbox>
+                    <ejs-textbox floatLabelType="Auto" v-model="editvendor.name" :placeholder="$ml.get('name')" required></ejs-textbox>
                   </b-col>
                   <b-col>
-                      <ejs-textbox floatLabelType="Auto"  v-model="editvendor.kcp.kcp_name" type="text" id="city" :placeholder="$ml.get('pholdkcpname')"></ejs-textbox>
-                  </b-col>
-                  <b-col>
-                      <ejs-textbox floatLabelType="Auto" v-model="editvendor.kcp.kcp_phone" type="number" id="postal-code" :placeholder="$ml.get('pholdkcpno')"></ejs-textbox>
+                    <ejs-textbox floatLabelType="Auto" v-model="editvendor.vendor_company" :placeholder="$ml.get('company')" required></ejs-textbox>
                   </b-col>
                 </b-row>
-                <!-- <b-row>
-                  <b-col class="py-2">
-                    <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('pholdpan')" v-model="editvendor.pan" id="vendor_company"></ejs-textbox>
+                  <b-row>
+                  <b-col>
+                      <ejs-textbox floatLabelType="Auto"  v-model="editaddresslist.phone" type="number" id="city" :placeholder="$ml.get('contact1')"></ejs-textbox>
                   </b-col>
                   <b-col>
-                    <b-form-group>
-                      <label for="street" v-text="$ml.get('pancopy')"></label>
-                      <b-form-file v-model="editvendor.pan_copy" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" required></b-form-file>
-                  </b-form-group>
+                      <ejs-textbox floatLabelType="Auto" v-model="editvendor.kcp.kcp_phone" type="number" id="postal-code" :placeholder="$ml.get('contact2')"></ejs-textbox>
                   </b-col>
                 </b-row>
                 <b-row>
                   <b-col class="py-2">
+                    <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('panno')" v-model="editvendor.pan" id="vendor_company"></ejs-textbox>
+                  </b-col>
+                  <b-col class="py-2">
                     <ejs-textbox floatLabelType="Auto" type="text" :placeholder="$ml.get('gst')" v-model="editvendor.gst" id="vendor_company"></ejs-textbox>
                   </b-col>
-                  <b-col>
-                    <b-form-group>
-                      <label for="street" v-text="$ml.get('gstcerti')"></label>
-                        <b-form-file v-model="editvendor.gst_certi" accept="image/*" :placeholder="$ml.get('dropfile')" id="fileInput" required></b-form-file>
-                    </b-form-group>
+                </b-row>
+                <b-row>
+                  <b-col sm="6">
+                    <ejs-textbox floatLabelType="Auto" type="number" :placeholder="$ml.get('turnover')" v-model="editvendor.turnover"></ejs-textbox>
                   </b-col>
-                </b-row> -->
+                </b-row>
               </b-form-group>
               <b-row class="justify-content-center">
                 <b-btn size="md" href="#" v-b-toggle.expand variant="primary"><i class="cui-chevron-bottom"></i>&nbsp;<span v-text="$ml.get('more')"></span></b-btn>
@@ -207,7 +192,7 @@
               <b-collapse id="expand">
                 <b-btn style="float:right" size="sm" href="#" v-b-toggle.bank variant="primary"><i class="cui-chevron-bottom"></i></b-btn>
               <b-form-group
-              :label="$ml.get('bankaccountdetails')"
+              :label="$ml.get('bankinfo')"
               label-for="basicName"
               :label-cols="3"
               label-size="md"
@@ -217,35 +202,18 @@
               <b-collapse id="bank" accordion="my-accordion">
                 <b-row>
                   <b-col sm="6">
-                  <ejs-textbox floatLabelType="Auto" v-model="editvendor.payment.acc_name" type="text" id="street" :placeholder="$ml.get('pholdaccountholdername')" ></ejs-textbox>
+                  <ejs-textbox floatLabelType="Auto" v-model="editvendor.payment.acc_name" type="text" id="street" :placeholder="$ml.get('beneficiaryname')" ></ejs-textbox>
                 </b-col>
                 <b-col sm="6">
-                  <ejs-textbox floatLabelType="Auto" v-model="editvendor.payment.acc_no" type="number" id="street" :placeholder="$ml.get('pholdaccountno')"></ejs-textbox>
+                  <ejs-textbox floatLabelType="Auto" v-model="editvendor.payment.acc_no" type="number" id="street" :placeholder="$ml.get('accno')"></ejs-textbox>
                 </b-col>
                 </b-row>
                 <b-row>
-                  <b-col sm="8">
-                      <ejs-textbox floatLabelType="Auto"  v-model="editvendor.payment.bank_name" type="text" id="city" :placeholder="$ml.get('pholdbankname')"></ejs-textbox>
+                  <b-col>
+                      <ejs-textbox floatLabelType="Auto"  v-model="editvendor.payment.bank_name" type="text" id="city" :placeholder="$ml.get('bankname')"></ejs-textbox>
                   </b-col>
-                  <b-col sm="4">
-                      <ejs-textbox floatLabelType="Auto" v-model="editvendor.payment.ifsc" type="text" id="postal-code" :placeholder="$ml.get('pholdifsc')"></ejs-textbox>
-                  </b-col>
-                </b-row>
-              </b-collapse>
-            </b-form-group>
-              <b-btn style="float:right" size="sm" href="#" v-b-toggle.additional variant="primary"><i class="cui-chevron-bottom"></i></b-btn>
-            <b-form-group
-              :label="$ml.get('additionaldetails')"
-              label-for="basicName"
-              :label-cols="3"
-              label-size="md"
-              label-class="py-3"
-              :horizontal="true"
-              >
-              <b-collapse id="additional" accordion="my-accordion">
-                <b-row>
-                  <b-col sm="4">
-                  <ejs-textbox floatLabelType="Auto" type="number" v-model="editvendor.turnover" id="vendor_company" :placeholder="$ml.get('pholdturnover')" ></ejs-textbox>
+                  <b-col>
+                      <ejs-textbox floatLabelType="Auto" v-model="editvendor.payment.ifsc" type="text" id="postal-code" :placeholder="$ml.get('ifsc')"></ejs-textbox>
                   </b-col>
                 </b-row>
               </b-collapse>
@@ -259,24 +227,21 @@
               label-class="py-3"
               :horizontal="true">
                 <b-collapse id="address" accordion="my-accordion">
-                    <ejs-textbox v-model="addresslist.compAdd" floatLabelType="Auto" :placeholder="$ml.get('placeholderaddressline1')"></ejs-textbox>
+                    <b-textarea v-model="addresslist.compAdd" floatLabelType="Auto" :placeholder="$ml.get('address')"></b-textarea>
                     <b-row>
                       <b-col sm="6">
-                        <ejs-textbox floatLabelType="Auto" v-model="addresslist.email" type="email" id="street" :placeholder="$ml.get('placeholdervendoremail')"></ejs-textbox>
-                      </b-col>
-                      <b-col sm="6">
-                        <ejs-textbox floatLabelType="Auto" v-model="addresslist.phone" type="number" id="street" :placeholder="$ml.get('placeholdervendorphone')"></ejs-textbox>
+                        <ejs-textbox floatLabelType="Auto" v-model="editaddresslist.email" type="email" id="street" :placeholder="$ml.get('email')"></ejs-textbox>
                       </b-col>
                     </b-row>
                     <b-row>
                       <b-col sm="4">
-                        <ejs-textbox v-model="addresslist.state" floatLabelType="Auto" :placeholder="$ml.get('state')"></ejs-textbox>
+                        <ejs-textbox v-model="editaddresslist.state" floatLabelType="Auto" :placeholder="$ml.get('state')"></ejs-textbox>
                       </b-col>
                       <b-col sm="4">
-                        <ejs-textbox v-model="addresslist.zip" floatLabelType="Auto" :placeholder="$ml.get('postalcode')"></ejs-textbox>
+                        <ejs-textbox v-model="editaddresslist.zip" floatLabelType="Auto" :placeholder="$ml.get('postalcode')"></ejs-textbox>
                       </b-col>
                       <b-col sm="4">
-                        <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="addresslist.country" :allowFiltering="true" :fields="country_fields" :dataSource='countrylist' popupHeight='200' :placeholder="$ml.get('country')"></ejs-dropdownlist>
+                        <ejs-dropdownlist :showClearButton="true" floatLabelType="Auto" v-model="editaddresslist.country" :allowFiltering="true" :fields="country_fields" :dataSource='countrylist' popupHeight='200' :placeholder="$ml.get('country')"></ejs-dropdownlist>
                       </b-col>
                     </b-row>
               </b-collapse>
@@ -284,50 +249,49 @@
           </b-collapse>
              <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
             </b-form>
-          </b-row>
           </b-modal>
 
           <!-- Vendor Details -->
-          <b-modal :title="vendordetails.vendor_company" size="xl" class="modal-primary" v-model="editvendorModal" @ok="editvendorModal = false" hide-footer>
+          <!-- <b-modal :title="vendordetails.vendor_company" size="xl" class="modal-primary" v-model="editvendorModal" @ok="editvendorModal = false" hide-footer>
             <b-row>
               <b-col>
                 <b-card no-body class="bg-primary">
                   <b-card-body class="pb-0">
                     <h4 class="mb-0"></h4>
                     <p>Members online</p>
-                  </b-card-body>
+                  </b-card-body> -->
                   <!-- <card-line1-chart-example chartId="card-chart-01" class="chart-wrapper px-3" style="height:70px;" :height="70"/> -->
-                </b-card>
+             <!--    </b-card>
               </b-col>
               <b-col>
                 <b-card no-body class="bg-primary">
                   <b-card-body class="pb-0">
                     <h4 class="mb-0">9.823</h4>
                     <p>Members online</p>
-                  </b-card-body>
+                  </b-card-body> -->
                   <!-- <card-line1-chart-example chartId="card-chart-01" class="chart-wrapper px-3" style="height:70px;" :height="70"/> -->
-                </b-card>
+               <!--  </b-card>
               </b-col>
               <b-col>
                 <b-card no-body class="bg-primary">
                   <b-card-body class="pb-0">
                     <h4 class="mb-0">9.823</h4>
                     <p>Members online</p>
-                  </b-card-body>
+                  </b-card-body> -->
                   <!-- <card-line1-chart-example chartId="card-chart-01" class="chart-wrapper px-3" style="height:70px;" :height="70"/> -->
-                </b-card>
+                <!-- </b-card>
               </b-col>
               <b-col>
                 <b-card no-body class="bg-primary">
                   <b-card-body class="pb-0">
                     <h4 class="mb-0">9.823</h4>
                     <p>Members online</p>
-                  </b-card-body>
+                  </b-card-body> -->
                   <!-- <card-line1-chart-example chartId="card-chart-01" class="chart-wrapper px-3" style="height:70px;" :height="70"/> -->
-                </b-card>
+                <!-- </b-card>
               </b-col>
             </b-row>
-          </b-modal>
+          </b-modal> -->
 
 
         </div>
@@ -417,16 +381,9 @@ export default {
       return {
         editvendorModal:false,
         addresslist : {
-        compAdd : "",
-        country : "",
-        state : "",
-        zip : "",
-        phone : "",
-        email : ""
       },
       countrylist:countries,
       country_fields:{text:"name",value:"name"},
-      
         vendor : {
         vendor_company:"",
         pan:"",
@@ -439,8 +396,7 @@ export default {
         ifsc : "",
         bank_name:"",
         pan_copy: null,
-        gst_certi:null,
-        address:this.addresslist
+        gst_certi:null
       },
       editvendor : {
         kcp:{},
@@ -479,39 +435,84 @@ export default {
         addTemplate: function () {
               return {
                   template: Vue.component("addTemplate", {
-                      template: `<b-badge id="label1" variant="success" ><i class="fa fa-plus"></i>&nbsp<span id="hide" v-text="$ml.get('add')"></span></b-badge>`,
+                      template: `<div ><div v-if="isPermitted"><b-badge id="label1" variant="success" ><i class="fa fa-plus"></i>&nbsp<span id="hide" v-text="$ml.get('add')"></span></b-badge></div><div v-else></div><div>`,
                       data() {
                         return {
                           data: {
                           },
+                          isPermitted:false,
                         };
                       },
+                      mounted() {
+                        var Session = JSON.parse(localStorage.session_key)
+                          if(Session.user) {
+                          for(var i=0;i<Session.permission.length;i++) {
+                            if(Session.permission[i].text=="Vendor" && Session.permission[i].write) {
+                              this.isPermitted = true
+                              break;
+                            }
+                          }
+                      }
+                      else {
+                        this.isPermitted =true
+                      }
+                    }
                     })
                   }
                 },
                 deleteTemplate: function () {
               return {
                   template: Vue.component("deleteTemplate", {
-                      template: `<b-badge id="label1" variant="primary" ><i class="fa fa-trash-o"></i>&nbsp<span id="hide" v-text="$ml.get('delete')"></span></b-badge>`,
+                      template: `<div ><div v-if="isPermitted"><b-badge id="label1" variant="primary" ><i class="fa fa-trash-o"></i>&nbsp<span id="hide" v-text="$ml.get('delete')"></span></b-badge></div><div v-else></div></div>`,
                       data() {
                         return {
                           data: {
                           },
+                          isPermitted:false
                         };
                       },
+                      mounted() {
+                        var Session = JSON.parse(localStorage.session_key)
+                          if(Session.user) {
+                          for(var i=0;i<Session.permission.length;i++) {
+                            if(Session.permission[i].text=="Vendor" && Session.permission[i].delete) {
+                              this.isPermitted = true
+                              break;
+                            }
+                          }
+                      }
+                      else {
+                        this.isPermitted =true
+                      }
+                    }
                     })
                   }
                 },
                 editTemplate: function () {
               return {
                   template: Vue.component("editTemplate", {
-                      template: `<b-badge id="label1" variant="primary" ><i class="fa fa-edit"></i>&nbsp<span id="hide" v-text="$ml.get('edit')"></span></b-badge>`,
+                      template: `<div><div v-if="isPermitted"><b-badge id="label1" variant="primary" ><i class="fa fa-edit"></i>&nbsp<span id="hide" v-text="$ml.get('edit')"></span></b-badge></div><div v-else></div></div>`,
                       data() {
                         return {
                           data: {
                           },
+                          isPermitted:false
                         };
                       },
+                      mounted() {
+                        var Session = JSON.parse(localStorage.session_key)
+                          if(Session.user) {
+                          for(var i=0;i<Session.permission.length;i++) {
+                            if(Session.permission[i].text=="Vendor" && Session.permission[i].edit) {
+                              this.isPermitted = true
+                              break;
+                            }
+                          }
+                      }
+                      else {
+                        this.isPermitted =true
+                      }
+                    }
                     })
                   }
                 },
@@ -641,7 +642,8 @@ export default {
                 alertWidth: '300px',
                 animationSettings: { effect: 'None' },
                 alertDlgButtons: [{ click: this.alertDlgBtnClick, buttonModel: { content: 'OK', isPrimary: true } }],
-                selectionSettings: { persistSelection: true, type: 'Multiple' }
+                selectionSettings: { persistSelection: true, type: 'Multiple' },
+                editaddresslist:{}
             };
         },
         watch : {
@@ -649,10 +651,12 @@ export default {
         api.get(`${apiUrl}`+`label/label/get/all`).then((response) => {
                     this.datasrc = response.data;
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
     },
@@ -661,10 +665,12 @@ export default {
               axios.post(`${apiUrl}`+`label/label/create`,this.formdata1,{withCredentials:true}).then((res) => {
                 this.label++
               }).catch((err)=> {
+                if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
             },
             editLabel(args) {
@@ -672,10 +678,12 @@ export default {
               axios.put(`${apiUrl}`+`label/label/edit/`+`${id[0]._id}`,this.formdata,{withCredentials:true}).then((res) => {
                 this.label++
               }).catch((err)=> {
+                if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
             },
             onChange(args) {
@@ -731,12 +739,33 @@ export default {
                 }
             },
             addEditHandler(args) {
-              console.log(args)
-                if(args.item.id == "add") {
+              var add=false
+              var edit=false
+              var deleteper = false 
+               var Session = JSON.parse(localStorage.session_key)
+                 if(Session.user) {
+                 for(var i=0;i<Session.permission.length;i++) {
+                   if(Session.permission[i].text=="Vendor" && Session.permission[i].write) {
+                      write= true
+                   }
+                   if(Session.permission[i].text=="Vendor" && Session.permission[i].edit) {
+                      edit= true
+                   }
+                   if(Session.permission[i].text=="Vendor" && Session.permission[i].delete) {
+                      deleteper= true
+                   }
+                 }
+             }
+              else {
+                 add = true
+                 edit = true
+                 deleteper = true
+               }
+                if(args.item.id == "add" && add) {
                     this.vendorModal = true
                 }
                 
-                if(args.item.id == "delete") {
+                if(args.item.id == "delete" && deleteper ) {
                     var selected = this.$refs.overviewgrid.getSelectedRecords()
                     if(selected.length>0) {
                         axios.delete(`${apiUrl}`+`vendor/vendor/delete/`+`${selected[0]._id}`,{withCredentials:true}).then((response) => {
@@ -744,18 +773,24 @@ export default {
                                     this.datasrc = res.data
                                   });
                                 }).catch((err)=> {
+                                  if(err.toString().includes("Network Error")) {
                                   toast({
                                     type: VueNotifications.types.error,
                                     title: 'Network Error'
                                   })
+                                }
                                 })
                     }
                 }
-                if(args.item.id == 'edit') {
+                if(args.item.id == 'edit' && edit) {
                   var id = this.$refs.overviewgrid.getSelectedRecords() 
                   if(this.$refs.overviewgrid.getSelectedRecords().length>0) {
                     this.editvendorModal = true
+                    console.log(id[0])
                     this.editvendor = id[0]
+                    if(id[0].address != null) {
+                      this.editaddresslist = id[0].address
+                    }
                   }
                   else { 
                     alert("Please select a record to label it");
@@ -782,36 +817,65 @@ export default {
                 },
                 addVendor() {
           this.vendor.address = this.addresslist
+          console.log(this.vendor.address)
           var vfd = new FormData();
+          vfd.append('name',this.vendor.name);
         vfd.append('vendor_company',this.vendor.vendor_company);
-        vfd.append('address',this.vendor.address);
+        vfd.append('compAdd',this.vendor.address.compAdd);
+        vfd.append('country',this.vendor.address.country);
+        vfd.append('email',this.vendor.address.email);
+        vfd.append('phone',this.vendor.address.phone);
+        vfd.append('state',this.vendor.address.state);
+        vfd.append('zip',this.vendor.address.zip);
+
         vfd.append('pan',this.vendor.pan)
         vfd.append('gst',this.vendor.gst)
         vfd.append('turnover',this.vendor.turnover)
         vfd.append('kcp_name',this.vendor.kcp_name)
         vfd.append('kcp_phone',this.vendor.kcp_phone)
         vfd.append('acc_no',this.vendor.acc_no)
+        vfd.append('acc_name',this.vendor.acc_name)
         vfd.append('ifsc',this.vendor.ifsc)
         vfd.append('bank_name',this.vendor.bank_name)
         console.log(this.vendor.pan_copy,this.vendor.gst_certi);
         vfd.append('pan_copy',this.vendor.pan_copy)
         vfd.append('gst_certi',this.vendor.gst_certi)
+        console.log(vfd)
         axios.post(`${apiUrl}`+`vendor/vendor/create`,vfd,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((response)=> {
           console.log(response.data)
             axios.get(`${apiUrl}`+`vendor/vendor/get/all`,{withCredentials:true}).then((res) => {
               console.log(res.data)
             this.datasrc = res.data
+            this.vendor = {
+                vendor_company:"",
+                pan:"",
+                gst:"",
+                turnover:"",
+                kcp_name : "",
+                kcp_phone : "",
+                acc_no : "",
+                acc_name:"",
+                ifsc : "",
+                bank_name:"",
+                pan_copy: null,
+                gst_certi:null,
+                address:[]
+              }
+              this.addresslist=[]
           });
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+
+      }
       })
         this.vendorModal =false
         },
         editVendor() {
-          this.vendor.address = this.addresslist
+          this.editvendor.address = this.editaddresslist
           var id = this.editvendor._id
           this.editvendor._id = undefined
         axios.put(`${apiUrl}`+`vendor/vendor/edit/${id}`,this.editvendor,{withCredentials:true}).then((response)=> {
@@ -819,11 +883,14 @@ export default {
             this.datasrc = res.data
           });
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
+        this.editaddresslist = []
         this.editvendorModal =false
         },
             
@@ -833,10 +900,12 @@ export default {
                     this.datasrc = response.data;
                     console.log(response.data)
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
             
         }

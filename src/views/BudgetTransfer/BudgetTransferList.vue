@@ -222,21 +222,26 @@ export default {
                             console.log(res.data)
                             window.location.reload();
                           }).catch((err)=> {
+                            if(err.toString().includes("Network Error")) {
                             toast({
                               type: VueNotifications.types.error,
                               title: 'Network Error'
                             })
+                          }
                           })
+
                         },
                         rejectReq() {
                           api.post(`${apiUrl}`+`transfer/budtrans/reject/requests/${this.data._id}`).then((res) => {
                             console.log(res.data)
                             window.location.reload();
                           }).catch((err)=> {
+                            if(err.toString().includes("Network Error")) {
                             toast({
                               type: VueNotifications.types.error,
                               title: 'Network Error'
                             })
+                          }
                           })
                         }
                       },
@@ -391,10 +396,12 @@ export default {
       api.put(`${apiUrl}approvals/preApp/pop/label/${id}`,body).then((res) => {
         console.log(res.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       
     },
@@ -412,10 +419,12 @@ export default {
                   })
                 console.log(this.editinput.labels)
               }).catch((err)=> {
+                if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
       },
     onChange(args) {
@@ -428,10 +437,12 @@ export default {
           label = res.data
           this.editinput.labels.push(label);
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
 
         var data = {
@@ -440,10 +451,12 @@ export default {
         api.put(`${apiUrl}approvals/preApp/push/label/${args}`,data).then((res) => {
             
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
       },
@@ -609,18 +622,22 @@ export default {
                     }
                     console.log(this.datasrc)
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
                 api.get(`${apiUrl}`+`label/label/find/by/Approval`).then((res) => {
                   this.labels = res.data
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
               }
               else{
@@ -652,10 +669,12 @@ export default {
                     }
                     console.log(response.data)
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
               }
         },

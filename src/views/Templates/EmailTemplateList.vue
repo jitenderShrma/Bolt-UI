@@ -347,10 +347,12 @@ export default {
                 axios.get(`${apiUrl}`+`mail/template/view`,{withCredentials:true}).then((response) => {
                     this.datasrc = response.data;
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
                 this.data = this.datasrc.slice(0)
                 return this.data

@@ -373,10 +373,12 @@ export default {
         api.get(`${apiUrl}`+`label/label/get/all`).then((response) => {
                     this.datasrc = response.data;
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
     },
@@ -385,10 +387,12 @@ export default {
               axios.post(`${apiUrl}`+`label/label/create`,this.formdata1,{withCredentials:true}).then((res) => {
                 this.label++
               }).catch((err)=> {
+                if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
               this.$refs.dialogObj.hide()
             },
@@ -397,10 +401,12 @@ export default {
               axios.put(`${apiUrl}`+`label/label/edit/`+`${id[0]._id}`,this.formdata,{withCredentials:true}).then((res) => {
                 this.label++
               }).catch((err)=> {
+                if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
               this.$refs.dialogObj1.hide()
             },
@@ -464,10 +470,12 @@ export default {
                         axios.delete(`${apiUrl}`+`label/label/delete/`+`${selected[0]._id}`,{withCredentials:true}).then((response) => {
                             this.label++;
                     }).catch((err)=> {
+                      if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
                     }
                 }
@@ -479,10 +487,12 @@ export default {
                         this.formdata = res.data
                         this.formdata.color = `#${res.data.color}`
                     }).catch((err)=> {
+                      if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
                   }
                   else { 
@@ -517,10 +527,12 @@ export default {
                     this.datasrc = response.data;
                     console.log(response.data)
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
             
         }

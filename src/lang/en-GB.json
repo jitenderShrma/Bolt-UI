@@ -45,7 +45,7 @@
     "placeholderphone" : "Enter your Phone Number",
     "state" :"State",
     "placeholderstate" : "Enter your State",
-    "postalcode" :"Postal Code",
+    "postalcode" :"PIN Code",
     "placeholderpostalcode" : "Enter your Postal Code",
     "country" :"Country",
     "placeholdercountry" : "Select your Country",
@@ -130,7 +130,7 @@
     "pholdbankname" : "Enter the Bank Name",
     "ifsc" : "IFSC  Code",
     "pholdifsc" : "Enter the IFSC Code",
-    "turnover" : "TurnOver",
+    "turnover" : "Turnover",
     "pholdturnover"  :"Enter the Vendor's TurnOver",
     "kcpdetails" : "Key Contact Person Details",
     "kcpname" : "Key Contact Person Name",
@@ -298,6 +298,13 @@
     "placeholdervendorphone" : "Enter Vendor's Phone Number",
     "approve" : "Approve",
     "markaspaid" : "Mark As Paid",
-    "paid" : "Paid"
+    "paid" : "Paid",
+    "basic" : "Basic",
+    "name":"Name",
+    "contact1" : "Contact 1",
+    "contact2" : "Contact 2",
+    "bankinfo" : "Bank Info",
+    "beneficiaryname" : "Beneficiary Name",
+    "accno" : "A/C No."
 
 }

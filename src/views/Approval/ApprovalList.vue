@@ -10,7 +10,7 @@
         <small>Approval Matrix</small>
       </template>
       <b-list-group class="list-group-accent">
-      <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center text-muted text-uppercase small">Approval Level-1 <div style="display:inline" v-if="designationBudget[0]!=null && designationBudget[0]!=''">{{designationBudget[0]}} - {{departmentBudget[0]}}</div>
+      <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center text-muted text-uppercase small">Approval Level-1 <div style="display:inline" v-if="designationBudget[0]!=null && designationBudget[0]!=''">{{designationBudget[0]}} - {{departmentBudget[0]}}</div> ({{linemanagersAmount[0]}} INR)
       </b-list-group-item>
       <div v-for="(run,i) in lineManagersBudget[0]" :key="i">
       <!-- <div class="p-3"> -->
@@ -28,7 +28,7 @@
     </b-list-group>
     <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-warning py-1 bg-light text-center  text-muted text-uppercase small">
-        Approval Level-2 <div style="display:inline" v-if="designationBudget[1]!=null && designationBudget[1]!=''">{{designationBudget[1]}} - {{departmentBudget[1]}}</div>
+        Approval Level-2 <div style="display:inline" v-if="designationBudget[1]!=null && designationBudget[1]!=''">{{designationBudget[1]}} - {{departmentBudget[1]}}</div> ({{linemanagersAmount[1]}} INR)
       </b-list-group-item>
       <div v-for="(run,i) in lineManagersBudget[1]" :key="i">
       <!-- <div class="p-3"> -->
@@ -46,7 +46,7 @@
     </b-list-group>
     <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-info py-1 bg-light text-center  text-muted text-uppercase small">
-        Approval Level-3 <div style="display:inline" v-if="designationBudget[2]!=null && designationBudget[2]!=''">{{designationBudget[2]}} - {{departmentBudget[2]}}</div>
+        Approval Level-3 <div style="display:inline" v-if="designationBudget[2]!=null && designationBudget[2]!=''">{{designationBudget[2]}} - {{departmentBudget[2]}}</div> ({{linemanagersAmount[2]}} INR)
       </b-list-group-item>
       <div v-for="(run,i) in lineManagersBudget[2]" :key="i">
       <!-- <div class="p-3"> -->
@@ -64,7 +64,7 @@
     </b-list-group>
     <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-danger py-1 bg-light text-center  text-muted text-uppercase small">
-        Approval Level-4 <div style="display:inline" v-if="designationBudget[3]!=null && designationBudget[3]!=''">{{designationBudget[3]}} - {{departmentBudget[3]}}</div>
+        Approval Level-4 <div style="display:inline" v-if="designationBudget[3]!=null && designationBudget[3]!=''">{{designationBudget[3]}} - {{departmentBudget[3]}}</div> ({{linemanagersAmount[3]}} INR)
       </b-list-group-item>
 
       <div v-for="(run,i) in lineManagersBudget[3]" :key="i">
@@ -83,7 +83,7 @@
     </b-list-group>
     <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-success py-1 bg-light text-center  text-muted text-uppercase small">
-        Approval Level-5 <div style="display:inline" v-if="designationBudget[4]!=null && designationBudget[4]!=''">{{designationBudget[4]}} - {{departmentBudget[4]}}</div>
+        Approval Level-5 <div style="display:inline" v-if="designationBudget[4]!=null && designationBudget[4]!=''">{{designationBudget[4]}} - {{departmentBudget[4]}}</div> ({{linemanagersAmount[4]}} INR)
       </b-list-group-item>
       <div v-for="(run,i) in lineManagersBudget[4]" :key="i">
       <!-- <div class="p-3"> -->
@@ -736,10 +736,12 @@ export default {
                               console.log(res.data)
                               window.location.reload();
                             }).catch((err)=> {
+                              if(err.toString().includes("Network Error")) {
                               toast({
                                 type: VueNotifications.types.error,
                                 title: 'Network Error'
                               })
+                            }
                             })
                           }
                           else{
@@ -749,24 +751,28 @@ export default {
                               console.log(res.data)
                               window.location.reload();
                             }).catch((err)=> {
+                              if(err.toString().includes("Network Error")) {
                               toast({
                                 type: VueNotifications.types.error,
                                 title: 'Network Error'
                               })
+                            }
                             })
                           }
                         },
                         rejectReq() {
                           console.log(this.input)
                           this.reject_remarks=false
-                          axios.post(`${apiUrl}`+`/approval/level1/reject/${this.data.ref_id}`,{withCredentials:true}).then((res) => {
+                          axios.post(`${apiUrl}`+`/approval/level1/reject/${this.data.ref_id}`,this.input,{withCredentials:true}).then((res) => {
                             console.log(res.data)
                             window.location.reload();
                           }).catch((err)=> {
+                            if(err.toString().includes("Network Error")) {
                             toast({
                               type: VueNotifications.types.error,
                               title: 'Network Error'
                             })
+                          }
                           })
                         }
                       },
@@ -950,6 +956,7 @@ export default {
                     type: 'CheckBox'
                 },
                 log:[],
+                linemanagersAmount:[],
                 color:['list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-success list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-success list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-success list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-success list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3'],
                 target: '.control-section',
                  alertHeader: 'Copy with Header',
@@ -1006,10 +1013,12 @@ export default {
                             console.log(this.datasrc)
                 })
                     }).catch((err)=> {
+                      if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     },
     releaseApproval() {
@@ -1055,10 +1064,12 @@ export default {
                             console.log(this.datasrc)
                 })
                     }).catch((err)=> {
+                      if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     },
     editdeptLabel() {
@@ -1067,10 +1078,12 @@ export default {
       api.put(`${apiUrl}label/label/edit/${id}`,this.editlabel).then((res) => {
         console.log(res.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       this.$router.go(0)
     },
@@ -1088,14 +1101,18 @@ export default {
         api.get(`${apiUrl}transaction/trans/get/for/an/${args.data.ref_id}`).then((res) => {
           this.transactions = res.data
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
         this.lineManagersBudget = []
+        this.linemanagersAmount=[]
         api.get(`${apiUrl}line/managers/find/settings/${args.data.request_by._id}`).then((res) => {
-                  this.lineManagersBudget = res.data
+                  this.lineManagersBudget = res.data.users
+                  this.linemanagersAmount = res.data.amount
                   this.designationBudget =[]
                     this.departmentBudget = []
                   for(var i=0;i<this.lineManagersBudget.length;i++) {
@@ -1110,10 +1127,12 @@ export default {
                     }
                   }
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
         api.get(`${apiUrl}approvals/preApp/timeline/get/${args.data._id}`).then((res) =>{
             if(res.data) {
@@ -1213,10 +1232,12 @@ export default {
             //   this.department.push(this.lineManagers[i][0].department.department_name)
             // }
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
     },
@@ -1244,10 +1265,12 @@ export default {
       api.put(`${apiUrl}approvals/preApp/pop/label/${id}`,body).then((res) => {
         console.log(res.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       
     },
@@ -1265,10 +1288,12 @@ export default {
                   })
                 console.log(this.editinput.labels)
               }).catch((err)=> {
+                if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
       },
     onChange(args) {
@@ -1282,10 +1307,12 @@ export default {
           label = res.data
           this.editinput.labels.push(label);
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
 
         var data = {
@@ -1294,10 +1321,12 @@ export default {
         api.put(`${apiUrl}approvals/preApp/push/label/${args}`,data).then((res) => {
             
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
       },
@@ -1459,10 +1488,12 @@ export default {
                 api.get(`${apiUrl}`+`approvals/preApp/view/requests`).then((response) => {
                     this.datasrc = response.data;
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
                 this.pending = true
               }
@@ -1470,10 +1501,12 @@ export default {
                 api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
                     this.datasrc = response.data;
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
                 this.pending = false
               }
@@ -1520,18 +1553,23 @@ export default {
                       }
                     }
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
+
                 api.get(`${apiUrl}`+`label/label/find/by/Approval`).then((res) => {
                   this.labels = res.data
                 }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
               
               // else{
