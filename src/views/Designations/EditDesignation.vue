@@ -141,7 +141,10 @@
                             <div v-if="datasrc[i].module_name == 'importTrans'">
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].delete" :uncheckedValue="false" :checkedValue="true" disabled/>
                             </div>
-                            <div v-else>
+                            <div v-if="datasrc[i].module_name == 'vendor'">
+                              <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="datasrc[i].delete" :uncheckedValue="false" :checkedValue="true"/>
+                            </div>
+                            <div v-if="datasrc[i].module_name != 'vendor' && datasrc[i].module_name != 'importTrans'">
                               <c-switch size="sm" class="mx-1" color="primary" name="switch1" v-model="additionalpermission[i].delete_all" @change="setDeleteAll(`${i}`)" :uncheckedValue="false" :checkedValue="true"/>
                             </div>
                             

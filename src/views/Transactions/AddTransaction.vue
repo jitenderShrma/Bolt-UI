@@ -679,7 +679,9 @@ Vue.use(TextBoxPlugin);
     else{
       this.isPermittedVendor = true
     }
+    if(this.ref_id) {
       this.input.approvalCode = this.ref_id
+    }
       this.month.splice(0,new Date().getMonth())
       if(this.$session.has('subuser')) {
         this.visible = false

@@ -7,18 +7,18 @@
             <ejs-toolbar id="toolbargrid2" :clicked="addEditHandler">
                 <e-items >
                  <e-item align="right" id="add" :text="$ml.get('add')" :template="addTemplate"></e-item>
-                 <e-item align="right" id="edit" :text="$ml.get('edit')" :template="editTemplate"></e-item>
                  <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item>
                 </e-items>
                 </ejs-toolbar>
              <div class="control-section">
                 
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' :toolbarClick="clickHandler"
-                :height="height" :enableHover='false'>
+                :height="height" :enableHover='false' :recordDoubleClick="beginEdit">
                 <e-columns>
-                    <e-column field='vendor_company' headerText='Vendor Company'  :filter='filter' ></e-column>
-                    <e-column field='kcp.kcp_name' headerText='Key Contact Person Name'  :filter='filter' ></e-column>     
-                    <e-column field='kcp.kcp_phone' headerText='Key Contact Person Phone'  :filter='filter' ></e-column>
+                    <e-column field='name' headerText='Name' :filter='filter' ></e-column>
+                    <e-column field='vendor_company' headerText='Vendor Company' :filter='filter'></e-column>
+                    <e-column field='address.phone' headerText='Contact 1'  :filter='filter'></e-column>     
+                    <e-column field='kcp.kcp_phone' headerText='Contact 2'  :filter='filter'></e-column>
                     <!-- <e-column field='description' :visible="false" headerText='Name'  :filter='filter' ></e-column>  -->
                 </e-columns>
                 </ejs-grid>
@@ -435,7 +435,7 @@ export default {
         addTemplate: function () {
               return {
                   template: Vue.component("addTemplate", {
-                      template: `<div ><div v-if="isPermitted"><b-badge id="label1" variant="success" ><i class="fa fa-plus"></i>&nbsp<span id="hide" v-text="$ml.get('add')"></span></b-badge></div><div v-else></div><div>`,
+                      template: `<div ><div v-if="isPermitted"><b-badge id="label1" variant="success" ><i class="fa fa-plus"></i>&nbsp<span id="hide" v-text="$ml.get('add')"></span></b-badge></div><div v-else stye="display:none"></div><div>`,
                       data() {
                         return {
                           data: {
@@ -463,7 +463,7 @@ export default {
                 deleteTemplate: function () {
               return {
                   template: Vue.component("deleteTemplate", {
-                      template: `<div ><div v-if="isPermitted"><b-badge id="label1" variant="primary" ><i class="fa fa-trash-o"></i>&nbsp<span id="hide" v-text="$ml.get('delete')"></span></b-badge></div><div v-else></div></div>`,
+                      template: `<div><div v-if="isPermitted"><b-badge id="label1" variant="primary" ><i class="fa fa-trash-o"></i>&nbsp<span id="hide" v-text="$ml.get('delete')"></span></b-badge></div><div v-else></div></div>`,
                       data() {
                         return {
                           data: {
@@ -472,7 +472,10 @@ export default {
                         };
                       },
                       mounted() {
+
                         var Session = JSON.parse(localStorage.session_key)
+                        console.log(Session.permission)
+
                           if(Session.user) {
                           for(var i=0;i<Session.permission.length;i++) {
                             if(Session.permission[i].text=="Vendor" && Session.permission[i].delete) {
@@ -491,7 +494,7 @@ export default {
                 editTemplate: function () {
               return {
                   template: Vue.component("editTemplate", {
-                      template: `<div><div v-if="isPermitted"><b-badge id="label1" variant="primary" ><i class="fa fa-edit"></i>&nbsp<span id="hide" v-text="$ml.get('edit')"></span></b-badge></div><div v-else></div></div>`,
+                      template: `<div><div v-if="isPermitted"><b-badge id="label1" variant="primary" ><i class="fa fa-edit"></i>&nbsp<span id="hide" v-text="$ml.get('edit')"></span></b-badge></div><div v-else stye="display:none"></div></div>`,
                       data() {
                         return {
                           data: {
@@ -661,6 +664,29 @@ export default {
       }
     },
   methods: {
+    beginEdit(args){
+      var edit = false 
+               var Session = JSON.parse(localStorage.session_key)
+                 if(Session.user) {
+                 for(var i=0;i<Session.permission.length;i++) {
+                   
+                   if(Session.permission[i].text=="Vendor" && Session.permission[i].edit) {
+                      edit= true
+                      break;
+                   }
+                 }
+               }
+               else{
+                edit = true
+               }
+               if(edit) {
+      this.editvendorModal = true
+        this.editvendor = args.rowData
+        if(args.rowData.address != null) {
+          this.editaddresslist = args.rowData.address
+        }
+      }
+    },
             addLabel(args) {
               axios.post(`${apiUrl}`+`label/label/create`,this.formdata1,{withCredentials:true}).then((res) => {
                 this.label++
@@ -782,20 +808,6 @@ export default {
                                 })
                     }
                 }
-                if(args.item.id == 'edit' && edit) {
-                  var id = this.$refs.overviewgrid.getSelectedRecords() 
-                  if(this.$refs.overviewgrid.getSelectedRecords().length>0) {
-                    this.editvendorModal = true
-                    console.log(id[0])
-                    this.editvendor = id[0]
-                    if(id[0].address != null) {
-                      this.editaddresslist = id[0].address
-                    }
-                  }
-                  else { 
-                    alert("Please select a record to label it");
-                  }
-                }
                 if (args.item.id === 'excelexport') {
                     this.$refs.overviewgrid.excelExport()
                 }
@@ -876,6 +888,7 @@ export default {
         },
         editVendor() {
           this.editvendor.address = this.editaddresslist
+          console.log(this.editvendor.address.phone)
           var id = this.editvendor._id
           this.editvendor._id = undefined
         axios.put(`${apiUrl}`+`vendor/vendor/edit/${id}`,this.editvendor,{withCredentials:true}).then((response)=> {
