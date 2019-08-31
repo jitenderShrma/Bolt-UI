@@ -162,7 +162,7 @@ export default {
                     icon:"icon-star"
                   },
                   {
-                    name:"Approved Budget",
+                    name:"Remaining Budget",
                     url:"/budget/approved",
                     icon:"icon-star"
                   }
@@ -269,7 +269,7 @@ export default {
         icon:"icon-star"
       },
       {
-        name:"Approved Budget",
+        name:"Remaining Budget",
         url:"/budget/approved",
         icon:"icon-star"
       }

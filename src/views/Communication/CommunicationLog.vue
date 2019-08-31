@@ -260,6 +260,7 @@ export default {
         },
         async mounted () { 
                 axios.get(`${apiUrl}`+`comms/logs/find`,{withCredentials:true}).then((response) => {
+                    console.log(response.data)
                     this.datasrc = response.data;
                 }).catch((err)=> {
                     if(err.toString().includes("Network Error")) {
@@ -269,8 +270,6 @@ export default {
         })
     }
       })
-                this.data = this.datasrc.slice(0)
-                return this.data
             
         },
         computed: {

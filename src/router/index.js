@@ -572,7 +572,7 @@ var router = new Router({
                   component : TotalBudget
                 },
                 {
-                  name:"Approved Budget",
+                  name:"Remaining Budget",
                   path : "/budget/approved",
                   component : ApprovedBudget
                 }

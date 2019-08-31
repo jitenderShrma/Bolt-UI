@@ -1375,6 +1375,8 @@ export default {
                 }
                 if(args.item.id == "cancel") {
                   if(data.length>0) {
+                    if(data[0].status == "PENDING") {
+
                     this.cancelModal = true
                 //     api.put(`${apiUrl}approvals/preApp/cancel/label/${data[0].ref_id}`).then((res) => {
                 //         api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
@@ -1416,6 +1418,13 @@ export default {
                 //             console.log(this.datasrc)
                 // })
                 //     })
+              }
+              else {
+                toast({
+                  type: VueNotifications.types.warn,
+                  title: 'Approval Not PENDING'
+                })
+              }
                   }
                 }
                 if(args.item.id == "release") {
@@ -1725,6 +1734,7 @@ export default {
 }
 .badge-CLOSED {
   background-color:grey;
+  color:white;
 }
 .badge-PENDING {
   background-color:yellow;
@@ -1739,8 +1749,13 @@ export default {
   background-color:red;
   color:white;
 }
+.badge-DECLINED {
+  background-color:red;
+  color:white;
+}
 .badge-AUTO-REJECTED {
   background-color:red;
+  color:white;
 }
 .badge-COMPLETED {
   background-color:orange;
