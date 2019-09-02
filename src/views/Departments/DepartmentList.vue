@@ -164,6 +164,9 @@
                 </div>
                 </b-form>
             </b-modal>
+            <b-modal size="sm" :title="$ml.get('confirm')" class="modal-primary" v-model="confirmDeleteModal" @ok="deleteDepartment">
+              <h5 v-text="$ml.get('confirmdelete')"></h5><span style="color:green">{{deleteDept.department_name}} </span><span>?</span>
+            </b-modal>
         </div>
     </div>
   </div>
@@ -370,6 +373,7 @@ export default {
           input:{
             labels:[],
           },
+          confirmDeleteModal:false,
           editlabelmodal:false,
           editlabel:{},
           modal:false,
@@ -381,6 +385,7 @@ export default {
           pageSettings: {pageSize:true,pageSize:200, pageSizes: [200,300,400,500], pageCount: 4 },
           editSettings: { allowDeleting: true,mode: 'Dialog',allowAdding: true, newRowPosition: 'Child' },
           dept:[],
+          deleteDept : {},
           rowHeight: 30,
           selectionSettings : {type:"Single"},
           data:null
@@ -699,6 +704,13 @@ export default {
        failure: function(args) {
         debugger;
       },
+      deleteDepartment() {
+        api.delete(`${apiUrl}`+`department/dept/delete/`+`${this.deleteDept._id}`).then((res)=>{
+                              if(res.data.deleted.n>0) {
+                                toast({type: VueNotifications.types.success, title: `${this.deleteDept.department_name} is deleted successfully`})
+                              }
+                              api.get(`${apiUrl}`+`department/dept/get`) .then((response) => {this.data = this.list_to_tree_dept(response.data) }) }).catch((err)=> {if(err.toString().includes("Network Error")) {toast({type: VueNotifications.types.error, title: 'Network Error'}) } }); 
+      },
       clickHandler(args){
         if(args.item.id === 'add') {
               this.modal = true
@@ -718,13 +730,13 @@ export default {
             }
           }
         if(args.item.id == 'delete') {
-                    if(this.$refs.treegrid.getSelectedRecords().length>0) {
-                      var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
+          var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
+                    if(data.length>0) {
                       api.get(`${apiUrl}dropdown/designation/count/${data[0]._id}`).then((desig) => {
                         api.get(`${apiUrl}dropdown/head/count/${data[0]._id}`).then((head)=> {
                           if(head.data == 0 && desig.data == 0) {
-
-                            api.delete(`${apiUrl}`+`department/dept/delete/`+`${data[0]._id}`).then((res)=>{api.get(`${apiUrl}`+`department/dept/get`) .then((response) => {this.data = this.list_to_tree_dept(response.data) }) }).catch((err)=> {if(err.toString().includes("Network Error")) {toast({type: VueNotifications.types.error, title: 'Network Error'}) } }); 
+                            this.confirmDeleteModal = true
+                            this.deleteDept = data[0]
                             }
                             else{
                               toast({type: VueNotifications.types.error, title: 'Please delete associated Heads and Designations first'})

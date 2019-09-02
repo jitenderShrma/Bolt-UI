@@ -26,27 +26,29 @@
 		          </b-form-group>
 				</b-col>
 			</b-row>
-			<b-row>
-				<b-col sm="4">
-					<span style="color:red;float:right;height:2px;font-size:20px">*</span>
-					<ejs-textbox required type="number" v-model="input.amount" floatLabelType="Auto" :placeholder="$ml.get('amount')"></ejs-textbox>
-				</b-col>
-			</b-row>
 			<br>
 			<b-row>
 				<b-col>
 					<label v-text="$ml.get('sourcehead')"></label>
 					<span style="color:red;float:right;height:2px;font-size:20px">*</span>
-					<treeselect required :default-expand-level="10" :placeholder="$ml.get('pholdsourcehead')" v-model="input.source_head" :multiple="false" :options="heads" />
+					<treeselect @select="head1update" required :default-expand-level="10" :placeholder="$ml.get('pholdsourcehead')" v-model="input.source_head" :multiple="false" :options="heads1" />
+					<span v-if="head1">Total : {{head1.total}} Remaining : {{head1.remaining}}</span>
 				</b-col>
 				<i class="fa fa-angle-double-right font-3xl" style="margin-top:30px;"></i>
 				<b-col>
 					<label v-text="$ml.get('desthead')"></label>
 					<span style="color:red;float:right;height:2px;font-size:20px">*</span>
-					<treeselect required :default-expand-level="10" :placeholder="$ml.get('pholddesthead')" v-model="input.destination_head" :multiple="false" :options="heads" />
+					<treeselect @select="head2update" required :default-expand-level="10" :placeholder="$ml.get('pholddesthead')" v-model="input.destination_head" :multiple="false" :options="heads2" />
+					<span v-if="head2">Total : {{head2.total}} Remaining : {{head2.remaining}}</span>
 				</b-col>
 			</b-row>
 			<br>
+			<b-row>
+				<b-col sm="4">
+					<span style="color:red;float:right;height:2px;font-size:20px">*</span>
+					<ejs-textbox @change="validateAmount" required type="number" v-model="input.amount" floatLabelType="Auto" :placeholder="$ml.get('amount')"></ejs-textbox>
+				</b-col>
+			</b-row>
 			<div slot="footer">
               <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
 	        </div>
@@ -102,7 +104,10 @@
 		},
 		data: function() {
 			return {
-				heads:[],
+				head1:{},
+				head2:{},
+				heads1:[],
+				heads2:[],
 				input:{},
 				months:[ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"},
 
@@ -116,7 +121,8 @@
 			api.get(`${apiUrl}`+`head/head/get`)
 		    .then((response) => {
 		    	this.or_head = JSON.parse(JSON.stringify(response.data))
-		      this.heads = this.list_to_tree_head(response.data)
+		      this.heads1 = this.list_to_tree_head(response.data)
+		      this.heads2 = JSON.parse(JSON.stringify(this.heads1))
 		      }).catch((err)=> {
         toast({
           type: VueNotifications.types.error,
@@ -125,28 +131,65 @@
       });
 		},
 		methods:{
+			head1update(args,args2) {
+				// console.log(args)
+				// if(this.input.month) {
+				// 	this.head1={}
+				// 	for(var i=0;i<this.heads1.length;i++) {
+				// 		if(args == this.heads1[i].id) {
+				// 			this.head1.total = this.heads1[i].permissible_values[this.input.month]
+				// 			this.head1.remaining = this.heads1[i].amount_left[this.input.month]
+				// 			break;
+				// 		}
+				// 	}
+							this.head1.total = args.permissible_values[this.input.month]
+							this.head1.remaining = args.amount_left[this.input.month]
+					// api.get(`${apiUrl}head/head/view/one/${this.input.source_head}`).then((resp) => {
+					// 	this.head1.total = resp.data.permissible_values[this.input.month]
+					// 	this.head1.remaining = resp.data.amount_left[this.input.month]
+					// })
+				// }
+			},
+			validateAmount(args) {
+				if(args.value <=0) {
+					this.input.amount = 1
+				}
+				if(args.value >this.head1.remaining) {
+					this.input.amount = this.head1.remaining
+				}
+
+			},
+			head2update(args,args2) {
+				// if(this.input.month) {
+				// 	for(var i=0;i<this.heads2.length;i++) {
+				// 		if(args == this.heads2[i].id) {
+				// 			this.head2.total = this.heads2[i].permissible_values[this.input.month]
+				// 			this.head2.remaining = this.heads2[i].amount_left[this.input.month]
+				// 			break;
+				// 		}
+				// 	}
+				// }
+				this.head2.total = args.permissible_values[this.input.month]
+				this.head2.remaining = args.amount_left[this.input.month]
+			},
 			transferBudget() {
 				this.$validator.validate().then(valid => {
-		            if (!valid) {
-		              console.log(this.$validator)
-		            } 
-		     		else {
+		            
 						api.post(`${apiUrl}transfer/budtrans/budget/monthly`,this.input).then((res)=> {
-							if(res.data.status == "PENDING") {
+							console.log(res)
 								toast({
 									type: VueNotifications.types.success,
 				                    title: 'Request Sent',
 				                    message: 'Request for Budget Transfer is Sent'
 								})
 								this.input = {}
-							}
 						}).catch((err)=> {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
       })
-					}
+				
 				})
 			},
 			checkExistHead(node) {

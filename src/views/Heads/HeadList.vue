@@ -234,6 +234,9 @@
                 </div>
                 </b-form>
             </b-modal>
+            <b-modal size="sm" :title="$ml.get('confirm')" class="modal-primary" v-model="confirmDeleteModal" @ok="deleteHeadfunc">
+              <h5 v-text="$ml.get('confirmdelete')"></h5><span style="color:green">{{deleteHead.name}} </span><span>?</span>
+            </b-modal>
         </div>
     </div>
   </div>
@@ -407,6 +410,7 @@ export default {
           modal:false,
           link:"",
           key:"",
+          confirmDeleteModal:false,
           addModal:false,
           head:[],
           selected:false,
@@ -436,6 +440,7 @@ export default {
             selectedLabel:null,
             module:null,
             isRoot:false,
+            deleteHead:{},
             squarePalettesColn: 7,
         circlePaletteColors: {'custom': ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#2196f3', '#03a9f4', '#00bcd4',
                     '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
@@ -544,6 +549,34 @@ export default {
       treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
+    deleteHeadfunc() {
+      api.delete(`${apiUrl}`+`head/head/delete/one/`+`${this.deleteHead.head_key}`).then((res)=>{
+                                  if(this.$route.path == '/heads/list') {
+                                      api.get(`${apiUrl}`+`head/head/get`)
+                                  .then((response) => {
+                                    this.or_head = JSON.parse(JSON.stringify(response.data))
+                                    this.data = this.list_to_tree_head(response.data)
+                                    });
+                                   }
+                                   else{
+                                    api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
+                                      .then((response) => {
+                                        this.or_head = JSON.parse(JSON.stringify(response.data))
+                                        this.data = this.list_to_tree_head(response.data)
+                                        this.input.department = this.key 
+                                        });
+                                   }
+                                 
+                              }).catch((err)=> {
+                                if(err.toString().includes("Network Error")) {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      }
+
+      });
+    },
     checkParent(args) {
         api.get(`${apiUrl}`+`head/head/get`)
         .then((response) => {
@@ -973,32 +1006,10 @@ export default {
           }
         if(args.item.id == 'delete') {
                             var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
-                               api.delete(`${apiUrl}`+`head/head/delete/one/`+`${data[0].head_key}`).then((res)=>{
-                                  if(this.$route.path == '/heads/list') {
-                                      api.get(`${apiUrl}`+`head/head/get`)
-                                  .then((response) => {
-                                    this.or_head = JSON.parse(JSON.stringify(response.data))
-                                    this.data = this.list_to_tree_head(response.data)
-                                    });
-                                   }
-                                   else{
-                                    api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
-                                      .then((response) => {
-                                        this.or_head = JSON.parse(JSON.stringify(response.data))
-                                        this.data = this.list_to_tree_head(response.data)
-                                        this.input.department = this.key 
-                                        });
-                                   }
-                              }).catch((err)=> {
-                                if(err.toString().includes("Network Error")) {
-        toast({
-          type: VueNotifications.types.error,
-          title: 'Network Error'
-        })
-      }
-      });
-                              
-                            
+                            if(data.length>0) {
+                              this.confirmDeleteModal =true
+                              this.deleteHead = data[0]
+                            }
                           }
         if (args.item.text === 'PDF Export') {
             this.$refs.treegrid.pdfExport({hierarchyExportMode: 'All'});

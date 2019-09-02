@@ -305,6 +305,8 @@
     "contact2" : "Contact 2",
     "bankinfo" : "Bank Info",
     "beneficiaryname" : "Beneficiary Name",
-    "accno" : "A/C No."
-
+    "accno" : "A/C No.",
+    "confirmdelete" : "Are you sure you want to delete ",
+    "addremovebudget" : "Add or Remove Amount",
+    "commit" : "Commit"
 }

@@ -568,9 +568,14 @@
             </b-modal>
             <b-modal :title="$ml.get('edithead')+` : `+`${editinput.name}`" class="modal-primary" v-model="editmodal" @ok="editmodal = false" hide-footer>
 
-              <b-form v-on:submit.prevent="editHead">
                 <b-tabs>
-                  <b-tab :title="$ml.get('head')" active>
+                    <b-tab :title="$ml.get('addremovebudget')">
+                            <b-form-group>
+                                <ejs-textbox @change="validateAmountrem" type="number" v-model="addremove.amount" floatLabelType="Auto" :placeholder="$ml.get('amount')" required></ejs-textbox>
+                            </b-form-group>
+                            <b-button  type="submit" @click="addBudget" size="sm" variant="primary" v-text="$ml.get('commit')"></b-button>
+                    </b-tab>
+                  <b-tab :title="$ml.get('head')">
                 <b-form-group>
                   <div class="e-float-input e-control-wrapper"><input v-model="editinput.name" class="e-field e-defaultcell" type="text" e-mappinguid="grid-column168" id="_gridcontrolname" name="name" style="text-align:undefined" aria-labelledby="label__gridcontrolname"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolname" for="_gridcontrolname">Head Name</label></div><div class="e-float-input e-control-wrapper"><input v-model="editinput.accounting_head" class="e-field e-defaultcell" type="text" e-mappinguid="grid-column170" id="_gridcontrolaccounting_head" name="accounting_head" style="text-align:undefined" aria-labelledby="label__gridcontrolaccounting_head"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolaccounting_head" for="_gridcontrolaccounting_head">Account Head</label></div><div class="e-float-input e-control-wrapper"><input v-model="editinput.notes" class="e-field e-defaultcell" type="text"  e-mappinguid="grid-column171" id="_gridcontrolnotes" name="notes" style="text-align:undefined" aria-labelledby="label__gridcontrolnotes"><span class="e-float-line"></span><label class="e-float-text e-label-top" id="label__gridcontrolnotes" for="_gridcontrolnotes">Notes</label></div>
                     <label v-text="$ml.get('department')"></label>
@@ -578,6 +583,7 @@
                       <label v-text="$ml.get('parenthead')"></label>
                       <treeselect :default-expand-level="10" :placeholder="$ml.get('pholdparenthead')" v-model="editinput.parent_head" :multiple="false" :options="head" />
                 </b-form-group>
+                <b-button  type="submit" size="sm" @click="editHead" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
                 </b-tab>
                 <b-tab :title="$ml.get('labels')">
                   <b-form-group>
@@ -606,8 +612,6 @@
                   </b-form-group>
                 </b-tab>
                 </b-tabs>
-                <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
-              </b-form>
             </b-modal>
             <b-modal size="sm" :title="$ml.get('label')" class="modal-primary" v-model="addModal" @ok="addModal = false" hide-footer>
               <b-form v-on:submit.prevent="addLabel(`${editinput._id}`)">
@@ -1087,9 +1091,11 @@ export default {
           modal:false,
           link:"",
           key:"",
+          addremoveform:false,
           currentView:"Budget",
           addModal:false,
           head:[],
+          addremove :{},
           selected:false,
           dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
              commands: [
@@ -1269,6 +1275,23 @@ export default {
       })
       }
       },
+      addBudget() {
+        this.editinput.permissible_values[this.addremove.month] += parseInt(this.addremove.amount)
+        this.editinput.amount_left[this.addremove.month] += parseInt(this.addremove.amount)
+        var update = {
+            permissible_values : this.editinput.permissible_values,
+            amount_left : this.editinput.amount_left,
+            updated_amount : this.addremove.amount
+        }
+        api.put(`${apiUrl}head/head/update/only/values/${this.editinput._id}`,update).then((res) => {
+            api.get(`${apiUrl}`+`head/head/get`)
+            .then((response) => {
+                this.or_head = JSON.parse(JSON.stringify(response.data))
+                this.data = this.list_to_tree_head(response.data)
+              });
+            this.editmodal =false
+        })
+      },
     list_to_tree_dept(list) {
           var map = {}, node, roots = [], i;
           for (i = 0; i < list.length; i += 1) {
@@ -1431,8 +1454,10 @@ export default {
           this.getflag=1
         }
         }
+        console.log(args)
         
-
+        this.addremove.month = args.column.field.split('amount_left.').pop()
+        // this.addremoveform = true 
         this.editmodal =true
         this.editinput = args.rowData
         this.editinput.department = args.rowData.department._id
@@ -1462,6 +1487,13 @@ export default {
        },
        failure: function(args) {
         debugger;
+      },
+      validateAmountrem(args) {
+        if(args.value<0) {
+        if(Math.abs(parseInt(args.value)) > this.editinput.amount_left[this.addremove.month]) {
+            this.addremove.amount = -this.editinput.amount_left[this.addremove.month]
+        }
+    }
       },
       list_to_tree_head(list) {
           var map = {}, node, roots = [], i;

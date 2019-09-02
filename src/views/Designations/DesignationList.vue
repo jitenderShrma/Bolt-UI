@@ -127,6 +127,9 @@
                 <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
                 </div>
             </b-modal>
+            <b-modal size="sm" :title="$ml.get('confirm')" class="modal-primary" v-model="confirmDeleteModal" @ok="deleteDesignation">
+              <h5 v-text="$ml.get('confirmdelete')"></h5><span style="color:green">{{deleteDesig.name}} </span><span>?</span>
+            </b-modal>
         </div>
     </div>
   </div>
@@ -266,6 +269,8 @@ export default {
     },
     data : function() {
         return {
+          confirmDeleteModal:false,
+          deleteDesig:{},
           excelTemplate : function() {
           return {
             template:Vue.component('excelTemplate', {
@@ -525,6 +530,24 @@ export default {
       treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
+    deleteDesignation() {
+       api.delete(`${apiUrl}`+`designation/desig/delete/`+`${this.deleteDesig._id}`).then((res) => {
+        if(res.data.deleted.n>0) {
+                                toast({type: VueNotifications.types.success, title: `${this.deleteDesig.name} is deleted successfully`})
+                              }
+                                api.get(`${apiUrl}`+`designation/desig/get/all`)
+                                .then((res) => {
+                                  this.data = this.list_to_tree_desig(res.data)
+                                  });
+                              }).catch((err)=> {
+                                if(err.toString().includes("Network Error")) {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      }
+      });
+    },
     async load(args) {
     },
     addLabel (args) {
@@ -762,20 +785,10 @@ export default {
             this.$refs.treegrid.expandAll()
           }
         if(args.item.id == 'delete') {
-          if(data.length>0)
-            api.delete(`${apiUrl}`+`designation/desig/delete/`+`${data[0]._id}`).then((res) => {
-                                api.get(`${apiUrl}`+`designation/desig/get/all`)
-                                .then((res) => {
-                                  this.data = this.list_to_tree_desig(res.data)
-                                  });
-                              }).catch((err)=> {
-                                if(err.toString().includes("Network Error")) {
-        toast({
-          type: VueNotifications.types.error,
-          title: 'Network Error'
-        })
-      }
-      });
+          if(data.length>0) {
+            this.confirmDeleteModal = true
+            this.deleteDesig = data[0]
+                              }
                             
                           }
         if (args.item.text === 'PDF Export') {
