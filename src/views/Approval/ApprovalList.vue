@@ -1139,14 +1139,14 @@ export default {
               this.log = JSON.parse(JSON.stringify(res.data.log))
               this.loglen = this.log.length - 1
               console.log(this.log[this.loglen])
-              if(this.log[this.loglen].event.includes("Request sent to")
-                || this.log[this.loglen].event.includes("Approval sent for")) {
+              if(this.log[this.loglen].event.includes("request")
+                || this.log[this.loglen].event.includes("approval")) {
                 this.iconEnable = true
               }
               else{
                 this.iconEnable = false
               }
-              if(this.log[this.loglen].event.includes("Approved at Level")
+              if(this.log[this.loglen].event.includes("Approved")
                 ) {
                 this.log[this.loglen].iconDouble = true
               console.log("icon")
@@ -1155,6 +1155,9 @@ export default {
                 this.log[this.loglen].iconDouble = false
               }
               for(var i=0;i<this.log.length;i++) {
+                if(this.log[i].event.includes("approved")) {
+                this.log[i].iconTick = true
+              }
                 if(this.log[i].event == "Approved at Level 1") {
                   if(res.data.approval_id.level1approved.by) {
                     this.log[i].approved = "Approved"

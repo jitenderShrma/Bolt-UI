@@ -9,7 +9,7 @@
                     <template slot="button-content">
                       <i class="icon-settings" style="color:black"></i>
                     </template>
-                    <b-dropdown-item @click="toggle1">Budget By Heads</b-dropdown-item>
+                    <!-- <b-dropdown-item @click="toggle1">Budget By Heads</b-dropdown-item> -->
                     <b-dropdown-item @click="toggle1">Budget by Departments</b-dropdown-item>
                   </b-dropdown>
               <div v-if="option1 == 'Budget By Heads'">
@@ -85,7 +85,7 @@
         <template slot="button-content">
           <i class="icon-settings" style="color:black"></i>
         </template>
-        <b-dropdown-item @click="toggle1">Budget By Heads</b-dropdown-item>
+        <!-- <b-dropdown-item @click="toggle1">Budget By Heads</b-dropdown-item> -->
         <b-dropdown-item @click="toggle1">Budget by Departments</b-dropdown-item>
       </b-dropdown>
       <div v-if="option1=='Budget By Heads'">
@@ -401,6 +401,7 @@ export default {
         categories: [],
         crosshair: true
     },
+    isPermittedDEpt:false,
     title:{
       text:'Yearly Budget'
     },
@@ -672,14 +673,17 @@ export default {
   },
   mounted() {
     var Session = JSON.parse(localStorage.session_key)
+    console.log(Session)
     if(Session.user) {
     for(var i=0;i<Session.permission.length;i++) {
       if(Session.permission[i].text=="Head" && (Session.additional_permissions[i].read_all || Session.additional_permissions[i].read_own)) {
         this.isPermitted = true
-        break;
+      }
+      if(Session.permission[i].text=="Department" && (Session.additional_permissions[i].read_all || Session.additional_permissions[i].read_own)) {
+        this.isPermittedDept = true
       }
     }
-    if(this.isPermitted && Session.user.user_type.department && Session.additional_permissions[i].read_own) {
+    if(this.isPermitted) {
       api.get(`${apiUrl}dropdown/head/find/${Session.user.user_type.department}`).then((response) => {
         this.budgetdata = JSON.parse(JSON.stringify(response.data))
         // this.chartOptions1.series[0].data = this.getLeftDataMonth(response.data)
@@ -692,41 +696,28 @@ export default {
         this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
         this.chartOptions3Bar.series = this.getYearlyBar2(response.data);       // this.chartOptions.series[2].data = this.getTransactionData(response.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     }
-    if(this.isPermitted && Session.user.user_type.department && Session.additional_permissions[i].read_all) {
-      api.get(`${apiUrl}`+`head/head/get`)
-    .then((response) => {
-      this.budgetdata = JSON.parse(JSON.stringify(response.data))
-      // this.chartOptions1.series[0].data = this.getLeftDataMonth(response.data)
-      this.chartOptions1.title.text = "Year's Budget - Total"
-      this.chartOptions1.tooltip.pointFormat = '{series.name}: <b>{point.y} ({point.percentage:.1f}%) </b>'
-      this.chartOptions1.series[0].name = "Total Budget"
-      this.chartOptions1.series[0].data = this.getTotalData(response.data)
-        this.chartOptions1Bar.series = this.getMonthlyBar1(response.data);
-        this.chartOptions2Bar.series = this.getMonthlyBar2(response.data);
-        this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
-        this.chartOptions3Bar.series = this.getYearlyBar2(response.data);       // this.chartOptions.series[2].data = this.getTransactionData(response.data)
-      }).catch((err)=> {
-        toast({
-          type: VueNotifications.types.error,
-          title: 'Network Error'
-        })
-      });
+    if(this.isPermittedDept) {
     api.get(`${apiUrl}department/dept/get`).then((res) => {
       this.dept = JSON.parse(JSON.stringify(res.data))
+      console.log(this.dept)
       this.tree_dept = this.list_to_tree_dept(res.data)
       this.chartOptionsStacked.xAxis.categories = this.getDeptList(this.tree_dept)
       this.chartOptionsStacked.series = [{name:"Total",data:this.tree_dept.total_data},{name:"Committed",data:this.tree_dept.committed_data},{name:"Remaining",data:this.tree_dept.remaining_data}]
     }).catch((err)=> {
+      if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     }
   }else{
@@ -744,10 +735,12 @@ export default {
         this.chartOptions3Bar.xAxis.categories = this.getYearlyBar1(response.data);
         this.chartOptions3Bar.series = this.getYearlyBar2(response.data);       // this.chartOptions.series[2].data = this.getTransactionData(response.data)
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       });
     api.get(`${apiUrl}department/dept/get`).then((res) => {
       this.dept = JSON.parse(JSON.stringify(res.data))
@@ -755,10 +748,12 @@ export default {
       this.chartOptionsStacked.xAxis.categories = this.getDeptList(this.tree_dept)
       this.chartOptionsStacked.series = [{name:"Total",data:this.tree_dept.total_data},{name:"Committed",data:this.tree_dept.committed_data},{name:"Remaining",data:this.tree_dept.remaining_data}]
     }).catch((err)=> {
+      if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
   }
     // api.get(`${apiUrl}`+`head/head/get`)
@@ -840,10 +835,12 @@ export default {
             roots.committed_data.push(committed)
             roots.remaining_data.push(remaining)
           }).catch((err)=> {
+            if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
         }
         return roots
@@ -879,10 +876,12 @@ export default {
             })
           }
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
       // api.get(`${apiUrl}department/dept/child/${args}`).then((res) => {
@@ -919,10 +918,12 @@ export default {
             })
           }
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
     }
@@ -959,10 +960,12 @@ export default {
           committed_data.push(committed)
           remaining_data.push(remaining)
         }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
       }
       data.push({
@@ -1225,10 +1228,12 @@ export default {
       api.get(`${apiUrl}transaction/trans/find/by/${new_data[i]._id}`).then((res) => {
         data[i] = {y:res.data.amount}
       }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
+      }
       })
     }
   }

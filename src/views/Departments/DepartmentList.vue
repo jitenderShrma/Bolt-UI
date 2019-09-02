@@ -720,21 +720,17 @@ export default {
         if(args.item.id == 'delete') {
                     if(this.$refs.treegrid.getSelectedRecords().length>0) {
                       var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
-                              api.delete(`${apiUrl}`+`department/dept/delete/`+`${data[0]._id}`).then((res)=>{
-                                api.get(`${apiUrl}`+`department/dept/get`)
-                                .then((response) => {
-                                  this.data = this.list_to_tree_dept(response.data)
-                                  })
-                              }).catch((err)=> {
-                                if(err.toString().includes("Network Error")) {
-        toast({
-          type: VueNotifications.types.error,
-          title: 'Network Error'
-        })
-      }
-      });
-                              this.$refs.treegrid.collapseAll()
-                              this.$refs.treegrid.expandAll()
+                      api.get(`${apiUrl}dropdown/designation/count/${data[0]._id}`).then((desig) => {
+                        api.get(`${apiUrl}dropdown/head/count/${data[0]._id}`).then((head)=> {
+                          if(head.data == 0 && desig.data == 0) {
+
+                            api.delete(`${apiUrl}`+`department/dept/delete/`+`${data[0]._id}`).then((res)=>{api.get(`${apiUrl}`+`department/dept/get`) .then((response) => {this.data = this.list_to_tree_dept(response.data) }) }).catch((err)=> {if(err.toString().includes("Network Error")) {toast({type: VueNotifications.types.error, title: 'Network Error'}) } }); 
+                            }
+                            else{
+                              toast({type: VueNotifications.types.error, title: 'Please delete associated Heads and Designations first'})
+                            }
+                        })
+                      }).catch((err)=> {if(err.toString().includes("Network Error")) {toast({type: VueNotifications.types.error, title: 'Network Error'}) } });
                     }
                 }
         if (args.item.text === 'PDF Export') {
@@ -743,11 +739,9 @@ export default {
          if (args.item.text === 'CSV Export') {
             this.$refs.treegrid.csvExport();
         }
-        
         if (args.item.id === 'small') {
             this.rowHeight = 20;
             }
-        
         if (args.item.id === 'medium') {
             this.rowHeight = 30;
         }
