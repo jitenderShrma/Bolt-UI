@@ -1,5 +1,131 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
+  <AppAside id="new_aside" style="height: calc(100vh - 60px);top:-7.9%">
+        <div style="float:right ">
+        <DefaultToggler style="line-height:2"/>
+        </div>
+        <b-tabs>
+          <b-tab>
+      <template slot="title">
+        <small>Approval Matrix</small>
+      </template>
+      <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center text-muted text-uppercase small">Approval Level-1 <div style="display:inline" v-if="designationBudget[0]!=null && designationBudget[0]!=''">{{designationBudget[0]}} - {{departmentBudget[0]}}</div> ({{linemanagersAmount[0]}} INR)
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagersBudget[0]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-secondary py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[0][i].user.personal_details.name}}</div>
+        </div>
+      </b-list-group-item>
+      </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-warning py-1 bg-light text-center  text-muted text-uppercase small">
+        Approval Level-2 <div style="display:inline" v-if="designationBudget[1]!=null && designationBudget[1]!=''">{{designationBudget[1]}} - {{departmentBudget[1]}}</div> ({{linemanagersAmount[1]}} INR)
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagersBudget[1]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-warning py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[1][i].user.personal_details.name}}</div>
+        </div>
+      </b-list-group-item>
+      </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-info py-1 bg-light text-center  text-muted text-uppercase small">
+        Approval Level-3 <div style="display:inline" v-if="designationBudget[2]!=null && designationBudget[2]!=''">{{designationBudget[2]}} - {{departmentBudget[2]}}</div> ({{linemanagersAmount[2]}} INR)
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagersBudget[2]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-info py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[2][i].user.personal_details.name}}</div>
+        </div>
+      </b-list-group-item>
+      </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-danger py-1 bg-light text-center  text-muted text-uppercase small">
+        Approval Level-4 <div style="display:inline" v-if="designationBudget[3]!=null && designationBudget[3]!=''">{{designationBudget[3]}} - {{departmentBudget[3]}}</div> ({{linemanagersAmount[3]}} INR)
+      </b-list-group-item>
+
+      <div v-for="(run,i) in lineManagersBudget[3]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-danger py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[3][i].user.personal_details.name}}</div>
+        </div>
+      </b-list-group-item>
+      </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-success py-1 bg-light text-center  text-muted text-uppercase small">
+        Approval Level-5 <div style="display:inline" v-if="designationBudget[4]!=null && designationBudget[4]!=''">{{designationBudget[4]}} - {{departmentBudget[4]}}</div> ({{linemanagersAmount[4]}} INR)
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagersBudget[4]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-success py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget[4][i].user.personal_details.name}}</div>
+        </div>
+        </b-list-group-item>
+      </div>
+    </b-list-group>
+    </b-tab>
+    <b-tab>
+      <template slot="title">
+        <small>Timeline</small>
+      </template>
+      <b-list-group class="list-group-accent">
+        <div v-for="(lg,i) in log.slice().reverse()">
+        <b-list-group-item href="#" :class="color[i]">
+          <div class="avatar float-left mr-1">
+            <img class="img-avatar" src="img/avatars/7.jpg" alt="admin@bootstrapmaster.com">
+          </div>
+          <div>
+            <span v-if="!lg.approved">{{lg.event}}</span>
+            <span id="approved" v-if="lg.approved">{{lg.approved}}</span>
+            <span v-if="lg.approved">{{lg.more}}</span>
+            <span v-if="lg.by"> by <span id="name">{{lg.by}}</span></span>&nbsp;<span style="float:right" v-if="iconEnable && i==0"><i class="fa fa-exclamation-circle"></i></span><span style="float:right" v-if="lg.iconDouble"><i style="color:blue;font-weight:bold" class="icon-check"></i></span><span style="float:right" v-if="lg.iconTick && !lg.iconDouble"><i class="icon-check"></i></span>
+          </div>
+          <small class="text-muted mr-3">
+            <i class="icon-calendar"></i>&nbsp;&nbsp;{{lg.date | moment("MMM Do YY, h:mm a")}}
+          </small>
+        </b-list-group-item>
+        </div>
+      </b-list-group>
+      
+    </b-tab>
+  </b-tabs>
+      </AppAside>
      <div id="target" class="col-lg-15 control-section">
         <div class="content-wrapper">
             <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
@@ -9,15 +135,15 @@
               </e-items>
             </ejs-toolbar>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :sortSettings='sortOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :sortSettings='sortOptions' :allowSelection='true' :rowSelected="rowSelected" :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column :visible="enableColumn" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
                     <e-column :visible="false" field="last_updated" headerText='last_updated' width='140'></e-column>
                     <!-- <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column> -->
-                    <e-column field='requested_by.user_name' headerText='Requested By'  :filter='filter' ></e-column>
-                    <e-column field='status' headerText='Status'  :filter='filter' ></e-column>
+                    <e-column field='requested_by.user_name' headerText='Requested By' :filter='filter' ></e-column>
+                    <e-column field='status' headerText='Status' :template="buttonLM" :filter='filter' ></e-column>
                     <!-- <e-column field='labels[0].label_name' headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column> -->
                     <e-column field='amount' headerText='Amount'  :filter='filter' ></e-column>
                     <e-column field='month' headerText='Month'  :filter='filter' ></e-column>
@@ -97,6 +223,11 @@
 import apiUrl from '@/apiUrl'
 import axios from 'axios'
 import Vue from 'vue'
+import { asideMenuCssClasses, validBreakpoints, checkBreakpoint } from '../../shared/classes'
+import toggleClasses from '../../shared/toggle-classes'
+import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
+import AsideToggler from '../../shared/AsideToggler'
+import DefaultToggler from '../../shared/AsideTogglerClose'
 import { Browser } from '@syncfusion/ej2-base';
 import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import VueNotifications from 'vue-notifications'
@@ -113,6 +244,7 @@ import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser,
     import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import { NumericTextBoxPlugin,ColorPickerPlugin } from "@syncfusion/ej2-vue-inputs";
 import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
+import { Switch as cSwitch } from '@coreui/vue'
 
 Vue.use(TextBoxPlugin)
 Vue.use(ColorPickerPlugin);
@@ -151,17 +283,7 @@ Vue.use(VueNotifications, options)
 
 export default {
     name: 'ApprovalList',
-    components: {
-      ToolbarPlugin,
-      CoolSelect,
-      GridPlugin, Filter, Selection, Sort, VirtualScroll,
-        Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
-        NumericTextBoxPlugin,
-        PivotViewPlugin,
-        GroupingBar,
-        FieldList,
-        Edit
-    },
+    components: {ToolbarPlugin, CoolSelect, GridPlugin, Filter, Selection, Sort, VirtualScroll, Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin, NumericTextBoxPlugin, PivotViewPlugin, GroupingBar, FieldList, AsideToggler, AppHeader, DefaultToggler, AppSidebar, AppAside, TheFooter, Breadcrumb, SidebarForm, SidebarFooter, SidebarToggler, SidebarHeader, SidebarNav, cSwitch, SidebarMinimizer, Edit },
      provide: {
             grid: [PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder]
         },
@@ -199,40 +321,164 @@ export default {
           })
           }
         },
-        
+        buttonLM: function () {
+              return {
+                  template: Vue.component('buttonLM', {
+                      template: `<div style="line-height:4"><b-badge id="label" :variant="data.status">{{data.status}}</b-badge><AsideToggler id="toggler"/></div>`,
+                      components:{
+                        AsideToggler,
+                        AppHeader,
+                        AppSidebar,
+                        AppAside,
+                        TheFooter,
+                        Breadcrumb,
+                        SidebarForm,
+                        SidebarFooter,
+                        SidebarToggler,
+                        SidebarHeader,
+                        SidebarNav,
+                        SidebarMinimizer
+                      },
+                  data: function() {
+                          return {
+                              data: {},
+                          }
+                      },
+                  methods: {
+                    gotoPage() {
+                      console.log("aside on")
+                    }
+                  }
+                })
+              }
+          },
         buttonTemplate: function () {
               return {
                   template: Vue.component('buttonTemplate', {
                       template: `<div>
                                 <div v-if="yes">
-                                  <b-button @click="acceptReq" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
-                                  <b-button @click="rejectReq" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
+                                  <b-button @click="accept_remarks = true" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
+                                  <b-button @click="reject_remarks = true" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
                                   </div>
+                                <b-modal size="sm" class="modal-primary py-0" v-model="accept_remarks" @ok="accept_remarks = false" hide-footer>
+                                <template slot="modal-header">
+                                  <h5>Level {{data.atLevel+1}} Approval</h5>
+                                  <b-button @click="accept_remarks = false" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
+                                </template>
+                                  <ejs-textbox v-model="input.remarks" floatLabelType="Auto" :placeholder="$ml.get('remarks')"></ejs-textbox>
+                                  <br>
+                                  <b-button @click="acceptReq" type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
+                                   
+                                  
+                                </b-modal>
+                                <b-modal size="sm" :title="$ml.get('addremarks')" class="modal-primary" v-model="reject_remarks" @ok="reject_remarks = false" hide-footer>
+                                  <ejs-textbox v-model="input.remarks" floatLabelType="Auto" :placeholder="$ml.get('remarks')"></ejs-textbox>
+                                  <br>
+                                  <b-button @click="rejectReq" type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
+                                </b-modal>
                                 </div>`,
+                                components :{
+                    cSwitch
+                  },
                   data: function() {
                           return {
                               data: {},
+                              input:{
+                              },
+                              amount_type:"Total Amount",
+                              partial:false,
+                              accept_remarks:false,
+                              reject_remarks:false,
+                              partial_amount:null,
                               designation:null,
                               yes:false
                           }
                       },
                       methods : {
-                        acceptReq() {
-                          api.post(`${apiUrl}`+`transfer/budtrans/accept/requests/${this.data._id}`).then((res) => {
-                            console.log(res.data)
-                            window.location.reload();
-                          }).catch((err)=> {
-                            if(err.toString().includes("Network Error")) {
-                            toast({
-                              type: VueNotifications.types.error,
-                              title: 'Network Error'
-                            })
+                        changePartial(i) {
+                          if(i==1) {
+                            this.input.partially_approved_amount = this.data.level1approved.partially_approved_amount
+                            this.partial = true
+                            console.log(this.input.partially_approved_amount)
                           }
-                          })
+                          if(i==2) {
+                            this.input.partially_approved_amount = this.data.level2approved.partially_approved_amount
+                            this.partial = true
 
+                          }
+                          if(i==3) {
+                            this.input.partially_approved_amount = this.data.level3approved.partially_approved_amount
+                            this.partial = true
+
+                          }
+                          if(i==4) {
+                            this.input.partially_approved_amount = this.data.level4approved.partially_approved_amount
+                            this.partial = true
+                            
+                          }
+                          this.acceptReq()
+                        },
+                        changeField() {
+                          if(this.partial) {
+                            if(this.partial_amount!=null) {
+                              this.input.partially_approved_amount = this.partial_amount
+                            }
+                            this.amount_type = "Partial Amount"
+                          }
+                          if(!this.partial) {
+                            this.partial_amount = JSON.parse(JSON.stringify(this.input.partially_approved_amount))
+                            this.input.partially_approved_amount = this.data.amount
+                            this.amount_type = "Total Amount"
+                          }
+                        },
+                        changeAmount(args) {
+                            if(args.value<=0) {
+                              this.input.partially_approved_amount = 1
+                            }
+                            if(args.value > this.data.amount) {
+                              this.input.partially_approved_amount = this.data.amount
+                            }
+                        },
+                        acceptpartial(i) {
+                          console.log(i)
+                        },
+                        acceptReq() {
+                          axios.post(`${apiUrl}`+`transfer/budtrans/accept/requests/${this.data._id}`,this.input,{withCredentials:true}).then((res) => {
+                              console.log(res.data)
+                              window.location.reload();
+                            }).catch((err)=> {
+                              if(err.toString().includes("Network Error")) {
+                              toast({
+                                type: VueNotifications.types.error,
+                                title: 'Network Error'
+                              })
+                            }
+                            })
+                          // this.accept_remarks=false
+                          // if(this.partial && this.data.amount != this.input.partially_approved_amount) {
+                          //   console.log(this.input)
+                            
+                          // }
+                          // else{
+                          //   this.input.partially_approved_amount = undefined
+                          //   console.log(this.input)
+                          //   axios.post(`${apiUrl}`+`transfer/budtrans/accept/requests/${this.data._id}`,this.input,{withCredentials:true}).then((res) => {
+                          //     console.log(res.data)
+                          //     window.location.reload();
+                          //   }).catch((err)=> {
+                          //     if(err.toString().includes("Network Error")) {
+                          //     toast({
+                          //       type: VueNotifications.types.error,
+                          //       title: 'Network Error'
+                          //     })
+                          //   }
+                          //   })
+                          // }
                         },
                         rejectReq() {
-                          api.post(`${apiUrl}`+`transfer/budtrans/reject/requests/${this.data._id}`).then((res) => {
+                          console.log(this.input)
+                          this.reject_remarks=false
+                          axios.post(`${apiUrl}`+`transfer/budtrans/reject/requests/${this.data._id}`,this.input,{withCredentials:true}).then((res) => {
                             console.log(res.data)
                             window.location.reload();
                           }).catch((err)=> {
@@ -249,7 +495,7 @@ export default {
                         var data =  JSON.parse(localStorage['session_key'])
                         if(data.user) {
                           this.designation = data.user.user_type.designation
-                          if(this.data.assigned_to == this.designation && this.data.status=="PENDING") {
+                          if(this.data.assigned_to_designation == this.designation && this.data.status=="PENDING") {
                             this.yes=true
                           }
                         }
@@ -383,7 +629,21 @@ export default {
                 alertWidth: '300px',
                 animationSettings: { effect: 'None' },
                 alertDlgButtons: [{ click: this.alertDlgBtnClick, buttonModel: { content: 'OK', isPrimary: true } }],
-                selectionSettings: { persistSelection: true, type: 'Multiple' }
+                selectionSettings: { persistSelection: true, type: 'Multiple' },
+                log:[],
+                linemanagersAmount:[],
+                color:['list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-success list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-success list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-success list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3','list-group-item-accent-success list-group-item-divider py-3','list-group-item-accent-info list-group-item-divider py-3','list-group-item-accent-primary list-group-item-divider py-3','list-group-item-accent-danger list-group-item-divider py-3','list-group-item-accent-warning list-group-item-divider py-3'],
+                target: '.control-section',
+                 alertHeader: 'Copy with Header',
+                alertContent: 'Atleast one row should be selected to copy with header',
+                alertWidth: '300px',
+                iconEnable : false,
+                loglen:0,
+                iconTick :false,
+                lineManagersBudget:[],
+          designationBudget:[],
+          departmentBudget:[],
+          transactions:[]
             };
         },
   methods: {
@@ -460,6 +720,152 @@ export default {
       })
       }
       },
+      rowSelected(args) {
+      if(args.target.outerHTML == `<i class="fa fa-copy px-3"></i>`) {
+        this.$refs.overviewgrid.copy()
+      }
+      if(args.target.outerHTML == `<i class="icon-plus px-3"></i>`) {
+        this.$router.push({name:"Add Transaction", params:{ref_id : args.data.ref_id}})
+      }
+      if(args.target.outerHTML == `<span class="icon-hourglass"></span>`) {
+        this.log = []
+        this.lineManagersBudget = []
+        this.linemanagersAmount=[]
+        this.designationBudget =[]
+        this.departmentBudget = []
+        api.get(`${apiUrl}line/managers/find/settings/budgetTransfer/${args.data.requested_by._id}`).then((res) => {
+                  this.lineManagersBudget = res.data.users
+                  this.linemanagersAmount = res.data.amount
+                  
+                  for(var i=0;i<this.lineManagersBudget.length;i++) {
+                    
+                    if(!this.lineManagersBudget[i][0]) {
+                      this.designationBudget.push("")
+                      this.departmentBudget.push("")
+                    }
+                    else {
+                      this.designationBudget.push(this.lineManagersBudget[i][0].designation.name)
+                      this.departmentBudget.push(this.lineManagersBudget[i][0].department.department_name)
+                    }
+                  }
+                }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      }
+      })
+        api.get(`${apiUrl}approvals/preApp/timeline/get/${args.data._id}`).then((res) =>{
+            if(res.data) {
+              this.log = JSON.parse(JSON.stringify(res.data.log))
+              this.loglen = this.log.length - 1
+              console.log(this.log[this.loglen])
+              if(this.log[this.loglen].event.includes("request")
+                || this.log[this.loglen].event.includes("approval")) {
+                this.iconEnable = true
+              }
+              else{
+                this.iconEnable = false
+              }
+              if(this.log[this.loglen].event.includes("Approved")
+                ) {
+                this.log[this.loglen].iconDouble = true
+              console.log("icon")
+              }
+              else{
+                this.log[this.loglen].iconDouble = false
+              }
+              for(var i=0;i<this.log.length;i++) {
+                if(this.log[i].event.includes("approved")) {
+                this.log[i].iconTick = true
+              }
+                if(this.log[i].event == "Approved at Level 1") {
+                  if(res.data.approval_id.level1approved.by) {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 1"
+                    this.log[i].by = res.data.approval_id.level1approved.by.personal_details.name
+                    this.log[i].iconTick = true
+                  }
+                  else {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 1"
+                    this.log[i].by = "Admin"
+                    this.log[i].iconTick = true
+                  }
+                }
+                if(this.log[i].event == "Approved at Level 2") {
+                  if(res.data.approval_id.level2approved.by) {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 2"
+                    this.log[i].by = res.data.approval_id.level2approved.by.personal_details.name
+                    this.log[i].iconTick = true
+                  }
+                  else {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 2"
+                    this.log[i].by = "Admin"
+                    this.log[i].iconTick = true
+                  }
+                }
+                if(this.log[i].event == "Approved at Level 3") {
+                  if(res.data.approval_id.level3approved.by) {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 3"
+                    this.log[i].by = res.data.approval_id.level3approved.by.personal_details.name
+                    this.log[i].iconTick = true
+                  }
+                  else {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 3"
+                    this.log[i].by = "Admin"
+                    this.log[i].iconTick = true
+                  }
+                }
+                if(this.log[i].event == "Approved at Level 4") {
+                  if(res.data.approval_id.level4approved.by) {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 4"
+                    this.log[i].by = res.data.approval_id.level4approved.by.personal_details.name
+                    this.log[i].iconTick = true
+                  }
+                  else {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 4"
+                    this.log[i].by = "Admin"
+                    this.log[i].iconTick = true
+                  }
+                }
+                if(this.log[i].event == "Approved at Level 5") {
+                  if(res.data.approval_id.level5approved.by) {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 5"
+                    this.log[i].by = res.data.approval_id.level5approved.by.personal_details.name
+                    this.log[i].iconTick = true
+                  }
+                  else {
+                    this.log[i].approved = "Approved"
+                    this.log[i].more = " at Level 5"
+                    this.log[i].by = "Admin"
+                    this.log[i].iconTick = true
+                  }
+                }
+              }
+            }
+            // for(var i=0;i<this.lineManagers.length;i++) {
+            //   this.designation.push(this.lineManagers[i][0].designation.name)
+            //   this.department.push(this.lineManagers[i][0].department.department_name)
+            // }
+        }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      }
+      })
+      }
+    },
             clickHandler (args) {
                     if(this.$refs.overviewgrid.getSelectedRecords().length>0){
                     let withHeader = false;
@@ -506,7 +912,6 @@ export default {
                 
             },
             alertDlgBtnClick() {
-                    this.$refs.alertDialog.hide();
                 },
             
         },
@@ -588,7 +993,7 @@ export default {
                     for(var i =0;i<this.datasrc.length;i++) {
                       if(user.user) {
                         console.log("user exists")
-                        if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to==user.user.user_type.designation) {
+                        if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
                            this.enableColumn =  true
                         }
                       }
@@ -740,6 +1145,105 @@ export default {
     margin-right: 0;
     margin-left: 0;
 }
+.badge-red {
+  background-color: red;
+  color:white;
+}
+.badge-#ff000 {
+  background-color: red;
+}
+.badge-CLOSED {
+  background-color:grey;
+  color:white;
+}
+.badge-PENDING {
+  background-color:yellow;
+}
+.badge-RELEASED {
+  background-color:grey;
+}
+.badge-APPROVED {
+  background-color:lightgreen;
+}
+.badge-CANCELLED {
+  background-color:red;
+  color:white;
+}
+.badge-DECLINED {
+  background-color:red;
+  color:white;
+}
+.badge-AUTO-REJECTED {
+  background-color:red;
+  color:white;
+}
+.badge-COMPLETED {
+  background-color:orange;
+}
+#toggler {
+  margin-top:10px;
+  border-radius: 50px;
+  height: 30px;
+  width:30px;
+  padding:0;
+  margin-top:5;
+  content:'\E81E';
+}
+#toggler:hover {
+  margin-top:10px;
+  border-radius: 50px;
+  color: grey;
+  height: 30px;
+  width:30px;
+  content:'\E81E';
+  padding:0;
+  margin-top:5;
+}
+#toggler:focus {
+  margin-top:10px;
+  border-radius: 50px;
+  height: 30px;
+  color: grey;
+  width:30px;
+  content:'\E81E';
+  padding:0;
+  margin-top:5;
+}
+/*#toggler:focus {
+  margin:10px;
+  border-radius: 50px;
+  height: 20px;
+  background: grey;
+  width:20px;
+  content:'\E81E';
+  padding:0;
+  margin-top:5;
+}*/
+#toggler2 {
+  margin-top:10px;
+  border-radius: 50px;
+  background: black;
+  height: 30px;
+  width:30px;
+  content:'\E81E';
+  padding:0;
+  margin:0;
+}
+#new_aside {
+  width:350px;
+}
+html:not([dir="rtl"]) #new_aside {
+    margin-right: -350px;
+}
+@media (min-width: 992px) {
+html:not([dir="rtl"]) .aside-menu-show #new_aside, html:not([dir="rtl"]) .aside-menu-lg-show #new_aside {
+    margin-right: 0px;
+}
+html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside-menu-off-canvas .#new_aside {
+    right: 0;
+}
+}
+
 .breadcrumb { 
     margin-bottom: 0;
 }
@@ -793,4 +1297,7 @@ export default {
 .badge-#ff000 {
   background-color: red;
 }
+.aside-menu .nav-tabs .nav-link {
+    padding: 0.75rem .3rem;
+  }
 </style>

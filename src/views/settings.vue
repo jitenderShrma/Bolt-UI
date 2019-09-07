@@ -279,7 +279,241 @@
               </b-form>
               </b-row>
             </b-tab>
-          
+          <b-tab>
+              <template slot="title">
+                <i class="icon-envelope "></i> {{tabs[2]}}
+              </template>
+              <b-form v-on:submit.prevent = "updateBudgetTransferSettings">
+                <b-col sm="15">
+                  <ejs-textbox v-model="input_budtrans.auto_cancel_time" floatLabelType="Auto" :placeholder="$ml.get('pholdautorejection')"></ejs-textbox>
+                </b-col>
+                <br>
+              <b-form-group
+            :label="$ml.get('level1approval')"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true"
+            >
+            <b-form-group :visible="false">
+            
+            <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLevel1_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+            </b-form-group>
+          <div v-if="isLevel1_budtrans">
+            <b-form-group>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbydesig')"></label>
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isDesig1_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isDesig1_budtrans">
+                  <br>
+                <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddesig')" v-model="input_budtrans.level1.designation" :multiple="false" :options="designations"/>
+          </b-col>
+        </b-row>
+            </b-form-group>
+            <b-form-group v-if="false">
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLabel1_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isLabel1_budtrans">
+                  <br>
+            <ejs-dropdownlist :showClearButton="true" :enabled="islabel_budtrans" v-model="input_budtrans.level1.designation_label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+          </b-col>
+        </b-row>
+            </b-form-group>
+            <b-form-group>
+            <ejs-textbox @change="validateAmount_budtrans(`${input_budtrans.level1.amount}`,1,isLevel1_budtrans)" v-model="input_budtrans.level1.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
+            </b-form-group>
+            <b-form-group>
+            <ejs-textbox v-model="input_budtrans.level1.alert_time" floatLabelType="Auto" :placeholder="$ml.get('alerttime')"></ejs-textbox>
+            </b-form-group>
+          </div>
+          </b-form-group>
+          <div v-if="isLevel1_budtrans">
+            <b-form-group
+            :label="$ml.get('level2approval')"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true"
+            >
+            <b-form-group>
+            <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLevel2_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+            </b-form-group>
+          <div v-if="isLevel2_budtrans">
+            <b-form-group>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbydesig')"></label>
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isDesig2_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isDesig2_budtrans">
+                  <br>
+                  <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddesig')" v-model="input_budtrans.level2.designation" :multiple="false" :options="designations" />
+                </b-col>
+            </b-row>
+            </b-form-group>
+            <b-form-group v-if="false">
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLabel2_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isLabel2_budtrans">
+                  <br>
+            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input_budtrans.level2.designation_label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+          </b-col>
+        </b-row>
+            </b-form-group>
+            <b-form-group>
+            <ejs-textbox @change="validateAmount_budtrans(`${input_budtrans.level2.amount}`,2)" v-model="input_budtrans.level2.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
+            </b-form-group>
+            <b-form-group>
+            <ejs-textbox v-model="input_budtrans.level2.alert_time" floatLabelType="Auto" :placeholder="$ml.get('alerttime')"></ejs-textbox>
+            </b-form-group>
+          </div>
+        </b-form-group>
+          </div>
+          <div v-if='isLevel1_budtrans && isLevel2_budtrans'>
+            <b-form-group
+            :label="$ml.get('level3approval')"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true"
+            >
+            <b-form-group>
+            <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLevel3_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+            </b-form-group>
+          <div v-if="isLevel3_budtrans">
+            <b-form-group>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbydesig')"></label>
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isDesig3_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isDesig3_budtrans">
+                  <br>
+                  <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddesig')" v-model="input_budtrans.level3.designation" :multiple="false" :options="designations"/>
+          </b-col>
+        </b-row>
+            </b-form-group>
+            <b-form-group v-if="false">
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLabel3_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isLabel3_budtrans">
+                  <br>
+            
+              <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input_budtrans.level3.designation_label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+
+          </b-col>
+        </b-row>
+            </b-form-group>
+            <b-form-group>
+            <ejs-textbox @change="validateAmount_budtrans(`${input_budtrans.level3.amount}`,3)" v-model="input_budtrans.level3.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
+            </b-form-group>
+            <b-form-group>
+            <ejs-textbox v-model="input_budtrans.level3.alert_time" floatLabelType="Auto" :placeholder="$ml.get('alerttime')"></ejs-textbox>
+            </b-form-group>
+          </div>
+        </b-form-group>
+            </div>
+            <div v-if='isLevel1_budtrans && isLevel2_budtrans && isLevel3_budtrans'>
+            <b-form-group
+            :label="$ml.get('level4approval')"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true"
+            >
+            <b-form-group>
+            <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLevel4_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+            </b-form-group>
+          <div v-if="isLevel4_budtrans">
+            <b-form-group>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbydesig')"></label>
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isDesig4_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isDesig4_budtrans">
+                  <br>
+            <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddesig')" v-model="input_budtrans.level4.designation" :multiple="false" :options="designations"/>
+          </b-col>
+        </b-row>
+            </b-form-group>
+            <b-form-group v-if="false">
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLabel4_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isLabel4_budtrans">
+                  <br>
+            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input_budtrans.level4.designation_label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+          </b-col>
+        </b-row>
+            </b-form-group>
+            <b-form-group>
+            <ejs-textbox @change="validateAmount_budtrans(`${input_budtrans.level4.amount}`,4)" v-model="input_budtrans.level4.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
+            </b-form-group>
+            <b-form-group>
+            <ejs-textbox v-model="input_budtrans.level4.alert_time" floatLabelType="Auto" :placeholder="$ml.get('alerttime')"></ejs-textbox>
+            </b-form-group>
+          </div>
+        </b-form-group>
+            </div>
+            <div v-if='isLevel1_budtrans && isLevel2_budtrans && isLevel3_budtrans && isLevel4_budtrans'>
+            <b-form-group
+            :label="$ml.get('level5approval')"
+            label-for="basicName"
+            :label-cols="3"
+            :horizontal="true"
+            >
+            <b-form-group>
+            <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLevel5_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+            </b-form-group>
+          <div v-if="isLevel5_budtrans">
+            <b-form-group>
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbydesig')"></label>
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isDesig5_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isDesig5_budtrans">
+                  <br>
+            <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddesig')" v-model="input_budtrans.level5.designation" :multiple="false" :options="designations"/>
+          </b-col>
+        </b-row>
+            </b-form-group>
+            <b-form-group v-if="false">
+              <b-row>
+                <b-col sm="4">
+                  <label v-text="$ml.get('approvedbylabel')"></label> &nbsp;&nbsp;&nbsp;
+                  <c-switch style="margin-top:5px;" class="mx-1" color="primary" unchecked name="switch1" v-model="isLabel5_budtrans" :uncheckedValue="false" :checkedValue="true"/>
+                </b-col>
+                <b-col sm="8" v-if="isLabel5_budtrans">
+                  <br>
+            <ejs-dropdownlist :showClearButton="true" :enabled="islabel" v-model="input_budtrans.level5.designation_label" :dataSource='label1' :fields='label_fields' :allowFiltering="true" popupHeight='300' :placeholder="$ml.get('pholdlabel')"></ejs-dropdownlist>
+          </b-col>
+        </b-row>
+            </b-form-group>
+            <b-form-group>
+            <ejs-textbox @change="validateAmount_budtrans(`${input_budtrans.level5.amount}`,5)" v-model="input_budtrans.level5.amount" type="number" floatLabelType="Auto" :placeholder="$ml.get('threshholdamount')"></ejs-textbox>
+            </b-form-group>
+            <b-form-group>
+            <ejs-textbox v-model="input_budtrans.level5.alert_time" floatLabelType="Auto" :placeholder="$ml.get('alerttime')"></ejs-textbox>
+            </b-form-group>
+          </div>
+        </b-form-group>
+            </div>
+            <div class="footer">
+              <b-btn variant="primary" type="submit" v-text="$ml.get('submit')"></b-btn>
+            </div>
+          </b-form>
+            </b-tab>
           </b-tabs>
      
         </b-card>
@@ -364,6 +598,7 @@ export default {
     data:[
     ],
     desig_fields:{groupBy:'parent_designation_id',text:"name",value:"_id"},
+    input_budtrans : {},
     input:{
       fin_year:d.getFullYear(),
       level1:{
@@ -429,6 +664,11 @@ export default {
     isLevel3:false,
     isLevel4:false,
     isLevel5:false,
+    isLevel1_budtrans:false,
+    isLevel2_budtrans:false,
+    isLevel3_budtrans:false,
+    isLevel4_budtrans:false,
+    isLevel5_budtrans:false,
     month:[
       {name:"January",value:"Jan"},
       {name:"February",value:"Feb"},
@@ -453,7 +693,8 @@ export default {
       tabIndex: [0, 0,0,0],
       tabs: [
         'Communications',
-        'Budget Settings'
+        'Budget Settings',
+        'Budget Transfer Settings'
       ],
       labelIcon: {
         dataOn: '\u2713',
@@ -474,6 +715,17 @@ export default {
       isLabel3:false,
       isLabel4:false,
       isLabel5:false,
+
+      isDesig1_budtrans:false,
+      isDesig2_budtrans:false,
+      isDesig3_budtrans:false,
+      isDesig4_budtrans:false,
+      isDesig5_budtrans:false,
+      isLabel1_budtrans:false,
+      isLabel2_budtrans:false,
+      isLabel3_budtrans:false,
+      isLabel4_budtrans:false,
+      isLabel5_budtrans:false,
       desig:[]
     }
 
@@ -503,6 +755,56 @@ export default {
       this.data = response.data
       console.log(response.data);
   	}).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      });
+    api.get(`${apiUrl}/super/settings/budget/transfer/budtransSet/get`).then((res) => {
+      console.log(res)
+      this.input_budtrans = res.data
+      if(this.input_budtrans.level1.designation) {
+        this.isLevel1_budtrans = true
+        this.isDesig1_budtrans = true 
+      }
+      if(this.input_budtrans.level2.designation) {
+        this.isLevel2_budtrans = true
+        this.isDesig2_budtrans = true 
+      }
+      if(this.input_budtrans.level3.designation) {
+        this.isLevel3_budtrans = true
+        this.isDesig3_budtrans = true 
+      }
+      if(this.input_budtrans.level4.designation) {
+        this.isLevel4_budtrans = true
+        this.isDesig4_budtrans = true 
+      }
+      if(this.input_budtrans.level5.designation) {
+        this.isLevel5_budtrans = true
+        this.isDesig5_budtrans = true 
+      }
+      if(this.input_budtrans.level1.designation_label) {
+        this.isLevel1_budtrans = true
+        this.isLabel1_budtrans = true 
+      }
+      if(this.input_budtrans.level2.designation_label) {
+        this.isLevel1_budtrans = true
+        this.isLabel2_budtrans = true 
+      }
+      if(this.input_budtrans.level3.designation_label) {
+        this.isLevel1_budtrans = true
+        this.isLabel3_budtrans = true 
+      }
+      if(this.input_budtrans.level4.designation_label) {
+        this.isLevel1_budtrans = true
+        this.isLabel4_budtrans = true 
+      }
+      if(this.input_budtrans.level5.designation_label) {
+        this.isLevel1_budtrans = true
+        this.isLabel5_budtrans = true 
+      }
+      console.log(res.data)
+    }).catch((err)=> {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
@@ -608,7 +910,59 @@ export default {
       if(args) {
         this.isDesig5 = false
       }
+    },
+
+    'isDesig1_budtrans' : function(args) {
+      if(args) {
+        this.isLabel1 = false
+      }
+    },
+    'isDesig2_budtrans' : function(args) {
+      if(args) {
+        this.isLabel2 = false
+      }
+    },
+    'isDesig3_budtrans' : function(args) {
+      if(args) {
+        this.isLabel3 = false
+      }
+    },
+    'isDesig4_budtrans' : function(args) {
+      if(args) {
+        this.isLabel4 = false
+      }
+    },
+    'isDesig5_budtrans' : function(args) {
+      if(args) {
+        this.isLabel5 = false
+      }
+    },
+    'isLabel1_budtrans' : function(args) {
+      if(args) {
+        this.isDesig1 = false
+      }
+    },
+    'isLabel2_budtrans' : function(args) {
+      if(args) {
+        this.isDesig2 = false
+      }
+    },
+    'isLabel3_budtrans' : function(args) {
+      if(args) {
+        this.isDesig3 = false
+      }
+    },
+    'isLabel4_budtrans' : function(args) {
+      if(args) {
+        this.isDesig4 = false
+      }
+    },
+    'isLabel5_budtrans' : function(args) {
+      if(args) {
+        this.isDesig5 = false
+      }
     }
+
   },
   methods : {
     list_to_tree_desig(list) {
@@ -678,8 +1032,110 @@ export default {
 
           }
         },
+        validateAmount_budtrans(args,i,check) {
+          console.log(args,i,check)
+          if(i == 1) {
+            if(args<=0 && this.input_budtrans.level1.designation != null && args != "") {
+              this.input_budtrans.level1.amount = 1
+            }
+          }
+          else if(i == 2){
+            if(args<=0 && this.input_budtrans.level2.designation != null && args != "") {
+              this.input_budtrans.level2.amount = 1
+            }
+
+          }else if(i == 3){
+            if(args<=0 && this.input_budtrans.level3.designation != null && args != "") {
+              this.input_budtrans.level3.amount = 1
+            }
+
+          }else if(i == 4){
+            if(args<=0 && this.input_budtrans.level4.designation != null && args != "") {
+              this.input_budtrans.level4.amount = 1
+            }
+
+          }else if(i == 5){
+            if(args<=0 && this.input_budtrans.level5.designation != null && args != "") {
+              this.input_budtrans.level5.amount = 1
+            }
+
+          }
+        },
     settingRoute(val) {
       this.$router.push(`/settings/${val}`);
+    },
+    async updateBudgetTransferSettings() {
+      console.log(this.input_budtrans)
+      if(!this.isLevel1_budtrans) {
+        this.input_budtrans.level1.designation = undefined
+        this.input_budtrans.level1.designation_label = undefined
+        this.input_budtrans.level1.amount = 0
+        this.input_budtrans.level2.designation = undefined
+        this.input_budtrans.level2.designation_label = undefined
+        this.input_budtrans.level2.amount = 0
+        this.input_budtrans.level3.designation = undefined
+        this.input_budtrans.level3.designation_label = undefined
+        this.input_budtrans.level3.amount = 0
+        this.input_budtrans.level4.designation = undefined
+        this.input_budtrans.level4.designation_label = undefined
+        this.input_budtrans.level4.amount = 0
+        this.input_budtrans.level5.designation = undefined
+        this.input_budtrans.level5.designation_label = undefined
+        this.input_budtrans.level5.amount = 0
+      }
+      if(!this.isLevel2_budtrans) {
+        this.input_budtrans.level2.designation = undefined
+        this.input_budtrans.level2.designation_label = undefined
+        this.input_budtrans.level2.amount = 0
+        this.input_budtrans.level3.designation = undefined
+        this.input_budtrans.level3.designation_label = undefined
+        this.input_budtrans.level3.amount = 0
+        this.input_budtrans.level4.designation = undefined
+        this.input_budtrans.level4.designation_label = undefined
+        this.input_budtrans.level4.amount = 0
+        this.input_budtrans.level5.designation = undefined
+        this.input_budtrans.level5.designation_label = undefined
+        this.input_budtrans.level5.amount = 0
+      }
+      if(!this.isLevel3_budtrans) {
+        this.input_budtrans.level3.designation = undefined
+        this.input_budtrans.level3.designation_label = undefined
+        this.input_budtrans.level3.amount = 0
+        this.input_budtrans.level4.designation = undefined
+        this.input_budtrans.level4.designation_label = undefined
+        this.input_budtrans.level4.amount = 0
+        this.input_budtrans.level5.designation = undefined
+        this.input_budtrans.level5.designation_label = undefined
+        this.input_budtrans.level5.amount = 0
+      }
+      if(!this.isLevel4_budtrans) {
+        this.input_budtrans.level4.designation = undefined
+        this.input_budtrans.level4.designation_label = undefined
+        this.input_budtrans.level4.amount = 0
+        this.input_budtrans.level5.designation = undefined
+        this.input_budtrans.level5.designation_label = undefined
+        this.input_budtrans.level5.amount = 0
+      }
+      if(!this.isLevel5_budtrans) {
+        this.input_budtrans.level5.designation = undefined
+        this.input_budtrans.level5.designation_label = undefined
+        this.input_budtrans.level5.amount = 0
+      }
+      await api.put(`${apiUrl}`+`super/settings/budget/transfer/budtransSet/update`,this.input_budtrans).then((res)=> {
+        if(res.data!=null) {
+          toast({
+            type: VueNotifications.types.success,
+            title: 'Settings Saved',
+            message: 'Budget Transfer Settings are Updated'
+          })
+        }
+      }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
+
     },
     async sendData() {
       if(!this.isLevel1) {

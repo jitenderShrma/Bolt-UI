@@ -6,8 +6,8 @@
         </div>
         <b-tabs>
     <b-tab>
-      <template slot="title">
-        Approval Matrix
+      <template slot="title" class="px-0 py-0">
+        <small>Approval Matrix</small>
       </template>
       <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center text-muted text-uppercase small">Approval Level-1 <div style="display:inline" v-if="designationBudget[0]!=null && designationBudget[0]!=''">{{designationBudget[0]}} - {{departmentBudget[0]}}</div> ({{linemanagersAmount[0]}} INR)
@@ -102,7 +102,102 @@
     </b-tab>
     <b-tab>
       <template slot="title">
-        Line Managers
+        <small>Budget Transfer Matrix</small>
+      </template>
+      <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center text-muted text-uppercase small">Approval Level-1 <div style="display:inline" v-if="designationBudget_trans[0]!=null && designationBudget_trans[0]!=''">{{designationBudget_trans[0]}} - {{departmentBudget_trans[0]}}</div> ({{linemanagersAmount_trans[0]}} INR)
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagersBudget_trans[0]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-secondary py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget_trans[0][i].user.personal_details.name}}</div>
+        </div>
+      </b-list-group-item>
+      </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-warning py-1 bg-light text-center  text-muted text-uppercase small">
+        Approval Level-2 <div style="display:inline" v-if="designationBudget_trans[1]!=null && designationBudget_trans[1]!=''">{{designationBudget_trans[1]}} - {{departmentBudget_trans[1]}}</div> ({{linemanagersAmount_trans[1]}} INR)
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagersBudget_trans[1]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-warning py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget_trans[1][i].user.personal_details.name}}</div>
+        </div>
+      </b-list-group-item>
+      </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-info py-1 bg-light text-center  text-muted text-uppercase small">
+        Approval Level-3 <div style="display:inline" v-if="designationBudget_trans[2]!=null && designationBudget_trans[2]!=''">{{designationBudget_trans[2]}} - {{departmentBudget_trans[2]}}</div> ({{linemanagersAmount_trans[2]}} INR)
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagersBudget_trans[2]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-info py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget_trans[2][i].user.personal_details.name}}</div>
+        </div>
+      </b-list-group-item>
+      </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-danger py-1 bg-light text-center  text-muted text-uppercase small">
+        Approval Level-4 <div style="display:inline" v-if="designationBudget_trans[3]!=null && designationBudget_trans[3]!=''">{{designationBudget_trans[3]}} - {{departmentBudget_trans[3]}}</div> ({{linemanagersAmount_trans[3]}} INR)
+      </b-list-group-item>
+
+      <div v-for="(run,i) in lineManagersBudget_trans[3]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-danger py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget_trans[3][i].user.personal_details.name}}</div>
+        </div>
+      </b-list-group-item>
+      </div>
+    </b-list-group>
+    <b-list-group class="list-group-accent">
+      <b-list-group-item class="list-group-item-accent-success py-1 bg-light text-center  text-muted text-uppercase small">
+        Approval Level-5 <div style="display:inline" v-if="designationBudget_trans[4]!=null && designationBudget_trans[4]!=''">{{designationBudget_trans[4]}} - {{departmentBudget_trans[4]}}</div> ({{linemanagersAmount_trans[4]}} INR)
+      </b-list-group-item>
+      <div v-for="(run,i) in lineManagersBudget_trans[4]" :key="i">
+      <!-- <div class="p-3"> -->
+        <b-list-group-item class="list-group-item-accent-success py-3">
+        <div class="py-1 message">
+          <div class=" mr-1 float-left">
+            <div class="avatar">
+              <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+            </div>
+          </div>
+          <div class="text-truncate py-1 ">{{lineManagersBudget_trans[4][i].user.personal_details.name}}</div>
+        </div>
+        </b-list-group-item>
+      </div>
+    </b-list-group>
+    </b-tab>
+    <b-tab>
+      <template slot="title">
+        <small>Line Managers</small>
       </template>
       <b-list-group class="list-group-accent">
       <b-list-group-item class="list-group-item-accent-secondary py-1 bg-light text-center  text-muted text-uppercase small">
@@ -374,6 +469,7 @@ export default {
               }
           },
           linemanagersAmount:[],
+          linemanagersAmount_trans:[],
           module:null,
           formdata: {
                   label_name : "",
@@ -394,6 +490,8 @@ export default {
             designation:[],
             designationBudget:[],
             departmentBudget:[],
+            designationBudget_trans:[],
+            departmentBudget_trans:[],
             editparams: { params: { popupHeight: '300px' }},
            rowHeight: 40,
            addTemplate: function () {
@@ -534,6 +632,7 @@ export default {
                     type: 'Menu'
                 },
                 lineManagersBudget:[],
+                lineManagersBudget_trans:[],
                 filter: {
                     type: 'CheckBox'
                 },
@@ -633,6 +732,31 @@ export default {
                     else {
                       this.designationBudget.push(this.lineManagersBudget[i][0].designation.name)
                       this.departmentBudget.push(this.lineManagersBudget[i][0].department.department_name)
+                    }
+                  }
+                }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      }
+      })
+                api.get(`${apiUrl}line/managers/find/settings/budgetTransfer/${args.data._id}`).then((res) => {
+                  this.lineManagersBudget_trans = res.data.users
+                  this.linemanagersAmount_trans = res.data.amount
+                  console.log(res.data)
+                  this.designationBudget_trans =[]
+                    this.departmentBudget_trans = []
+                  for(var i=0;i<this.lineManagersBudget_trans.length;i++) {
+                    
+                    if(!this.lineManagersBudget_trans[i][0]) {
+                      this.designationBudget_trans.push("")
+                      this.departmentBudget_trans.push("")
+                    }
+                    else {
+                      this.designationBudget_trans.push(this.lineManagersBudget_trans[i][0].designation.name)
+                      this.departmentBudget_trans.push(this.lineManagersBudget_trans[i][0].department.department_name)
                     }
                   }
                 }).catch((err)=> {
@@ -878,4 +1002,7 @@ html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside
     right: 100px;
 }
 }
+.aside-menu .nav-tabs .nav-link {
+    padding: 0.75rem .3rem;
+  }
 </style>

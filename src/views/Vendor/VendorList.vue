@@ -474,7 +474,6 @@ export default {
                       mounted() {
 
                         var Session = JSON.parse(localStorage.session_key)
-                        console.log(Session.permission)
 
                           if(Session.user) {
                           for(var i=0;i<Session.permission.length;i++) {
@@ -732,11 +731,9 @@ export default {
                 })
             },
             searchValues(args) {
-              console.log("ASdasd")
             },
             openVendorModal() {
               this.openVendorModal = true
-              console.log("asd")
             },
             clickHandler (args) {
                     if(this.$refs.overviewgrid.getSelectedRecords().length>0){
@@ -772,7 +769,7 @@ export default {
                  if(Session.user) {
                  for(var i=0;i<Session.permission.length;i++) {
                    if(Session.permission[i].text=="Vendor" && Session.permission[i].write) {
-                      write= true
+                      add= true
                    }
                    if(Session.permission[i].text=="Vendor" && Session.permission[i].edit) {
                       edit= true
@@ -794,7 +791,16 @@ export default {
                 if(args.item.id == "delete" && deleteper ) {
                     var selected = this.$refs.overviewgrid.getSelectedRecords()
                     if(selected.length>0) {
-                        axios.delete(`${apiUrl}`+`vendor/vendor/delete/`+`${selected[0]._id}`,{withCredentials:true}).then((response) => {
+                      api.get(`${apiUrl}transaction/trans/vendor/${selected[0]._id}`).then((res) => {
+                        if(res.data>0) {
+                          toast({
+                            type: VueNotifications.types.warn,
+                            title: 'Cannot be deleted',
+                            message:'Transaction(s) exists for this Vendor'
+                          })
+                        }
+                        else{
+                          axios.delete(`${apiUrl}`+`vendor/vendor/delete/`+`${selected[0]._id}`,{withCredentials:true}).then((response) => {
                           axios.get(`${apiUrl}`+`vendor/vendor/get/all`,{withCredentials:true}).then((res) => {
                                     this.datasrc = res.data
                                   });
@@ -806,6 +812,8 @@ export default {
                                   })
                                 }
                                 })
+                        }
+                      })
                     }
                 }
                 if (args.item.id === 'excelexport') {
@@ -829,7 +837,6 @@ export default {
                 },
                 addVendor() {
           this.vendor.address = this.addresslist
-          console.log(this.vendor.address)
           var vfd = new FormData();
           vfd.append('name',this.vendor.name);
         vfd.append('vendor_company',this.vendor.vendor_company);
@@ -849,14 +856,10 @@ export default {
         vfd.append('acc_name',this.vendor.acc_name)
         vfd.append('ifsc',this.vendor.ifsc)
         vfd.append('bank_name',this.vendor.bank_name)
-        console.log(this.vendor.pan_copy,this.vendor.gst_certi);
         vfd.append('pan_copy',this.vendor.pan_copy)
         vfd.append('gst_certi',this.vendor.gst_certi)
-        console.log(vfd)
         axios.post(`${apiUrl}`+`vendor/vendor/create`,vfd,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((response)=> {
-          console.log(response.data)
             axios.get(`${apiUrl}`+`vendor/vendor/get/all`,{withCredentials:true}).then((res) => {
-              console.log(res.data)
             this.datasrc = res.data
             this.vendor = {
                 vendor_company:"",
@@ -888,15 +891,16 @@ export default {
         },
         editVendor() {
           this.editvendor.address = this.editaddresslist
-          console.log(this.editvendor.address.phone)
           var id = this.editvendor._id
           this.editvendor._id = undefined
         axios.put(`${apiUrl}`+`vendor/vendor/edit/${id}`,this.editvendor,{withCredentials:true}).then((response)=> {
+          console.log(response.data)
             axios.get(`${apiUrl}`+`vendor/vendor/get/all`,{withCredentials:true}).then((res) => {
             this.datasrc = res.data
           });
         }).catch((err)=> {
           if(err.toString().includes("Network Error")) {
+            console.log(err)
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
@@ -911,7 +915,6 @@ export default {
         async mounted () {
                 api.get(`${apiUrl}`+`vendor/vendor/get/all`).then((response) => {
                     this.datasrc = response.data;
-                    console.log(response.data)
                 }).catch((err)=> {
                   if(err.toString().includes("Network Error")) {
         toast({

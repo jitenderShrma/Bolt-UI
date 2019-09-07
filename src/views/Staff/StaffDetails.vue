@@ -678,6 +678,7 @@ export default {
     axios.get(`${apiUrl}/user/subuser/get/${this.key}`,{withCredentials:true}).then((res) => {
       console.log(res.data)
       this.input = res.data
+      this.input.identification = []
       this.staff = this.input.user_type
       if(this.staff.education[0].description!=null) {
         this.UG=true
@@ -1480,7 +1481,7 @@ export default {
       if(this.id_type == "Others") {
         this.identification.id_type = this.identification.type
       }
-      this.input.identification.push(this.identification);
+      this.input.personal_details.identification.push(this.identification);
         this.identification = {}
         this.idmodal = false
     },
@@ -1581,7 +1582,7 @@ export default {
                 toast({
                     type: VueNotifications.types.success,
                     title: 'Success',
-                    message: 'User Created Successfully'
+                    message: 'User Profile Updated Successfully'
                     })
                 this.$router.push("/dashboard");
               }
@@ -1626,7 +1627,7 @@ export default {
                 toast({
                     type: VueNotifications.types.success,
                     title: 'Success',
-                    message: 'User Created Successfully'
+                    message: 'User Profile Updated Successfully'
                     })
                 this.$router.push("/staff");
               }
@@ -1675,7 +1676,7 @@ export default {
                 toast({
                     type: VueNotifications.types.success,
                     title: 'Success',
-                    message: 'User Edited Successfully'
+                    message: 'User Profile Updated Successfully'
                     })
                 this.$router.push("/user");
               }

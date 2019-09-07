@@ -14,28 +14,46 @@
 		              <span style="color:red;float:right;height:2px;font-size:20px">*</span>
 		              <cool-select
 		              	v-validate="'required'"
-		              	name="Month"
-		                v-model="input.month"
+		              	name="Source Month"
+		                v-model="input.source_month"
 		                :items="months"
 		                item-text="name"
 		                item-value="value"
-		                :placeholder="$ml.get('pholdmonth')"
+		                :placeholder="$ml.get('pholdsourcemonth')"
 		               >
 		              </cool-select>
-		              <span id="errors">{{ errors.first('Month') }}</span>
+		              <span id="errors">{{ errors.first('Source Month') }}</span>
+		          </b-form-group>
+				</b-col>
+				<i class="fa fa-angle-double-right font-3xl" style="margin-top:30px;"></i>
+				<b-col sm="4">
+					<b-form-group
+		              :label="$ml.get('month')">
+		              <span style="color:red;float:right;height:2px;font-size:20px">*</span>
+		              <cool-select
+		              	v-validate="'required'"
+		              	name="Destination Month"
+		                v-model="input.destination_month"
+		                :items="months"
+		                item-text="name"
+		                item-value="value"
+		                :placeholder="$ml.get('pholddestmonth')"
+		               >
+		              </cool-select>
+		              <span id="errors">{{ errors.first('Destination Month') }}</span>
 		          </b-form-group>
 				</b-col>
 			</b-row>
 			<br>
 			<b-row>
-				<b-col>
+				<b-col sm="4">
 					<label v-text="$ml.get('sourcehead')"></label>
 					<span style="color:red;float:right;height:2px;font-size:20px">*</span>
 					<treeselect @select="head1update" required :default-expand-level="10" :placeholder="$ml.get('pholdsourcehead')" v-model="input.source_head" :multiple="false" :options="heads1" />
 					<span v-if="head1">Total : {{head1.total}} Remaining : {{head1.remaining}}</span>
 				</b-col>
 				<i class="fa fa-angle-double-right font-3xl" style="margin-top:30px;"></i>
-				<b-col>
+				<b-col sm="4">
 					<label v-text="$ml.get('desthead')"></label>
 					<span style="color:red;float:right;height:2px;font-size:20px">*</span>
 					<treeselect @select="head2update" required :default-expand-level="10" :placeholder="$ml.get('pholddesthead')" v-model="input.destination_head" :multiple="false" :options="heads2" />
@@ -142,8 +160,8 @@
 				// 			break;
 				// 		}
 				// 	}
-							this.head1.total = args.permissible_values[this.input.month]
-							this.head1.remaining = args.amount_left[this.input.month]
+							this.head1.total = args.permissible_values[this.input.source_month]
+							this.head1.remaining = args.amount_left[this.input.source_month]
 					// api.get(`${apiUrl}head/head/view/one/${this.input.source_head}`).then((resp) => {
 					// 	this.head1.total = resp.data.permissible_values[this.input.month]
 					// 	this.head1.remaining = resp.data.amount_left[this.input.month]
@@ -169,8 +187,8 @@
 				// 		}
 				// 	}
 				// }
-				this.head2.total = args.permissible_values[this.input.month]
-				this.head2.remaining = args.amount_left[this.input.month]
+				this.head2.total = args.permissible_values[this.input.destination_month]
+				this.head2.remaining = args.amount_left[this.input.destination_month]
 			},
 			transferBudget() {
 				this.$validator.validate().then(valid => {
@@ -183,6 +201,7 @@
 				                    message: 'Request for Budget Transfer is Sent'
 								})
 								this.input = {}
+								this.$router.push(`/budgettrans/list/all`)
 						}).catch((err)=> {
         toast({
           type: VueNotifications.types.error,

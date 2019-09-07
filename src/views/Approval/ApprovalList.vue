@@ -306,9 +306,7 @@ Vue.use(ColorPickerPlugin);
     Vue.use(DropDownListPlugin);
     Vue.use(DatePickerPlugin);
     Vue.use(NumericTextBoxPlugin)
-var api = axios.create({
-  withCredentials :true
-})
+
 const toastTypes = {
   success: 'success',
   error: 'error',
@@ -1110,11 +1108,12 @@ export default {
       })
         this.lineManagersBudget = []
         this.linemanagersAmount=[]
+        this.designationBudget =[]
+        this.departmentBudget = []
         api.get(`${apiUrl}line/managers/find/settings/${args.data.request_by._id}`).then((res) => {
                   this.lineManagersBudget = res.data.users
                   this.linemanagersAmount = res.data.amount
-                  this.designationBudget =[]
-                    this.departmentBudget = []
+                  
                   for(var i=0;i<this.lineManagersBudget.length;i++) {
                     
                     if(!this.lineManagersBudget[i][0]) {
@@ -1835,4 +1834,7 @@ html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside
     flex: 1 1 auto;
     padding: 0 1rem 0 1rem;
 }
+.aside-menu .nav-tabs .nav-link {
+    padding: 0.75rem .3rem;
+  }
 </style>

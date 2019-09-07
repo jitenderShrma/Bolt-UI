@@ -9,7 +9,7 @@
                     <template slot="button-content">
                       <i class="icon-settings" style="color:black"></i>
                     </template>
-                    <!-- <b-dropdown-item @click="toggle1">Budget By Heads</b-dropdown-item> -->
+                    <b-dropdown-item @click="toggle1">Budget By Heads</b-dropdown-item>
                     <b-dropdown-item @click="toggle1">Budget by Departments</b-dropdown-item>
                   </b-dropdown>
               <div v-if="option1 == 'Budget By Heads'">
@@ -76,7 +76,7 @@
         </b-col>
     </b-row>
     </div>
-    <b-modal size="xl" class="modal-primary" v-model="chartModal" @ok="chartModal = false" hide-footer>
+    <b-modal size="xl" class="modal-primary" v-model="chartModal" @ok="exitModal" hide-footer>
       <template slot="modal-title">
         
       </template>
@@ -85,13 +85,15 @@
         <template slot="button-content">
           <i class="icon-settings" style="color:black"></i>
         </template>
-        <!-- <b-dropdown-item @click="toggle1">Budget By Heads</b-dropdown-item> -->
-        <b-dropdown-item @click="toggle1">Budget by Departments</b-dropdown-item>
+        <b-dropdown-item @click="toggle3">Budget By Heads</b-dropdown-item>
+        <b-dropdown-item @click="toggle3">Budget by Departments</b-dropdown-item>
       </b-dropdown>
-      <div v-if="option1=='Budget By Heads'">
-        <highcharts class="chart" :options="chartOptions3Bar" :updateArgs="updateArgs"></highcharts>
+      <div v-if="option3=='Budget By Heads'">
+        <highcharts class="chart2" :options="chartOptions3childBar" :updateArgs="updateArgs"></highcharts>
       </div>
-      <div @click="changeModal" v-else>
+      <div v-else>
+        <b-button v-if="departmentLog.length>1" @click="goBack" class="bg-transparent" style="float:left;border:0"><i class="icon-arrow-left-circle font-2xl"></i></b-button>
+        <div @click="changeModal">
         <highcharts class="chart2"  :options="chartOptionsStackedchild" :updateArgs="updateArgs"></highcharts>
       
                 <div>
@@ -111,6 +113,7 @@
                     REMAINING : {{summary_remaining_child()}}
                 </b-row>
                 </div> 
+              </div>
               </div>
     </b-modal>
     <b-modal size="xl" class="modal-primary" v-model="pieModal" @ok="pieModal = false" hide-footer>
@@ -197,6 +200,7 @@ export default {
   data: function() {
     return {
       child_dept:[],
+      departmentLog:[],
       chartModal:false,
       summary_remaining: function() {
         return this.chartOptionsStacked.series[2].data.reduce((a,b) => a+b,0)
@@ -242,6 +246,7 @@ export default {
       dept:[],
       option:"Total Budget",
       option1:"Budget By Departments",
+      option3:"Budget By Departments",
       updateArgs: [true, true, {duration: 1000}],
       chartOptions1: {
         tooltip: {
@@ -250,17 +255,16 @@ export default {
         chart: {
           type: 'pie',
         },
-        
         plotOptions: {
           pie: {
               allowPointSelect: true,
               cursor: 'pointer',
-              center: ['50%', '50%']
+              center: ['50%', '50%'],
+              dataLabels:{
+                enabled:false,
+              }
           }
       },
-        dataLabels:[{
-          align:"center",
-        }],
         title: {
           text: ``
         },
@@ -403,7 +407,7 @@ export default {
     },
     isPermittedDEpt:false,
     title:{
-      text:'Yearly Budget'
+      text:'Yearly Budget (Heads)'
     },
     yAxis: {
         min: 0,
@@ -411,6 +415,36 @@ export default {
             text: 'Amount ( in Rupees )'
         },
     },
+    plotOptions: {
+            column: {
+                stacking: 'percent'
+            }
+        },
+    series: []
+    },
+    chartOptions3childBar: {
+        chart: {
+          type: 'column',
+        },
+        xAxis: {
+        categories: [],
+        crosshair: true
+    },
+    isPermittedDEpt:false,
+    title:{
+      text:'Yearly Budget (Heads)'
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Amount ( in Rupees )'
+        },
+    },
+    plotOptions: {
+            column: {
+                stacking: 'percent'
+            }
+        },
     series: []
     }
     }
@@ -421,7 +455,13 @@ export default {
         this.child_flag = true
       }
       else{
+        this.exitModal()
         this.child_flag=false
+      }
+    },
+    'pieModal' : function() {
+      if(!this.pieModal) {
+        this.chartOptions1.plotOptions.pie.dataLabels.enabled = false
       }
     },
     'option' : function(){
@@ -854,6 +894,7 @@ export default {
       },
     openPie(args) {
       if(args.chartX) {
+        this.chartOptions1.plotOptions.pie.dataLabels.enabled = true
         this.pieModal = true
       }
     },
@@ -863,16 +904,23 @@ export default {
         var id = val.split('</span>')
         api.get(`${apiUrl}department/dept/child/${id[0]}`).then((res) => {
           if(res.data.length > 0) {
+            this.departmentLog.push(`${id[0]}`)
             this.chartModal = true
             this.child_dept = JSON.parse(JSON.stringify(res.data))
             this.child_tree_dept = this.child_list_to_tree_dept(res.data)
             this.chartOptionsStackedchild.xAxis.categories = this.getDeptList(res.data)
             this.chartOptionsStackedchild.series = [{name:"Total",data:this.child_tree_dept.total_data},{name:"Committed",data:this.child_tree_dept.committed_data},{name:"Remaining",data:this.child_tree_dept.remaining_data}]
+            api.get(`${apiUrl}dropdown/head/only/${id[0]}`).then((response) => {
+              this.chartOptions3childBar.xAxis.categories = this.getYearlyBar1(response.data);
+              this.chartOptions3childBar.series = this.getYearlyBar2(response.data);
+            })
           }
           else {
+            this.option1="Budget By Heads"
             toast({
               type: VueNotifications.types.info,
-              title: 'No Sub-Departments'
+              title: 'No Sub-Departments',
+              message:'Switching to Budget By Heads'
             })
           }
         }).catch((err)=> {
@@ -906,15 +954,23 @@ export default {
         var id = val.split('</span>')
         api.get(`${apiUrl}department/dept/child/${id[0]}`).then((res) => {
           if(res.data.length > 0) {
+            this.departmentLog.push(`${id[0]}`)
+            console.log(this.departmentLog)
             this.child_dept = JSON.parse(JSON.stringify(res.data))
             this.child_tree_dept = this.child_list_to_tree_dept(res.data)
             this.chartOptionsStackedchild.xAxis.categories = this.getDeptList(res.data)
             this.chartOptionsStackedchild.series = [{name:"Total",data:this.child_tree_dept.total_data},{name:"Committed",data:this.child_tree_dept.committed_data},{name:"Remaining",data:this.child_tree_dept.remaining_data}]
+            api.get(`${apiUrl}dropdown/head/only/${id[0]}`).then((response) => {
+              this.chartOptions3childBar.xAxis.categories = this.getYearlyBar1(response.data);
+              this.chartOptions3childBar.series = this.getYearlyBar2(response.data);
+            })
           }
           else {
+            this.option3="Budget By Heads"
             toast({
               type: VueNotifications.types.info,
-              title: 'No Sub-Departments'
+              title: 'No Sub-Departments',
+              message:'Switching to Budget By Heads'
             })
           }
         }).catch((err)=> {
@@ -928,12 +984,20 @@ export default {
       }
     }
     else{
+      this.option3="Budget By Heads"
       toast({
               type: VueNotifications.types.info,
-              title: 'No Sub-Departments'
+              title: 'No Sub-Departments',
+              message:'Switching to Budget By Heads'
       })
     }     
     }, 
+    exitModal() {
+      this.chartModal = false
+      this.departmentLog = []
+      this.option3 = "Budget by Departments"
+      console.log("ADD")
+    },
     getDeptList(nodes) {
       var data = []
       for(var i=0;i<nodes.length;i++) {
@@ -1057,6 +1121,41 @@ export default {
       }
       return data
     },
+    goBack() {
+     var departmentLog = JSON.parse(JSON.stringify(this.departmentLog))
+     departmentLog.pop()
+     var previousdept = departmentLog.pop()
+     console.log(previousdept)
+     api.get(`${apiUrl}department/dept/child/${previousdept}`).then((res) => {
+          if(res.data.length > 0) {
+            this.departmentLog.pop()
+            this.chartModal = true
+            this.child_dept = JSON.parse(JSON.stringify(res.data))
+            this.child_tree_dept = this.child_list_to_tree_dept(res.data)
+            this.chartOptionsStackedchild.xAxis.categories = this.getDeptList(res.data)
+            this.chartOptionsStackedchild.series = [{name:"Total",data:this.child_tree_dept.total_data},{name:"Committed",data:this.child_tree_dept.committed_data},{name:"Remaining",data:this.child_tree_dept.remaining_data}]
+            api.get(`${apiUrl}dropdown/head/only/${previousdept}`).then((response) => {
+              this.chartOptions3childBar.xAxis.categories = this.getYearlyBar1(response.data);
+              this.chartOptions3childBar.series = this.getYearlyBar2(response.data);
+            })
+          }
+          else {
+            this.option3="Budget By Heads"
+            toast({
+              type: VueNotifications.types.info,
+              title: 'No Sub-Departments',
+              message:'Switching to Budget By Heads'
+            })
+          }
+        }).catch((err)=> {
+          if(err.toString().includes("Network Error")) {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      }
+      })
+    },
     getMonthlyBar2(new_data) {
       var data =[]
       for(var i=0;i<new_data.length;i++) {
@@ -1153,6 +1252,10 @@ export default {
     },
     toggle1(args) {
       this.option1 = args.target.text
+      console.log(args.target.text)
+    },
+    toggle3(args) {
+      this.option3 = args.target.text
       console.log(args.target.text)
     },
     getTotalData(new_data) {

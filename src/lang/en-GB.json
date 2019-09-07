@@ -159,6 +159,8 @@
     "addhead" : "Add Head",
     "month" : "Month",
     "pholdmonth"  : "Select the Month of Expenditure",
+    "pholdsourcemonth"  : "Select Source Month",
+    "pholddestmonth"  : "Select Destination Month",
     "transacammount" : "Transaction Amount",
     "amount" : "Amount",
     "pholdtransacammount": "Enter the Transaction Amount",
