@@ -33,7 +33,8 @@
             </b-dropdown>
           </b-col>
           <div v-if="selected2=='Jan'">
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            
+                <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
@@ -46,7 +47,7 @@
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
-                    <!-- <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
@@ -57,23 +58,13 @@
                     <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
-                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column> -->
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+            
         </div>
         <div v-if="selected2=='Feb'">
+           
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -88,7 +79,7 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                    <!-- <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
@@ -99,24 +90,14 @@
                     <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
-                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column> -->
+                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
 
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        
         </div>
         <div v-if="selected2=='Mar'">
+            
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -131,7 +112,7 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                    <!-- <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
@@ -142,24 +123,14 @@
                     <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
-                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column> -->
+                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
 
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        
         </div>
         <div v-if="selected2=='Apr'">
+            
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -174,7 +145,7 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                    <!-- <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
@@ -185,24 +156,14 @@
                     <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
-                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column> -->
+                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
 
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        
         </div>
         <div v-if="selected2=='May'">
+            
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -217,7 +178,7 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                   <!--  <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
@@ -228,24 +189,14 @@
                     <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
-                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column> -->
+                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
 
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        
         </div>
         <div v-if="selected2=='Jun'">
+            
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -260,7 +211,7 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                    <!-- <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
@@ -271,24 +222,13 @@
                     <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
-                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column> -->
-
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        
         </div>
         <div v-if="selected2=='July'">
+        
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -303,7 +243,7 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                    <!-- <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
@@ -314,24 +254,15 @@
                     <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
-                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column> -->
+                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
 
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        
         </div>
         <div v-if="selected2=='Aug'">
+        
+
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -346,7 +277,7 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                   <!--  <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
@@ -357,24 +288,15 @@
                     <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
-                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column> -->
+                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
 
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        
         </div>
         <div v-if="selected2=='Sep'">
+        
+
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -388,7 +310,7 @@
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
-                    <!-- <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
@@ -399,24 +321,14 @@
                     <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
-                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column> -->
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
                     
                 </e-columns>
             </ejs-treegrid>
+        
         </div>
         <div v-if="selected2=='Oct'">
+        
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -430,7 +342,7 @@
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
-                    <!-- <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
@@ -441,25 +353,16 @@
                     <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
-                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column> -->
+                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
                     
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
                     
                 </e-columns>
             </ejs-treegrid>
+        
         </div>
         <div v-if="selected2=='Nov'">
+        
+
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -473,7 +376,7 @@
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
-                    <!-- <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
@@ -484,25 +387,16 @@
                     <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
-                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column> -->
+                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
                     
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
                     
                 </e-columns>
             </ejs-treegrid>
+        
         </div>
         <div v-if="selected2=='Dec'">
+        
+
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -516,7 +410,7 @@
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
-                    <!-- <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
@@ -527,24 +421,12 @@
                     <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
                     <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
-                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column> -->
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
                     
                 </e-columns>
             </ejs-treegrid>
-        </div>
-        <div v-else>
+
+        
         </div>
             <b-modal :title="$ml.get('addhead')" class="modal-primary" v-model="modal" @ok="modal = false" hide-footer>
               <div>
@@ -575,9 +457,9 @@
                     <br>
                     
                     <label v-text="$ml.get('department')"></label>
-                      <treeselect :default-expand-level="10" :placeholder="$ml.get('pholddept')" v-model="input.department" :multiple="false" :options="department" />
+                      <treeselect :placeholder="$ml.get('pholddept')" v-model="input.department" :multiple="false" :options="department" />
                     <label v-text="$ml.get('parenthead')"></label>
-                      <treeselect :default-expand-level="10" :placeholder="$ml.get('pholdparenthead')" v-model="input.parent_head" :multiple="false" :options="head" />
+                      <treeselect :placeholder="$ml.get('pholdparenthead')" v-model="input.parent_head" :multiple="false" :options="head" />
                 </b-form-group>
                 <b-button  type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button></b-form>
                 </div>
@@ -716,7 +598,7 @@ var template1Vue = Vue.component('template1',{
               };
             },
             mounted() {
-              this.value = +(Math.round((this.data.amount_left[0]/this.data.permissible_values[0])*100 + "e+2")  + "e-2")
+              this.value = +(Math.round((this.data.amount_left[0]/this.data.permissible_values[0])*100+ "e+2")  + "e-2")
             }       
               })
 var template2Vue = Vue.component('template2',{
@@ -868,7 +750,7 @@ var template9Vue = Vue.component('template9',{
               };
             },
             mounted() {
-              this.value = +(Math.round((this.data.amount_left[8]/this.data.permissible_values[8])*100 + "e+2")  + "e-2")
+              this.value = +(Math.round((this.data.amount_left[8]/this.data.permissible_values[8])*100+ "e+2")  + "e-2")
             }       
               })
 var template10Vue = Vue.component('template10',{
@@ -925,8 +807,8 @@ var template12Vue = Vue.component('template12',{
               };
             },
             mounted() {
-              this.value = + (Math.round((this.data.amount_left[11]/this.data.permissible_values[11])*100 + "e+2")  + "e-2")
-                }       
+              this.value = +(Math.round((this.data.amount_left[11]/this.data.permissible_values[11])*100+ "e+2")  + "e-2")
+            }       
               })
 
 export default {
@@ -936,6 +818,7 @@ export default {
       CoolSelect,
         TreeGridPlugin,ChartPlugin,ToolbarPlugin,ExcelExport,PdfExport, Edit,CommandColumn, Filter, Toolbar, TreeGridComponent, Sort, Reorder,Resize, Page
     },
+    props:['page_from'],
     data : function() {
         return {
           uploadTemplate: function () {
@@ -1012,7 +895,7 @@ export default {
           labelTemplate: function () {
               return {
                   template: Vue.component('labelTemplate', {
-                      template: `<div ><b-badge id="label" style="font-weight:100;margin:3px" v-for="label in data.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
+                      template: `<div ><b-badge id="label" style="ffont-weight:lighter;margin:3px" v-for="label in data.labels" id="label" :variant="label.color">{{label.label_name}}</b-badge>&nbsp;</div>`,
                   data: function() {
                           return {
                               data: {},
@@ -1035,12 +918,14 @@ export default {
                   template: groupVue
               }
           },
-          something:true,
+          something:false,
           groupTemplate1: function () {
               return {
                   template: groupVue1
               }
           },
+          addremove :{},
+
     getflag:0,
           template1 : function(){
             return {  
@@ -1107,26 +992,8 @@ export default {
           modal:false,
           link:"",
           key:"",
-          sortSettings:{columns: [
-            {field: 'amount_left.0', direction: 'Descending'},
-            {field: 'amount_left.1', direction: 'Descending'},
-            {field: 'amount_left.2', direction: 'Descending'},
-            {field: 'amount_left.3', direction: 'Descending'},
-            {field: 'amount_left.4', direction: 'Descending'},
-            {field: 'amount_left.5', direction: 'Descending'},
-            {field: 'amount_left.6', direction: 'Descending'},
-            {field: 'amount_left.7', direction: 'Descending'},
-            {field: 'amount_left.8', direction: 'Descending'},
-            {field: 'amount_left.9', direction: 'Descending'},
-            {field: 'amount_left.10', direction: 'Descending'},
-            {field: 'amount_left.11', direction: 'Descending'}
-            ],isMulti:true},
-          addremoveform:false,
-          currentView:"Budget",
           addModal:false,
           head:[],
-          loading:false,
-          addremove :{},
           selected:false,
           dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
              commands: [
@@ -1150,11 +1017,27 @@ export default {
             input:{
 
             },
-            selectedLabel:null,
-            module:null,
-            isRoot:false,
             or_head:[],
             or_dept:[],
+            currentView:"Graph",
+            selectedLabel:null,
+            module:null,
+            loading:false,
+            isRoot:false,
+            sortSettings:{columns: [
+            {field: 'amount_left.0', direction: 'Descending'},
+            {field: 'amount_left.1', direction: 'Descending'},
+            {field: 'amount_left.2', direction: 'Descending'},
+            {field: 'amount_left.3', direction: 'Descending'},
+            {field: 'amount_left.4', direction: 'Descending'},
+            {field: 'amount_left.5', direction: 'Descending'},
+            {field: 'amount_left.6', direction: 'Descending'},
+            {field: 'amount_left.7', direction: 'Descending'},
+            {field: 'amount_left.8', direction: 'Descending'},
+            {field: 'amount_left.9', direction: 'Descending'},
+            {field: 'amount_left.10', direction: 'Descending'},
+            {field: 'amount_left.11', direction: 'Descending'}
+            ],isMulti:true},
             squarePalettesColn: 7,
         circlePaletteColors: {'custom': ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#2196f3', '#03a9f4', '#00bcd4',
                     '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
@@ -1162,18 +1045,19 @@ export default {
    };
   },
   async mounted() {
-
-    this.link = window.location.href;
+      this.link = window.location.href;
      this.key = this.link.split(`head/`).pop()
-     console.log(`request sent ${window.performance.now()}`);
+     console.log(`Req sent ${window.performance.now()}`)
      this.loading = true
+
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
-        this.or_head = JSON.parse(JSON.stringify(response.data))
         console.log(`data recieved ${window.performance.now()}`)
+        this.or_head = JSON.parse(JSON.stringify(response.data))
         this.data = this.list_to_tree_head(response.data)
-        console.log(`data converted from flat to hierarchy ${window.performance.now()}`)
-        this.loading = true
+        console.log(`data converted ${window.performance.now()}`)
+     this.loading = true
+
       }).catch((err)=> {
         if(err.toString().includes("Network Error")) {
         toast({
@@ -1220,7 +1104,7 @@ export default {
       })
      
      await axios.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
-        this.or_head = JSON.parse(JSON.stringify(res.data))
+        this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = this.list_to_tree_dept(res.data)
       }).catch((err)=> {
         if(err.toString().includes("Network Error")) {
@@ -1245,6 +1129,11 @@ export default {
       treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
+    dataBound() {
+        console.log(`data rendered ${window.performance.now()}`)
+     this.loading = false
+
+    },
     delLabel(args,id,label) {
       console.log(this.editinput.labels.splice(label,1))
       var body = {
@@ -1263,6 +1152,13 @@ export default {
       })
       
     },
+    validateAmountrem(args) {
+        if(args.value<0) {
+        if(Math.abs(parseInt(args.value)) > this.editinput.amount_left[this.addremove.month]) {
+            this.addremove.amount = -this.editinput.amount_left[this.addremove.month]
+        }
+    }
+      },
     addLabel (args) {
       this.addModal =false
               api.post(`${apiUrl}`+`label/label/create`,this.formdata).then((label)=>{
@@ -1311,23 +1207,6 @@ export default {
     }
       })
       }
-      },
-      addBudget() {
-        this.editinput.permissible_values[this.addremove.month] += parseInt(this.addremove.amount)
-        this.editinput.amount_left[this.addremove.month] += parseInt(this.addremove.amount)
-        var update = {
-            permissible_values : this.editinput.permissible_values,
-            amount_left : this.editinput.amount_left,
-            updated_amount : this.addremove.amount
-        }
-        api.put(`${apiUrl}head/head/update/only/values/${this.editinput._id}`,update).then((res) => {
-            api.get(`${apiUrl}`+`head/head/get`)
-            .then((response) => {
-                this.or_head = JSON.parse(JSON.stringify(response.data))
-                this.data = this.list_to_tree_head(response.data)
-              });
-            this.editmodal =false
-        })
       },
     list_to_tree_dept(list) {
           var map = {}, node, roots = [], i;
@@ -1381,22 +1260,9 @@ export default {
     //           });
             
     //   },
-    dataBound() {
-        console.log(`data rendered ${window.performance.now()}`)
-        this.loading= false
-    },
     onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
       }, 
-      switchGraph() {
-        this.currentView = "Graph"
-        this.$router.push({name:"Budget Graph", params:{page_from : "remaining"}})
-
-      },
-      switchValue() {
-        this.something = true
-        this.currentView = "Budget"
-      },
       addHead() {
         this.$validator.validate().then((valid) =>{
             if (!valid) {
@@ -1407,10 +1273,14 @@ export default {
               
               api.post(`${apiUrl}`+`head/head/create`,this.input).then((response) =>{
                 
-                this.$route.go(0)
-                    this.modal = false       
-
+                  api.get(`${apiUrl}`+`head/head/get`)
+                  .then((response) => {
+                      this.or_head = JSON.parse(JSON.stringify(response.data))
+                      this.data = this.list_to_tree_head(response.data)
+                      this.modal = false     
                       this.input={}  
+                });
+                    
               }).catch((err)=> {
                 if(err.toString().includes("Network Error")) {
         toast({
@@ -1435,10 +1305,10 @@ export default {
         }
         api.put(`${apiUrl}`+`head/head/update/one/`+`${this.editinput._id}`,sendData).then((response)=>{
             api.get(`${apiUrl}`+`head/head/get`)
-            .then((response) => {
-                this.or_head = JSON.parse(JSON.stringify(response.data))
-                this.data = this.list_to_tree_head(response.data)
-              });
+                .then((response) => {
+                    this.or_head = JSON.parse(JSON.stringify(response.data))
+                    this.data = this.list_to_tree_head(response.data)
+                  });
           }).catch((err)=> {
             if(err.toString().includes("Network Error")) {
         toast({
@@ -1452,7 +1322,6 @@ export default {
       rowSelected(args) {
         this.selected = true
       },
-
       rowDeselecting(args) {
         this.selected = false
       },
@@ -1482,6 +1351,23 @@ export default {
       });
         }
       },
+      addBudget() {
+        this.editinput.permissible_values[this.addremove.month] += parseInt(this.addremove.amount)
+        this.editinput.amount_left[this.addremove.month] += parseInt(this.addremove.amount)
+        var update = {
+            permissible_values : this.editinput.permissible_values,
+            amount_left : this.editinput.amount_left,
+            updated_amount : this.addremove.amount
+        }
+        api.put(`${apiUrl}head/head/update/only/values/${this.editinput._id}`,update).then((res) => {
+            api.get(`${apiUrl}`+`head/head/get`)
+            .then((response) => {
+                this.or_head = JSON.parse(JSON.stringify(response.data))
+                this.data = this.list_to_tree_head(response.data)
+              });
+            this.editmodal =false
+        })
+      },
       beginEdit(args) {
         if(args.rowData.parentItem==null) {
           this.isRoot = true
@@ -1497,12 +1383,27 @@ export default {
           this.getflag=1
         }
         }
+        
         console.log(args)
-        this.addremove.month = args.column.field.split('amount_left.').pop()
-        // this.addremoveform = true 
+        
+        this.addremove.month = args.column.field.split('permissible_values.').pop()
         this.editmodal =true
         this.editinput = args.rowData
         this.editinput.department = args.rowData.department._id
+      },
+      checkExistDept(node) {
+        for (var i=0; i < this.or_dept.length; i++) {
+            if (this.or_dept[i]._id == node)
+                return true;
+        }
+        return false;
+      },
+      checkExistHead(node) {
+        for (var i=0; i < this.or_head.length; i++) {
+            if (this.or_head[i]._id == node)
+                return true;
+        }
+        return false;
       },
        onClick(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
@@ -1529,13 +1430,6 @@ export default {
        },
        failure: function(args) {
         debugger;
-      },
-      validateAmountrem(args) {
-        if(args.value<0) {
-        if(Math.abs(parseInt(args.value)) > this.editinput.amount_left[this.addremove.month]) {
-            this.addremove.amount = -this.editinput.amount_left[this.addremove.month]
-        }
-    }
       },
       list_to_tree_head(list) {
           var map = {}, node, roots = [], i;
@@ -1569,6 +1463,20 @@ export default {
       },
       onProgress(args) {
       },
+      switchGraph() {
+        this.something = false
+        this.currentView = "Graph"
+      },
+      switchValue() {
+        this.something = true
+        this.currentView = "Budget"
+        if(this.page_from == 'total') {
+            this.$router.push('/budget/total')
+        } 
+        else{
+            this.$router.push('/budget/approved')
+        }
+      },
        onUploadSuccess: function (args) {
           var formData = new FormData();
           formData.append('csv',args.file.rawFile);
@@ -1588,18 +1496,7 @@ export default {
     }
       })
           this.browseModal = false
-          api.get(`${apiUrl}`+`head/head/get`)
-            .then((response) => {
-                this.or_head = JSON.parse(JSON.stringify(response.data))
-                this.data = this.list_to_tree_head(response.data)
-              }).catch((err)=> {
-                if(err.toString().includes("Network Error")) {
-        toast({
-          type: VueNotifications.types.error,
-          title: 'Network Error'
-        })
-    }
-      });
+          this.$router.go(0)
           // axios.post(`${apiUrl}`+`csv/read`,formData,{headers:{'Content-Type':'multipart/form-data'}}).then((res) => {
           //   this.dataSourceSettings.dataSource = res.data
           // })
@@ -1610,25 +1507,16 @@ export default {
         onFileRemove: function (args) {
             args.postRawFile = false;
         },
-        checkExistDept(node) {
-        for (var i=0; i < this.or_dept.length; i++) {
-            if (this.or_dept[i]._id == node)
-                return true;
-        }
-        return false;
-      },
-      checkExistHead(node) {
-        for (var i=0; i < this.or_head.length; i++) {
-            if (this.or_head[i]._id == node)
-                return true;
-        }
-        return false;
-      },
+  
       clickHandler(args){
         if(this.getflag==0) {
           this.head = this.data
     this.getflag=1
         }
+        
+        if(args.item.id === 'add') {
+          this.modal =true
+          }
           if(args.item.id=="upload") {
             this.browseModal = true
           }
@@ -1644,11 +1532,11 @@ export default {
         if(args.item.id == 'delete') {
                             var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
                                api.delete(`${apiUrl}`+`head/head/delete/one/`+`${data[0].head_key}`).then((res)=>{
-                                   api.get(`${apiUrl}`+`head/head/get`)
-                                    .then((response) => {
-                                        this.or_head = JSON.parse(JSON.stringify(response.data))
-                                        this.data = this.list_to_tree_head(response.data)
-                                      });
+                                api.get(`${apiUrl}`+`head/head/get`)
+                                .then((response) => {
+                                  this.or_head = JSON.parse(JSON.stringify(response.data))
+                                  this.data = this.list_to_tree_head(response.data)
+                                  });
                               }).catch((err)=> {
                                 if(err.toString().includes("Network Error")) {
         toast({
@@ -1713,8 +1601,8 @@ export default {
 </style>
 <style>
 #label {
+    font-weight:lighter;
   font-size:12px;
-  font-weight:lighter;
 }
   .badge-f44336 {
     background-color:#f44336;
@@ -1795,10 +1683,7 @@ font-style: normal;
  .e-grid-min-height .e-rowcell {
      line-height: 1;
 }
-
 </style>
-
-
 <style src="spinkit/scss/spinkit.scss" lang="scss" />
 
 <style scoped>

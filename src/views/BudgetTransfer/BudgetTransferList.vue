@@ -360,15 +360,229 @@ export default {
                                   <b-button @click="accept_remarks = true" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
                                   <b-button @click="reject_remarks = true" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
                                   </div>
-                                <b-modal size="sm" class="modal-primary py-0" v-model="accept_remarks" @ok="accept_remarks = false" hide-footer>
+                                <b-modal size="lg" class="modal-primary py-0" v-model="accept_remarks" @ok="accept_remarks = false" hide-footer>
                                 <template slot="modal-header">
                                   <h5>Level {{data.atLevel+1}} Approval</h5>
                                   <b-button @click="accept_remarks = false" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
                                 </template>
-                                  <ejs-textbox v-model="input.remarks" floatLabelType="Auto" :placeholder="$ml.get('remarks')"></ejs-textbox>
+                                <b-row>
+                                  <b-col  class="px-0 bg-secondary" sm="4">
+                                  <b-card no-body style="border:0px">
+                                  <b-card-body class="bg-primary px-1 py-0">
+                                  Requested By :
+                                  <b-row>
+                                  <b-col  sm="3">
+                                  <div class="avatar py-1">
+                                    <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    </div>
+                                  </b-col>
+                                  <b-col>
+                                      <b-row>
+                                        Name : {{data.requested_by.personal_details.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Designation : {{data.requested_by.user_type.designation.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Department : {{data.requested_by.user_type.department.department_name}}
+                                      </b-row>
+                                      <b-row>
+                                        Source Head : {{data.source_head.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Destination Head : {{data.destination_head.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Amount Requested : {{data.amount}}
+                                      </b-row>
+                                  </b-col>
+                                  </b-card-body>
+                                  </b-card>
                                   <br>
-                                  <b-button @click="acceptReq" type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
-                                   
+                                  <div class="px-1 py-1">
+                                  <label v-text="$ml.get('approvepartially')"></label>
+                                  <c-switch @change="changeField" class="py-1" color="primary" unchecked name="switch1" v-model="partial" :uncheckedValue="false" :checkedValue="true"/>
+                                  <br>
+                                  <label v-text="amount_type"></label>
+                                  <b-input ref="input" @update="changeAmount" type="number" v-model="input.partially_approved_amount" :disabled="!partial" floatLabelType="Auto" :placeholder="$ml.get('partialamount')"></b-input>
+                                    <br>
+                                  <b-textarea v-model="input.remarks" floatLabelType="Auto" :placeholder="$ml.get('remarks')"></b-textarea>
+                                   <br>
+                                   <b-button @click="acceptReq" type="submit" size="sm" variant="primary" v-text="$ml.get('approve')"></b-button>
+                                   </div>
+                                  </b-col>
+                                  
+                                  <b-col sm="8" class="px-0" style="height:384px;overflow:auto;overflow-x:hidden">
+                                  <b-row class="px-3">
+                                    <b-card no-body style="border:0px;width: 100%;">
+                                  <b-card-body class="bg-warn px-1 py-0">
+                                  Level 1 Approval :
+                                  <div v-if="data.level1approved">
+                                  <b-row>
+                                  <b-col  sm="3">
+                                  <div class="avatar py-1">
+                                    <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    </div>
+                                  </b-col>
+                                  <b-col>
+                                    
+                                      <b-row>
+                                        Name : <span v-if="data.level1approved"> {{data.level1approved.by.personal_details.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Designation : <span v-if="data.level1approved"> {{data.level1approved.by.user_type.designation.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Department : <span v-if="data.level1approved"> {{data.level1approved.by.user_type.department.department_name}}
+                                      </b-row>
+                                      <b-row>
+                                        Source Head : {{data.source_head.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Destination Head : {{data.destination_head.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Amount Requested : <span v-if="data.level1approved.partially_approved_amount"> {{data.level1approved.partially_approved_amount}}</span>
+                                        <span v-else>{{data.amount}}</span>
+                                      </b-row>
+                                    
+                                  </b-col>
+                                  <b-col>
+                                    <b-button @click="changePartial(1)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
+                                  </b-col>
+                                  </div>
+                                  </b-card-body>
+                                  </b-card>
+                                  </b-row>
+                                  
+                                  <b-row class="px-3">
+                                    <b-card no-body style="border:0px;width: 100%;">
+                                  <b-card-body class="bg-secondary px-1 py-0">
+                                  Level 2 Approval :
+                                  <div v-if="data.level2approved">
+                                  <b-row>
+                                  <b-col  sm="3">
+                                  <div class="avatar py-1">
+                                    <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    </div>
+                                  </b-col>
+                                  <b-col>
+                                    
+                                      <b-row>
+                                        Name : <span v-if="data.level2approved"> {{data.level2approved.by.personal_details.name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Designation : <span v-if="data.level2approved"> {{data.level2approved.by.user_type.designation.name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Department : <span v-if="data.level2approved"> {{data.level2approved.by.user_type.department.department_name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Source Head : {{data.source_head.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Destination Head : {{data.destination_head.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Amount Requested : <span v-if="data.level2approved.partially_approved_amount"> {{data.level2approved.partially_approved_amount}}</span>
+                                        <span v-else>{{data.amount}}</span>
+                                      </b-row>
+                                    
+                                  </b-col>
+                                  <b-col>
+                                    <b-button @click="changePartial(2)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
+                                  </b-col>
+                                  </div>
+                                  </b-card-body>
+                                  </b-card>
+                                  </b-row>
+                                  
+                                  <b-row class="px-3">
+                                    <b-card no-body style="border:0px;width: 100%;">
+                                  <b-card-body class="bg-warn px-1 py-0">
+                                  Level 3 Approval :
+                                  <div v-if="data.level3approved">
+                                  <b-row>
+                                  <b-col  sm="3">
+                                  <div class="avatar py-1">
+                                    <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    </div>
+                                  </b-col>
+                                  <b-col>
+                                    
+                                      <b-row>
+                                        Name : <span v-if="data.level3approved"> {{data.level3approved.by.personal_details.name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Designation : <span v-if="data.level3approved"> {{data.level3approved.by.user_type.designation.name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Department : <span v-if="data.level3approved"> {{data.level3approved.by.user_type.department.department_name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Source Head : {{data.source_head.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Destination Head : {{data.destination_head.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Amount Requested : <span v-if="data.level3approved.partially_approved_amount"> {{data.level3approved.partially_approved_amount}}</span>
+                                        <span v-else>{{data.amount}}</span>
+                                      </b-row>
+                                  </b-col>
+                                  <b-col>
+                                    <b-button @click="changePartial(3)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
+                                  </b-col>
+                                  </div>
+                                  </b-card-body>
+                                  </b-card>
+                                  </b-row>
+                                  
+                                  <b-row class="px-3">
+                                    <b-card no-body style="border:0px;width: 100%;">
+                                  <b-card-body class="bg-secondary px-1 py-0">
+                                  Level 4 Approval :
+                                  <div v-if="data.level4approved">
+                                  <b-row>
+                                  <b-col  sm="3">
+                                  <div class="avatar py-1">
+                                    <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    </div>
+                                  </b-col>
+                                  <b-col>
+                                    
+                                      <b-row>
+                                        Name : <span v-if="data.level4approved"> {{data.level4approved.by.personal_details.name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Designation : <span v-if="data.level4approved"> {{data.level4approved.by.user_type.designation.name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Department : <span v-if="data.level4approved"> {{data.level4approved.by.user_type.department.department_name}}</span>
+                                      </b-row>
+                                      <b-row>
+                                        Source Head : {{data.source_head.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Destination Head : {{data.destination_head.name}}
+                                      </b-row>
+                                      <b-row>
+                                        Amount Requested : <span v-if="data.level4approved.partially_approved_amount"> {{data.level4approved.partially_approved_amount}}</span>
+                                        <span v-else>{{data.amount}}</span>
+                                      </b-row>
+                                    
+                                  </b-col>
+                                  <b-col>
+                                    <b-button @click="changePartial(4)" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
+                                  </b-col>
+                                  </div>
+                                  </b-card-body>
+                                  </b-card>
+                                  </b-row>
+                                  
+                                  </b-col>
+                                  </b-row>
+                                  <br>
                                   
                                 </b-modal>
                                 <b-modal size="sm" :title="$ml.get('addremarks')" class="modal-primary" v-model="reject_remarks" @ok="reject_remarks = false" hide-footer>
@@ -443,7 +657,10 @@ export default {
                           console.log(i)
                         },
                         acceptReq() {
-                          axios.post(`${apiUrl}`+`transfer/budtrans/accept/requests/${this.data._id}`,this.input,{withCredentials:true}).then((res) => {
+                          this.accept_remarks=false
+                          if(this.partial && this.data.amount != this.input.partially_approved_amount) {
+                            console.log(this.input)
+                            axios.post(`${apiUrl}`+`transfer/budtrans/accept/requests/${this.data._id}`,this.input,{withCredentials:true}).then((res) => {
                               console.log(res.data)
                               window.location.reload();
                             }).catch((err)=> {
@@ -454,26 +671,22 @@ export default {
                               })
                             }
                             })
-                          // this.accept_remarks=false
-                          // if(this.partial && this.data.amount != this.input.partially_approved_amount) {
-                          //   console.log(this.input)
-                            
-                          // }
-                          // else{
-                          //   this.input.partially_approved_amount = undefined
-                          //   console.log(this.input)
-                          //   axios.post(`${apiUrl}`+`transfer/budtrans/accept/requests/${this.data._id}`,this.input,{withCredentials:true}).then((res) => {
-                          //     console.log(res.data)
-                          //     window.location.reload();
-                          //   }).catch((err)=> {
-                          //     if(err.toString().includes("Network Error")) {
-                          //     toast({
-                          //       type: VueNotifications.types.error,
-                          //       title: 'Network Error'
-                          //     })
-                          //   }
-                          //   })
-                          // }
+                          }
+                          else{
+                            this.input.partially_approved_amount = undefined
+                            console.log(this.input)
+                            axios.post(`${apiUrl}`+`transfer/budtrans/accept/requests/${this.data._id}`,this.input,{withCredentials:true}).then((res) => {
+                              console.log(res.data)
+                              window.location.reload();
+                            }).catch((err)=> {
+                              if(err.toString().includes("Network Error")) {
+                              toast({
+                                type: VueNotifications.types.error,
+                                title: 'Network Error'
+                              })
+                            }
+                            })
+                          }
                         },
                         rejectReq() {
                           console.log(this.input)
@@ -492,6 +705,7 @@ export default {
                         }
                       },
                       mounted() {
+                        this.input.partially_approved_amount = this.data.amount
                         var data =  JSON.parse(localStorage['session_key'])
                         if(data.user) {
                           this.designation = data.user.user_type.designation
@@ -1300,4 +1514,12 @@ html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside
 .aside-menu .nav-tabs .nav-link {
     padding: 0.75rem .3rem;
   }
+  .modal-body {
+    position: relative;
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    height: auto;
+    flex: 1 1 auto;
+    padding: 0 1rem 0 1rem;
+}
 </style>

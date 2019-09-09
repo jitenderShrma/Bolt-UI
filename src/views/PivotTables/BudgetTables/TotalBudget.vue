@@ -10,6 +10,22 @@
               <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item>
             </e-items>
           </ejs-toolbar>
+          <div v-if="loading" id="loader">
+          <div class="sk-fading-circle">
+              <div class="sk-circle1 sk-circle"></div>
+              <div class="sk-circle2 sk-circle"></div>
+              <div class="sk-circle3 sk-circle"></div>
+              <div class="sk-circle4 sk-circle"></div>
+              <div class="sk-circle5 sk-circle"></div>
+              <div class="sk-circle6 sk-circle"></div>
+              <div class="sk-circle7 sk-circle"></div>
+              <div class="sk-circle8 sk-circle"></div>
+              <div class="sk-circle9 sk-circle"></div>
+              <div class="sk-circle10 sk-circle"></div>
+              <div class="sk-circle11 sk-circle"></div>
+              <div class="sk-circle12 sk-circle"></div>
+            </div>
+        </div>
           <b-col sm="1" id="xs" style="position: fixed; top: -6%; right: 6%;width:55px;z-index:1001">
             <b-dropdown size="sm" id="ddown_primary" :text="currentView" variant="primary" class="m-0">
               <b-dropdown-item @click="switchGraph"><span v-text="$ml.get('graph')"></span></b-dropdown-item>
@@ -17,7 +33,8 @@
             </b-dropdown>
           </b-col>
           <div v-if="selected2=='Jan'">
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            <div v-if="currentView=='Graph'">
+                <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
@@ -26,7 +43,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -42,6 +59,23 @@
                     <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.10' :template="template11" headerText='Nov' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.11' :template="template12" headerText='Dec' width="110px"></e-column>
+                </e-columns>
+            </ejs-treegrid>
+            </div>
+            <div v-if="currentView=='Budget'">
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
+            :allowPdfExport='true' 
+            :allowExcelExport='true'
+            :actionComplete="actionComplete"
+            :enableCollapseAll="false" :toolbar="toolbar"
+            :rowSelected="rowSelected" :toolbarClick="clickHandler"
+            :recordDoubleClick="beginEdit"
+            :rowDeselecting="rowDeselecting"
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+                <e-columns>
+                    <e-column :visible="false" field='_id'></e-column>
+                    <e-column field='name' headerText='Head Name' ></e-column>
                     <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
@@ -56,8 +90,10 @@
                     <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        </div>
         </div>
         <div v-if="selected2=='Feb'">
+            <div v-if="currentView=='Graph'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -67,7 +103,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -85,6 +121,24 @@
                     <e-column :visible="!something" field='permissible_values.11' :template="template12" headerText='Dec' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.0' :template="template1" headerText='Jan' width="110px"></e-column>
 
+                </e-columns>
+            </ejs-treegrid>
+        </div>
+        <div v-if="currentView=='Budget'">
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
+            :allowPdfExport='true' 
+            :allowExcelExport='true'
+            :actionComplete="actionComplete"
+            :enableCollapseAll="false" :toolbar="toolbar"
+            :rowSelected="rowSelected" :toolbarClick="clickHandler"
+            :recordDoubleClick="beginEdit"
+            :rowDeselecting="rowDeselecting"
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+                <e-columns>
+                    <e-column :visible="false" field='_id'></e-column>
+                    <e-column field='name' headerText='Head Name' ></e-column>
+
                     <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
@@ -99,8 +153,10 @@
                     <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        </div>
         </div>
         <div v-if="selected2=='Mar'">
+            <div v-if="currentView=='Graph'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -110,7 +166,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -128,6 +184,24 @@
                     <e-column :visible="!something" field='permissible_values.0' :template="template1" headerText='Jan' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.1' :template="template2" headerText='Feb' width="110px"></e-column>
 
+                </e-columns>
+            </ejs-treegrid>
+        </div>
+        <div v-if="currentView=='Budget'">
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
+            :allowPdfExport='true' 
+            :allowExcelExport='true'
+            :actionComplete="actionComplete"
+            :enableCollapseAll="false" :toolbar="toolbar"
+            :rowSelected="rowSelected" :toolbarClick="clickHandler"
+            :recordDoubleClick="beginEdit"
+            :rowDeselecting="rowDeselecting"
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+                <e-columns>
+                    <e-column :visible="false" field='_id'></e-column>
+                    <e-column field='name' headerText='Head Name' ></e-column>
+
                     <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.4'  headerText='May' width="110px"></e-column>
@@ -142,8 +216,10 @@
                     <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        </div>
         </div>
         <div v-if="selected2=='Apr'">
+            <div v-if="currentView=='Graph'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -153,7 +229,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -171,6 +247,23 @@
                     <e-column :visible="!something" field='permissible_values.1' :template="template2" headerText='Feb' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="110px"></e-column>
 
+                </e-columns>
+            </ejs-treegrid>
+        </div>
+        <div v-if="currentView=='Budget'">
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
+            :allowPdfExport='true' 
+            :allowExcelExport='true'
+            :actionComplete="actionComplete"
+            :enableCollapseAll="false" :toolbar="toolbar"
+            :rowSelected="rowSelected" :toolbarClick="clickHandler"
+            :recordDoubleClick="beginEdit"
+            :rowDeselecting="rowDeselecting"
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+                <e-columns>
+                    <e-column :visible="false" field='_id'></e-column>
+                    <e-column field='name' headerText='Head Name' ></e-column>
                     <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.4'  headerText='May' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
@@ -185,8 +278,10 @@
                     <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        </div>
         </div>
         <div v-if="selected2=='May'">
+            <div v-if="currentView=='Graph'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -196,7 +291,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -214,6 +309,25 @@
                     <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.3' :template="template4" headerText='Apr' width="110px"></e-column>
 
+                </e-columns>
+            </ejs-treegrid>
+        </div>
+        <div v-if="currentView=='Budget'">
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
+            :allowPdfExport='true' 
+            :allowExcelExport='true'
+            :actionComplete="actionComplete"
+            :enableCollapseAll="false" :toolbar="toolbar"
+            :rowSelected="rowSelected" :toolbarClick="clickHandler"
+            :recordDoubleClick="beginEdit"
+            :rowDeselecting="rowDeselecting"
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+                <e-columns>
+                    <e-column :visible="false" field='_id'></e-column>
+                    <e-column field='name' headerText='Head Name' ></e-column>
+
+
                     <e-column :visible="something" field='permissible_values.4'  headerText='May' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
@@ -228,8 +342,10 @@
                     <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        </div>
         </div>
         <div v-if="selected2=='Jun'">
+            <div v-if="currentView == 'Graph'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -239,7 +355,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -256,6 +372,23 @@
                     <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.3' :template="template4" headerText='Apr' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.4' :template="template5" headerText='May' width="110px"></e-column>
+                </e-columns>
+            </ejs-treegrid>
+        </div>
+        <div v-if="currentView=='Budget'">
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
+            :allowPdfExport='true' 
+            :allowExcelExport='true'
+            :actionComplete="actionComplete"
+            :enableCollapseAll="false" :toolbar="toolbar"
+            :rowSelected="rowSelected" :toolbarClick="clickHandler"
+            :recordDoubleClick="beginEdit"
+            :rowDeselecting="rowDeselecting"
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+                <e-columns>
+                    <e-column :visible="false" field='_id'></e-column>
+                    <e-column field='name' headerText='Head Name' ></e-column>
 
                     <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
@@ -271,8 +404,11 @@
                     <e-column :visible="something" field='permissible_values.4'  headerText='May' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        </div>
         </div>
         <div v-if="selected2=='July'">
+        <div v-if="currentView=='Graph'">
+
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -282,7 +418,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -300,6 +436,25 @@
                     <e-column :visible="!something" field='permissible_values.4' :template="template5" headerText='May' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="110px"></e-column>
 
+                </e-columns>
+            </ejs-treegrid>
+        </div>
+        <div v-if="currentView=='Budget'">
+
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
+            :allowPdfExport='true' 
+            :allowExcelExport='true'
+            :actionComplete="actionComplete"
+            :enableCollapseAll="false" :toolbar="toolbar"
+            :rowSelected="rowSelected" :toolbarClick="clickHandler"
+            :recordDoubleClick="beginEdit"
+            :rowDeselecting="rowDeselecting"
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+                <e-columns>
+                    <e-column :visible="false" field='_id'></e-column>
+                    <e-column field='name' headerText='Head Name' ></e-column>
+
                     <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.7'  headerText='Aug' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
@@ -314,8 +469,11 @@
                     <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        </div>
         </div>
         <div v-if="selected2=='Aug'">
+        <div v-if="currentView=='Graph'">
+
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -325,7 +483,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -343,6 +501,24 @@
                     <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.6' :template="template7" headerText='Jul' width="110px"></e-column>
 
+                </e-columns>
+            </ejs-treegrid>
+        </div>
+        <div v-if="currentView=='Budget'">
+
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
+            :allowPdfExport='true' 
+            :allowExcelExport='true'
+            :actionComplete="actionComplete"
+            :enableCollapseAll="false" :toolbar="toolbar"
+            :rowSelected="rowSelected" :toolbarClick="clickHandler"
+            :recordDoubleClick="beginEdit"
+            :rowDeselecting="rowDeselecting"
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+                <e-columns>
+                    <e-column :visible="false" field='_id'></e-column>
+                    <e-column field='name' headerText='Head Name' ></e-column>
                     <e-column :visible="something" field='permissible_values.7'  headerText='Aug' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
@@ -357,8 +533,11 @@
                     <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
+        </div>
         </div>
         <div v-if="selected2=='Sep'">
+        <div v-if="currentView=='Graph'">
+
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -368,7 +547,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -384,6 +563,26 @@
                     <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.6' :template="template7" headerText='Jul' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.7' :template="template8" headerText='Aug' width="110px"></e-column>
+                    
+                </e-columns>
+            </ejs-treegrid>
+        </div>
+        <div v-if="currentView=='Budget'">
+
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
+            :allowPdfExport='true' 
+            :allowExcelExport='true'
+            :actionComplete="actionComplete"
+            :enableCollapseAll="false" :toolbar="toolbar"
+            :rowSelected="rowSelected" :toolbarClick="clickHandler"
+            :recordDoubleClick="beginEdit"
+            :rowDeselecting="rowDeselecting"
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+                <e-columns>
+                    <e-column :visible="false" field='_id'></e-column>
+                    <e-column field='name' headerText='Head Name' ></e-column>
+                    
                     <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
@@ -399,8 +598,11 @@
                     
                 </e-columns>
             </ejs-treegrid>
+        </div>
         </div>
         <div v-if="selected2=='Oct'">
+        <div v-if="currentView=='Graph'">
+
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -410,7 +612,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -427,6 +629,27 @@
                     <e-column :visible="!something" field='permissible_values.7' :template="template8" headerText='Aug' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="110px"></e-column>
                     
+                    
+                </e-columns>
+            </ejs-treegrid>
+        </div>
+        <div v-if="currentView=='Budget'">
+
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
+            :allowPdfExport='true' 
+            :allowExcelExport='true'
+            :actionComplete="actionComplete"
+            :enableCollapseAll="false" :toolbar="toolbar"
+            :rowSelected="rowSelected" :toolbarClick="clickHandler"
+            :recordDoubleClick="beginEdit"
+            :rowDeselecting="rowDeselecting"
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+                <e-columns>
+                    <e-column :visible="false" field='_id'></e-column>
+                    <e-column field='name' headerText='Head Name' ></e-column>
+                    
+                    
                     <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
@@ -442,8 +665,11 @@
                     
                 </e-columns>
             </ejs-treegrid>
+        </div>
         </div>
         <div v-if="selected2=='Nov'">
+        <div v-if="currentView=='Graph'">
+
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -453,7 +679,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -470,6 +696,26 @@
                     <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="110px"></e-column>
                     
+                    
+                </e-columns>
+            </ejs-treegrid>
+        </div>
+        <div v-if="currentView=='Budget'">
+
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
+            :allowPdfExport='true' 
+            :allowExcelExport='true'
+            :actionComplete="actionComplete"
+            :enableCollapseAll="false" :toolbar="toolbar"
+            :rowSelected="rowSelected" :toolbarClick="clickHandler"
+            :recordDoubleClick="beginEdit"
+            :rowDeselecting="rowDeselecting"
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+                <e-columns>
+                    <e-column :visible="false" field='_id'></e-column>
+                    <e-column field='name' headerText='Head Name' ></e-column>
+                    
                     <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
@@ -485,8 +731,11 @@
                     
                 </e-columns>
             </ejs-treegrid>
+        </div>
         </div>
         <div v-if="selected2=='Dec'">
+        <div v-if="currentView=='Graph'">
+
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -496,7 +745,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -512,6 +761,26 @@
                     <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="110px"></e-column>
                     <e-column :visible="!something" field='permissible_values.10' :template="template11" headerText='Nov' width="110px"></e-column>
+                    
+                </e-columns>
+            </ejs-treegrid>
+
+        </div>
+        <div v-if="currentView=='Budget'">
+            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
+            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
+            :allowPdfExport='true' 
+            :allowExcelExport='true'
+            :actionComplete="actionComplete"
+            :enableCollapseAll="false" :toolbar="toolbar"
+            :rowSelected="rowSelected" :toolbarClick="clickHandler"
+            :recordDoubleClick="beginEdit"
+            :rowDeselecting="rowDeselecting"
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+                <e-columns>
+                    <e-column :visible="false" field='_id'></e-column>
+                    <e-column field='name' headerText='Head Name' ></e-column>
+                    
                     <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
                     <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
@@ -528,7 +797,6 @@
                 </e-columns>
             </ejs-treegrid>
         </div>
-        <div v-else>
         </div>
             <b-modal :title="$ml.get('addhead')" class="modal-primary" v-model="modal" @ok="modal = false" hide-footer>
               <div>
@@ -1095,7 +1363,22 @@ export default {
           key:"",
           addModal:false,
           head:[],
+          loading:false,
           selected:false,
+          sortSettings:{columns: [
+            {field: 'permissible_values.0', direction: 'Descending'},
+            {field: 'permissible_values.1', direction: 'Descending'},
+            {field: 'permissible_values.2', direction: 'Descending'},
+            {field: 'permissible_values.3', direction: 'Descending'},
+            {field: 'permissible_values.4', direction: 'Descending'},
+            {field: 'permissible_values.5', direction: 'Descending'},
+            {field: 'permissible_values.6', direction: 'Descending'},
+            {field: 'permissible_values.7', direction: 'Descending'},
+            {field: 'permissible_values.8', direction: 'Descending'},
+            {field: 'permissible_values.9', direction: 'Descending'},
+            {field: 'permissible_values.10', direction: 'Descending'},
+            {field: 'permissible_values.11', direction: 'Descending'}
+            ],isMulti:true},
           dept_fields:{groupBy:'parent_department',text:"department_name",value:"_id"},
              commands: [
                  { type:"Details",tooltipText : "Double click", buttonOption: { iconCss: ' e-icons e-edit', cssClass: 'e-flat',click:this.onClick } },
@@ -1103,7 +1386,7 @@ export default {
                     selected2:"Jan",
                 height : window.innerHeight*0.65,
              filterSettings: { type: "Menu" },
-             pageSettings: {pageSize:true,pageSize:200, pageSizes: [200,300,400,500], pageCount: 4} ,
+             pageSettings: {pageSize:true,pageSize:50, pageSizes: [50,200,,300,400,500], pageCount: 4} ,
              editSettings: { allowDeleting: true,mode: 'Dialog', allowAdding: true, newRowPosition: 'Child' },
              rowHeight: 30,
               toolbar: [
@@ -1133,10 +1416,15 @@ export default {
   async mounted() {
       this.link = window.location.href;
      this.key = this.link.split(`head/`).pop()
+     console.log(`Req sent ${window.performance.now()}`)
+     this.loading = true
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
+        console.log(`data recieved ${window.performance.now()}`)
         this.or_head = JSON.parse(JSON.stringify(response.data))
         this.data = this.list_to_tree_head(response.data)
+        console.log(`data converted ${window.performance.now()}`)
+        this.loading = true
       }).catch((err)=> {
         if(err.toString().includes("Network Error")) {
         toast({
@@ -1208,6 +1496,10 @@ export default {
       treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
+    dataBound() {
+        console.log(`data rendered ${window.performance.now()}`)
+        this.loading= false
+    },
     delLabel(args,id,label) {
       console.log(this.editinput.labels.splice(label,1))
       var body = {
@@ -1540,6 +1832,7 @@ export default {
       switchGraph() {
         this.something = false
         this.currentView = "Graph"
+        this.$router.push({name:"Budget Graph", params:{page_from : "total"}})
       },
       switchValue() {
         this.something = true
@@ -1751,4 +2044,24 @@ font-style: normal;
  .e-grid-min-height .e-rowcell {
      line-height: 1;
 }
+</style>
+<style src="spinkit/scss/spinkit.scss" lang="scss" />
+
+<style scoped>
+#loader{
+    height: 0;
+    position: absolute;
+    left: 15%;
+    top: -9%;
+}
+      .sk-fading-circle {
+    margin: 20px auto;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    z-index:1001;
+}
+  .sk-three-bounce {
+    height: 20px;
+  }
 </style>

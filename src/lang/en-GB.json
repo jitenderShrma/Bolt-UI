@@ -310,5 +310,9 @@
     "accno" : "A/C No.",
     "confirmdelete" : "Are you sure you want to delete ",
     "addremovebudget" : "Add or Remove Amount",
-    "commit" : "Commit"
+    "commit" : "Commit",
+    "totalapproved" : "Total Amount Approved",
+    "totalpaid" : "Total Amount Paid ",
+    "totalbalance" : "Total Balance Left",
+    "totalnopo" : "Total No. of PO's"
 }

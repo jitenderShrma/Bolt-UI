@@ -80,6 +80,7 @@ const DepartmentList = () => import('@/views/Departments/DepartmentList');
 //Pivot Routes
 const TotalBudget = () => import('@/views/PivotTables/BudgetTables/TotalBudget');
 const ApprovedBudget = () => import('@/views/PivotTables/BudgetTables/ApprovedBudget');
+const BudgetGraph = () => import('@/views/PivotTables/BudgetTables/BudgetGraph');
 
 //Budget Transfer Routes
 const BudgetTransfer =() => import('@/views/BudgetTransfer');
@@ -575,6 +576,12 @@ var router = new Router({
                   name:"Remaining Budget",
                   path : "/budget/approved",
                   component : ApprovedBudget
+                },
+                {
+                  name:"Budget Graph",
+                  path : "/budget/graph",
+                  props:true,
+                  component : BudgetGraph
                 }
               ]
             },
