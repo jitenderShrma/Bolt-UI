@@ -33,35 +33,6 @@
             </b-dropdown>
           </b-col>
           <div v-if="selected2=='Jan'">
-            <div v-if="currentView=='Graph'">
-                <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
-            :allowPdfExport='true' 
-            :allowExcelExport='true'
-            :actionComplete="actionComplete"
-            :enableCollapseAll="false" :toolbar="toolbar"
-            :rowSelected="rowSelected" :toolbarClick="clickHandler"
-            :recordDoubleClick="beginEdit"
-            :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
-                <e-columns>
-                    <e-column :visible="false" field='_id'></e-column>
-                    <e-column field='name' headerText='Head Name' ></e-column>
-                    <e-column :visible="!something" field='permissible_values.0' :template="template1" headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.1' :template="template2" headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.3' :template="template4" headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.4' :template="template5" headerText='May' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.6' :template="template7" headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.7' :template="template8" headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.10' :template="template11" headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.11' :template="template12" headerText='Dec' width="136px"></e-column>
-                </e-columns>
-            </ejs-treegrid>
-            </div>
             <div v-if="currentView=='Budget'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
@@ -76,54 +47,36 @@
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
-                    <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.4'  headerText='May' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.7'  headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="136px"></e-column>
+                    <e-column :visible="false" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.11'  headerText='Dec' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
         </div>
         <div v-if="selected2=='Feb'">
-            <div v-if="currentView=='Graph'">
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
-            :allowPdfExport='true' 
-            :allowExcelExport='true'
-            :actionComplete="actionComplete"
-            :enableCollapseAll="false" :toolbar="toolbar"
-            :rowSelected="rowSelected" :toolbarClick="clickHandler"
-            :recordDoubleClick="beginEdit"
-            :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
-                <e-columns>
-                    <e-column :visible="false" field='_id'></e-column>
-                    <e-column field='name' headerText='Head Name' ></e-column>
-
-                    <e-column :visible="!something" field='permissible_values.1' :template="template2" headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.3' :template="template4" headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.4' :template="template5" headerText='May' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.6' :template="template7" headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.7' :template="template8" headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.10' :template="template11" headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.11' :template="template12" headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.0' :template="template1" headerText='Jan' width="136px"></e-column>
-
-                </e-columns>
-            </ejs-treegrid>
-        </div>
+            
         <div v-if="currentView=='Budget'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
@@ -139,54 +92,36 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                    <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.4'  headerText='May' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.7'  headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="136px"></e-column>
+                    <e-column :visible="false" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.0'  headerText='Jan' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
         </div>
         <div v-if="selected2=='Mar'">
-            <div v-if="currentView=='Graph'">
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
-            :allowPdfExport='true' 
-            :allowExcelExport='true'
-            :actionComplete="actionComplete"
-            :enableCollapseAll="false" :toolbar="toolbar"
-            :rowSelected="rowSelected" :toolbarClick="clickHandler"
-            :recordDoubleClick="beginEdit"
-            :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
-                <e-columns>
-                    <e-column :visible="false" field='_id'></e-column>
-                    <e-column field='name' headerText='Head Name' ></e-column>
-
-                    <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.3' :template="template4" headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.4' :template="template5" headerText='May' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.6' :template="template7" headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.7' :template="template8" headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.10' :template="template11" headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.11' :template="template12" headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.0' :template="template1" headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.1' :template="template2" headerText='Feb' width="136px"></e-column>
-
-                </e-columns>
-            </ejs-treegrid>
-        </div>
+            
         <div v-if="currentView=='Budget'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
@@ -202,54 +137,37 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                    <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.4'  headerText='May' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.7'  headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="136px"></e-column>
+                    <e-column :visible="false" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
+
+                    <e-column :visible="something" field='totalamount.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.1'  headerText='Feb' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
         </div>
         <div v-if="selected2=='Apr'">
-            <div v-if="currentView=='Graph'">
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
-            :allowPdfExport='true' 
-            :allowExcelExport='true'
-            :actionComplete="actionComplete"
-            :enableCollapseAll="false" :toolbar="toolbar"
-            :rowSelected="rowSelected" :toolbarClick="clickHandler"
-            :recordDoubleClick="beginEdit"
-            :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
-                <e-columns>
-                    <e-column :visible="false" field='_id'></e-column>
-                    <e-column field='name' headerText='Head Name' ></e-column>
-
-                    <e-column :visible="!something" field='permissible_values.3' :template="template4" headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.4' :template="template5" headerText='May' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.6' :template="template7" headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.7' :template="template8" headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.10' :template="template11" headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.11' :template="template12" headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.0' :template="template1" headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.1' :template="template2" headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="136px"></e-column>
-
-                </e-columns>
-            </ejs-treegrid>
-        </div>
+            
         <div v-if="currentView=='Budget'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
@@ -264,54 +182,38 @@
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
-                    <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.4'  headerText='May' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.7'  headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="136px"></e-column>
+                    <e-column :visible="false" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
+
+
+                    <e-column :visible="something" field='totalamount.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.2'  headerText='Mar' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
         </div>
         <div v-if="selected2=='May'">
-            <div v-if="currentView=='Graph'">
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
-            :allowPdfExport='true' 
-            :allowExcelExport='true'
-            :actionComplete="actionComplete"
-            :enableCollapseAll="false" :toolbar="toolbar"
-            :rowSelected="rowSelected" :toolbarClick="clickHandler"
-            :recordDoubleClick="beginEdit"
-            :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
-                <e-columns>
-                    <e-column :visible="false" field='_id'></e-column>
-                    <e-column field='name' headerText='Head Name' ></e-column>
-
-                    <e-column :visible="!something" field='permissible_values.4' :template="template5" headerText='May' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.6' :template="template7" headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.7' :template="template8" headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.10' :template="template11" headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.11' :template="template12" headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.0' :template="template1" headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.1' :template="template2" headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.3' :template="template4" headerText='Apr' width="136px"></e-column>
-
-                </e-columns>
-            </ejs-treegrid>
-        </div>
+            
         <div v-if="currentView=='Budget'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
@@ -328,53 +230,38 @@
                     <e-column field='name' headerText='Head Name' ></e-column>
 
 
-                    <e-column :visible="something" field='permissible_values.4'  headerText='May' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.7'  headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="136px"></e-column>
+                    <e-column :visible="false" field='permissible_values.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
+
+                    <e-column :visible="something" field='totalamount.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.3' headerText='Apr' width="110px"></e-column>
+
                 </e-columns>
             </ejs-treegrid>
         </div>
         </div>
         <div v-if="selected2=='Jun'">
-            <div v-if="currentView == 'Graph'">
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
-            :allowPdfExport='true' 
-            :allowExcelExport='true'
-            :actionComplete="actionComplete"
-            :enableCollapseAll="false" :toolbar="toolbar"
-            :rowSelected="rowSelected" :toolbarClick="clickHandler"
-            :recordDoubleClick="beginEdit"
-            :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
-                <e-columns>
-                    <e-column :visible="false" field='_id'></e-column>
-                    <e-column field='name' headerText='Head Name' ></e-column>
-
-                    <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.6' :template="template7" headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.7' :template="template8" headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.10' :template="template11" headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.11' :template="template12" headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.0' :template="template1" headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.1' :template="template2" headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.3' :template="template4" headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.4' :template="template5" headerText='May' width="136px"></e-column>
-                </e-columns>
-            </ejs-treegrid>
-        </div>
+            
         <div v-if="currentView=='Budget'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
@@ -390,55 +277,37 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                    <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.7'  headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.4'  headerText='May' width="136px"></e-column>
+                    <e-column :visible="false" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.4'  headerText='May' width="110px"></e-column>
+
+                    <e-column :visible="something" field='totalamount.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.4'  headerText='May' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
         </div>
         <div v-if="selected2=='July'">
-        <div v-if="currentView=='Graph'">
-
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
-            :allowPdfExport='true' 
-            :allowExcelExport='true'
-            :actionComplete="actionComplete"
-            :enableCollapseAll="false" :toolbar="toolbar"
-            :rowSelected="rowSelected" :toolbarClick="clickHandler"
-            :recordDoubleClick="beginEdit"
-            :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
-                <e-columns>
-                    <e-column :visible="false" field='_id'></e-column>
-                    <e-column field='name' headerText='Head Name' ></e-column>
-
-                    <e-column :visible="!something" field='permissible_values.6' :template="template7" headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.7' :template="template8" headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.10' :template="template11" headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.11' :template="template12" headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.0' :template="template1" headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.1' :template="template2" headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.3' :template="template4" headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.4' :template="template5" headerText='May' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="136px"></e-column>
-
-                </e-columns>
-            </ejs-treegrid>
-        </div>
+        
         <div v-if="currentView=='Budget'">
 
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
@@ -454,56 +323,37 @@
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
+                    <e-column :visible="false" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
 
-                    <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.7'  headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.4'  headerText='May' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="136px"></e-column>
+                    <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.5'  headerText='Jun' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
         </div>
         <div v-if="selected2=='Aug'">
-        <div v-if="currentView=='Graph'">
-
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
-            :allowPdfExport='true' 
-            :allowExcelExport='true'
-            :actionComplete="actionComplete"
-            :enableCollapseAll="false" :toolbar="toolbar"
-            :rowSelected="rowSelected" :toolbarClick="clickHandler"
-            :recordDoubleClick="beginEdit"
-            :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
-                <e-columns>
-                    <e-column :visible="false" field='_id'></e-column>
-                    <e-column field='name' headerText='Head Name' ></e-column>
-
-                    <e-column :visible="!something" field='permissible_values.7' :template="template8" headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.10' :template="template11" headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.11' :template="template12" headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.0' :template="template1" headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.1' :template="template2" headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.3' :template="template4" headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.4' :template="template5" headerText='May' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.6' :template="template7" headerText='Jul' width="136px"></e-column>
-
-                </e-columns>
-            </ejs-treegrid>
-        </div>
+        
         <div v-if="currentView=='Budget'">
 
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
@@ -519,54 +369,37 @@
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
-                    <e-column :visible="something" field='permissible_values.7'  headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.4'  headerText='May' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="136px"></e-column>
+                    <e-column :visible="false" field='permissible_values.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
+
+                    <e-column :visible="something" field='totalamount.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
         </div>
         <div v-if="selected2=='Sep'">
-        <div v-if="currentView=='Graph'">
-
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
-            :allowPdfExport='true' 
-            :allowExcelExport='true'
-            :actionComplete="actionComplete"
-            :enableCollapseAll="false" :toolbar="toolbar"
-            :rowSelected="rowSelected" :toolbarClick="clickHandler"
-            :recordDoubleClick="beginEdit"
-            :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
-                <e-columns>
-                    <e-column :visible="false" field='_id'></e-column>
-                    <e-column field='name' headerText='Head Name' ></e-column>
-                    <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.10' :template="template11" headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.11' :template="template12" headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.0' :template="template1" headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.1' :template="template2" headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.3' :template="template4" headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.4' :template="template5" headerText='May' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.6' :template="template7" headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.7' :template="template8" headerText='Aug' width="136px"></e-column>
-                    
-                </e-columns>
-            </ejs-treegrid>
-        </div>
+        
         <div v-if="currentView=='Budget'">
 
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
@@ -583,56 +416,38 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
                     
-                    <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.4'  headerText='May' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.7'  headerText='Aug' width="136px"></e-column>
+                    <e-column :visible="false" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.7'  headerText='Aug' width="110px"></e-column>
+
+                    <e-column :visible="something" field='totalamount.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.7'  headerText='Aug' width="110px"></e-column>
                     
                 </e-columns>
             </ejs-treegrid>
         </div>
         </div>
         <div v-if="selected2=='Oct'">
-        <div v-if="currentView=='Graph'">
-
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
-            :allowPdfExport='true' 
-            :allowExcelExport='true'
-            :actionComplete="actionComplete"
-            :enableCollapseAll="false" :toolbar="toolbar"
-            :rowSelected="rowSelected" :toolbarClick="clickHandler"
-            :recordDoubleClick="beginEdit"
-            :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
-                <e-columns>
-                    <e-column :visible="false" field='_id'></e-column>
-                    <e-column field='name' headerText='Head Name' ></e-column>
-                    <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.10' :template="template11" headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.11' :template="template12" headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.0' :template="template1" headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.1' :template="template2" headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.3' :template="template4" headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.4' :template="template5" headerText='May' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.6' :template="template7" headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.7' :template="template8" headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="136px"></e-column>
-                    
-                    
-                </e-columns>
-            </ejs-treegrid>
-        </div>
+        
         <div v-if="currentView=='Budget'">
 
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
@@ -650,56 +465,38 @@
                     <e-column field='name' headerText='Head Name' ></e-column>
                     
                     
-                    <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.4'  headerText='May' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.7'  headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="136px"></e-column>
+                    <e-column :visible="false" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
+
+                    <e-column :visible="something" field='totalamount.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.8'  headerText='Sep' width="110px"></e-column>
                     
                 </e-columns>
             </ejs-treegrid>
         </div>
         </div>
         <div v-if="selected2=='Nov'">
-        <div v-if="currentView=='Graph'">
-
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
-            :allowPdfExport='true' 
-            :allowExcelExport='true'
-            :actionComplete="actionComplete"
-            :enableCollapseAll="false" :toolbar="toolbar"
-            :rowSelected="rowSelected" :toolbarClick="clickHandler"
-            :recordDoubleClick="beginEdit"
-            :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
-                <e-columns>
-                    <e-column :visible="false" field='_id'></e-column>
-                    <e-column field='name' headerText='Head Name' ></e-column>
-                    <e-column :visible="!something" field='permissible_values.10' :template="template11" headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.11' :template="template12" headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.0' :template="template1" headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.1' :template="template2" headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.3' :template="template4" headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.4' :template="template5" headerText='May' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.6' :template="template7" headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.7' :template="template8" headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="136px"></e-column>
-                    
-                    
-                </e-columns>
-            </ejs-treegrid>
-        </div>
+        
         <div v-if="currentView=='Budget'">
 
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
@@ -716,56 +513,38 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
                     
-                    <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.4'  headerText='May' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.7'  headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="136px"></e-column>
+                    <e-column :visible="false" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
+
+                    <e-column :visible="something" field='totalamount.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.9'  headerText='Oct' width="110px"></e-column>
                     
                 </e-columns>
             </ejs-treegrid>
         </div>
         </div>
         <div v-if="selected2=='Dec'">
-        <div v-if="currentView=='Graph'">
-
-            <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
-            :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
-            :allowPdfExport='true' 
-            :allowExcelExport='true'
-            :actionComplete="actionComplete"
-            :enableCollapseAll="false" :toolbar="toolbar"
-            :rowSelected="rowSelected" :toolbarClick="clickHandler"
-            :recordDoubleClick="beginEdit"
-            :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
-                <e-columns>
-                    <e-column :visible="false" field='_id'></e-column>
-                    <e-column field='name' headerText='Head Name' ></e-column>
-                    <e-column :visible="!something" field='permissible_values.11' :template="template12" headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.0' :template="template1" headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.1' :template="template2" headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.2' :template="template3" headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.3' :template="template4" headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.4' :template="template5" headerText='May' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.5' :template="template6" headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.6' :template="template7" headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.7' :template="template8" headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.8' :template="template9" headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.9' :template="template10" headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="!something" field='permissible_values.10' :template="template11" headerText='Nov' width="136px"></e-column>
-                    
-                </e-columns>
-            </ejs-treegrid>
-
-        </div>
+        
         <div v-if="currentView=='Budget'">
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex="1" childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
@@ -781,18 +560,31 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
                     
-                    <e-column :visible="something" field='permissible_values.11'  headerText='Dec' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.0'  headerText='Jan' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.1'  headerText='Feb' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.2'  headerText='Mar' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.3' headerText='Apr' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.4'  headerText='May' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.5'  headerText='Jun' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.6'  headerText='Jul' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.7'  headerText='Aug' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.8'  headerText='Sep' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.9'  headerText='Oct' width="136px"></e-column>
-                    <e-column :visible="something" field='permissible_values.10'  headerText='Nov' width="136px"></e-column>
+                    <e-column :visible="false" field='permissible_values.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='permissible_values.10'  headerText='Nov' width="110px"></e-column>
+
+                     <e-column :visible="something" field='totalamount.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='totalamount.10'  headerText='Nov' width="110px"></e-column>
                     
                 </e-columns>
             </ejs-treegrid>
@@ -1499,8 +1291,9 @@ export default {
    methods:{
     convertAmount(list) {
         for(var i=0;i<list.length;i++) {
+            list[i].totalamount=[0,0,0,0,0,0,0,0,0,0,0,0]
             for(var j=0;j<12;j++) {
-                list[i].permissible_values[j] = this.changeAmounttoFormat(list[i].permissible_values[j])
+                list[i].totalamount[j] = this.changeAmounttoFormat(list[i].permissible_values[j])
             }
         }
         return list

@@ -46,30 +46,43 @@
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
-                    <!-- <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="137px"></e-column> -->
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="137px"></e-column>
+                    <!-- <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column> -->
+                    <e-column :visible="something" field='remaining.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.11'  headerText='Dec' width="110px"></e-column>
+
+                    <e-column :visible="false" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
@@ -88,31 +101,44 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                    <!-- <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="137px"></e-column> -->
+                    <!-- <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column> -->
+                    <e-column :visible="something" field='remaining.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.0'  headerText='Jan' width="110px"></e-column>
 
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="137px"></e-column>
+
+                    <e-column :visible="false" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
@@ -131,31 +157,44 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                    <!-- <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="137px"></e-column> -->
+                    <!-- <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column> -->
+                    <e-column :visible="something" field='remaining.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.1'  headerText='Feb' width="110px"></e-column>
 
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="137px"></e-column>
+
+                    <e-column :visible="false" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
@@ -174,31 +213,45 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                    <!-- <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="137px"></e-column> -->
+                    <!-- <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column> -->
+                    <e-column :visible="something" field='remaining.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.2'  headerText='Mar' width="110px"></e-column>
 
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="137px"></e-column>
+
+
+                    <e-column :visible="false" field='amount_left.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
@@ -217,31 +270,44 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                   <!--  <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="137px"></e-column> -->
+                   <!--  <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column> -->
+                    <e-column :visible="something" field='remaining.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.3' headerText='Apr' width="110px"></e-column>
 
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="137px"></e-column>
+
+                    <e-column :visible="false" field='amount_left.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.3' headerText='Apr' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
@@ -260,31 +326,44 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                    <!-- <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="137px"></e-column> -->
+                    <!-- <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column> -->
+                    <e-column :visible="something" field='remaining.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.4'  headerText='May' width="110px"></e-column>
 
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="137px"></e-column>
+
+                    <e-column :visible="false" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.4'  headerText='May' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
@@ -303,31 +382,43 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                    <!-- <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="137px"></e-column> -->
+                    <!-- <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column> -->
+                    <e-column :visible="something" field='remaining.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.5'  headerText='Jun' width="110px"></e-column>
 
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="137px"></e-column>
+                    <e-column :visible="false" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
@@ -346,31 +437,43 @@
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
 
-                   <!--  <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="137px"></e-column> -->
+                   <!--  <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column> -->
+                    <e-column :visible="something" field='remaining.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.6'  headerText='Jul' width="110px"></e-column>
 
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="137px"></e-column>
+                    <e-column :visible="false" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
                 </e-columns>
             </ejs-treegrid>
         </div>
@@ -388,30 +491,43 @@
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
-                    <!-- <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="137px"></e-column> -->
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="137px"></e-column>
+                    <!-- <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column> -->
+                    <e-column :visible="something" field='remaining.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.7'  headerText='Aug' width="110px"></e-column>
+
+                    <e-column :visible="false" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
                     
                 </e-columns>
             </ejs-treegrid>
@@ -430,31 +546,44 @@
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
-                    <!-- <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="137px"></e-column> -->
-                    
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="137px"></e-column>
+                    <!-- <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column> -->
+                    <e-column :visible="something" field='remaining.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.8'  headerText='Sep' width="110px"></e-column>
+
+
+                    <e-column :visible="false" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
                     
                 </e-columns>
             </ejs-treegrid>
@@ -473,31 +602,44 @@
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
-                    <!-- <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="137px"></e-column> -->
-                    
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="137px"></e-column>
+                    <!-- <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column> -->
+                    <e-column :visible="something" field='remaining.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.9'  headerText='Oct' width="110px"></e-column>
+
+
+                    <e-column :visible="false" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
                     
                 </e-columns>
             </ejs-treegrid>
@@ -516,30 +658,43 @@
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
-                    <!-- <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="137px"></e-column> -->
-                    <e-column :visible="something" field='amount_left.11'  headerText='Dec' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.0'  headerText='Jan' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.1'  headerText='Feb' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.2'  headerText='Mar' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.3' headerText='Apr' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.4'  headerText='May' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.5'  headerText='Jun' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.6'  headerText='Jul' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.7'  headerText='Aug' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.8'  headerText='Sep' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.9'  headerText='Oct' width="137px"></e-column>
-                    <e-column :visible="something" field='amount_left.10'  headerText='Nov' width="137px"></e-column>
+                    <!-- <e-column :visible="!something" field='amount_left.11' :template="template12" headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.0' :template="template1" headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.1' :template="template2" headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.2' :template="template3" headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.3' :template="template4" headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.4' :template="template5" headerText='May' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.5' :template="template6" headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.6' :template="template7" headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.7' :template="template8" headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.8' :template="template9" headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.9' :template="template10" headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="!something" field='amount_left.10' :template="template11" headerText='Nov' width="110px"></e-column> -->
+                    <e-column :visible="something" field='remaining.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="something" field='remaining.10'  headerText='Nov' width="110px"></e-column>
+
+                    <e-column :visible="false" field='amount_left.11'  headerText='Dec' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.0'  headerText='Jan' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.1'  headerText='Feb' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.2'  headerText='Mar' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.3' headerText='Apr' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.4'  headerText='May' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.5'  headerText='Jun' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.6'  headerText='Jul' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.7'  headerText='Aug' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.8'  headerText='Sep' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.9'  headerText='Oct' width="110px"></e-column>
+                    <e-column :visible="false" field='amount_left.10'  headerText='Nov' width="110px"></e-column>
                     
                 </e-columns>
             </ejs-treegrid>
@@ -1248,8 +1403,10 @@ export default {
    methods:{
     convertAmount(list) {
         for(var i=0;i<list.length;i++) {
+            list[i].remaining=[0,0,0,0,0,0,0,0,0,0,0,0]
+
             for(var j=0;j<12;j++) {
-                list[i].amount_left[j] = this.changeAmounttoFormat(list[i].amount_left[j])
+                list[i].remaining[j] = this.changeAmounttoFormat(list[i].amount_left[j])
             }
         }
         return list
