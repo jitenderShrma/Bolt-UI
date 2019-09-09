@@ -529,6 +529,8 @@ var router = new Router({
             children : [
               {
                 path:'',
+                name:"Test",
+                props:true,
                 component :test
               }
             ]},

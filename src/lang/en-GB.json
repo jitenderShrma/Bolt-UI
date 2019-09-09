@@ -311,7 +311,7 @@
     "confirmdelete" : "Are you sure you want to delete ",
     "addremovebudget" : "Add or Remove Amount",
     "commit" : "Commit",
-    "totalapproved" : "Total Amount Approved",
+    "totalapproved" : "Total Amount",
     "totalpaid" : "Total Amount Paid ",
     "totalbalance" : "Total Balance Left",
     "totalnopo" : "Total No. of PO's"
