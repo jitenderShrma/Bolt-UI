@@ -17,10 +17,11 @@
                 :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
                     <e-column field='approvalCode' headerText='Ref ID'  :filter='filter' ></e-column>
-                    <e-column field='amount' :template="printTemplate" headerText='Amount' :filter='filter'></e-column>
+                    <e-column field='transaction_id' :template="printTemplate" headerText='Transaction ID' :filter='filter'></e-column>
+                    <e-column field='amount' headerText='Amount' :filter='filter' :width="130"></e-column>
                     <e-column field='department.department_name' headerText='Department' :filter='filter'  ></e-column>
                     <e-column field='head.name' headerText='Head' :filter='filter'></e-column>
-                    <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' ></e-column>
+                    <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' :width="119" ></e-column>
                     <e-column field='labels[0].label_name' headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
                     <e-column field='user.user_name' headerText='Requested By'  :filter='filter' ></e-column>
                     <e-column field='transaction_type'  headerText='Type' :filter='filter' :isPrimaryKey='true'></e-column>
@@ -195,7 +196,7 @@ export default {
                 printTemplate: function() {
                   return {
                     template: Vue.component("printTemplate", {
-                      template : `<div style="line-height:4">{{data.amount}}<b-button class="bg-transparent py-0 px-2" style="border:0px"><i class="icon-printer"></i></b-button>&nbsp;&nbsp;<span v-if="data.status == 'PAID'"><b-button class="bg-success py-0 px-2" style="border:0px"><b-badge id="label" variant="success" v-text="$ml.get('paid')"></b-badge></b-button></span><span v-else><b-button class="bg-transparent py-0 px-2" style="border:0px"><b-badge variant="warning" id="label" v-text="$ml.get('markaspaid')"></b-badge></b-button></span></div>`,
+                      template : `<div style="line-height:4">{{data.transaction_id}}<b-button class="bg-transparent py-0 px-2" style="border:0px"><i class="icon-printer"></i></b-button>&nbsp;&nbsp;<span v-if="data.status == 'PAID'"><b-button class="bg-success py-0 px-2" style="border:0px"><b-badge id="label" variant="success" v-text="$ml.get('paid')"></b-badge></b-button></span><span v-else><b-button class="bg-transparent py-0 px-2" style="border:0px"><b-badge variant="warning" id="label" v-text="$ml.get('markaspaid')"></b-badge></b-button></span></div>`,
                       data()  {
                         return {
                           data: {}

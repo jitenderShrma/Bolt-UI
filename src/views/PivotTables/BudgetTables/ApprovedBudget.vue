@@ -1,7 +1,7 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
 
-    <div id="target" class="col-lg-12 control-section">
+    <div id="target" class="col-lg-12 control-section px-0">
         <div>
           <ejs-toolbar id="toolbarbudget" :clicked="clickHandler">
             <e-items><!-- 
@@ -42,7 +42,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings" :actionBegin="actionBegin">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -96,7 +96,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings" :actionBegin="actionBegin">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -152,7 +152,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings" :actionBegin="actionBegin">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -208,7 +208,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings" :actionBegin="actionBegin">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -265,7 +265,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings" :actionBegin="actionBegin">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -321,7 +321,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings" :actionBegin="actionBegin">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -377,7 +377,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings" :actionBegin="actionBegin">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -432,7 +432,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings" :actionBegin="actionBegin">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -487,7 +487,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings" :actionBegin="actionBegin">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -542,7 +542,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings" :actionBegin="actionBegin">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -598,7 +598,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings" :actionBegin="actionBegin">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -654,7 +654,7 @@
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
             :recordDoubleClick="beginEdit"
             :rowDeselecting="rowDeselecting"
-            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings">
+            :allowSorting='true' :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load" :dataBound="dataBound" :sortSettings="sortSettings" :actionBegin="actionBegin">
                 <e-columns>
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='name' headerText='Head Name' ></e-column>
@@ -1317,19 +1317,23 @@ export default {
    };
   },
   async mounted() {
-
     this.link = window.location.href;
      this.key = this.link.split(`head/`).pop()
      console.log(`request sent ${window.performance.now()}`);
      this.loading = true
+    
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
         this.convertAmount(response.data)
         this.or_head = JSON.parse(JSON.stringify(response.data))
         console.log(`data recieved ${window.performance.now()}`)
+        
+
         this.data = this.list_to_tree_head(response.data)
         console.log(`data converted from flat to hierarchy ${window.performance.now()}`)
         this.loading = true
+    
+
       }).catch((err)=> {
         if(err.toString().includes("Network Error")) {
         toast({
@@ -1560,6 +1564,8 @@ export default {
     dataBound() {
         console.log(`data rendered ${window.performance.now()}`)
         this.loading= false
+        
+
     },
     onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
@@ -1631,6 +1637,11 @@ export default {
 
       rowDeselecting(args) {
         this.selected = false
+      },
+      actionBegin(args) {
+        if(args.requestType=="searching") {
+            this.$refs.treegrid.clearSorting()
+        }
       },
       actionComplete(args) {
         if(args.action=="edit") {
@@ -1888,6 +1899,9 @@ export default {
 @import "../../../styles/ej2-vue-inputs/styles/material.css";
 </style>
 <style>
+.e-spinner-pane.e-spin-show {
+             display: none;
+        }
 #label {
   font-size:12px;
   font-weight:lighter;

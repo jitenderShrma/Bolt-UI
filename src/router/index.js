@@ -96,6 +96,7 @@ const EditDesignation = () => import('@/views/Designations/EditDesignation');
 
 //Vendor Routes
 const VendorList = () => import('@/views/Vendor/VendorList');
+const VendorDetail = () => import('@/views/Vendor/VendorDetail');
 
 //Error Pages
 const NotFound = () => import('@/views/NotFound');
@@ -604,16 +605,23 @@ var router = new Router({
             },
             {
               path : "/vendor",
+              redirect:'/vendor',
+              name:"Vendors",
               meta : { requiresAuth : true },
               component : {
                 render (c) { return c('router-view') }
               },
               children : [
                 {
-                  name:"Vendors",
                   path : "/vendor",
                   meta : { requiresAuth : true },
                   component : VendorList
+                },
+                {
+                  name:"Vendor Detail",
+                  path : "/vendor/:id",
+                  meta : { requiresAuth : true },
+                  component : VendorDetail
                 }
               ]
             },

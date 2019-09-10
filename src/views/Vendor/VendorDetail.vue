@@ -41,11 +41,11 @@
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="vendortransactions"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' :toolbarClick="clickHandler"
                 :height="height" :enableHover='false'>
                 <e-columns>
-                    <e-column field='amount' headerText='Amount' :filter='filter' ></e-column>
-                    <e-column field='category' headerText='Category' :filter='filter'></e-column>
-                    <e-column field='po_raised' headerText='Purchase Order'  :filter='filter'></e-column>     
-                    <e-column field='createdAt' headerText='Date' :template="dateTemplate"  :filter='filter'></e-column>
-                    <e-column field='status' headerText='Status' :template="statusTemplate"  :filter='filter'></e-column>
+                    <e-column field='amount' headerText='Amount' width="auto" :filter='filter' ></e-column>
+                    <e-column field='category' headerText='Category' width="auto" :filter='filter'></e-column>
+                    <e-column field='po_raised' headerText='Purchase Order' width="auto"  :filter='filter'></e-column>     
+                    <e-column field='createdAt' headerText='Date' width="auto" :template="dateTemplate"  :filter='filter'></e-column>
+                    <e-column field='status' headerText='Status' width="auto" :template="statusTemplate"  :filter='filter'></e-column>
                 </e-columns>
                 </ejs-grid>
               </div>
@@ -61,8 +61,7 @@
   withCredentials :true
 })
   export default {
-    name:"Test",
-    props:['vendor_id'],
+    name:"vendorDetail",
     components :{
       GridPlugin,
     },
@@ -109,9 +108,12 @@
            height : window.innerHeight - 270,
                 totalapproved:0,
       totalpaid:0,
+      pos:[],
       totalunpaid:0,
       totalpo:0,
-        toolbar: ['Search',
+        toolbar: [
+        'CsvExport',
+        'Search',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
@@ -119,17 +121,23 @@
       }
     },
     mounted() {
-      console.log(this.vendor_id)
-      if(this.vendor_id) {
-      api.get(`${apiUrl}vendor/vendor/get/${this.vendor_id}`).then((res) => {
+      console.log(this.$route.params.id)
+      if(this.$route.params.id) {
+      api.get(`${apiUrl}vendor/vendor/get/${this.$route.params.id}`).then((res) => {
         this.vendor = res.data
-        api.get(`${apiUrl}transaction/trans/vendordetail/${this.vendor_id}`).then((res) => {
+        api.get(`${apiUrl}transaction/trans/vendordetail/${this.$route.params.id}`).then((res) => {
           this.vendortransactions = res.data
           this.paidtransactions = []
           this.unpaidtransactions = []
           this.totalapproved = 0 
+          this.pos=[]
           for(var i=0;i<this.vendortransactions.length;i++) {
-            this.totalapproved = this.vendortransactions[i].amount
+            this.totalapproved = this.totalapproved + parseInt(this.vendortransactions[i].amount)
+            if(this.vendortransactions[i].po_raised) {
+              if(this.checkExist(this.vendortransactions[i].po_raised,i)) {
+               this.pos.push(this.vendortransactions[i].po_raised)
+              }
+            }
             if(this.vendortransactions[i].status == "PAID") {
               this.paidtransactions.push(this.vendortransactions[i])
             }
@@ -146,13 +154,34 @@
           for(var k=0;k<this.unpaidtransactions.length;k++) {
             this.totalunpaid = this.totalunpaid + parseInt(this.unpaidtransactions[k].amount)
           }
-          this.totalpo = this.paidtransactions.length
+          this.totalpo = this.pos.length
+          this.totalpaid = this.convertAmount(this.totalpaid)
+          this.totalunpaid = this.convertAmount(this.totalunpaid)
+          this.totalapproved = this.convertAmount(this.totalapproved)
           console.log(this.unpaidtransactions,this.paidtransactions,this.totalpaid,this.totalunpaid)
         })
       })
     }
     },
     methods:{
+      convertAmount(amount) {
+        var x=amount;
+        x=x.toString();
+        var lastThree = x.substring(x.length-3);
+        var otherNumbers = x.substring(0,x.length-3);
+        if(otherNumbers != '')
+            lastThree = ',' + lastThree;
+        var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+        return res
+      },
+      checkExist(args,lim) {
+        for(var i=0;i<lim;i++) {
+          if(args == this.vendortransactions[i].po_raised) {
+            return false;
+          }
+        }
+        return true
+      },
       clickHandler (args) {
                     if(this.$refs.overviewgrid.getSelectedRecords().length>0){
                     let withHeader = false;

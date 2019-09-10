@@ -138,7 +138,7 @@
             <span v-text="$ml.get('transactionmade')"></span>
             <span> Rs. {{lg.amount}} </span>
             <span>for Head : {{lg.head.name}} in Department : {{lg.department.department_name}} </span>
-            <span>by {{lg.user.personal_details.name}}.</span>
+            <span>by <span v-if="lg.user">{{lg.user.personal_details.name}}.</span><span v-else>ADMIN</span></span>
           </div>
         </b-list-group-item>
         </div>
@@ -157,7 +157,7 @@
               </e-items>
             </ejs-toolbar>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true' :allowReordering='true'  id='overviewgrid' :allowPaging="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc" :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :pageSettings="pageSettings" :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler" :rowSelected="rowSelected" :beforeCopy="beforeCopy"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true' :allowReordering='true'  id='overviewgrid' :allowPaging="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc" :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :pageSettings="pageSettings" :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"  :rowSelected="rowSelected" :beforeCopy="beforeCopy"
                 :height="height" :enableHover='false'> 
                 <e-columns>
                     <e-column :visible="enableColumn" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
@@ -387,7 +387,7 @@ export default {
         buttonLM: function () {
               return {
                   template: Vue.component('buttonLM', {
-                      template: `<div style="line-height:4"><b-badge id="label" :variant="data.status">{{data.status}}</b-badge><AsideToggler id="toggler"/></div>`,
+                      template: `<div style="line-height:4"><b-badge v-if="data.status!='BUDGET LIMIT EXCEEDED'" id="label" :variant="data.status">{{data.status}}</b-badge><b-badge v-else id="label" variant="LIMIT">LIMIT EXCEEDED</b-badge><AsideToggler id="toggler"/></div>`,
                       components:{
                         AsideToggler,
                         AppHeader,
@@ -417,7 +417,7 @@ export default {
           },
           buttonCopy: function () {
               return {
-                  template: Vue.component('buttonLM', {
+                  template: Vue.component('buttonCopy', {
                       template: `<div style="line-height:4">{{data.ref_id}}<b-button class="bg-transparent py-0 px-0" style="border:0px"><i class="fa fa-copy px-3"></i></b-button><b-button class="bg-transparent py-0 px-0" style="border:0px"><i class="icon-plus px-3"></i></b-button></div>`,
                   data: function() {
                           return {
@@ -936,7 +936,7 @@ export default {
             ],
             editlabelmodal:false,
             editlabel:{},
-          pageSettings: {pageSize:true,pageSize:200, pageSizes: [200,300,400,500], pageCount: 4 },
+          pageSettings: {pageSize:true,pageSize:50, pageSizes: [50,100,200,300,400,500], pageCount: 4 },
         ddData: [{ value: 1000, text: '1,000 Rows and 11 Columns' }, { value: 10000, text: '10,000 Rows and 11 Columns' }],
                 ddValue: 1000,
                 stTime: null,
@@ -1740,6 +1740,10 @@ export default {
 }
 .badge-PENDING {
   background-color:yellow;
+}
+.badge-LIMIT {
+  background-color:red;
+  color:white;
 }
 .badge-RELEASED {
   background-color:grey;

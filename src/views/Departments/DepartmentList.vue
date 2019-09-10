@@ -1,6 +1,6 @@
 <template>
  <div class="animated slideInLeft" style="animation-duration:100ms">
-    <div id="target" class="control-section">
+    <div id="target" class="control-section px-0">
         <div>
           <ejs-toolbar id="toolbar" :clicked="clickHandler">
             <e-items>

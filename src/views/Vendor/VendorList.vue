@@ -15,7 +15,7 @@
             <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' :toolbarClick="clickHandler"
                 :height="height" :enableHover='false' :recordDoubleClick="beginEdit">
                 <e-columns>
-                    <e-column field='name' headerText='Name' :filter='filter' ></e-column>
+                    <e-column field='name' :template="detailTemplate" headerText='Name' :filter='filter' ></e-column>
                     <e-column field='vendor_company' headerText='Vendor Company' :filter='filter'></e-column>
                     <e-column field='address.phone' headerText='Contact 1'  :filter='filter'></e-column>     
                     <e-column field='kcp.kcp_phone' headerText='Contact 2'  :filter='filter'></e-column>
@@ -251,50 +251,12 @@
             </b-form>
           </b-modal>
 
-          <!-- Vendor Details -->
-          <!-- <b-modal :title="vendordetails.vendor_company" size="xl" class="modal-primary" v-model="editvendorModal" @ok="editvendorModal = false" hide-footer>
-            <b-row>
-              <b-col>
-                <b-card no-body class="bg-primary">
-                  <b-card-body class="pb-0">
-                    <h4 class="mb-0"></h4>
-                    <p>Members online</p>
-                  </b-card-body> -->
-                  <!-- <card-line1-chart-example chartId="card-chart-01" class="chart-wrapper px-3" style="height:70px;" :height="70"/> -->
-             <!--    </b-card>
-              </b-col>
-              <b-col>
-                <b-card no-body class="bg-primary">
-                  <b-card-body class="pb-0">
-                    <h4 class="mb-0">9.823</h4>
-                    <p>Members online</p>
-                  </b-card-body> -->
-                  <!-- <card-line1-chart-example chartId="card-chart-01" class="chart-wrapper px-3" style="height:70px;" :height="70"/> -->
-               <!--  </b-card>
-              </b-col>
-              <b-col>
-                <b-card no-body class="bg-primary">
-                  <b-card-body class="pb-0">
-                    <h4 class="mb-0">9.823</h4>
-                    <p>Members online</p>
-                  </b-card-body> -->
-                  <!-- <card-line1-chart-example chartId="card-chart-01" class="chart-wrapper px-3" style="height:70px;" :height="70"/> -->
-                <!-- </b-card>
-              </b-col>
-              <b-col>
-                <b-card no-body class="bg-primary">
-                  <b-card-body class="pb-0">
-                    <h4 class="mb-0">9.823</h4>
-                    <p>Members online</p>
-                  </b-card-body> -->
-                  <!-- <card-line1-chart-example chartId="card-chart-01" class="chart-wrapper px-3" style="height:70px;" :height="70"/> -->
-                <!-- </b-card>
-              </b-col>
-            </b-row>
-          </b-modal> -->
 
 
+          
         </div>
+
+
 
       </div>
   </div>
@@ -382,6 +344,11 @@ export default {
         editvendorModal:false,
         addresslist : {
       },
+      totalapproved:0,
+      totalpaid:0,
+      totalunpaid:0,
+      totalpo:0,
+      detailvendorModal:false,
       countrylist:countries,
       country_fields:{text:"name",value:"name"},
         vendor : {
@@ -401,6 +368,23 @@ export default {
       editvendor : {
         kcp:{},
         payment:{}
+      },
+      detailTemplate: function() {
+        return {
+          template : Vue.component('detailTemplate', {
+            template:`<div style="line-height:4">{{data.name}}<b-button @click="vendorDetails" class="bg-transparent py-0 px-0" style="margin-left:10px;border:0px"><i class="cui-info"></i></b-button></div>`,
+            data : function() {
+              return {
+                data:{}
+              }
+            },
+            methods : {
+              vendorDetails() {
+                window.location.href = `#/vendor/`+`${this.data._id}`
+              }
+            }
+          })
+        }
       },
         excelTemplate : function() {
           return {
@@ -635,6 +619,9 @@ export default {
                   context : "",
                   description : ""
                 },
+                paidtransactions:[],
+                unpaidtransactions:[],
+                vendortransactions:[],
                 LabelEditModal: "",
                 LabelAddModal:"",
                 animationSettings: { effect: 'Zoom' },
@@ -679,12 +666,12 @@ export default {
                 edit = true
                }
                if(edit) {
-      this.editvendorModal = true
-        this.editvendor = args.rowData
-        if(args.rowData.address != null) {
-          this.editaddresslist = args.rowData.address
-        }
-      }
+                this.editvendorModal = true
+                this.editvendor = args.rowData
+                if(args.rowData.address != null) {
+                  this.editaddresslist = args.rowData.address
+                }
+              }
     },
             addLabel(args) {
               axios.post(`${apiUrl}`+`label/label/create`,this.formdata1,{withCredentials:true}).then((res) => {
@@ -732,7 +719,7 @@ export default {
             },
             searchValues(args) {
             },
-            openVendorModal() {
+            openVendorModals() {
               this.openVendorModal = true
             },
             clickHandler (args) {
