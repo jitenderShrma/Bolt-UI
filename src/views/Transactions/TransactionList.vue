@@ -27,8 +27,8 @@
                     <e-column field='transaction_type'  headerText='Type' :filter='filter' :isPrimaryKey='true'></e-column>
                     <e-column field='category' headerText='Category'  :filter='filter' ></e-column>
                     <e-column field='vendor.vendor_company' headerText='Vendor'  :filter='filter' ></e-column>
-                    <e-column field='po_raised.purchase_id' headerText='PO Number'  :filter='filter' ></e-column>
-                    <e-column field='createdAt' :visible="false" :filter='filter' ></e-column>
+                    <e-column field='po_raised' headerText='PO Number'  :filter='filter' ></e-column>
+                    <e-column field='createdAt' :visible="true" :format='formatOptions' type='date' :filter='filter2' ></e-column>
                 </e-columns>
                 </ejs-grid>
                  </div>
@@ -164,6 +164,7 @@ export default {
         },
     data: function () {
       return {
+        formatOptions: { type: 'date', format: 'dd/MM/yyyy' },
         groupOptions:{
           columns:['approvalCode'],
           showDropArea: false,
@@ -364,6 +365,9 @@ export default {
                 filter: {
                     type: 'CheckBox'
                 },
+                filter2: {
+                    type: 'Excel'
+                },
                 target: '.control-section',
                  alertHeader: 'Copy with Header',
                 alertContent: 'Atleast one row should be selected to copy with header',
@@ -452,6 +456,9 @@ export default {
             args.postRawFile = false;
         },
             actionBegin: function(args) {
+              if(args.requestType == "filtering") {
+                console.log(args)
+              }
             },
             
             load: function() {
@@ -587,6 +594,7 @@ export default {
                     this.datasrc = response.data;
                     console.log(response.data)
                     for(var i =0;i<this.datasrc.length;i++) {
+                      this.datasrc[i].createdAt = new Date(this.datasrc[i].createdAt)
                       if(this.datasrc[i].user == null) {
                         this.datasrc[i].user = {
                           user_name:"No longer exists!"

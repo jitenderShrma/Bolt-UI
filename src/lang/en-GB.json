@@ -314,5 +314,6 @@
     "totalapproved" : "Total Amount",
     "totalpaid" : "Total Amount Paid ",
     "totalbalance" : "Total Balance Left",
-    "totalnopo" : "Total No. of PO's"
+    "totalnopo" : "Total No. of PO's",
+    "uploadpo" : "Upload Purchase Order"
 }

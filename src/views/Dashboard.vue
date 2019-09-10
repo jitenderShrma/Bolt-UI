@@ -13,7 +13,7 @@
                     <b-dropdown-item @click="toggle1">Budget by Departments</b-dropdown-item>
                   </b-dropdown>
               <div v-if="option1 == 'Budget By Heads'">
-                <highcharts class="chart" :options="chartOptions3Bar" :updateArgs="updateArgs"></highcharts>
+                <highcharts class="chart3" :options="chartOptions3Bar" :updateArgs="updateArgs"></highcharts>
               </div>
               <div v-else @click="openModal">
                 <highcharts class="chart"  :options="chartOptionsStacked" :updateArgs="updateArgs"></highcharts>
@@ -89,7 +89,7 @@
         <b-dropdown-item @click="toggle3">Budget by Departments</b-dropdown-item>
       </b-dropdown>
       <div v-if="option3=='Budget By Heads'">
-        <highcharts class="chart2" :options="chartOptions3childBar" :updateArgs="updateArgs"></highcharts>
+        <highcharts class="chart4" :options="chartOptions3childBar" :updateArgs="updateArgs"></highcharts>
       </div>
       <div v-else>
         <b-button v-if="departmentLog.length>1" @click="goBack" class="bg-transparent" style="float:left;border:0"><i class="icon-arrow-left-circle font-2xl"></i></b-button>
@@ -400,6 +400,7 @@ export default {
     chartOptions3Bar: {
         chart: {
           type: 'column',
+          width:15000
         },
         xAxis: {
         categories: [],
@@ -425,6 +426,7 @@ export default {
     chartOptions3childBar: {
         chart: {
           type: 'column',
+          width:10000
         },
         xAxis: {
         categories: [],
@@ -1182,16 +1184,9 @@ export default {
         return a.total-b.total
     })
     new_data.reverse()
-    if(new_data.length>5) {
-      for(var i=0;i<5;i++) {
-          data[i] = new_data[i].name
-        }
-    }
-    else {
       for(var i=0;i<new_data.length;i++) {
           data[i] = new_data[i].name
         }
-    }
       return data
     },
     getYearlyBar2(new_data) {
@@ -1360,7 +1355,20 @@ export default {
 .chart {
   max-width:550px;
 }
+.chart3 {
+  max-width:550px;
+  overflow-x: scroll !important;
+}
+.chart4 {
+  max-width:100%;
+  overflow-x: scroll !important;
+}
 .chart2 {
   max-width:100%;
+}
+.highcharts-container {
+    overflow-x: inherit !important;
+    overflow-y: hidden !important;
+    width: auto !important;
 }
 </style>

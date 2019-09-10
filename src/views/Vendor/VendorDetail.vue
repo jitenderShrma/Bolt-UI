@@ -38,17 +38,20 @@
                 </b-card>
               </b-col>
             </b-row>
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="vendortransactions"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' :toolbarClick="clickHandler"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :recordDoubleClick="beginEdit" :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="vendortransactions"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' :toolbarClick="clickHandler"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='amount' headerText='Amount' width="auto" :filter='filter' ></e-column>
                     <e-column field='category' headerText='Category' width="auto" :filter='filter'></e-column>
-                    <e-column field='po_raised' headerText='Purchase Order' width="auto"  :filter='filter'></e-column>     
+                    <e-column field='po_raised' :template="buttonLM" headerText='Purchase Order' width="auto"  :filter='filter'></e-column>     
                     <e-column field='createdAt' headerText='Date' width="auto" :template="dateTemplate"  :filter='filter'></e-column>
                     <e-column field='status' headerText='Status' width="auto" :template="statusTemplate"  :filter='filter'></e-column>
                 </e-columns>
                 </ejs-grid>
+                <b-modal size="sm" :title="$ml.get('uploadpo')" class="modal-primary" v-model="uploadModal" @ok="uploadModal = false">
+            </b-modal>
               </div>
+              
 </template>
 <script>
   import apiUrl from '@/apiUrl'
@@ -56,6 +59,12 @@
   import moment from 'moment'
   import Vue from 'vue'
   import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
+  import { asideMenuCssClasses, validBreakpoints, checkBreakpoint } from '../../shared/classes'
+  import toggleClasses from '../../shared/toggle-classes'
+  import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
+  import AsideToggler from '../../shared/AsideToggler'
+  import { Switch as cSwitch } from '@coreui/vue'
+  import DefaultToggler from '../../shared/AsideTogglerClose'
   Vue.use(GridPlugin);
   var api = axios.create({
   withCredentials :true
@@ -63,10 +72,10 @@
   export default {
     name:"vendorDetail",
     components :{
-      GridPlugin,
+      GridPlugin, AsideToggler, AppHeader, DefaultToggler, AppSidebar, AppAside, TheFooter, Breadcrumb, SidebarForm, SidebarFooter, SidebarToggler, SidebarHeader, SidebarNav, cSwitch, SidebarMinimizer
     },
     provide: {
-            grid: [PdfExport,ExcelExport,Edit,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder]
+            grid: [PdfExport,ExcelExport,Edit,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder,]
         },
     data: function() {
       return {
@@ -109,6 +118,7 @@
                 totalapproved:0,
       totalpaid:0,
       pos:[],
+      uploadModal:false,
       totalunpaid:0,
       totalpo:0,
         toolbar: [
@@ -118,6 +128,38 @@
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
             ],
+
+            buttonLM: function () {
+              return {
+                  template: Vue.component('buttonLM', {
+                      template: `<div v-if="data.po_raised">{{data.po_raised}}</div>`,
+                      components:{
+                        AsideToggler,
+                        AppHeader,
+                        AppSidebar,
+                        AppAside,
+                        TheFooter,
+                        Breadcrumb,
+                        SidebarForm,
+                        SidebarFooter,
+                        SidebarToggler,
+                        SidebarHeader,
+                        SidebarNav,
+                        SidebarMinimizer
+                      },
+                  data: function() {
+                          return {
+                              data: {},
+                          }
+                      },
+                  methods: {
+                    gotoPage() {
+                      console.log("aside on")
+                    }
+                  }
+                })
+              }
+          },
       }
     },
     mounted() {
@@ -164,6 +206,9 @@
     }
     },
     methods:{
+      beginEdit(args){
+        this.uploadModal = true
+      },
       convertAmount(amount) {
         var x=amount;
         x=x.toString();

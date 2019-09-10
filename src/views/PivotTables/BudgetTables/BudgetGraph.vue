@@ -599,6 +599,9 @@ var template1Vue = Vue.component('template1',{
             },
             mounted() {
               this.value = +(Math.round((this.data.amount_left[0]/this.data.permissible_values[0])*100+ "e+2")  + "e-2")
+              if(Number.isNaN(this.value)) {
+                this.value = 0
+              }
             }       
               })
 var template2Vue = Vue.component('template2',{
@@ -618,6 +621,9 @@ var template2Vue = Vue.component('template2',{
             },
             mounted() {
               this.value = +(Math.round((this.data.amount_left[1]/this.data.permissible_values[1])*100+ "e+2")  + "e-2")
+              if(Number.isNaN(this.value)) {
+                this.value = 0
+              }
             }       
               })
 var template3Vue = Vue.component('template3',{
@@ -637,6 +643,9 @@ var template3Vue = Vue.component('template3',{
             },
             mounted() {
               this.value = +(Math.round((this.data.amount_left[2]/this.data.permissible_values[2])*100+ "e+2")  + "e-2")
+              if(Number.isNaN(this.value)) {
+                this.value = 0
+              }
             }       
               })
 var template4Vue = Vue.component('template4',{
@@ -656,6 +665,9 @@ var template4Vue = Vue.component('template4',{
             },
             mounted() {
               this.value = +(Math.round((this.data.amount_left[3]/this.data.permissible_values[3])*100+ "e+2")  + "e-2")
+              if(Number.isNaN(this.value)) {
+                this.value = 0
+              }
             }       
               })
 var template5Vue = Vue.component('template5',{
@@ -675,6 +687,9 @@ var template5Vue = Vue.component('template5',{
             },
             mounted() {
               this.value = +(Math.round((this.data.amount_left[4]/this.data.permissible_values[4])*100+ "e+2")  + "e-2")
+              if(Number.isNaN(this.value)) {
+                this.value = 0
+              }
             }       
               })
 var template6Vue = Vue.component('template6',{
@@ -694,6 +709,9 @@ var template6Vue = Vue.component('template6',{
             },
             mounted() {
               this.value = +(Math.round((this.data.amount_left[5]/this.data.permissible_values[5])*100+ "e+2")  + "e-2")
+              if(Number.isNaN(this.value)) {
+                this.value = 0
+              }
             }       
               })
 var template7Vue = Vue.component('template7',{
@@ -713,6 +731,9 @@ var template7Vue = Vue.component('template7',{
             },
             mounted() {
               this.value = +(Math.round((this.data.amount_left[6]/this.data.permissible_values[6])*100+ "e+2")  + "e-2")
+              if(Number.isNaN(this.value)) {
+                this.value = 0
+              }
             }         
               })
 var template8Vue = Vue.component('template8',{
@@ -732,6 +753,9 @@ var template8Vue = Vue.component('template8',{
             },
             mounted() {
               this.value = +(Math.round((this.data.amount_left[7]/this.data.permissible_values[7])*100+ "e+2")  + "e-2")
+              if(Number.isNaN(this.value)) {
+                this.value = 0
+              }
             }       
               })
 var template9Vue = Vue.component('template9',{
@@ -751,6 +775,9 @@ var template9Vue = Vue.component('template9',{
             },
             mounted() {
               this.value = +(Math.round((this.data.amount_left[8]/this.data.permissible_values[8])*100+ "e+2")  + "e-2")
+              if(Number.isNaN(this.value)) {
+                this.value = 0
+              }
             }       
               })
 var template10Vue = Vue.component('template10',{
@@ -770,6 +797,9 @@ var template10Vue = Vue.component('template10',{
             },
             mounted() {
               this.value = +(Math.round((this.data.amount_left[9]/this.data.permissible_values[9])*100+ "e+2")  + "e-2")
+              if(Number.isNaN(this.value)) {
+                this.value = 0
+              }
             }       
               })
 var template11Vue = Vue.component('template11',{
@@ -789,6 +819,9 @@ var template11Vue = Vue.component('template11',{
             },
             mounted() {
               this.value = +(Math.round((this.data.amount_left[10]/this.data.permissible_values[10])*100+ "e+2")  + "e-2")
+              if(Number.isNaN(this.value)) {
+                this.value = 0
+              }
             }       
               })
 var template12Vue = Vue.component('template12',{
@@ -808,6 +841,9 @@ var template12Vue = Vue.component('template12',{
             },
             mounted() {
               this.value = +(Math.round((this.data.amount_left[11]/this.data.permissible_values[11])*100+ "e+2")  + "e-2")
+              if(Number.isNaN(this.value)) {
+                this.value = 0
+              }
             }       
               })
 
