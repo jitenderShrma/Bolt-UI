@@ -1503,6 +1503,8 @@ export default {
         api.put(`${apiUrl}head/head/update/only/values/${this.editinput._id}`,update).then((res) => {
             api.get(`${apiUrl}`+`head/head/get`)
             .then((response) => {
+        this.convertAmount(response.data)
+
                 this.or_head = JSON.parse(JSON.stringify(response.data))
                 this.data = this.list_to_tree_head(response.data)
               });
@@ -1618,6 +1620,8 @@ export default {
         api.put(`${apiUrl}`+`head/head/update/one/`+`${this.editinput._id}`,sendData).then((response)=>{
             api.get(`${apiUrl}`+`head/head/get`)
             .then((response) => {
+        this.convertAmount(response.data)
+
                 this.or_head = JSON.parse(JSON.stringify(response.data))
                 this.data = this.list_to_tree_head(response.data)
               });
@@ -1656,6 +1660,8 @@ export default {
           api.put(`${apiUrl}`+`head/head/update/one/`+`${id}`,sendData).then((response) => {
             api.get(`${apiUrl}`+`head/head/get`)
             .then((response) => {
+        this.convertAmount(response.data)
+
                 this.or_head = JSON.parse(JSON.stringify(response.data))
                 this.data = this.list_to_tree_head(response.data)
               });
@@ -1685,11 +1691,13 @@ export default {
         }
         }
         console.log(args)
-        this.addremove.month = args.column.field.split('amount_left.').pop()
+        this.addremove.month = args.column.field.split('remaining.').pop()
         // this.addremoveform = true 
         this.editmodal =true
         this.editinput = args.rowData
-        this.editinput.department = args.rowData.department._id
+        if(args.rowData.department) {
+            this.editinput.department = args.rowData.department._id
+        }
       },
        onClick(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
@@ -1777,6 +1785,8 @@ export default {
           this.browseModal = false
           api.get(`${apiUrl}`+`head/head/get`)
             .then((response) => {
+        this.convertAmount(response.data)
+
                 this.or_head = JSON.parse(JSON.stringify(response.data))
                 this.data = this.list_to_tree_head(response.data)
               }).catch((err)=> {
@@ -1833,6 +1843,8 @@ export default {
                                api.delete(`${apiUrl}`+`head/head/delete/one/`+`${data[0].head_key}`).then((res)=>{
                                    api.get(`${apiUrl}`+`head/head/get`)
                                     .then((response) => {
+        this.convertAmount(response.data)
+                                        
                                         this.or_head = JSON.parse(JSON.stringify(response.data))
                                         this.data = this.list_to_tree_head(response.data)
                                       });
