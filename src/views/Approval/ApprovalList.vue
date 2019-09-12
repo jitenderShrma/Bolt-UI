@@ -137,7 +137,7 @@
           <div>
             <span v-text="$ml.get('transactionmade')"></span>
             <span> Rs. {{lg.amount}} </span>
-            <span>for Head : {{lg.head.name}} in Department : {{lg.department.department_name}} </span>
+            <span>for Head : {{lg.head.name}} in Department : <span v-if="lg.department">{{lg.department.department_name}}</span> <span  v-else> NONE </span></span>
             <span>by <span v-if="lg.user">{{lg.user.personal_details.name}}.</span><span v-else>ADMIN</span></span>
           </div>
         </b-list-group-item>
@@ -1044,16 +1044,6 @@ export default {
                                   user_name:"No longer exists!"
                                 }
                               }
-                              if(this.datasrc[i].department == null) {
-                                this.datasrc[i].department = {
-                                  department_name:"No longer exists!"
-                                }
-                              }
-                              if(this.datasrc[i].budget_head == null) {
-                                this.datasrc[i].budget_head = {
-                                  name:"No longer exists!"
-                                }
-                              }
                               this.datasrc[i].labellist = "";
                               for(var j=0;j<this.datasrc[i].labels.length;i++) {
                                 this.datasrc[i].labellist = this.datasrc[i].labellist+`${this.datasrc[i].labels[j].label_name},`
@@ -1122,7 +1112,9 @@ export default {
                     }
                     else {
                       this.designationBudget.push(this.lineManagersBudget[i][0].designation.name)
-                      this.departmentBudget.push(this.lineManagersBudget[i][0].department.department_name)
+                      if(this.lineManagersBudget[i][0].department) {
+                        this.departmentBudget.push(this.lineManagersBudget[i][0].department.department_name)
+                      }
                     }
                   }
                 }).catch((err)=> {
@@ -1546,11 +1538,6 @@ export default {
                       if(this.datasrc[i].request_by == null) {
                         this.datasrc[i].request_by = {
                           user_name:"No longer exists!"
-                        }
-                      }
-                      if(this.datasrc[i].department == null) {
-                        this.datasrc[i].department = {
-                          department_name:"No longer exists!"
                         }
                       }
                       if(this.datasrc[i].budget_head == null) {

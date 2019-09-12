@@ -6,19 +6,23 @@
             <ejs-toolbar id="toolbargrid" :clicked="addEditHandler">
                 <e-items>
                   <e-item align="right" id="add" :text="$ml.get('add')" :template="addTemplate"></e-item>
-                 <!-- <e-item align="right" id="edit" :text="$ml.get('edit')" :template="editTemplate"></e-item> --><!-- 
-                 <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item> -->
+                 <!-- <e-item align="right" id="edit" :text="$ml.get('edit')" :template="editTemplate"></e-item> --> 
+                 <e-item align="right" id="cancel" :text="$ml.get('cancel')" :template="cancelTemplate"></e-item>
                   <e-item align="right" id="upload" :template="uploadTemplate" :text="$ml.get('upload')"></e-item>
                 </e-items>
                 </ejs-toolbar>
              <div class="control-section">
-            <ejs-grid ref='overviewgrid' :allowGrouping='true' :groupSettings='groupOptions'  :rowHeight='rowHeight' :sortSettings='sortOptions' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowReordering='true' :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin"
+            <ejs-grid ref='overviewgrid' :allowGrouping='true' :groupSettings='groupOptions'  :rowHeight='rowHeight' :sortSettings='sortOptions' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowReordering='true' :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :actionComplete="actionComplete"
             :rowSelected="rowSelected"
                 :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
                     <e-column field='approvalCode' headerText='Ref ID'  :filter='filter' ></e-column>
                     <e-column field='transaction_id' :template="printTemplate" headerText='Transaction ID' :filter='filter'></e-column>
                     <e-column field='amount' headerText='Amount' :filter='filter' :width="130"></e-column>
+                    <e-column field='total_amount' headerText='Approved' :allowFiltering="false" :width="130"></e-column>
+                    <e-column field='spent' headerText='Spent' :allowFiltering="false" :width="130"></e-column>
+                    <e-column field='amount_left' headerText='Left' :allowFiltering="false" :width="130"></e-column>
+                    <e-column field='status' :template="statusTemplate" headerText='Status' :filter='filter' :width="130"></e-column>
                     <e-column field='department.department_name' headerText='Department' :filter='filter'  ></e-column>
                     <e-column field='head.name' headerText='Head' :filter='filter'></e-column>
                     <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' :width="119" ></e-column>
@@ -85,7 +89,7 @@
 import apiUrl from '@/apiUrl'
 import axios from 'axios'
 import moment from 'moment'
-
+import {Parser} from 'json2csv'
 Vue.prototype.moment = moment
 import Vue from 'vue'
 import html2pdf from 'html2pdf.js'
@@ -104,7 +108,7 @@ import {
   FieldList
 } from "@syncfusion/ej2-vue-pivotview";
 import {
-PdfExport,ExcelExport, Edit,Group, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
+PdfExport,ExcelExport, Edit,Group, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, ForeignKey, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     import VueHtmlToPaper from 'vue-html-to-paper';
  
@@ -160,10 +164,11 @@ export default {
   Edit
     },
      provide: {
-            grid: [PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder,Group]
+            grid: [ForeignKey,PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder,Group]
         },
     data: function () {
       return {
+        foreign:[],
         formatOptions: { type: 'date', format: 'dd/MM/yyyy' },
         groupOptions:{
           columns:['approvalCode'],
@@ -197,7 +202,7 @@ export default {
                 printTemplate: function() {
                   return {
                     template: Vue.component("printTemplate", {
-                      template : `<div style="line-height:4">{{data.transaction_id}}<b-button class="bg-transparent py-0 px-2" style="border:0px"><i class="icon-printer"></i></b-button>&nbsp;&nbsp;<span v-if="data.status == 'PAID'"><b-button class="bg-success py-0 px-2" style="border:0px"><b-badge id="label" variant="success" v-text="$ml.get('paid')"></b-badge></b-button></span><span v-else><b-button class="bg-transparent py-0 px-2" style="border:0px"><b-badge variant="warning" id="label" v-text="$ml.get('markaspaid')"></b-badge></b-button></span></div>`,
+                      template : `<div style="line-height:4">{{data.transaction_id}}<b-button class="bg-transparent py-0 px-2" style="border:0px"><i class="icon-printer"></i></b-button>&nbsp;&nbsp;<span v-if="data.status == 'PAID'"><b-button class="bg-success py-0 px-2" style="border:0px"><b-badge id="label" variant="success" v-text="$ml.get('paid')"></b-badge></b-button></span><span v-if="data.status == 'UNPAID'"><b-button class="bg-transparent py-0 px-2" style="border:0px"><b-badge variant="warning" id="label" v-text="$ml.get('markaspaid')"></b-badge></b-button></span></div>`,
                       data()  {
                         return {
                           data: {}
@@ -208,6 +213,34 @@ export default {
                   }
                 },
                 log:[],
+                cancelTemplate: function () {
+              return {
+                  template: Vue.component("cancelTemplate", {
+                      template: `<div><b-badge v-if="isPermitted" id="label1" variant="warning" ><i class="fa fa-trash-o"></i>&nbsp<span id="hide" v-text="$ml.get('cancel')"></span></b-badge></div>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                          isPermitted:false
+                        };
+                      },
+                      mounted() {
+                        var Session = JSON.parse(localStorage.session_key)
+                        if(Session.user) {
+                          for(var i=0;i<Session.permission.length;i++) {
+                            if(Session.permission[i].module_name=="trans" && Session.permission[i].delete) {
+                              this.isPermitted = true
+                              break;
+                            }
+                          }
+                        }
+                        else{
+                          this.isPermitted = true
+                        }
+                      }
+                    })
+                  }
+                },
                 deleteTemplate: function () {
               return {
                   template: Vue.component("deleteTemplate", {
@@ -268,7 +301,18 @@ export default {
             this.$refs.uploadObj.sequentialUpload = args.checked;
             this.$refs.uploadObj.clearAll();
         },
-
+        statusTemplate: function() {
+          return {
+            template:Vue.component('statusTemplate', {
+                      template: `<div><b-badge style="font-weight:lighter;margin:3px" id="label" :variant="data.status">{{data.status}}</b-badge></div>`,
+                  data: function() {
+                          return {
+                              data: {}
+                          }
+                      }
+                    })
+                  }
+                },
         labelTemplate: function() {
           return {
             template:Vue.component('labelTemplate', {
@@ -295,6 +339,7 @@ export default {
                 })
           }
         },
+        filterqueries : [],
             dropdownValue: 'Top',
             datasrc: [],
             editSettings: { allowEditing: true, allowAdding: true, allowDeleting: true,mode:'Dialog'},
@@ -334,7 +379,7 @@ export default {
                           case "9": this.month = "October"
                                   break;        
                           case "10": this.month = "November"
-                                  break;        
+                                  break;       
                           case "11": this.month = "December"
                                   break;
                         }
@@ -349,7 +394,7 @@ export default {
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
             ],
-          pageSettings: {pageSize:true,pageSize:200, pageSizes: [200,300,400,500], pageCount: 4},
+          pageSettings: {pageSize:true,pageSize:50, pageSizes: [50,100,200,300,400,500], pageCount: 4},
         ddData: [{ value: 1000, text: '1,000 Rows and 11 Columns' }, { value: 10000, text: '10,000 Rows and 11 Columns' }],
                 ddValue: 1000,
                 stTime: null,
@@ -389,27 +434,44 @@ export default {
       else {
         api.post(`${apiUrl}payments/paymentorder/create`,this.payment).then((res) => {
           api.put(`${apiUrl}transaction/trans/edit/${this.payment.transaction_id}`,{status:"PAID"}).then((trans) => {
+            api.get(`${apiUrl}approvals/preApp/get/all`).then((res) => {
+                    this.foreign = res.data
             api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
                     this.datasrc = response.data;
+                    this.paymentModal = false
                     for(var i =0;i<this.datasrc.length;i++) {
+                      this.datasrc[i].date = moment(this.datasrc[i].createdAt).format('L')
+                      this.datasrc[i].time = moment(this.datasrc[i].createdAt).format('h:mm')
+                      this.datasrc[i].createdAt = new Date(this.datasrc[i].createdAt)
                       if(this.datasrc[i].user == null) {
                         this.datasrc[i].user = {
-                          user_name:"No longer exists!"
+                          user_name:"ADMIN"
                         }
+                      }
+                      if(this.datasrc[i].status == "Approved") {
+                        this.datasrc[i].status = "UNPAID"
                       }
                       if(this.datasrc[i].department == null) {
                         this.datasrc[i].department = {
-                          department_name:"No longer exists!"
+                          department_name:"NONE"
                         }
                       }
                       if(this.datasrc[i].head == null) {
                         this.datasrc[i].head = {
-                          name:"No longer exists!"
+                          name:"NONE"
+                        }
+                      }
+                      for(var j=0;j<this.foreign.length;j++) {
+                        if(this.datasrc[i].approvalCode == this.foreign[j].ref_id) {
+                          this.datasrc[i].total_amount = this.foreign[j].amount
+                          this.datasrc[i].amount_left = this.foreign[j].approval_amount_left[this.foreign[j].month]
+                          this.datasrc[i].spent = this.datasrc[i].total_amount - this.datasrc[i].amount_left
                         }
                       }
                     }
-                    this.paymentModal =false
-              })
+                    this.datasrc = this.convertAmount(this.datasrc)
+                })
+          })
           })
           
         }).catch((err)=> {
@@ -455,12 +517,31 @@ export default {
         onFileRemove: function (args) {
             args.postRawFile = false;
         },
+        checkField(field) {
+          console.log(field)
+          for(var i=0;i<this.filterqueries.length;i++) {
+            if(this.filterqueries[i].field == field) {
+              return true
+            }
+          }
+          return false
+        },
             actionBegin: function(args) {
-              if(args.requestType == "filtering") {
-                console.log(args)
+            },
+            actionComplete(args) {
+              this.filterqueries=[]
+              console.log(args)
+              if(args.requestType=="filtering") {
+                if(args.columns) {
+                for(var i=0;i<args.columns.length;i++) {
+                    if(args.columns[i].ignoreAccent==false) {
+                      this.filterqueries.push({field:args.columns[i].properties.field,operators:args.columns[i].properties.operator,value:args.columns[i].properties.value})
+                    }
+                }
+              }
+                console.log(this.filterqueries)
               }
             },
-            
             load: function() {
                 let proxy = this;
                 this.$refs.overviewgrid.$el.ej2_instances[0].on('data-ready', function () {
@@ -498,21 +579,198 @@ export default {
                     this.rowHeight = 60;
                 }
                 if (args.item.text === 'CSV Export') {
-                    this.$refs.overviewgrid.csvExport()
+                  var datasrc = []
+                  api.get(`${apiUrl}transaction/trans/get/all`).then((res) => {
+                    datasrc = res.data
+                    for(var i=0;i<datasrc.length;i++) {
+                      datasrc[i].date = moment(datasrc[i].createdAt).format('L')
+                      datasrc[i].time = moment(datasrc[i].createdAt).format('h:mm')
+                      for(var j=0;j<this.foreign.length;j++) {
+                        if(datasrc[i].approvalCode == this.foreign[j].ref_id) {
+                          datasrc[i].total_amount = this.foreign[j].amount
+                          datasrc[i].amount_left = this.foreign[j].approval_amount_left[this.foreign[j].month]
+                          datasrc[i].spent = datasrc[i].total_amount - datasrc[i].amount_left
+                        }
+                      }
+                    }
+                    datasrc = this.convertAmount(datasrc)
+                       const fields = [{
+                        label: 'Approval Reference ID',
+                        value: 'approvalCode'
+                      },{
+                        label: 'Transaction ID',
+                        value: 'transaction_id'
+                      },
+                      {
+                        label: 'Amount',
+                        value: 'amount'
+                      },
+                      {
+                        label: 'Approved',
+                        value: 'total_amount'
+                      },
+                      {
+                        label: 'Spent',
+                        value: 'spent'
+                      },
+                      {
+                        label: 'Left',
+                        value: 'amount_left'
+                      },
+                      {
+                        label: 'Status',
+                        value: 'status'
+                      },
+                      {
+                        label: 'Department',
+                        value: 'department.department_name'
+                      },
+                      {
+                        label: 'Head',
+                        value: 'head.name'
+                      },
+                      {
+                        label: 'Month',
+                        value: 'month'
+                      },
+                      {
+                        label: 'Label 1',
+                        value: 'labels[0].label_name'
+                      },
+                      {
+                        label: 'Label 2',
+                        value: 'labels[1].label_name'
+                      },
+                      {
+                        label: 'Requested By',
+                        value: 'user.user_name'
+                      },
+                      {
+                        label: 'Transaction Type',
+                        value: 'transaction_type'
+                      },
+                      {
+                        label: 'Category',
+                        value: 'category'
+                      },
+                      {
+                        label: 'Vendor',
+                        value: 'vendor.name'
+                      },
+                      {
+                        label: 'Purchase Order',
+                        value: 'po_raised'
+                      },
+                      {
+                        label: 'Date',
+                        value: 'date'
+                      },
+                      {
+                        label: 'Time',
+                        value: 'time'
+                      }];
+                    
+                    const json2csvParser = new Parser({ fields });
+                    const csv = json2csvParser.parse(datasrc);
+                    var hiddenElement = document.createElement('a');
+                    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+                    hiddenElement.target = '_blank';
+                    hiddenElement.download = 'transactions.csv';
+                    hiddenElement.click();
+                  })
+                 
+                    // this.$refs.overviewgrid.csvExport()
                 }
                 if (args.item.text === 'PDF Export') {
                     this.$refs.overviewgrid.pdfExport()
                 }
             },
             addEditHandler(args) {
+               var selected = this.$refs.overviewgrid.getSelectedRecords()
+               var deleteperm = false
+               var Session = JSON.parse(localStorage.session_key)
+                        if(Session.user) {
+                          for(var i=0;i<Session.permission.length;i++) {
+                            if(Session.permission[i].module_name=="trans" && Session.permission[i].delete) {
+                              deleteperm = true
+                              break;
+                            }
+                          }
+                        }
+                        else{
+                          deleteperm = true
+                        }
                 if(args.item.id == "add") {
                     this.$router.push('/transaction/add');
                 }
                 if(args.item.id=="upload") {
                   this.browseModal = true
                 }
+                if(args.item.id=="cancel") {
+                  if(selected.length>0) {
+                    if(deleteperm) {
+                      if(selected[0].status == "PAID") {
+                        toast({
+                          type: VueNotifications.types.warn,
+                          title: 'Already Paid',
+                          message:"Paid Transactions cannot be Cancelled"
+                        })
+                      }
+                      else{
+                        api.put(`${apiUrl}transaction/trans/cancel/${selected[0]._id}`).then((res) => {
+                          if(res.data) {
+                            toast({
+                              type: VueNotifications.types.success,
+                              title: 'Transaction Cancelled'
+                            })
+                            api.get(`${apiUrl}approvals/preApp/get/all`).then((res) => {
+                              this.foreign = res.data
+                            api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
+                              this.datasrc = response.data;
+                              for(var i =0;i<this.datasrc.length;i++) {
+                                this.datasrc[i].date = moment(this.datasrc[i].createdAt).format('L')
+                                this.datasrc[i].time = moment(this.datasrc[i].createdAt).format('h:mm')
+                                this.datasrc[i].createdAt = new Date(this.datasrc[i].createdAt)
+                                if(this.datasrc[i].user == null) {
+                                  this.datasrc[i].user = {
+                                    user_name:"ADMIN"
+                                  }
+                                }
+                                if(this.datasrc[i].status == "Approved") {
+                                  this.datasrc[i].status = "UNPAID"
+                                }
+                                if(this.datasrc[i].department == null) {
+                                  this.datasrc[i].department = {
+                                    department_name:"NONE"
+                                  }
+                                }
+                                if(this.datasrc[i].head == null) {
+                                  this.datasrc[i].head = {
+                                    name:"NONE"
+                                  }
+                                }
+                                for(var j=0;j<this.foreign.length;j++) {
+                                  if(this.datasrc[i].approvalCode == this.foreign[j].ref_id) {
+                                    this.datasrc[i].total_amount = this.foreign[j].amount
+                                    this.datasrc[i].amount_left = this.foreign[j].approval_amount_left[this.foreign[j].month]
+                                    this.datasrc[i].spent = this.datasrc[i].total_amount - this.datasrc[i].amount_left
+                                  }
+                                }
+                              }
+                              this.datasrc = this.convertAmount(this.datasrc)
+                          })
+                          })
+                          }
+
+                        })
+                      }
+                    }
+                    else{
+                      console.log("Not Permitted")
+                    }
+                  }
+                }
                 if(args.item.id == "edit") {
-                    var selected = this.$refs.overviewgrid.getSelectedRecords()
                     if(selected.length>0) {
                         this.$router.push('/transaction/edit/'+`${selected[0]._id}`);
                     }
@@ -532,6 +790,24 @@ export default {
       })
                     }
                 }
+            },
+            convertAmount(list) {
+              for(var i=0;i<list.length;i++) {
+                list[i].total_amount = this.AmountToString(list[i].total_amount)
+                list[i].spent = this.AmountToString(list[i].spent)
+                list[i].amount_left = this.AmountToString(list[i].amount_left)
+              } 
+              return list
+            },
+            AmountToString(amount) {
+              var x=amount;
+              x=x.toString();
+              var lastThree = x.substring(x.length-3);
+              var otherNumbers = x.substring(0,x.length-3);
+              if(otherNumbers != '')
+                  lastThree = ',' + lastThree;
+              var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+              return res
             },
             alertDlgBtnClick() {
                     this.$refs.alertDialog.hide();
@@ -590,33 +866,50 @@ export default {
         },
         async mounted () { 
           console.log(this.ref_id);
-                api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
+          api.get(`${apiUrl}approvals/preApp/get/all`).then((res) => {
+            this.foreign = res.data
+            api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
+                  console.log(response.data)
                     this.datasrc = response.data;
-                    console.log(response.data)
                     for(var i =0;i<this.datasrc.length;i++) {
+                      this.datasrc[i].date = moment(this.datasrc[i].createdAt).format('L')
+                      this.datasrc[i].time = moment(this.datasrc[i].createdAt).format('h:mm')
                       this.datasrc[i].createdAt = new Date(this.datasrc[i].createdAt)
                       if(this.datasrc[i].user == null) {
                         this.datasrc[i].user = {
-                          user_name:"No longer exists!"
+                          user_name:"ADMIN"
                         }
+                      }
+                      if(this.datasrc[i].status == "Approved") {
+                        this.datasrc[i].status = "UNPAID"
                       }
                       if(this.datasrc[i].department == null) {
                         this.datasrc[i].department = {
-                          department_name:"No longer exists!"
+                          department_name:"NONE"
                         }
                       }
                       if(this.datasrc[i].head == null) {
                         this.datasrc[i].head = {
-                          name:"No longer exists!"
+                          name:"NONE"
+                        }
+                      }
+                      for(var j=0;j<this.foreign.length;j++) {
+                        if(this.datasrc[i].approvalCode == this.foreign[j].ref_id) {
+                          this.datasrc[i].total_amount = this.foreign[j].amount
+                          this.datasrc[i].amount_left = this.foreign[j].approval_amount_left[this.foreign[j].month]
+                          this.datasrc[i].spent = this.datasrc[i].total_amount - this.datasrc[i].amount_left
                         }
                       }
                     }
+                    this.datasrc = this.convertAmount(this.datasrc)
                 }).catch((err)=> {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
         })
       })
+          }) 
+                
             
         }
 };
@@ -676,6 +969,18 @@ export default {
   .badge-ffc107{
     background-color:#ffc107;
     color:black;
+  }
+  .badge-PAID{
+    background-color:lightgreen;
+    color:black;
+  }
+  .badge-UNPAID{
+    background-color:yellow;
+    color:black;
+  }
+  .badge-CANCELLED{
+    background-color:red;
+    color:white;
   }
 .container-fluid {
     width: 100%;

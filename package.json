@@ -71,6 +71,7 @@
     "html2pdf.js": "^0.9.1",
     "jQuery": "^1.7.4",
     "jquery": "^3.4.1",
+    "json2csv": "^4.5.3",
     "jspdf": "^1.5.3",
     "mini-toastr": "0.6.6",
     "perfect-scrollbar": "^1.4.0",

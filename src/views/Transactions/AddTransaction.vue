@@ -857,7 +857,8 @@ Vue.use(TextBoxPlugin);
           else{
           console.log(this.input)
           axios.post(`${apiUrl}`+`transaction/trans/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
-            this.$router.push("/transaction/list")}).catch((err)=> {
+            this.$router.push("/transaction/list")
+          }).catch((err)=> {
               if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,
