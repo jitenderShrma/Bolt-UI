@@ -315,5 +315,8 @@
     "totalpaid" : "Total Amount Paid ",
     "totalbalance" : "Total Balance Left",
     "totalnopo" : "Total No. of PO's",
-    "uploadpo" : "Upload Purchase Order"
+    "uploadpo" : "Upload Purchase Order",
+    "carryover" : "Carry Over Form",
+    "budgettransfer" : "Budget Transfer Form",
+    "pholdmonthcarryover" : "Select the month to Carry Over"
 }

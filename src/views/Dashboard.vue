@@ -1192,7 +1192,7 @@ export default {
     getYearlyBar2(new_data) {
       var data =[]
       var total = 0
-      for(var i=0;i<3;i++) {
+      for(var i=0;i<4;i++) {
         data[i] = {name:null,data:[]}
       }
       for(var i=0;i<new_data.length;i++) {
@@ -1207,7 +1207,7 @@ export default {
         return a.total-b.total
     })
     new_data.reverse()
-      for(var i=0;i<3;i++) {
+      for(var i=0;i<4;i++) {
         if(i ==0) {
           data[i].name = "Total"
           for(var j=0;j<new_data.length;j++) {
@@ -1234,6 +1234,16 @@ export default {
             total = 0
             for(var k=0;k<12;k++) {
               total = total + new_data[j].amount_left[k]
+            }
+            data[i].data.push(total)
+          }
+        }
+        if(i ==3) {
+          data[i].name = "Carry Over"
+          for(var j=0;j<new_data.length;j++) {
+            total = 0
+            for(var k=0;k<12;k++) {
+              total = total + new_data[j].carry_over_amount[k]
             }
             data[i].data.push(total)
           }

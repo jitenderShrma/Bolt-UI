@@ -6,7 +6,31 @@
           <div slot="header">
             <span v-text="$ml.get('approvalform')"></span>
           </div>
-		<b-form v-on:submit.prevent="transferBudget">
+          <b-tabs>
+          	<b-tab :title="$ml.get('carryover')" active>
+          		<b-form v-on:submit.prevent="carryOver">
+          			<b-form-group
+		              :label="$ml.get('month')">
+		              <span style="color:red;float:right;height:2px;font-size:20px">*</span>
+		              <cool-select
+		              	v-validate="'required'"
+		              	name="Month"
+		                v-model="input2.from_month"
+		                :items="months"
+		                item-text="name"
+		                item-value="value"
+		                :placeholder="$ml.get('pholdmonthcarryover')"
+		               >
+		              </cool-select>
+		              <span id="errors">{{ errors.first('Month') }}</span>
+		          </b-form-group>
+		          <div slot="footer">
+		              <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
+			       </div>
+          		</b-form>
+          	</b-tab>
+          	<b-tab :title="$ml.get('budgettransfer')">
+          		<b-form v-on:submit.prevent="transferBudget">
 			<b-row>
 				<b-col sm="4">
 					<b-form-group
@@ -71,6 +95,8 @@
               <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"><i class="fa fa-dot-circle-o"></i></b-button>
 	        </div>
 		</b-form>
+          	</b-tab>
+		</b-tabs>
 	</b-card>
 	</b-col>
 	</b-row>
@@ -127,6 +153,8 @@
 				heads1:[],
 				heads2:[],
 				input:{},
+				input2:{
+				},
 				months:[ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"},
 
           		],
@@ -210,6 +238,22 @@
       })
 				
 				})
+			},
+			carryOver() {
+				console.log(this.input2)
+				api.post(`${apiUrl}budget/carryover/carryover/all/heads`,this.input2).then((res) => {
+					toast({
+									type: VueNotifications.types.success,
+				                    title: 'Carry Over Complete'
+								})
+								this.input2 = {}
+
+				}).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
 			},
 			checkExistHead(node) {
 		        for (var i=0; i < this.or_head.length; i++) {

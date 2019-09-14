@@ -464,7 +464,7 @@ export default {
       });
      }
      else{
-      await api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
+      await api.get(`${apiUrl}`+`dropdown/head/only/`+`${this.key}`)
         .then((response) => {
           this.or_head = JSON.parse(JSON.stringify(response.data))
           this.data = this.list_to_tree_head(response.data)
@@ -509,7 +509,7 @@ export default {
       });
      }
      else{
-      await api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
+      await api.get(`${apiUrl}`+`dropdown/head/only/`+`${this.key}`)
         .then((response) => {
           this.or_head = JSON.parse(JSON.stringify(response.data))
           this.data = this.list_to_tree_head(response.data)
@@ -559,7 +559,7 @@ export default {
                                     });
                                    }
                                    else{
-                                    api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
+                                    api.get(`${apiUrl}`+`dropdown/head/only/`+`${this.key}`)
                                       .then((response) => {
                                         this.or_head = JSON.parse(JSON.stringify(response.data))
                                         this.data = this.list_to_tree_head(response.data)
@@ -681,7 +681,7 @@ export default {
                 var id = {
                   labels :  label.data._id
                 }
-                  api.get(`${apiUrl}`+`label/label/find/by/Heads`).then((res) => {
+                  api.get(`${apiUrl}`+`label/label/only/by/Heads`).then((res) => {
                     this.labels = res.data
                   })
                 console.log(this.editinput.labels)
@@ -820,7 +820,7 @@ export default {
                       }  
                     }
                     else {
-                      api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
+                      api.get(`${apiUrl}`+`dropdown/head/only/`+`${this.key}`)
                         .then((response) => {
                           this.or_head = JSON.parse(JSON.stringify(response.data))
                           this.data = this.list_to_tree_head(response.data)
@@ -868,7 +868,7 @@ export default {
               });
              }
              else{
-              api.get(`${apiUrl}`+`head/head/find/`+`${this.key}`)
+              api.get(`${apiUrl}`+`dropdown/head/only/`+`${this.key}`)
                 .then((response) => {
                   this.or_head = JSON.parse(JSON.stringify(response.data))
                   this.data = this.list_to_tree_head(response.data)

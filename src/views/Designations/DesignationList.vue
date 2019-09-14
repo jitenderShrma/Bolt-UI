@@ -436,7 +436,7 @@ export default {
       });
   }
   else{
-    await api.get(`${apiUrl}`+`designation/desig/find/${this.key}`)
+    await api.get(`${apiUrl}`+`dropdown/desig/only/${this.key}`)
     .then((response) => {
       this.or_desig = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_desig(response.data)
@@ -496,7 +496,7 @@ export default {
       });
   }
   else{
-    await api.get(`${apiUrl}`+`designation/desig/find/${this.key}`)
+    await api.get(`${apiUrl}`+`dropdown/desig/only/${this.key}`)
     .then((response) => {
       console.log(response.data)
       this.or_desig = JSON.parse(JSON.stringify(response.data))

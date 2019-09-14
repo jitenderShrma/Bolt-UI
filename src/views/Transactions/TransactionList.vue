@@ -16,7 +16,7 @@
             :rowSelected="rowSelected"
                 :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
-                    <e-column field='approvalCode' headerText='Ref ID'  :filter='filter' ></e-column>
+                    <e-column field='approvalCode' headerText='Ref ID' :filter='filter' ></e-column>
                     <e-column field='transaction_id' :template="printTemplate" headerText='Transaction ID' :filter='filter'></e-column>
                     <e-column field='amount' headerText='Amount' :filter='filter' :width="130"></e-column>
                     <e-column field='total_amount' headerText='Approved' :allowFiltering="false" :width="130"></e-column>
@@ -186,6 +186,19 @@ export default {
             }
           }},
         printData:[],
+        filterTemplate: function () {
+              return {
+                  template: Vue.component("filterTemplate", {
+                      template: `<div>Filter</div>`,
+                      data() {
+                        return {
+                          data: {
+                          },
+                        };
+                      },
+                    })
+                  }
+                },
         addTemplate: function () {
               return {
                   template: Vue.component("addTemplate", {
@@ -389,7 +402,8 @@ export default {
           },
            height : window.innerHeight*0.695,
           toolbar: [
-          'CsvExport','Search',
+          { prefixIcon: 'e-csvexport', text:"CSV Export Filtered", id: 'exportfiltered', align: 'Left' },
+          { prefixIcon: 'e-csvexport', text:"CSV Export All", id: 'exportall', align: 'Left' },'Search',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
@@ -407,6 +421,7 @@ export default {
                 filterOptions: {
                     type: 'Menu'
                 },
+                filterTID:false,
                 filter: {
                     type: 'CheckBox'
                 },
@@ -527,10 +542,19 @@ export default {
           return false
         },
             actionBegin: function(args) {
+              console.log(args)
+              if(args.requestType == "filterchoicerequest") {
+                args.dataSource = this.datasrc
+              }
+              
             },
             actionComplete(args) {
               this.filterqueries=[]
               console.log(args)
+              if(args.requestType == "filterafteropen") {
+                this.filterTID = true
+                args.filterModel=`<div></div>`
+              }
               if(args.requestType=="filtering") {
                 if(args.columns) {
                 for(var i=0;i<args.columns.length;i++) {
@@ -578,7 +602,110 @@ export default {
                 if (args.item.id === 'big') {
                     this.rowHeight = 60;
                 }
-                if (args.item.text === 'CSV Export') {
+                if (args.item.text === 'CSV Export Filtered') {
+                  var datasrc = this.$refs.overviewgrid.ej2Instances.currentViewData.records
+                  // api.get(`${apiUrl}transaction/trans/get/all`).then((res) => {
+                  //   datasrc = res.data
+                  //   for(var i=0;i<datasrc.length;i++) {
+                  //     datasrc[i].date = moment(datasrc[i].createdAt).format('L')
+                  //     datasrc[i].time = moment(datasrc[i].createdAt).format('h:mm')
+                  //     for(var j=0;j<this.foreign.length;j++) {
+                  //       if(datasrc[i].approvalCode == this.foreign[j].ref_id) {
+                  //         datasrc[i].total_amount = this.foreign[j].amount
+                  //         datasrc[i].amount_left = this.foreign[j].approval_amount_left[this.foreign[j].month]
+                  //         datasrc[i].spent = datasrc[i].total_amount - datasrc[i].amount_left
+                  //       }
+                  //     }
+                  // //   }
+                  //   datasrc = this.convertAmount(datasrc)
+                       const fields = [{
+                        label: 'Approval Reference ID',
+                        value: 'approvalCode'
+                      },{
+                        label: 'Transaction ID',
+                        value: 'transaction_id'
+                      },
+                      {
+                        label: 'Amount',
+                        value: 'amount'
+                      },
+                      {
+                        label: 'Approved',
+                        value: 'total_amount'
+                      },
+                      {
+                        label: 'Spent',
+                        value: 'spent'
+                      },
+                      {
+                        label: 'Left',
+                        value: 'amount_left'
+                      },
+                      {
+                        label: 'Status',
+                        value: 'status'
+                      },
+                      {
+                        label: 'Department',
+                        value: 'department.department_name'
+                      },
+                      {
+                        label: 'Head',
+                        value: 'head.name'
+                      },
+                      {
+                        label: 'Month',
+                        value: 'month'
+                      },
+                      {
+                        label: 'Label 1',
+                        value: 'labels[0].label_name'
+                      },
+                      {
+                        label: 'Label 2',
+                        value: 'labels[1].label_name'
+                      },
+                      {
+                        label: 'Requested By',
+                        value: 'user.user_name'
+                      },
+                      {
+                        label: 'Transaction Type',
+                        value: 'transaction_type'
+                      },
+                      {
+                        label: 'Category',
+                        value: 'category'
+                      },
+                      {
+                        label: 'Vendor',
+                        value: 'vendor.name'
+                      },
+                      {
+                        label: 'Purchase Order',
+                        value: 'po_raised'
+                      },
+                      {
+                        label: 'Date',
+                        value: 'date'
+                      },
+                      {
+                        label: 'Time',
+                        value: 'time'
+                      }];
+                    
+                    const json2csvParser = new Parser({ fields });
+                    const csv = json2csvParser.parse(datasrc);
+                    var hiddenElement = document.createElement('a');
+                    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+                    hiddenElement.target = '_blank';
+                    hiddenElement.download = 'transactions.csv';
+                    hiddenElement.click();
+                  // })
+                 
+                    // this.$refs.overviewgrid.csvExport()
+                }
+                if (args.item.text === 'CSV Export All') {
                   var datasrc = []
                   api.get(`${apiUrl}transaction/trans/get/all`).then((res) => {
                     datasrc = res.data

@@ -12,13 +12,15 @@
             :treeColumnIndex='1' childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
             :allowExcelExport='true'
-            :enableCollapseAll="false"
+            :enableCollapseAll="true"
             :recordDoubleClick="beginEdit"
+            :actionComplete = "actionComplete"
             :allowSorting='true' :toolbar="toolbar" :toolbarClick="clickHandler" :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :load="load">
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='department_name' headerText='Department Name' width='170' ></e-column>
+                    <e-column field='budget.total' headerText='Total Budget' width='170' ></e-column>
                     <e-column field='labels[0].label_name' :template="labelTemplate" headerText='Labels'></e-column>
                     <e-column :template="buttonDesig" width='80' headerText='Manage Designations' ></e-column>
                      <e-column :template="buttonHead" width='80' headerText='Manage Heads' ></e-column>
@@ -179,7 +181,7 @@ import apiUrl from '@/apiUrl'
 import {CoolSelect} from 'vue-cool-select'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { ExcelExport,PdfExport,TreeGridPlugin, Edit, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
+import { ExcelExport,PdfExport,TreeGridPlugin, Edit,Aggregate, Filter,CommandColumn, Toolbar, TreeGridComponent, Sort, Reorder,Resize, Page } from "@syncfusion/ej2-vue-treegrid";
 import { addClass, removeClass, getValue } from '@syncfusion/ej2-base';
 import { ToolbarPlugin } from "@syncfusion/ej2-vue-navigations";
 import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
@@ -421,6 +423,9 @@ export default {
      api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
       this.dept = JSON.parse(JSON.stringify(response.data))
+      for(var i=0;i<response.data.length;i++) {
+        response.data[i].budget = this.getBudgetForDept(response.data[i]._id)
+      }
       this.data = this.list_to_tree_dept(response.data)
       }).catch((err)=> {
         if(err.toString().includes("Network Error")) {
@@ -429,7 +434,7 @@ export default {
           title: 'Network Error'
         })
       }
-      })
+      })   
     api.get(`${apiUrl}`+`label/label/find/by/Departments`).then((res) => {
         this.labels = res.data
       }).catch((err)=> {
@@ -465,9 +470,36 @@ export default {
       })
     },
   provide: {
-      treegrid: [ ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
+      treegrid: [ Aggregate,ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
+    dataBound() {
+
+    },
+    getBudgetForDept(id) {
+      var budget={
+        total:0,
+        remaining:0,
+        approved:0
+      }
+      var total=[]
+      var remaining=[]
+      var approved=[]
+      api.get(`${apiUrl}dropdown/head/only/${id}`).then((res) => {
+        for(var i=0;i<res.data.length;i++) {
+          total.push(0)
+          remaining.push(0)
+          approved.push(0)
+          total[i] = total[i] + res.data[i].permissible_values.reduce((a,b) => a+b,0)
+          remaining[i] = remaining[i] + res.data[i].amount_left.reduce((a,b) => a+b,0)
+          approved[i] = approved[i] + total[i]-remaining[i]
+        }
+        budget.total = total.reduce((a,b)=> a+b,0)
+        budget.remaining = remaining.reduce((a,b)=> a+b,0)
+        budget.approved = approved.reduce((a,b)=> a+b,0)
+      })
+      return budget
+    },
     editdeptLabel() {
       var id = this.editlabel._id
       this.editlabel._id = undefined
@@ -539,6 +571,11 @@ export default {
       })
       }
     },
+    actionComplete(args) {
+      if(args.requestType=="refresh" && !this.data[0].budget.total) {
+        this.$refs.treegrid.refresh()
+      }
+    },
     async load(args) {
       api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
@@ -600,9 +637,7 @@ export default {
                 .then((response) => {
                   this.dept = JSON.parse(JSON.stringify(response.data))
                   this.data = this.list_to_tree_dept(response.data)
-                  });
-                this.$refs.treegrid.collapseAll()
-                this.$refs.treegrid.expandAll()            
+                  });       
                 }).catch((err)=> {
                   if(err.toString().includes("Network Error")) {
         toast({
