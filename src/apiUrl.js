@@ -1,3 +1,3 @@
-var apiUrl = "http://127.0.0.1:3000/api/";
+var apiUrl = "http://101.53.144.170:3000/api/";
 
 export default apiUrl
