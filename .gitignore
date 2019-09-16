@@ -3,7 +3,7 @@ node_modules
 package-lock.json
 /dist
 /coverage
-/src/apiUrl.js
+src/apiUrl.js
 /tests/e2e/reports/
 selenium-debug.log
 
