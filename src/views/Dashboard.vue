@@ -858,12 +858,12 @@ export default {
           this.getHeadBudget(roots)
           return roots
       },
-      getHeadBudget(roots) {
+      async getHeadBudget(roots) {
         roots.total_data = []
         roots.committed_data = []
         roots.remaining_data = []
         for(var i=0;i<roots.length;i++) {
-            api.get(`${apiUrl}dropdown/head/only/${roots[i]._id}`).then((res) => {
+            await api.get(`${apiUrl}dropdown/head/only/${roots[i]._id}`).then((res) => {
               console.log(res.data)
             var total = 0
             var committed = 0

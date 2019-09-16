@@ -76,18 +76,19 @@
                 <e-aggregates>
                     <e-aggregate :showChildSummary='false'>
                         <e-columns>
-                            <e-column type="Sum" field="permissible_values.0" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.1" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.2" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.3" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.4" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.5" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.6" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.7" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.8" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.9" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.10" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.11" format="C0" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Custom" field="name" :customAggregate="customAggregateFn" :footerTemplate='footerCustom'></e-column>
+                            <e-column type="Sum" field="permissible_values.0" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.1" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.2" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.3" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.4" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.5" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.6" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.7" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.8" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.9" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.10" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.11" :footerTemplate='footerMin'></e-column>
                         </e-columns>
                     </e-aggregate>
                 </e-aggregates>
@@ -140,18 +141,20 @@
                 <e-aggregates>
                     <e-aggregate :showChildSummary='false'>
                         <e-columns>
-                            <e-column type="Sum" field="permissible_values.0" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.1" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.2" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.3" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.4" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.5" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.6" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.7" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.8" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.9" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.10" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.11" format="C0" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Custom" field="name" :customAggregate="customAggregateFn" :footerTemplate='footerCustom'></e-column>
+                            <e-column type="Sum" field="permissible_values.0" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.1" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.2" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.3" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.4" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.5" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.6" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.7" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.8" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.9" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.10" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.11" :footerTemplate='footerMin'></e-column>
+                            <e-column format="C0" field='total'  headerText='Year' width="130px"></e-column>
                         </e-columns>
                     </e-aggregate>
                 </e-aggregates>
@@ -188,7 +191,7 @@
                     <e-column format="C0" field='permissible_values.11'  headerText='Dec' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.0'  headerText='Jan' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.1'  headerText='Feb' width="130px"></e-column>
-
+                    <e-column format="C0" field='total'  headerText='Year' width="130px"></e-column>
                     <!-- <e-column :visible="something" field='totalamount.2'  headerText='Mar' width="130px"></e-column>
                     <e-column :visible="something" field='totalamount.3' headerText='Apr' width="130px"></e-column>
                     <e-column :visible="something" field='totalamount.4'  headerText='May' width="130px"></e-column>
@@ -205,18 +208,19 @@
                 <e-aggregates>
                     <e-aggregate :showChildSummary='false'>
                         <e-columns>
-                            <e-column type="Sum" field="permissible_values.0" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.1" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.2" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.3" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.4" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.5" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.6" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.7" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.8" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.9" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.10" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.11" format="C0" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Custom" field="name" :customAggregate="customAggregateFn" :footerTemplate='footerCustom'></e-column>
+                            <e-column type="Sum" field="permissible_values.0" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.1" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.2" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.3" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.4" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.5" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.6" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.7" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.8" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.9" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.10" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.11" :footerTemplate='footerMin'></e-column>
                         </e-columns>
                     </e-aggregate>
                 </e-aggregates>
@@ -252,7 +256,7 @@
                     <e-column format="C0" field='permissible_values.0'  headerText='Jan' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.1'  headerText='Feb' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.2'  headerText='Mar' width="130px"></e-column>
-
+                    <e-column format="C0" field='total'  headerText='Year' width="130px"></e-column>
 
                   <!--   <e-column :visible="something" field='totalamount.3' headerText='Apr' width="130px"></e-column>
                     <e-column :visible="something" field='totalamount.4'  headerText='May' width="130px"></e-column>
@@ -270,18 +274,19 @@
                 <e-aggregates>
                     <e-aggregate :showChildSummary='false'>
                         <e-columns>
-                            <e-column type="Sum" field="permissible_values.0" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.1" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.2" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.3" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.4" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.5" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.6" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.7" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.8" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.9" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.10" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.11" format="C0" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Custom" field="name" :customAggregate="customAggregateFn" :footerTemplate='footerCustom'></e-column>
+                            <e-column type="Sum" field="permissible_values.0" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.1" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.2" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.3" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.4" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.5" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.6" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.7" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.8" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.9" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.10" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.11" :footerTemplate='footerMin'></e-column>
                         </e-columns>
                     </e-aggregate>
                 </e-aggregates>
@@ -319,7 +324,7 @@
                     <e-column format="C0" field='permissible_values.1'  headerText='Feb' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.2'  headerText='Mar' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.3' headerText='Apr' width="130px"></e-column>
-
+                    <e-column format="C0" field='total'  headerText='Year' width="130px"></e-column>
                    <!--  <e-column :visible="something" field='totalamount.4'  headerText='May' width="130px"></e-column>
                     <e-column :visible="something" field='totalamount.5'  headerText='Jun' width="130px"></e-column>
                     <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="130px"></e-column>
@@ -337,18 +342,19 @@
                 <e-aggregates>
                     <e-aggregate :showChildSummary='false'>
                         <e-columns>
-                            <e-column type="Sum" field="permissible_values.0" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.1" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.2" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.3" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.4" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.5" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.6" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.7" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.8" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.9" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.10" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.11" format="C0" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Custom" field="name" :customAggregate="customAggregateFn" :footerTemplate='footerCustom'></e-column>
+                            <e-column type="Sum" field="permissible_values.0" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.1" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.2" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.3" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.4" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.5" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.6" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.7" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.8" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.9" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.10" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.11" :footerTemplate='footerMin'></e-column>
                         </e-columns>
                     </e-aggregate>
                 </e-aggregates>
@@ -385,6 +391,7 @@
                     <e-column format="C0" field='permissible_values.2'  headerText='Mar' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.3' headerText='Apr' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.4'  headerText='May' width="130px"></e-column>
+                    <e-column format="C0" field='total'  headerText='Year' width="130px"></e-column>
 <!-- 
                     <e-column :visible="something" field='totalamount.5'  headerText='Jun' width="130px"></e-column>
                     <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="130px"></e-column>
@@ -402,18 +409,19 @@
                 <e-aggregates>
                     <e-aggregate :showChildSummary='false'>
                         <e-columns>
-                            <e-column type="Sum" field="permissible_values.0" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.1" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.2" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.3" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.4" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.5" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.6" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.7" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.8" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.9" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.10" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.11" format="C0" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Custom" field="name" :customAggregate="customAggregateFn" :footerTemplate='footerCustom'></e-column>
+                            <e-column type="Sum" field="permissible_values.0" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.1" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.2" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.3" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.4" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.5" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.6" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.7" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.8" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.9" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.10" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.11" :footerTemplate='footerMin'></e-column>
                         </e-columns>
                     </e-aggregate>
                 </e-aggregates>
@@ -450,6 +458,7 @@
                     <e-column format="C0" field='permissible_values.3' headerText='Apr' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.4'  headerText='May' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.5'  headerText='Jun' width="130px"></e-column>
+                    <e-column format="C0" field='total'  headerText='Year' width="130px"></e-column>
 <!-- 
                     <e-column :visible="something" field='totalamount.6'  headerText='Jul' width="130px"></e-column>
                     <e-column :visible="something" field='totalamount.7'  headerText='Aug' width="130px"></e-column>
@@ -467,18 +476,19 @@
                 <e-aggregates>
                     <e-aggregate :showChildSummary='false'>
                         <e-columns>
-                            <e-column type="Sum" field="permissible_values.0" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.1" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.2" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.3" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.4" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.5" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.6" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.7" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.8" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.9" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.10" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.11" format="C0" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Custom" field="name" :customAggregate="customAggregateFn" :footerTemplate='footerCustom'></e-column>
+                            <e-column type="Sum" field="permissible_values.0" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.1" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.2" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.3" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.4" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.5" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.6" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.7" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.8" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.9" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.10" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.11" :footerTemplate='footerMin'></e-column>
                         </e-columns>
                     </e-aggregate>
                 </e-aggregates>
@@ -515,6 +525,7 @@
                     <e-column format="C0" field='permissible_values.4'  headerText='May' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.5'  headerText='Jun' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.6'  headerText='Jul' width="130px"></e-column>
+                    <e-column format="C0" field='total'  headerText='Year' width="130px"></e-column>
 <!-- 
                     <e-column :visible="something" field='totalamount.7'  headerText='Aug' width="130px"></e-column>
                     <e-column :visible="something" field='totalamount.8'  headerText='Sep' width="130px"></e-column>
@@ -532,18 +543,19 @@
                 <e-aggregates>
                     <e-aggregate :showChildSummary='false'>
                         <e-columns>
-                            <e-column type="Sum" field="permissible_values.0" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.1" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.2" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.3" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.4" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.5" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.6" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.7" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.8" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.9" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.10" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.11" format="C0" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Custom" field="name" :customAggregate="customAggregateFn" :footerTemplate='footerCustom'></e-column>
+                            <e-column type="Sum" field="permissible_values.0" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.1" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.2" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.3" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.4" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.5" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.6" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.7" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.8" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.9" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.10" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.11" :footerTemplate='footerMin'></e-column>
                         </e-columns>
                     </e-aggregate>
                 </e-aggregates>
@@ -581,6 +593,7 @@
                     <e-column format="C0" field='permissible_values.5'  headerText='Jun' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.6'  headerText='Jul' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.7'  headerText='Aug' width="130px"></e-column>
+                    <e-column format="C0" field='total'  headerText='Year' width="130px"></e-column>
 <!-- 
                     <e-column :visible="something" field='totalamount.8'  headerText='Sep' width="130px"></e-column>
                     <e-column :visible="something" field='totalamount.9'  headerText='Oct' width="130px"></e-column>
@@ -599,18 +612,19 @@
                 <e-aggregates>
                     <e-aggregate :showChildSummary='false'>
                         <e-columns>
-                            <e-column type="Sum" field="permissible_values.0" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.1" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.2" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.3" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.4" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.5" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.6" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.7" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.8" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.9" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.10" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.11" format="C0" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Custom" field="name" :customAggregate="customAggregateFn" :footerTemplate='footerCustom'></e-column>
+                            <e-column type="Sum" field="permissible_values.0" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.1" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.2" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.3" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.4" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.5" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.6" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.7" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.8" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.9" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.10" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.11" :footerTemplate='footerMin'></e-column>
                         </e-columns>
                     </e-aggregate>
                 </e-aggregates>
@@ -649,6 +663,7 @@
                     <e-column format="C0" field='permissible_values.6'  headerText='Jul' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.7'  headerText='Aug' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.8'  headerText='Sep' width="130px"></e-column>
+                    <e-column format="C0" field='total'  headerText='Year' width="130px"></e-column>
 
                    <!--  <e-column :visible="something" field='totalamount.9'  headerText='Oct' width="130px"></e-column>
                     <e-column :visible="something" field='totalamount.10'  headerText='Nov' width="130px"></e-column>
@@ -667,18 +682,19 @@
                 <e-aggregates>
                     <e-aggregate :showChildSummary='false'>
                         <e-columns>
-                            <e-column type="Sum" field="permissible_values.0" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.1" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.2" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.3" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.4" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.5" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.6" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.7" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.8" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.9" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.10" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.11" format="C0" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Custom" field="name" :customAggregate="customAggregateFn" :footerTemplate='footerCustom'></e-column>
+                            <e-column type="Sum" field="permissible_values.0" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.1" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.2" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.3" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.4" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.5" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.6" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.7" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.8" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.9" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.10" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.11" :footerTemplate='footerMin'></e-column>
                         </e-columns>
                     </e-aggregate>
                 </e-aggregates>
@@ -716,7 +732,7 @@
                     <e-column format="C0" field='permissible_values.7'  headerText='Aug' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.8'  headerText='Sep' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.9'  headerText='Oct' width="130px"></e-column>
-
+                    <e-column format="C0" field='total'  headerText='Year' width="130px"></e-column>
                    <!--  <e-column :visible="something" field='totalamount.10'  headerText='Nov' width="130px"></e-column>
                     <e-column :visible="something" field='totalamount.11'  headerText='Dec' width="130px"></e-column>
                     <e-column :visible="something" field='totalamount.0'  headerText='Jan' width="130px"></e-column>
@@ -734,18 +750,19 @@
                 <e-aggregates>
                     <e-aggregate :showChildSummary='false'>
                         <e-columns>
-                            <e-column type="Sum" field="permissible_values.0" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.1" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.2" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.3" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.4" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.5" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.6" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.7" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.8" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.9" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.10" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.11" format="C0" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Custom" field="name" :customAggregate="customAggregateFn" :footerTemplate='footerCustom'></e-column>
+                            <e-column type="Sum" field="permissible_values.0" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.1" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.2" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.3" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.4" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.5" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.6" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.7" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.8" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.9" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.10" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.11" :footerTemplate='footerMin'></e-column>
                         </e-columns>
                     </e-aggregate>
                 </e-aggregates>
@@ -782,7 +799,7 @@
                     <e-column format="C0" field='permissible_values.8'  headerText='Sep' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.9'  headerText='Oct' width="130px"></e-column>
                     <e-column format="C0" field='permissible_values.10'  headerText='Nov' width="130px"></e-column>
-
+                    <e-column format="C0" field='total'  headerText='Year' width="130px"></e-column>
                      <!-- <e-column :visible="something" field='totalamount.11'  headerText='Dec' width="130px"></e-column>
                     <e-column :visible="something" field='totalamount.0'  headerText='Jan' width="130px"></e-column>
                     <e-column :visible="something" field='totalamount.1'  headerText='Feb' width="130px"></e-column>
@@ -800,18 +817,19 @@
                 <e-aggregates>
                     <e-aggregate :showChildSummary='false'>
                         <e-columns>
-                            <e-column type="Sum" field="permissible_values.0" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.1" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.2" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.3" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.4" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.5" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.6" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.7" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.8" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.9" format="C0" :footerTemplate='footerMin'></e-column>
-                            <e-column type="Sum" field="permissible_values.10" format="C0" :footerTemplate='footerMax'></e-column>
-                            <e-column type="Sum" field="permissible_values.11" format="C0" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Custom" field="name" :customAggregate="customAggregateFn" :footerTemplate='footerCustom'></e-column>
+                            <e-column type="Sum" field="permissible_values.0" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.1" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.2" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.3" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.4" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.5" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.6" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.7" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.8" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.9" :footerTemplate='footerMin'></e-column>
+                            <e-column type="Sum" field="permissible_values.10" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="permissible_values.11" :footerTemplate='footerMin'></e-column>
                         </e-columns>
                     </e-aggregate>
                 </e-aggregates>
@@ -1284,14 +1302,66 @@ export default {
                 footerMin: function () {
         return  { template : Vue.component('minTemplate', {
             template: `<span>Sum: {{data.Sum}}</span>`,
-            data () {return { data: {}};}
+            data () {return { data: {}};},
+            mounted() {
+                this.data.Sum = this.changeAmounttoFormat(this.data.Sum)
+            },
+            methods : {
+                changeAmounttoFormat(amount) {
+                    var x=amount;
+                    x=x.toString();
+                    var lastThree = x.substring(x.length-3);
+                    var otherNumbers = x.substring(0,x.length-3);
+                    if(otherNumbers != '')
+                        lastThree = ',' + lastThree;
+                    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                    return `₹ ${res}`
+                },
+            }
+            })
+          }
+      },
+      footerCustom: function () {
+        return  { template : Vue.component('customTemplate', {
+            template: `<span>Total: {{data.Custom}}</span>`,
+            data () {return { data: {}};},
+            mounted() {
+                this.data.Custom = this.changeAmounttoFormat(this.data.Custom)
+            },
+            methods : {
+                changeAmounttoFormat(amount) {
+                    var x=amount;
+                    x=x.toString();
+                    var lastThree = x.substring(x.length-3);
+                    var otherNumbers = x.substring(0,x.length-3);
+                    if(otherNumbers != '')
+                        lastThree = ',' + lastThree;
+                    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                    return `₹ ${res}`
+                },
+            }
             })
           }
       },
       footerMax: function () {
         return  { template : Vue.component('maxTemplate', {
             template: `<span>Sum: {{data.Sum}}</span>`,
-            data () {return { data: {}};}
+            data () {return { data: {}};},
+            mounted() {
+                this.data.Sum = this.changeAmounttoFormat(this.data.Sum)
+            },
+            methods : {
+                changeAmounttoFormat(amount) {
+                    var x=amount;
+                    x=x.toString();
+                    var lastThree = x.substring(x.length-3);
+                    var otherNumbers = x.substring(0,x.length-3);
+                    if(otherNumbers != '')
+                        lastThree = ',' + lastThree;
+                    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                    return `₹ ${res}`
+                },
+            }
             })
           }
       },
@@ -1542,6 +1612,7 @@ export default {
     convertAmount(list) {
         for(var i=0;i<list.length;i++) {
             list[i].totalamount=[0,0,0,0,0,0,0,0,0,0,0,0]
+            list[i].total = list[i].permissible_values.reduce((a,b)=>a+b,0)
             for(var j=0;j<12;j++) {
                 list[i].totalamount[j] = this.changeAmounttoFormat(list[i].permissible_values[j])
             }
@@ -1834,6 +1905,10 @@ export default {
         }
         return false;
       },
+      customAggregateFn(args) {
+        var total = args.aggregates['permissible_values.0 - sum'] + args.aggregates['permissible_values.1 - sum'] + args.aggregates['permissible_values.2 - sum'] + args.aggregates['permissible_values.3 - sum'] + args.aggregates['permissible_values.4 - sum'] + args.aggregates['permissible_values.5 - sum'] + args.aggregates['permissible_values.6 - sum'] + args.aggregates['permissible_values.7 - sum'] + args.aggregates['permissible_values.8 - sum'] + args.aggregates['permissible_values.9 - sum'] + args.aggregates['permissible_values.10 - sum'] + args.aggregates['permissible_values.11 - sum']
+        return total
+    },
       checkExistHead(node) {
         for (var i=0; i < this.or_head.length; i++) {
             if (this.or_head[i]._id == node)

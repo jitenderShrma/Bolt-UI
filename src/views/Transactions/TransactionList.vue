@@ -34,10 +34,10 @@
                 <e-columns>
                     <e-column field='approvalCode' headerText='Ref ID' :filter='filter' ></e-column>
                     <e-column field='transaction_id' :template="printTemplate" headerText='Transaction ID' :filter='filter'></e-column>
-                    <e-column field='amount' format="C0" headerText='Amount' :filter='filter' :width="130"></e-column>
-                    <e-column field='total_amount' format="C0" headerText='Approved' :filter='filter' :width="130"></e-column>
-                    <e-column field='spent' format="C0" headerText='Spent' :filter='filter' :width="130"></e-column>
-                    <e-column field='amount_left' format="C0" headerText='Left' :filter='filter' :width="130"></e-column>
+                    <e-column field='amount' format="C0" headerText='Transaction AMT' :filter='filter' :width="180"></e-column>
+                    <e-column field='total_amount' format="C0" headerText='Approved' :allowFiltering="false" :width="130"></e-column>
+                    <e-column field='spent' format="C0" headerText='Spent' :allowFiltering="false" :width="130"></e-column>
+                    <e-column field='amount_left' format="C0" headerText='Left' :allowFiltering="false" :width="130"></e-column>
                     <e-column field='status' :template="statusTemplate" headerText='Status' :filter='filter' :width="130"></e-column>
                     <e-column field='department.department_name' headerText='Department' :filter='filter'  ></e-column>
                     <e-column field='head.name' headerText='Head' :filter='filter'></e-column>
@@ -53,7 +53,10 @@
                 <e-aggregates>
                     <e-aggregate :showChildSummary='false'>
                         <e-columns>
-                            <e-column type="Sum" field="amount" format="C0" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="amount" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Custom" field="total_amount" :customAggregate="customAggregateFn" :footerTemplate='footerTTL'></e-column>
+                            <e-column type="Custom" field="spent" :customAggregate="customAggregateFn1" :footerTemplate='footerSPT'></e-column>
+                            <e-column type="Custom" field="amount_left" :customAggregate="customAggregateFn2" :footerTemplate='footerLFT'></e-column>
                         </e-columns>
                   </e-aggregate>
                 </e-aggregates>
@@ -105,12 +108,48 @@
       <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
     </b-form>
   </b-modal>
+  <b-modal :title="$ml.get('filter')" class="modal-primary" v-model="filterModal" size="md" @ok="filterModal = false" hide-footer>
+    <b-form style="padding:3%" v-on:submit.prevent="applyFilter">
+      <b-form-group>
+        <ejs-dropdownlist :showClearButton="true" :fields='fieldsformat' floatLabelType="Auto" :dataSource='fields' v-model="filterform.field" :placeholder="$ml.get('pholdfilterfield')">
+        </ejs-dropdownlist>
+      </b-form-group>
+      <div v-if="filterform.field == 'department.department_name' ">
+        <treeselect ref='treeselect1' :default-expand-level="10" v-model="filterform.value" :placeholder="$ml.get('pholddept')" :multiple="false" :options="department" />
+      </div>
+      <div v-if="filterform.field == 'head.name' ">
+        <treeselect ref='treeselect1' :default-expand-level="10" :placeholder="$ml.get('pholdhead')" v-model="filterform.value" :multiple="false" :options="head" />
+      </div>
+      <div v-if="filterform.field == 'user.user_name' ">
+        <ejs-dropdownlist :showClearButton="true" :fields='userfields' floatLabelType="Auto" :dataSource='users' v-model="filterform.value" :placeholder="$ml.get('pholduser')">
+        </ejs-dropdownlist>
+      </div>
+      <div v-if="filterform.field == 'createdAt' ">
+        <vue-daterange-picker 
+            double 
+            start-date="06/10/2017" 
+            end-date="06/10/2018" 
+            format="dd/mm/yyyy"
+            place-holders="dd/mm/yyyy"
+            @get-dates="getDates"/>
+      </div>
+      <div v-if="filterform.field == 'transaction_id' || filterform.field == 'ref_id' || filterform.field == 'amount' || filterform.field == 'status' || filterform.field == 'po_raised'">
+        <ejs-textbox v-model="filterform.value" floatLabelType="Auto" :placeholder="$ml.get('equalto')"></ejs-textbox>
+      </div>
+      <br>
+      <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
+    </b-form>
+  </b-modal>
   </div>
  </div>
 </template>
 <script>
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import VueDaterangePicker from 'vue-daterange-picker';
 import apiUrl from '@/apiUrl'
 import axios from 'axios'
+import _ from 'lodash'
 import moment from 'moment'
 import {Parser} from 'json2csv'
 Vue.prototype.moment = moment
@@ -177,7 +216,7 @@ export default {
   props:[
   'ref_id'],
     name: 'TransactionList',
-    components: {      ToolbarPlugin,
+    components: { Treeselect,VueDaterangePicker,ToolbarPlugin,
       GridPlugin, Filter, Selection, Sort, VirtualScroll,
         Toolbar, Page,ColumnChooser,Resize,ColumnMenu,DatePickerPlugin,
         TextBoxPlugin,
@@ -192,6 +231,11 @@ export default {
     data: function () {
       return {
         foreign:[],
+        filterform:{
+
+        },
+        fieldsformat: { text: 'name', value: 'ID' },
+        filterModal:false,
         formatOptions: { type: 'date', format: 'dd/MM/yyyy' },
         groupOptions:{
           columns:['approvalCode'],
@@ -210,8 +254,102 @@ export default {
           }},
       footerMax: function () {
         return  { template : Vue.component('maxTemplate', {
-            template: `<span>Sum: {{data.Sum}}</span>`,
-            data () {return { data: {}};}
+            template: `<span>TRA: {{data.Sum}}</span>`,
+            data () {return { data: {}};},
+            mounted() {
+                this.data.Sum = this.changeAmounttoFormat(this.data.Sum)
+            },
+            methods : {
+                changeAmounttoFormat(amount) {
+                    var x=amount;
+                    x=x.toString();
+                    var lastThree = x.substring(x.length-3);
+                    var otherNumbers = x.substring(0,x.length-3);
+                    if(otherNumbers != '')
+                        lastThree = ',' + lastThree;
+                    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                    return `₹ ${res}`
+                },
+            }
+            })
+          }
+      },
+
+      fields:[
+      {name:'Ref ID',ID:'approvalCode'},
+        {name:'Transaction ID',ID:'transaction_id'},
+        {name:'Amount',ID:'amount'},
+        {name:'Status',ID:'status'},
+        {name:'Department',ID:'department.department_name'},
+        {name:'Head',ID:'head.name'},
+        {name:'Label',ID:'labels[0].label_name'},
+        {name:'Vendor',ID:'vendor.vendor_company'},
+        {name:'PO Number',ID:'po_raised'},
+        {name:'createdAt',ID:'createdAt'}
+      ],
+      footerTTL: function (datasrc) {
+        return  { template : Vue.component('sumTemplate', {
+            template: `<span>TOT: {{data.Custom}}</span>`,
+            data () {return { data: {}};},
+            mounted() {
+                this.data.Custom = this.changeAmounttoFormat(this.data.Custom)
+            },
+            methods : {
+                changeAmounttoFormat(amount) {
+                    var x=amount;
+                    x=x.toString();
+                    var lastThree = x.substring(x.length-3);
+                    var otherNumbers = x.substring(0,x.length-3);
+                    if(otherNumbers != '')
+                        lastThree = ',' + lastThree;
+                    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                    return `₹ ${res}`
+                },
+            }
+            })
+          }
+      },
+      footerSPT: function (datasrc) {
+        return  { template : Vue.component('sumTemplate', {
+            template: `<span>SPT: {{data.Custom}}</span>`,
+            data () {return { data: {}};},
+            mounted() {
+                this.data.Custom = this.changeAmounttoFormat(this.data.Custom)
+            },
+            methods : {
+                changeAmounttoFormat(amount) {
+                    var x=amount;
+                    x=x.toString();
+                    var lastThree = x.substring(x.length-3);
+                    var otherNumbers = x.substring(0,x.length-3);
+                    if(otherNumbers != '')
+                        lastThree = ',' + lastThree;
+                    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                    return `₹ ${res}`
+                },
+            }
+            })
+          }
+      },
+      footerLFT: function (datasrc) {
+        return  { template : Vue.component('sumTemplate', {
+            template: `<span>LFT: {{data.Custom}}</span>`,
+            data () {return { data: {}};},
+            mounted() {
+                this.data.Custom = this.changeAmounttoFormat(this.data.Custom)
+            },
+            methods : {
+                changeAmounttoFormat(amount) {
+                    var x=amount;
+                    x=x.toString();
+                    var lastThree = x.substring(x.length-3);
+                    var otherNumbers = x.substring(0,x.length-3);
+                    if(otherNumbers != '')
+                        lastThree = ',' + lastThree;
+                    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                    return `₹ ${res}`
+                },
+            }
             })
           }
       },
@@ -434,7 +572,8 @@ export default {
            height : window.innerHeight*0.695,
           toolbar: [
           { prefixIcon: 'e-csvexport', text:"CSV Export Filtered", id: 'exportfiltered', align: 'Left' },
-          { prefixIcon: 'e-csvexport', text:"CSV Export All", id: 'exportall', align: 'Left' },'Search',
+          { prefixIcon: 'e-csvexport', text:"CSV Export All", id: 'exportall', align: 'Left' },
+          {text:"Clear Filters", id: 'clearfilter', align: 'Left' },'Search',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
@@ -467,9 +606,103 @@ export default {
                 alertDlgButtons: [{ click: this.alertDlgBtnClick, buttonModel: { content: 'OK', isPrimary: true } }],
                 selectionSettings: { persistSelection: true, type: 'Multiple' },
                 sortOptions:{columns: [{field: 'approvalCode', direction: 'Descending'},{field: 'createdAt', direction: 'Descending'}],isMulti:true},
+                department:[],
+                head:[]
             };
         },
   methods: {
+    customAggregateFn : function (data) {
+      var total = 0
+      var group = _.groupBy(data.result.records,'approvalCode')
+      for(var i=0;i<this.foreign.length;i++) {
+        if(group[this.foreign[i].ref_id]) {
+        total = total + group[this.foreign[i].ref_id][0].total_amount
+      }
+      }
+      console.log(total)
+      return total;
+    },
+    customAggregateFn1 : function (data) {
+      var total = 0
+      var group = _.groupBy(data.result.records,'approvalCode')
+      for(var i=0;i<this.foreign.length;i++) {
+        if(group[this.foreign[i].ref_id]) {
+        total = total + group[this.foreign[i].ref_id][0].spent
+      }
+      }
+      console.log(total)
+      return total;
+    },
+    applyFilter() {
+      if(this.filterform.field == "department.department_name") {
+        this.filterform.field = "department"
+      }
+      if(this.filterform.field == "head.name") {
+        this.filterform.field = "head"
+      }
+      console.log(this.filterform)
+      api.get(`${apiUrl}approvals/preApp/get/all`).then((res) => {
+            this.loading= true
+            this.foreign = res.data
+                    this.filterModal =false
+
+            api.post(`${apiUrl}`+`transaction/trans/filter/get`,this.filterform).then((response) => {
+                  console.log(response.data)
+                    this.datasrc = response.data;
+                    for(var i =0;i<this.datasrc.length;i++) {
+                      this.datasrc[i].amount = parseInt(this.datasrc[i].amount)
+                      this.datasrc[i].date = moment(this.datasrc[i].createdAt).format('L')
+                      this.datasrc[i].time = moment(this.datasrc[i].createdAt).format('h:mm')
+                      this.datasrc[i].createdAt = new Date(this.datasrc[i].createdAt)
+                      if(this.datasrc[i].user == null) {
+                        this.datasrc[i].user = {
+                          user_name:"ADMIN"
+                        }
+                      }
+                      if(this.datasrc[i].status == "Approved") {
+                        this.datasrc[i].status = "UNPAID"
+                      }
+                      if(this.datasrc[i].department == null) {
+                        this.datasrc[i].department = {
+                          department_name:"NONE"
+                        }
+                      }
+                      if(this.datasrc[i].head == null) {
+                        this.datasrc[i].head = {
+                          name:"NONE"
+                        }
+                      }
+                      for(var j=0;j<this.foreign.length;j++) {
+                        if(this.datasrc[i].approvalCode == this.foreign[j].ref_id) {
+                          this.datasrc[i].total_amount = this.foreign[j].amount
+                          this.datasrc[i].amount_left = this.foreign[j].approval_amount_left[this.foreign[j].month]
+                          this.datasrc[i].spent = this.datasrc[i].total_amount - this.datasrc[i].amount_left
+                        }
+                      }
+                    }
+                    
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
+          })
+    },
+    getDates(args) {
+      console.log(args)
+    },
+    customAggregateFn2 : function (data) {
+      var total = 0
+      var group = _.groupBy(data.result.records,'approvalCode')
+      for(var i=0;i<this.foreign.length;i++) {
+        if(group[this.foreign[i].ref_id]) {
+        total = total + group[this.foreign[i].ref_id][0].amount_left
+      }
+      }
+      console.log(total)
+      return total;
+    },
     sumofUnique(array) {
       var flags = [], output = [], l = array.length, i;
       for( i=0; i<l; i++) {
@@ -496,6 +729,7 @@ export default {
                     this.datasrc = response.data;
                     this.paymentModal = false
                     for(var i =0;i<this.datasrc.length;i++) {
+                      this.datasrc[i].amount = parseInt(this.datasrc[i].amount)
                       this.datasrc[i].date = moment(this.datasrc[i].createdAt).format('L')
                       this.datasrc[i].time = moment(this.datasrc[i].createdAt).format('h:mm')
                       this.datasrc[i].createdAt = new Date(this.datasrc[i].createdAt)
@@ -584,18 +818,16 @@ export default {
         },
             actionBegin: function(args) {
               console.log(args)
-              if(args.requestType == "filterchoicerequest") {
-                args.dataSource = this.datasrc
+              if(args.requestType == "filterchoicerequest" && args.query.distincts[0]!="createdAt" && args.query.distincts[0]!="user.user_name" && args.query.distincts[0]!="transaction_type" && args.query.distincts[0]!="category" && args.query.distincts[0]!="month" && args.query.distincts[0]!="vendor.vendor_company") {
+                this.filterform.field = args.query.distincts[0]
+                this.filterModal = true
+                args.filterModel.dialogObj.hide()
               }
               
             },
             actionComplete(args) {
               this.filterqueries=[]
               console.log(args)
-              if(args.requestType == "filterafteropen") {
-                this.filterTID = true
-                args.filterModel=`<div></div>`
-              }
               if(args.requestType=="filtering") {
                 if(args.columns) {
                 for(var i=0;i<args.columns.length;i++) {
@@ -751,6 +983,7 @@ export default {
                   api.get(`${apiUrl}transaction/trans/get/all`).then((res) => {
                     datasrc = res.data
                     for(var i=0;i<datasrc.length;i++) {
+                      datasrc[i].amount = parseInt(datasrc[i].amount)
                       datasrc[i].date = moment(datasrc[i].createdAt).format('L')
                       datasrc[i].time = moment(datasrc[i].createdAt).format('h:mm')
                       for(var j=0;j<this.foreign.length;j++) {
@@ -852,6 +1085,54 @@ export default {
                 if (args.item.text === 'PDF Export') {
                     this.$refs.overviewgrid.pdfExport()
                 }
+                if (args.item.id === 'clearfilter') {
+                  this.$refs.overviewgrid.clearFiltering()
+                    api.get(`${apiUrl}approvals/preApp/get/all`).then((res) => {
+                      this.loading= true
+                      this.foreign = res.data
+                      api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
+                            console.log(response.data)
+                              this.datasrc = response.data;
+                              for(var i =0;i<this.datasrc.length;i++) {
+                                this.datasrc[i].amount = parseInt(this.datasrc[i].amount)
+                                this.datasrc[i].date = moment(this.datasrc[i].createdAt).format('L')
+                                this.datasrc[i].time = moment(this.datasrc[i].createdAt).format('h:mm')
+                                this.datasrc[i].createdAt = new Date(this.datasrc[i].createdAt)
+                                if(this.datasrc[i].user == null) {
+                                  this.datasrc[i].user = {
+                                    user_name:"ADMIN"
+                                  }
+                                }
+                                if(this.datasrc[i].status == "Approved") {
+                                  this.datasrc[i].status = "UNPAID"
+                                }
+                                if(this.datasrc[i].department == null) {
+                                  this.datasrc[i].department = {
+                                    department_name:"NONE"
+                                  }
+                                }
+                                if(this.datasrc[i].head == null) {
+                                  this.datasrc[i].head = {
+                                    name:"NONE"
+                                  }
+                                }
+                                for(var j=0;j<this.foreign.length;j++) {
+                                  if(this.datasrc[i].approvalCode == this.foreign[j].ref_id) {
+                                    this.datasrc[i].total_amount = this.foreign[j].amount
+                                    this.datasrc[i].amount_left = this.foreign[j].approval_amount_left[this.foreign[j].month]
+                                    this.datasrc[i].spent = this.datasrc[i].total_amount - this.datasrc[i].amount_left
+                                  }
+                                }
+                              }
+                              
+                          }).catch((err)=> {
+                  toast({
+                    type: VueNotifications.types.error,
+                    title: 'Network Error'
+                  })
+                })
+                    })
+                }
             },
             dataBound(args) {
               this.loading= false
@@ -899,6 +1180,7 @@ export default {
                             api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
                               this.datasrc = response.data;
                               for(var i =0;i<this.datasrc.length;i++) {
+                                this.datasrc[i].amount = parseInt(this.datasrc[i].amount)
                                 this.datasrc[i].date = moment(this.datasrc[i].createdAt).format('L')
                                 this.datasrc[i].time = moment(this.datasrc[i].createdAt).format('h:mm')
                                 this.datasrc[i].createdAt = new Date(this.datasrc[i].createdAt)
@@ -980,6 +1262,84 @@ export default {
               var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
               return res
             },
+            list_to_tree_dept(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_department != undefined  && this.checkExistDept(node.parent_department)) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_department]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataDept(roots)
+          return roots
+      },
+      convertDataDept(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataDept(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].department_name;
+        delete roots[i]._id;
+        delete roots[i].department_name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
+        }
+      },
+      checkExistDept(node) {
+        for (var i=0; i < this.dept.length; i++) {
+            if (this.dept[i]._id == node)
+                return true;
+        }
+        return false;
+      },
+      checkExistHead(node) {
+        for (var i=0; i < this.or_head.length; i++) {
+            if (this.or_head[i]._id == node)
+                return true;
+        }
+        return false;
+      },
+      list_to_tree_head(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_head != undefined && this.checkExistHead(node.parent_head)) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_head]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataHead(roots)
+          return roots
+      },
+      convertDataHead(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataHead(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].name;
+        delete roots[i]._id;
+        delete roots[i].name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
+        }
+      },
             alertDlgBtnClick() {
                     this.$refs.alertDialog.hide();
                 },
@@ -1044,6 +1404,7 @@ export default {
                   console.log(response.data)
                     this.datasrc = response.data;
                     for(var i =0;i<this.datasrc.length;i++) {
+                      this.datasrc[i].amount = parseInt(this.datasrc[i].amount)
                       this.datasrc[i].date = moment(this.datasrc[i].createdAt).format('L')
                       this.datasrc[i].time = moment(this.datasrc[i].createdAt).format('h:mm')
                       this.datasrc[i].createdAt = new Date(this.datasrc[i].createdAt)
@@ -1080,8 +1441,32 @@ export default {
           title: 'Network Error'
         })
       })
-          }) 
-                
+          })
+          // Department Tree
+      axios.get(`${apiUrl}`+`dropdown/department/get/all`,{withCredentials:true}).then((res) => {
+        this.dept = JSON.parse(JSON.stringify(res.data))
+        this.department = this.list_to_tree_dept(res.data)
+      }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      }
+      })
+      // Head Tree
+      axios.get(`${apiUrl}`+`head/head/get`,{withCredentials:true}).then((res) => {
+        console.log(res.data);
+        this.or_head = JSON.parse(JSON.stringify(res.data))
+        this.head = this.list_to_tree_head(res.data)
+      }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      }
+      })           
             
         }
 };
@@ -1175,7 +1560,7 @@ export default {
 #loader {
     height: 0;
     position: absolute;
-    left: 33%;
+    left: 44% !important;
     top: -8%;
 }
       .sk-fading-circle {

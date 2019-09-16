@@ -87,8 +87,10 @@
     "vue": "^2.5.22",
     "vue-blu": "^0.1.9",
     "vue-chartjs": "^3.4.0",
+    "vue-clickaway": "^2.2.2",
     "vue-codemirror": "^4.0.6",
     "vue-cool-select": "^2.10.2",
+    "vue-daterange-picker": "^1.2.5",
     "vue-friendly-iframe": "^0.13.0",
     "vue-froala-wysiwyg": "^3.0.3",
     "vue-grid-layout": "^2.3.3",
@@ -109,6 +111,7 @@
     "vue-tables-2": "^1.4.70",
     "vue-text-mask": "^6.1.2",
     "vue-trumbowyg": "^3.4.2",
+    "vue2-daterange-picker": "^0.3.1",
     "vue2-google-maps": "^0.10.5",
     "vuelidate": "^0.7.4"
   },

@@ -193,7 +193,7 @@
                 <e-aggregates>
                     <e-aggregate >
                         <e-columns>
-                            <e-column type="Sum" field="amount" format="C0" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="amount" :footerTemplate='footerMax'></e-column>
                         </e-columns>
                   </e-aggregate>
                 </e-aggregates>
@@ -375,7 +375,22 @@ export default {
         footerMax: function () {
         return  { template : Vue.component('maxTemplate', {
             template: `<span>Sum: {{data.Sum}}</span>`,
-            data () {return { data: {}};}
+            data () {return { data: {}};},
+            mounted() {
+                this.data.Sum = this.changeAmounttoFormat(this.data.Sum)
+            },
+            methods : {
+                changeAmounttoFormat(amount) {
+                    var x=amount;
+                    x=x.toString();
+                    var lastThree = x.substring(x.length-3);
+                    var otherNumbers = x.substring(0,x.length-3);
+                    if(otherNumbers != '')
+                        lastThree = ',' + lastThree;
+                    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                    return `₹ ${res}`
+                },
+            }
             })
           }
       },

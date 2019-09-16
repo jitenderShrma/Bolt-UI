@@ -318,5 +318,8 @@
     "uploadpo" : "Upload Purchase Order",
     "carryover" : "Carry Over Form",
     "budgettransfer" : "Budget Transfer Form",
-    "pholdmonthcarryover" : "Select the month to Carry Over"
+    "pholdmonthcarryover" : "Select the month to Carry Over",
+    "equalto" : "Equal To",
+    "pholdfilterfield" : "Select A Field to Filter",
+    "filter" : "Filter"
 }
