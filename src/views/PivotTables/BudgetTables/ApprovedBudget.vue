@@ -1936,7 +1936,7 @@ export default {
         }
         }
         console.log(args)
-        this.addremove.month = args.column.field.split('remaining.').pop()
+        this.addremove.month = args.column.field.split('amount_left.').pop()
         // this.addremoveform = true 
         this.editmodal =true
         this.editinput = args.rowData

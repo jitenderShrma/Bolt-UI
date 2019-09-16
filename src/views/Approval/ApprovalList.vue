@@ -156,14 +156,30 @@
                 <!-- <e-item align="right" id="label" :text="$ml.get('editlabels')"></e-item> -->
               </e-items>
             </ejs-toolbar>
+            <div v-if="loading" id="loader">
+          <div class="sk-fading-circle">
+              <div class="sk-circle1 sk-circle"></div>
+              <div class="sk-circle2 sk-circle"></div>
+              <div class="sk-circle3 sk-circle"></div>
+              <div class="sk-circle4 sk-circle"></div>
+              <div class="sk-circle5 sk-circle"></div>
+              <div class="sk-circle6 sk-circle"></div>
+              <div class="sk-circle7 sk-circle"></div>
+              <div class="sk-circle8 sk-circle"></div>
+              <div class="sk-circle9 sk-circle"></div>
+              <div class="sk-circle10 sk-circle"></div>
+              <div class="sk-circle11 sk-circle"></div>
+              <div class="sk-circle12 sk-circle"></div>
+            </div>
+        </div>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true' :allowReordering='true'  id='overviewgrid' :allowPaging="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc" :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :pageSettings="pageSettings" :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"  :rowSelected="rowSelected" :beforeCopy="beforeCopy"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true' :allowReordering='true'  id='overviewgrid' :allowPaging="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc" :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :pageSettings="pageSettings" :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"  :rowSelected="rowSelected" :beforeCopy="beforeCopy" :dataBound="dataBound"
                 :height="height" :enableHover='false'> 
                 <e-columns>
                     <e-column :visible="enableColumn" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
                     <e-column field='ref_id' :template="buttonCopy" headerText='Ref ID' width="167"  :filter='filter' ></e-column>
                     <e-column :sortComparer='sortComparer' :template="buttonLM" field='status' headerText='Status' width="137" :filter='filter' ></e-column>
-                    <e-column field='amount' headerText='Amount' width="126" :filter='filter' ></e-column>
+                    <e-column field='amount' headerText='Amount' format="C0" width="126" :filter='filter' ></e-column>
                     <e-column field='department.department_name' headerText='Department' width="145" :filter='filter' ></e-column>
                     <e-column field='budget_head.name' headerText='Head' width="110" :filter='filter' ></e-column>
                     <e-column :visible="true" field="last_updated" headerText='Last Updated At' :template="dateTemplate"></e-column>
@@ -174,6 +190,13 @@
                     <e-column field='recurring_rate' headerText='Recur Rate' width="138" :filter='filter' ></e-column>
                     <e-column field='description' headerText='Description' width="143" :filter='filter' ></e-column>
                 </e-columns>
+                <e-aggregates>
+                    <e-aggregate >
+                        <e-columns>
+                            <e-column type="Sum" field="amount" format="C0" :footerTemplate='footerMax'></e-column>
+                        </e-columns>
+                  </e-aggregate>
+                </e-aggregates>
                 </ejs-grid>
                  </div>
         </div>
@@ -290,7 +313,7 @@ import {
   FieldList
 } from "@syncfusion/ej2-vue-pivotview";
 import {CoolSelect} from 'vue-cool-select';
-import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
+import {Aggregate,PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     import { DialogPlugin } from '@syncfusion/ej2-vue-popups';
 import { NumericTextBoxPlugin,ColorPickerPlugin } from "@syncfusion/ej2-vue-inputs";
@@ -340,7 +363,7 @@ export default {
       ToolbarPlugin, CoolSelect, GridPlugin, AsideToggler, AppHeader, DefaultToggler, AppSidebar, AppAside, TheFooter, Breadcrumb, SidebarForm, SidebarFooter, SidebarToggler, SidebarHeader, SidebarNav, cSwitch, SidebarMinimizer,DatePickerPlugin, NumericTextBoxPlugin 
     },
     provide: {
-         grid: [PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder]
+         grid: [Aggregate,PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder]
     },
     data: function () {
       return {
@@ -349,6 +372,13 @@ export default {
                 delete_own:true,
         addModal:false,
         sortOptions:{columns: [{field: 'status', direction: 'Descending'},{field: 'last_updated', direction: 'Descending'}],isMulti:true},
+        footerMax: function () {
+        return  { template : Vue.component('maxTemplate', {
+            template: `<span>Sum: {{data.Sum}}</span>`,
+            data () {return { data: {}};}
+            })
+          }
+      },
         dateTemplate:function() {
           return {
             template:Vue.component('dateTemplate', {
@@ -817,6 +847,7 @@ export default {
                 })
               }
           },
+          loading:false,
           transactions:[],
           module:null,
           formdata: {
@@ -1472,6 +1503,9 @@ export default {
             alertDlgBtnClick() {
                     this.$refs.alertDialog.hide();
                 },
+                dataBound() {
+                  this.loading=false
+                },
                 sortComparer(reference,comparer) {
                   if(comparer == "PENDING"){
                     return -1;
@@ -1521,6 +1555,7 @@ export default {
                 this.key = this.link.split('view/').pop()
                 this.pending = false
                 await api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
+                  this.loading=true
                   var user =  JSON.parse(localStorage['session_key'])
                     this.datasrc = response.data;
                     console.log(this.datasrc)
@@ -1816,6 +1851,9 @@ html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside
     right: 0;
 }
 }
+.e-spinner-pane.e-spin-show {
+             display: none;
+        }
 
 .modal-body {
     position: relative;
@@ -1827,5 +1865,25 @@ html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside
 }
 .aside-menu .nav-tabs .nav-link {
     padding: 0.75rem .3rem;
+  }
+</style>
+<style src="spinkit/scss/spinkit.scss" lang="scss" />
+
+<style scoped>
+#loader{
+    height: 0;
+    position: absolute;
+    left: 15%;
+    top: -9%;
+}
+      .sk-fading-circle {
+    margin: 20px auto;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    z-index:1001;
+}
+  .sk-three-bounce {
+    height: 20px;
   }
 </style>

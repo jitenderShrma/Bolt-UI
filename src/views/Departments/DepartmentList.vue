@@ -8,6 +8,22 @@
               <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item>
             </e-items>
           </ejs-toolbar>
+          <div v-if="loading" id="loader">
+          <div class="sk-fading-circle">
+              <div class="sk-circle1 sk-circle"></div>
+              <div class="sk-circle2 sk-circle"></div>
+              <div class="sk-circle3 sk-circle"></div>
+              <div class="sk-circle4 sk-circle"></div>
+              <div class="sk-circle5 sk-circle"></div>
+              <div class="sk-circle6 sk-circle"></div>
+              <div class="sk-circle7 sk-circle"></div>
+              <div class="sk-circle8 sk-circle"></div>
+              <div class="sk-circle9 sk-circle"></div>
+              <div class="sk-circle10 sk-circle"></div>
+              <div class="sk-circle11 sk-circle"></div>
+              <div class="sk-circle12 sk-circle"></div>
+            </div>
+        </div>
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight' :dataSource='data' 
             :treeColumnIndex='1' childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -15,12 +31,13 @@
             :enableCollapseAll="true"
             :recordDoubleClick="beginEdit"
             :actionComplete = "actionComplete"
+            :dataBound="dataBound"
             :allowSorting='true' :toolbar="toolbar" :toolbarClick="clickHandler" :editSettings='editSettings' :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :load="load">
                 <e-columns>
                     <!-- <e-column type='checkbox' :width="30" :allowFiltering='false' :allowSorting='false'  ></e-column> -->
                     <e-column :visible="false" field='_id'></e-column>
                     <e-column field='department_name' headerText='Department Name' width='170' ></e-column>
-                    <e-column field='budget.total' headerText='Total Budget' width='170' ></e-column>
+                    <e-column field='budget.total' format="C0" headerText='Total Budget' width='170' ></e-column>
                     <e-column field='labels[0].label_name' :template="labelTemplate" headerText='Labels'></e-column>
                     <e-column :template="buttonDesig" width='80' headerText='Manage Designations' ></e-column>
                      <e-column :template="buttonHead" width='80' headerText='Manage Heads' ></e-column>
@@ -372,6 +389,7 @@ export default {
           editinput:{},
           link:"",
           key:"",
+          loading:false,
           input:{
             labels:[],
           },
@@ -422,6 +440,7 @@ export default {
   mounted() {
      api.get(`${apiUrl}`+`department/dept/get`)
     .then((response) => {
+      this.loading=true
       this.dept = JSON.parse(JSON.stringify(response.data))
       for(var i=0;i<response.data.length;i++) {
         response.data[i].budget = this.getBudgetForDept(response.data[i]._id)
@@ -473,9 +492,6 @@ export default {
       treegrid: [ Aggregate,ExcelExport,PdfExport,CommandColumn,Edit, Toolbar, Filter, Sort, Reorder, Page, Resize ]
    },
    methods:{
-    dataBound() {
-
-    },
     getBudgetForDept(id) {
       var budget={
         total:0,
@@ -628,6 +644,9 @@ export default {
                 return true;
         }
         return false;
+      },
+      dataBound() {
+        this.loading=false
       },
       adddept(args) {
         var parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
@@ -1010,4 +1029,30 @@ font-style: normal;
   font-size:17px;
   font-weight:lighter;
 }
+.aside-menu .nav-tabs .nav-link {
+    padding: 0.75rem .3rem;
+  }
+  .e-spinner-pane.e-spin-show {
+             display: none;
+        }
+</style>
+<style src="spinkit/scss/spinkit.scss" lang="scss" />
+
+<style scoped>
+#loader{
+    height: 0;
+    position: absolute;
+    left: 15%;
+    top: -9%;
+}
+      .sk-fading-circle {
+    margin: 20px auto;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    z-index:1001;
+}
+  .sk-three-bounce {
+    height: 20px;
+  }
 </style>

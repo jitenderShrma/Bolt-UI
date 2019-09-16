@@ -134,8 +134,24 @@
                 <e-item align="right" id="label" :text="$ml.get('label')"></e-item>
               </e-items>
             </ejs-toolbar>
+            <div v-if="loading" id="loader">
+          <div class="sk-fading-circle">
+              <div class="sk-circle1 sk-circle"></div>
+              <div class="sk-circle2 sk-circle"></div>
+              <div class="sk-circle3 sk-circle"></div>
+              <div class="sk-circle4 sk-circle"></div>
+              <div class="sk-circle5 sk-circle"></div>
+              <div class="sk-circle6 sk-circle"></div>
+              <div class="sk-circle7 sk-circle"></div>
+              <div class="sk-circle8 sk-circle"></div>
+              <div class="sk-circle9 sk-circle"></div>
+              <div class="sk-circle10 sk-circle"></div>
+              <div class="sk-circle11 sk-circle"></div>
+              <div class="sk-circle12 sk-circle"></div>
+            </div>
+        </div>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :sortSettings='sortOptions' :allowSelection='true' :rowSelected="rowSelected" :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"
+            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :sortSettings='sortOptions' :allowSelection='true' :rowSelected="rowSelected" :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler" :dataBound="dataBound"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column :visible="enableColumn" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
@@ -145,7 +161,7 @@
                     <e-column field='requested_by.user_name' headerText='Requested By' :filter='filter' ></e-column>
                     <e-column field='status' headerText='Status' :template="buttonLM" :filter='filter' ></e-column>
                     <!-- <e-column field='labels[0].label_name' headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column> -->
-                    <e-column field='amount' headerText='Amount'  :filter='filter' ></e-column>
+                    <e-column field='amount' format="C0" headerText='Amount'  :filter='filter' ></e-column>
                     <e-column field='month' headerText='Month'  :filter='filter' ></e-column>
                     <e-column field='source_head.name' headerText='Source Head'  :filter='filter' ></e-column>
                     <e-column field='destination_head.name' headerText='Destination Head'  :filter='filter' ></e-column>
@@ -352,6 +368,7 @@ export default {
                 })
               }
           },
+          loading:false,
         buttonTemplate: function () {
               return {
                   template: Vue.component('buttonTemplate', {
@@ -861,6 +878,9 @@ export default {
             };
         },
   methods: {
+    dataBound() {
+      this.loading=false
+    },
     delLabel(args,id,label) {
       console.log(this.editinput.labels.splice(label,1))
       var body = {
@@ -1199,6 +1219,7 @@ export default {
                 this.link = window.location.href;
                 this.key = this.link.split('list/').pop()
                 if(this.key == 'all') {
+                  this.loading=true
                   this.pending = false
                   var user =  JSON.parse(localStorage['session_key'])
                 api.get(`${apiUrl}`+`transfer/budtrans/view/requests/all`).then((response) => {
@@ -1522,4 +1543,27 @@ html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside
     flex: 1 1 auto;
     padding: 0 1rem 0 1rem;
 }
+.aside-menu .nav-tabs .nav-link {
+    padding: 0.75rem .3rem;
+  }
+</style>
+<style src="spinkit/scss/spinkit.scss" lang="scss" />
+
+<style scoped>
+#loader{
+    height: 0;
+    position: absolute;
+    left: 15%;
+    top: -9%;
+}
+      .sk-fading-circle {
+    margin: 20px auto;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    z-index:1001;
+}
+  .sk-three-bounce {
+    height: 20px;
+  }
 </style>

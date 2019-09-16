@@ -9,6 +9,9 @@ export default {
 </script>
 
 <style lang="scss">
+.e-spinner-pane.e-spin-show {
+             display: none;
+        }
 .modal-header {
     padding-bottom: 0.5rem !important;
     padding-top: 0.5rem !important;

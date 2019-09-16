@@ -2,8 +2,24 @@
  <div class="animated slideInLeft" style="animation-duration:100ms">
      <div class="col-lg-15 control-section">
         <div class="content-wrapper">
+            <div v-if="loading" id="loader">
+          <div class="sk-fading-circle">
+              <div class="sk-circle1 sk-circle"></div>
+              <div class="sk-circle2 sk-circle"></div>
+              <div class="sk-circle3 sk-circle"></div>
+              <div class="sk-circle4 sk-circle"></div>
+              <div class="sk-circle5 sk-circle"></div>
+              <div class="sk-circle6 sk-circle"></div>
+              <div class="sk-circle7 sk-circle"></div>
+              <div class="sk-circle8 sk-circle"></div>
+              <div class="sk-circle9 sk-circle"></div>
+              <div class="sk-circle10 sk-circle"></div>
+              <div class="sk-circle11 sk-circle"></div>
+              <div class="sk-circle12 sk-circle"></div>
+            </div>
+        </div>
              <div class="control-section">
-            <ejs-grid ref='overviewgrid' :allowReordering='true' :rowHeight='rowHeight' :showColumnMenu='true' :allowResizing='true'  :showColumnChooser='true'  id='overviewgrid'  :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true'
+            <ejs-grid ref='overviewgrid' :allowReordering='true' :rowHeight='rowHeight' :showColumnMenu='true' :allowResizing='true'  :showColumnChooser='true'  id='overviewgrid'  :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :dataBound="dataBound"
                 :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
                     <e-column type='checkbox' :allowFiltering='false' :allowSorting='false'  ></e-column>
@@ -91,6 +107,7 @@ export default {
         },
     data: function () {
       return {
+        loading:false,
            newRowPositionDataSource: [{ value: 'Top', text: 'Top' }, { value: 'Bottom', text: 'Bottom' }],
             fields: { text: 'text', value: 'value' },
             dropdownValue: 'Top',
@@ -206,6 +223,9 @@ export default {
             };
         },
   methods: {
+    dataBound() {
+        this.loading =false
+    },
             actionComplete: function(args) {
                 if ((args.requestType === 'beginEdit' || args.requestType === 'add')) {
                     if (Browser.isDevice) {
@@ -260,6 +280,7 @@ export default {
         },
         async mounted () { 
                 axios.get(`${apiUrl}`+`comms/logs/find`,{withCredentials:true}).then((response) => {
+                    this.loading =true
                     console.log(response.data)
                     this.datasrc = response.data;
                 }).catch((err)=> {
@@ -291,4 +312,24 @@ export default {
 .breadcrumb { 
     margin-bottom: 0;
 }
+</style>
+<style src="spinkit/scss/spinkit.scss" lang="scss" />
+
+<style scoped>
+#loader{
+    height: 0;
+    position: absolute;
+    left: 15%;
+    top: -9%;
+}
+      .sk-fading-circle {
+    margin: 20px auto;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    z-index:1001;
+}
+  .sk-three-bounce {
+    height: 20px;
+  }
 </style>

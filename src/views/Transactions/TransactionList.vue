@@ -11,17 +11,33 @@
                   <e-item align="right" id="upload" :template="uploadTemplate" :text="$ml.get('upload')"></e-item>
                 </e-items>
                 </ejs-toolbar>
+                <div v-if="loading" id="loader">
+          <div class="sk-fading-circle">
+              <div class="sk-circle1 sk-circle"></div>
+              <div class="sk-circle2 sk-circle"></div>
+              <div class="sk-circle3 sk-circle"></div>
+              <div class="sk-circle4 sk-circle"></div>
+              <div class="sk-circle5 sk-circle"></div>
+              <div class="sk-circle6 sk-circle"></div>
+              <div class="sk-circle7 sk-circle"></div>
+              <div class="sk-circle8 sk-circle"></div>
+              <div class="sk-circle9 sk-circle"></div>
+              <div class="sk-circle10 sk-circle"></div>
+              <div class="sk-circle11 sk-circle"></div>
+              <div class="sk-circle12 sk-circle"></div>
+            </div>
+        </div>
              <div class="control-section">
             <ejs-grid ref='overviewgrid' :allowGrouping='true' :groupSettings='groupOptions'  :rowHeight='rowHeight' :sortSettings='sortOptions' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc" :allowReordering='true' :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :actionComplete="actionComplete"
-            :rowSelected="rowSelected"
+            :rowSelected="rowSelected" :dataBound="dataBound"
                 :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
                     <e-column field='approvalCode' headerText='Ref ID' :filter='filter' ></e-column>
                     <e-column field='transaction_id' :template="printTemplate" headerText='Transaction ID' :filter='filter'></e-column>
-                    <e-column field='amount' headerText='Amount' :filter='filter' :width="130"></e-column>
-                    <e-column field='total_amount' headerText='Approved' :allowFiltering="false" :width="130"></e-column>
-                    <e-column field='spent' headerText='Spent' :allowFiltering="false" :width="130"></e-column>
-                    <e-column field='amount_left' headerText='Left' :allowFiltering="false" :width="130"></e-column>
+                    <e-column field='amount' format="C0" headerText='Amount' :filter='filter' :width="130"></e-column>
+                    <e-column field='total_amount' format="C0" headerText='Approved' :filter='filter' :width="130"></e-column>
+                    <e-column field='spent' format="C0" headerText='Spent' :filter='filter' :width="130"></e-column>
+                    <e-column field='amount_left' format="C0" headerText='Left' :filter='filter' :width="130"></e-column>
                     <e-column field='status' :template="statusTemplate" headerText='Status' :filter='filter' :width="130"></e-column>
                     <e-column field='department.department_name' headerText='Department' :filter='filter'  ></e-column>
                     <e-column field='head.name' headerText='Head' :filter='filter'></e-column>
@@ -34,6 +50,13 @@
                     <e-column field='po_raised' headerText='PO Number'  :filter='filter' ></e-column>
                     <e-column field='createdAt' :visible="true" :format='formatOptions' type='date' :filter='filter2' ></e-column>
                 </e-columns>
+                <e-aggregates>
+                    <e-aggregate :showChildSummary='false'>
+                        <e-columns>
+                            <e-column type="Sum" field="amount" format="C0" :footerTemplate='footerMax'></e-column>
+                        </e-columns>
+                  </e-aggregate>
+                </e-aggregates>
                 </ejs-grid>
                  </div>
         </div>
@@ -108,7 +131,7 @@ import {
   FieldList
 } from "@syncfusion/ej2-vue-pivotview";
 import {
-PdfExport,ExcelExport, Edit,Group, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, ForeignKey, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
+PdfExport,ExcelExport,Aggregate, Edit,Group, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, ForeignKey, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     import VueHtmlToPaper from 'vue-html-to-paper';
  
@@ -164,7 +187,7 @@ export default {
   Edit
     },
      provide: {
-            grid: [ForeignKey,PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder,Group]
+            grid: [Aggregate,ForeignKey,PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder,Group]
         },
     data: function () {
       return {
@@ -185,6 +208,13 @@ export default {
               })
             }
           }},
+      footerMax: function () {
+        return  { template : Vue.component('maxTemplate', {
+            template: `<span>Sum: {{data.Sum}}</span>`,
+            data () {return { data: {}};}
+            })
+          }
+      },
         printData:[],
         filterTemplate: function () {
               return {
@@ -400,6 +430,7 @@ export default {
                     })
               }
           },
+          loading:false,
            height : window.innerHeight*0.695,
           toolbar: [
           { prefixIcon: 'e-csvexport', text:"CSV Export Filtered", id: 'exportfiltered', align: 'Left' },
@@ -439,6 +470,16 @@ export default {
             };
         },
   methods: {
+    sumofUnique(array) {
+      var flags = [], output = [], l = array.length, i;
+      for( i=0; i<l; i++) {
+          if( flags[array[i].approvalCode]) continue;
+          flags[array[i].approvalCode] = true;
+          output.push(array[i]);
+      }
+      console.log(output)
+      return 0
+    },
     paymentDone() {
       if(this.payment.payment_method == null || this.payment.payment_method == "") {
         toast({
@@ -484,7 +525,7 @@ export default {
                         }
                       }
                     }
-                    this.datasrc = this.convertAmount(this.datasrc)
+                    
                 })
           })
           })
@@ -812,6 +853,9 @@ export default {
                     this.$refs.overviewgrid.pdfExport()
                 }
             },
+            dataBound(args) {
+              this.loading= false
+            },
             addEditHandler(args) {
                var selected = this.$refs.overviewgrid.getSelectedRecords()
                var deleteperm = false
@@ -884,7 +928,7 @@ export default {
                                   }
                                 }
                               }
-                              this.datasrc = this.convertAmount(this.datasrc)
+                              
                           })
                           })
                           }
@@ -994,6 +1038,7 @@ export default {
         async mounted () { 
           console.log(this.ref_id);
           api.get(`${apiUrl}approvals/preApp/get/all`).then((res) => {
+            this.loading= true
             this.foreign = res.data
             api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
                   console.log(response.data)
@@ -1028,7 +1073,7 @@ export default {
                         }
                       }
                     }
-                    this.datasrc = this.convertAmount(this.datasrc)
+                    
                 }).catch((err)=> {
         toast({
           type: VueNotifications.types.error,
@@ -1044,6 +1089,7 @@ export default {
 
 
 <style>
+
 
 #label {
     font-size: 12px;
@@ -1119,4 +1165,27 @@ export default {
 .breadcrumb { 
     margin-bottom: 0;
 }
+.e-spinner-pane.e-spin-show {
+             display: none;
+        }
+</style>
+<style src="spinkit/scss/spinkit.scss" lang="scss" />
+
+<style scoped>
+#loader {
+    height: 0;
+    position: absolute;
+    left: 33%;
+    top: -8%;
+}
+      .sk-fading-circle {
+    margin: 20px auto;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    z-index:1001;
+}
+  .sk-three-bounce {
+    height: 20px;
+  }
 </style>

@@ -9,6 +9,22 @@
               <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item>
             </e-items>
           </ejs-toolbar>
+          <div v-if="loading" id="loader">
+          <div class="sk-fading-circle">
+              <div class="sk-circle1 sk-circle"></div>
+              <div class="sk-circle2 sk-circle"></div>
+              <div class="sk-circle3 sk-circle"></div>
+              <div class="sk-circle4 sk-circle"></div>
+              <div class="sk-circle5 sk-circle"></div>
+              <div class="sk-circle6 sk-circle"></div>
+              <div class="sk-circle7 sk-circle"></div>
+              <div class="sk-circle8 sk-circle"></div>
+              <div class="sk-circle9 sk-circle"></div>
+              <div class="sk-circle10 sk-circle"></div>
+              <div class="sk-circle11 sk-circle"></div>
+              <div class="sk-circle12 sk-circle"></div>
+            </div>
+        </div>
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
             :treeColumnIndex='1' childMapping='children' :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true' 
@@ -16,7 +32,7 @@
             :actionComplete="actionComplete"
             :rowSelected="rowSelected"
             :rowDeselecting="rowDeselecting"
-            :enableCollapseAll="false"
+            :enableCollapseAll="false" :dataBound="dataBound"
             :toolbar="toolbar" :toolbarClick="clickHandler"
             :allowSorting='true' :recordDoubleClick="editPage" :allowPaging= 'true' :pageSettings='pageSettings' :allowResizing= 'true' :filterSettings='filterSettings' :created="load">
                 <e-columns>
@@ -203,6 +219,7 @@ var groupVue1 = Vue.component("groupTemplate1", {
     async mounted() {
       if(this.data.parent_department!=null) {
       await api.get(`${apiUrl}`+`department/dept/get/`+`${this.data.parent_department}`).then((res) => {
+        this.loading =true
         this.data.parent_department = res.data.department_name
         departments.push(this.data)
       });
@@ -229,6 +246,7 @@ var departmentVue = Vue.component("departmentTemplate", {
     },
     async mounted() {
       await api.get(`${apiUrl}`+`department/dept/get`).then((res) => {
+        this.loading =true
         this.department = res.data
       })
     },
@@ -372,6 +390,7 @@ export default {
               template: departmentVue
             }
           },
+          loading:false,
         labels:[],
         label_fields:{text:"label_name",value:"_id"},
           selected:false,
@@ -411,6 +430,7 @@ export default {
   watch : {
     '$route' : async function() {
       await api.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+        this.loading =true
         this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = res.data
       }).catch((err)=> {
@@ -424,6 +444,7 @@ export default {
     if(this.$route.path == '/designation/list') {
     await api.get(`${apiUrl}`+`designation/desig/get/all`)
     .then((response) => {
+      this.loading =true
       this.or_desig = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_desig(response.data)
       }).catch((err)=> {
@@ -438,6 +459,7 @@ export default {
   else{
     await api.get(`${apiUrl}`+`dropdown/desig/only/${this.key}`)
     .then((response) => {
+      this.loading =true
       this.or_desig = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_desig(response.data)
       for(var i =0;i<this.data.length;i++) {
@@ -455,6 +477,7 @@ export default {
       });
   }
     await api.get(`${apiUrl}`+`label/label/find/by/Designations`).then((res) => {
+      this.loading =true
         this.labels = res.data
       }).catch((err)=> {
         if(err.toString().includes("Network Error")) {
@@ -471,6 +494,7 @@ export default {
     this.link = window.location.href;
      this.key = this.link.split(`designation/`).pop()
     await api.get(`${apiUrl}`+`department/dept/get`,{withCredentials:true}).then((res) => {
+      this.loading =true
       this.or_dept = JSON.parse(JSON.stringify(res.data))
         this.department = res.data
       }).catch((err)=> {
@@ -484,6 +508,7 @@ export default {
     if(this.$route.path == '/designation/list') {
     await api.get(`${apiUrl}`+`designation/desig/get/all`)
     .then((response) => {
+      this.loading =true
       this.or_desig = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_desig(response.data)
       }).catch((err)=> {
@@ -498,6 +523,7 @@ export default {
   else{
     await api.get(`${apiUrl}`+`dropdown/desig/only/${this.key}`)
     .then((response) => {
+      this.loading =true
       console.log(response.data)
       this.or_desig = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_desig(response.data)
@@ -537,6 +563,7 @@ export default {
                               }
                                 api.get(`${apiUrl}`+`designation/desig/get/all`)
                                 .then((res) => {
+                                  this.loading =true
                                   this.data = this.list_to_tree_desig(res.data)
                                   });
                               }).catch((err)=> {
@@ -602,6 +629,9 @@ export default {
         }
           }
       },
+      dataBound() {
+        this.loading =false
+      },
       editPage(args) {
         this.$router.push(`/designation/edit/${args.rowData.id}`)
       },
@@ -629,6 +659,7 @@ export default {
               api.post(`${apiUrl}`+`designation/desig/create`,this.input).then((response) => {
                 api.get(`${apiUrl}`+`designation/desig/get/all`)
                 .then((res) => {
+                  this.loading =true
                   this.data = res.data
                   });           
                 this.modal = false
@@ -657,6 +688,7 @@ export default {
           api.post(`${apiUrl}`+`designation/desig/create`,this.input).then((response) => {
             api.get(`${apiUrl}`+`designation/desig/get/all`)
                 .then((res) => {
+                  this.loading =true
                   this.data = res.data
                   });
                 this.modal = false
@@ -703,6 +735,7 @@ export default {
           api.put(`${apiUrl}`+`designation/desig/update/`+`${id}`,sendData).then((response) => {
                api.get(`${apiUrl}`+`designation/desig/get/all`)
                 .then((res) => {
+                  this.loading =true
                   this.data = res.data
                   });
           }).catch((err)=> {
@@ -929,4 +962,27 @@ font-style: normal;
         font-family: 'e-grid-rowheight';
         content: '\e702';
     }
+    .e-spinner-pane.e-spin-show {
+             display: none;
+        }
+</style>
+<style src="spinkit/scss/spinkit.scss" lang="scss" />
+
+<style scoped>
+#loader{
+    height: 0;
+    position: absolute;
+    left: 15%;
+    top: -9%;
+}
+      .sk-fading-circle {
+    margin: 20px auto;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    z-index:1001;
+}
+  .sk-three-bounce {
+    height: 20px;
+  }
 </style>

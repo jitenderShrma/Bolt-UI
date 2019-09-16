@@ -9,10 +9,26 @@
               <e-item align="right" id="delete" :text="$ml.get('delete')" :template="deleteTemplate"></e-item>
             </e-items>
           </ejs-toolbar>
+          <div v-if="loading" id="loader">
+          <div class="sk-fading-circle">
+              <div class="sk-circle1 sk-circle"></div>
+              <div class="sk-circle2 sk-circle"></div>
+              <div class="sk-circle3 sk-circle"></div>
+              <div class="sk-circle4 sk-circle"></div>
+              <div class="sk-circle5 sk-circle"></div>
+              <div class="sk-circle6 sk-circle"></div>
+              <div class="sk-circle7 sk-circle"></div>
+              <div class="sk-circle8 sk-circle"></div>
+              <div class="sk-circle9 sk-circle"></div>
+              <div class="sk-circle10 sk-circle"></div>
+              <div class="sk-circle11 sk-circle"></div>
+              <div class="sk-circle12 sk-circle"></div>
+            </div>
+        </div>
             <ejs-treegrid ref='treegrid' :rowHeight='rowHeight'  :dataSource='data' 
              :treeColumnIndex='1' childMapping="children" :height='height' :allowReordering='true' :allowFiltering='true'
             :allowPdfExport='true'
-            :allowExcelExport='true'
+            :allowExcelExport='true' :dataBound="dataBound"
             :actionComplete="actionComplete"
             :enableCollapseAll="false" :toolbar="toolbar"
             :rowSelected="rowSelected" :toolbarClick="clickHandler"
@@ -393,6 +409,7 @@ export default {
                 },
           editinput:{
           },
+          loading:false,
           editmodal:false,
           groupTemplate: function () {
               return {
@@ -452,6 +469,7 @@ export default {
       if(this.$route.path == '/heads/list') {
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
+      this.loading =true
       this.or_head = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_head(response.data)
       }).catch((err)=> {
@@ -466,6 +484,7 @@ export default {
      else{
       await api.get(`${apiUrl}`+`dropdown/head/only/`+`${this.key}`)
         .then((response) => {
+          this.loading =true
           this.or_head = JSON.parse(JSON.stringify(response.data))
           this.data = this.list_to_tree_head(response.data)
           }).catch((err)=> {
@@ -497,6 +516,7 @@ export default {
      if(this.$route.path == '/heads/list') {
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
+      this.loading =true
       this.or_head = JSON.parse(JSON.stringify(response.data))
       this.data = this.list_to_tree_head(response.data)
       }).catch((err)=> {
@@ -511,6 +531,7 @@ export default {
      else{
       await api.get(`${apiUrl}`+`dropdown/head/only/`+`${this.key}`)
         .then((response) => {
+          this.loading =true
           this.or_head = JSON.parse(JSON.stringify(response.data))
           this.data = this.list_to_tree_head(response.data)
           this.input.department = this.key 
@@ -554,6 +575,7 @@ export default {
                                   if(this.$route.path == '/heads/list') {
                                       api.get(`${apiUrl}`+`head/head/get`)
                                   .then((response) => {
+                                    this.loading =true
                                     this.or_head = JSON.parse(JSON.stringify(response.data))
                                     this.data = this.list_to_tree_head(response.data)
                                     });
@@ -561,6 +583,7 @@ export default {
                                    else{
                                     api.get(`${apiUrl}`+`dropdown/head/only/`+`${this.key}`)
                                       .then((response) => {
+                                        this.loading =true
                                         this.or_head = JSON.parse(JSON.stringify(response.data))
                                         this.data = this.list_to_tree_head(response.data)
                                         this.input.department = this.key 
@@ -580,6 +603,7 @@ export default {
     checkParent(args) {
         api.get(`${apiUrl}`+`head/head/get`)
         .then((response) => {
+          this.loading =true
           for(var i=0;i<response.data.length;i++) {
             if(response.data[i]._id == this.editinput._id) {
               response.data[i].isDisabled = true
@@ -649,6 +673,7 @@ export default {
         if(this.selectedLabel != null) {
         var label;
         api.get(`${apiUrl}label/label/get/one/${this.selectedLabel}`).then((res) => {
+          this.loading =true
           label = res.data
           this.input.labels.push(label);
         }).catch((err)=> {
@@ -809,6 +834,7 @@ export default {
                 if(this.$route.path == '/heads/list') {
                     api.get(`${apiUrl}`+`head/head/get`)
                 .then((response) => {
+                  this.loading =true
                   this.or_head = JSON.parse(JSON.stringify(response.data))
                   this.data = this.list_to_tree_head(response.data)
                   });
@@ -822,6 +848,7 @@ export default {
                     else {
                       api.get(`${apiUrl}`+`dropdown/head/only/`+`${this.key}`)
                         .then((response) => {
+                          this.loading =true
                           this.or_head = JSON.parse(JSON.stringify(response.data))
                           this.data = this.list_to_tree_head(response.data)
                           this.input.department = this.key 
@@ -863,6 +890,7 @@ export default {
             if(this.$route.path == '/heads/list') {
                 api.get(`${apiUrl}`+`head/head/get`)
             .then((response) => {
+              this.loading =true
               this.or_head = JSON.parse(JSON.stringify(response.data))
               this.data = this.list_to_tree_head(response.data)
               });
@@ -870,6 +898,7 @@ export default {
              else{
               api.get(`${apiUrl}`+`dropdown/head/only/`+`${this.key}`)
                 .then((response) => {
+                  this.loading =true
                   this.or_head = JSON.parse(JSON.stringify(response.data))
                   this.data = this.list_to_tree_head(response.data)
                   this.input.department = this.key 
@@ -976,6 +1005,9 @@ export default {
           }
           this.convertDataHead(roots)
           return roots
+      },
+      dataBound() {
+        this.loading= false
       },
       convertDataHead(roots) {
         for(var i=0;i<roots.length;i++) {
@@ -1144,4 +1176,27 @@ font-style: normal;
     #errors {
   color:red;
 }
+.e-spinner-pane.e-spin-show {
+             display: none;
+        }
+</style>
+<style src="spinkit/scss/spinkit.scss" lang="scss" />
+
+<style scoped>
+#loader{
+    height: 0;
+    position: absolute;
+    left: 15%;
+    top: -9%;
+}
+      .sk-fading-circle {
+    margin: 20px auto;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    z-index:1001;
+}
+  .sk-three-bounce {
+    height: 20px;
+  }
 </style>

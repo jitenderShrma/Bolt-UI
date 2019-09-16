@@ -1820,7 +1820,7 @@ export default {
         
         console.log(args)
         
-        this.addremove.month = args.column.field.split('totalamount.').pop()
+        this.addremove.month = args.column.field.split('permissible_values.').pop()
         this.editmodal =true
         this.editinput = args.rowData
         if(args.rowData.department) {
