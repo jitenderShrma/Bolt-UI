@@ -42,13 +42,13 @@
                     <e-column field='department.department_name' headerText='Department' :filter='filter'  ></e-column>
                     <e-column field='head.name' headerText='Head' :filter='filter'></e-column>
                     <e-column field='month' :template="monthTemplate" headerText='Month' :filter='filter' :width="119" ></e-column>
-                    <e-column field='labels[0].label_name' headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
+                    <e-column field='labels[0].label_name' :allowFiltering="false" headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
                     <e-column field='user.user_name' headerText='Requested By'  :filter='filter' ></e-column>
                     <e-column field='transaction_type'  headerText='Type' :filter='filter' :isPrimaryKey='true'></e-column>
                     <e-column field='category' headerText='Category'  :filter='filter' ></e-column>
                     <e-column field='vendor.vendor_company' headerText='Vendor'  :filter='filter' ></e-column>
                     <e-column field='po_raised' headerText='PO Number'  :filter='filter' ></e-column>
-                    <e-column field='createdAt' :visible="true" :format='formatOptions' type='date' :filter='filter2' ></e-column>
+                    <e-column field='createdAt' headerText='Created At' :visible="true" :format='formatOptions' type='date' :filter='filter2' ></e-column>
                 </e-columns>
                 <e-aggregates>
                     <e-aggregate :showChildSummary='false'>
@@ -120,20 +120,31 @@
       <div v-if="filterform.field == 'head.name' ">
         <treeselect ref='treeselect1' :default-expand-level="10" :placeholder="$ml.get('pholdhead')" v-model="filterform.value" :multiple="false" :options="head" />
       </div>
-      <div v-if="filterform.field == 'user.user_name' ">
-        <ejs-dropdownlist :showClearButton="true" :fields='userfields' floatLabelType="Auto" :dataSource='users' v-model="filterform.value" :placeholder="$ml.get('pholduser')">
+      <div v-if="filterform.field == 'user.user_name'">
+        <ejs-textbox v-model="filterform.value" floatLabelType="Auto" :placeholder="$ml.get('contains')"></ejs-textbox>
+        <b-button style="float:right" type="submit" @click="filterform.value='ADMIN'" size="sm" variant="primary" v-text="$ml.get('filterbyadmin')"></b-button>
+      </div>
+      <div v-if="filterform.field == 'vendor.vendor_company' ">
+        <ejs-dropdownlist :showClearButton="true" :fields='vendorfields' floatLabelType="Auto" :dataSource='vendors' v-model="filterform.value" :placeholder="$ml.get('pholdvendor')">
+        </ejs-dropdownlist>
+      </div>
+      <div v-if="filterform.field == 'labels[0].label_name'">
+        <ejs-dropdownlist :showClearButton="true" :fields='labelfields' floatLabelType="Auto" :dataSource='labels' v-model="filterform.value" :placeholder="$ml.get('pholdlabel')">
+        </ejs-dropdownlist>
+      </div>
+      <div v-if="filterform.field == 'month' ">
+        <ejs-dropdownlist :showClearButton="true" :fields='monthfields' floatLabelType="Auto" :dataSource='months' v-model="filterform.value" :placeholder="$ml.get('pholdmonth')">
         </ejs-dropdownlist>
       </div>
       <div v-if="filterform.field == 'createdAt' ">
         <vue-daterange-picker 
-            double 
-            start-date="06/10/2017" 
-            end-date="06/10/2018" 
-            format="dd/mm/yyyy"
+            double
+            :start-date="startdate"
+            format="DD/MM/YYYY"
             place-holders="dd/mm/yyyy"
             @get-dates="getDates"/>
       </div>
-      <div v-if="filterform.field == 'transaction_id' || filterform.field == 'ref_id' || filterform.field == 'amount' || filterform.field == 'status' || filterform.field == 'po_raised'">
+      <div v-if="filterform.field == 'transaction_type' || filterform.field == 'category' || filterform.field == 'transaction_id' || filterform.field == 'ref_id' || filterform.field == 'amount' || filterform.field == 'status' || filterform.field == 'po_raised'">
         <ejs-textbox v-model="filterform.value" floatLabelType="Auto" :placeholder="$ml.get('equalto')"></ejs-textbox>
       </div>
       <br>
@@ -235,6 +246,9 @@ export default {
 
         },
         fieldsformat: { text: 'name', value: 'ID' },
+        monthfields: { text: 'name', value: 'value' },
+        vendorfields: { text: 'vendor_company', value: '_id' },
+        labelfields: { text: 'label_name', value: '_id' },
         filterModal:false,
         formatOptions: { type: 'date', format: 'dd/MM/yyyy' },
         groupOptions:{
@@ -282,10 +296,14 @@ export default {
         {name:'Status',ID:'status'},
         {name:'Department',ID:'department.department_name'},
         {name:'Head',ID:'head.name'},
-        {name:'Label',ID:'labels[0].label_name'},
+        {name:'Requested By',ID:'user.user_name'},
+        {name:'Month',ID:'month'},
+        {name:'Vendor',ID:'vendor.vendor_company'},
+        {name:'Type',ID:'transaction_type'},
+        {name:'Category',ID:'category'},
         {name:'Vendor',ID:'vendor.vendor_company'},
         {name:'PO Number',ID:'po_raised'},
-        {name:'createdAt',ID:'createdAt'}
+        {name:"Created At",ID:"createdAt"}
       ],
       footerTTL: function (datasrc) {
         return  { template : Vue.component('sumTemplate', {
@@ -494,6 +512,10 @@ export default {
                     })
                   }
                 },
+          labels:[],
+          vendors:[],
+          months:[ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"}
+        ],
         labelTemplate: function() {
           return {
             template:Vue.component('labelTemplate', {
@@ -573,8 +595,7 @@ export default {
           toolbar: [
           { prefixIcon: 'e-csvexport', text:"CSV Export Filtered", id: 'exportfiltered', align: 'Left' },
           { prefixIcon: 'e-csvexport', text:"CSV Export All", id: 'exportall', align: 'Left' },
-          {text:"Clear Filters", id: 'clearfilter', align: 'Left' },'Search',
-            { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
+          'Search',{ prefixIcon: 'e-excl-filter-icon', text:"Clear", id: 'clearfilter', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
             ],
@@ -592,6 +613,7 @@ export default {
                     type: 'Menu'
                 },
                 filterTID:false,
+                startdate:null,
                 filter: {
                     type: 'CheckBox'
                 },
@@ -613,7 +635,7 @@ export default {
   methods: {
     customAggregateFn : function (data) {
       var total = 0
-      var group = _.groupBy(data.result.records,'approvalCode')
+      var group = _.groupBy(this.datasrc,'approvalCode')
       for(var i=0;i<this.foreign.length;i++) {
         if(group[this.foreign[i].ref_id]) {
         total = total + group[this.foreign[i].ref_id][0].total_amount
@@ -624,7 +646,7 @@ export default {
     },
     customAggregateFn1 : function (data) {
       var total = 0
-      var group = _.groupBy(data.result.records,'approvalCode')
+      var group = _.groupBy(this.datasrc,'approvalCode')
       for(var i=0;i<this.foreign.length;i++) {
         if(group[this.foreign[i].ref_id]) {
         total = total + group[this.foreign[i].ref_id][0].spent
@@ -634,19 +656,32 @@ export default {
       return total;
     },
     applyFilter() {
+      var link = `transaction/trans/filter/get`
       if(this.filterform.field == "department.department_name") {
         this.filterform.field = "department"
+      }
+      if(this.filterform.field == "status" && this.filterform.value=="UNPAID") {
+        this.filterform.value = "Approved"
       }
       if(this.filterform.field == "head.name") {
         this.filterform.field = "head"
       }
+      if(this.filterform.field == "vendor.vendor_company") {
+        this.filterform.field = "vendor"
+      }
+      if(this.filterform.field == "user.user_name") {
+        link = `transaction/trans/filter/user`
+      }
+      if(this.filterform.field == "user.user_name" && this.filterform.value=="ADMIN") {
+        link = `transaction/trans/superuser/get`
+      }
       console.log(this.filterform)
-      api.get(`${apiUrl}approvals/preApp/get/all`).then((res) => {
+      api.get(`${apiUrl}approvals/preApp/get/all `).then((res) => {
             this.loading= true
             this.foreign = res.data
                     this.filterModal =false
 
-            api.post(`${apiUrl}`+`transaction/trans/filter/get`,this.filterform).then((response) => {
+            api.post(`${apiUrl}`+`${link}`,this.filterform).then((response) => {
                   console.log(response.data)
                     this.datasrc = response.data;
                     for(var i =0;i<this.datasrc.length;i++) {
@@ -680,7 +715,7 @@ export default {
                         }
                       }
                     }
-                    
+                    this.filterform = {}
                 }).catch((err)=> {
         toast({
           type: VueNotifications.types.error,
@@ -690,11 +725,11 @@ export default {
           })
     },
     getDates(args) {
-      console.log(args)
+      this.filterform.value = args
     },
     customAggregateFn2 : function (data) {
       var total = 0
-      var group = _.groupBy(data.result.records,'approvalCode')
+      var group = _.groupBy(this.datasrc,'approvalCode')
       for(var i=0;i<this.foreign.length;i++) {
         if(group[this.foreign[i].ref_id]) {
         total = total + group[this.foreign[i].ref_id][0].amount_left
@@ -818,7 +853,7 @@ export default {
         },
             actionBegin: function(args) {
               console.log(args)
-              if(args.requestType == "filterchoicerequest" && args.query.distincts[0]!="createdAt" && args.query.distincts[0]!="user.user_name" && args.query.distincts[0]!="transaction_type" && args.query.distincts[0]!="category" && args.query.distincts[0]!="month" && args.query.distincts[0]!="vendor.vendor_company") {
+              if(args.requestType == "filterchoicerequest") {
                 this.filterform.field = args.query.distincts[0]
                 this.filterModal = true
                 args.filterModel.dialogObj.hide()
@@ -876,7 +911,7 @@ export default {
                     this.rowHeight = 60;
                 }
                 if (args.item.text === 'CSV Export Filtered') {
-                  var datasrc = this.$refs.overviewgrid.ej2Instances.currentViewData.records
+                  var datasrc = this.datasrc
                   // api.get(`${apiUrl}transaction/trans/get/all`).then((res) => {
                   //   datasrc = res.data
                   //   for(var i=0;i<datasrc.length;i++) {
@@ -1466,7 +1501,30 @@ export default {
           title: 'Network Error'
         })
       }
-      })           
+      })
+
+      axios.get(`${apiUrl}`+`label/label/find/by/Approval`,{withCredentials:true}).then((res) => {
+        this.labels = res.data
+      }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      }
+      })
+      axios.get(`${apiUrl}`+`vendor/vendor/get/all`,{withCredentials:true}).then((res) => {
+        this.vendors = res.data
+      }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      }
+      })      
+      var year = new Date().getFullYear()
+      this.startdate  = new Date(`04/01/${year}`)
             
         }
 };
@@ -1560,7 +1618,7 @@ export default {
 #loader {
     height: 0;
     position: absolute;
-    left: 44% !important;
+    left: 33% !important;
     top: -8%;
 }
       .sk-fading-circle {

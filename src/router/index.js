@@ -81,6 +81,7 @@ const DepartmentList = () => import('@/views/Departments/DepartmentList');
 const TotalBudget = () => import('@/views/PivotTables/BudgetTables/TotalBudget');
 const ApprovedBudget = () => import('@/views/PivotTables/BudgetTables/ApprovedBudget');
 const BudgetGraph = () => import('@/views/PivotTables/BudgetTables/BudgetGraph');
+const CarryOverBudget = () => import('@/views/PivotTables/BudgetTables/CarryOverBudget');
 
 //Budget Transfer Routes
 const BudgetTransfer =() => import('@/views/BudgetTransfer');
@@ -585,6 +586,11 @@ var router = new Router({
                   path : "/budget/graph",
                   props:true,
                   component : BudgetGraph
+                },
+                {
+                  name:"CarryOver Budget",
+                  path : "/budget/carryover",
+                  component : CarryOverBudget
                 }
               ]
             },

@@ -95,7 +95,8 @@
         <b-button v-if="departmentLog.length>1" @click="goBack" class="bg-transparent" style="float:left;border:0"><i class="icon-arrow-left-circle font-2xl"></i></b-button>
         <div @click="changeModal">
         <highcharts class="chart2"  :options="chartOptionsStackedchild" :updateArgs="updateArgs"></highcharts>
-      
+        
+              </div>
                 <div>
                   <!-- <b-row>
                   <b-col v-for="(run,i) in child_dept" :key="i">
@@ -113,7 +114,6 @@
                     REMAINING : {{summary_remaining_child()}}
                 </b-row>
                 </div> 
-              </div>
               </div>
     </b-modal>
     <b-modal size="xl" class="modal-primary" v-model="pieModal" @ok="pieModal = false" hide-footer>
@@ -203,41 +203,117 @@ export default {
       departmentLog:[],
       chartModal:false,
       summary_remaining: function() {
-        return this.chartOptionsStacked.series[2].data.reduce((a,b) => a+b,0)
+                var x=this.chartOptionsStacked.series[2].data.reduce((a,b) => a+b,0)
+                x=x.toString();
+                var lastThree = x.substring(x.length-3);
+                var otherNumbers = x.substring(0,x.length-3);
+                if(otherNumbers != '')
+                    lastThree = ',' + lastThree;
+                var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                return `₹ ${res}`
       },
       summary_committed: function() {
-        return this.chartOptionsStacked.series[1].data.reduce((a,b) => a+b,0)
+        var x=this.chartOptionsStacked.series[1].data.reduce((a,b) => a+b,0)
+                x=x.toString();
+                var lastThree = x.substring(x.length-3);
+                var otherNumbers = x.substring(0,x.length-3);
+                if(otherNumbers != '')
+                    lastThree = ',' + lastThree;
+                var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                return `₹ ${res}`
       },
       summary_total: function() {
         if(this.chartOptionsStacked.series[0].data.length > 0) {
-          return this.chartOptionsStacked.series[0].data.reduce((a,b) => a+b,0)
+          var x=this.chartOptionsStacked.series[0].data.reduce((a,b) => a+b,0)
+                x=x.toString();
+                var lastThree = x.substring(x.length-3);
+                var otherNumbers = x.substring(0,x.length-3);
+                if(otherNumbers != '')
+                    lastThree = ',' + lastThree;
+                var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                return `₹ ${res}`
         }
         else {
-          return this.chartOptionsStacked.series[0].data[0]
+          var x=this.chartOptionsStacked.series[0].data[0]
+                x=x.toString();
+                var lastThree = x.substring(x.length-3);
+                var otherNumbers = x.substring(0,x.length-3);
+                if(otherNumbers != '')
+                    lastThree = ',' + lastThree;
+                var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                return `₹ ${res}`
         }
       },
       summary_remaining_child: function() {
         if(this.chartOptionsStackedchild.series[2].data.length > 0) {
-          return this.chartOptionsStackedchild.series[2].data.reduce((a,b) => a+b,0)
+          var x=this.chartOptionsStackedchild.series[2].data.reduce((a,b) => a+b,0)
+                x=x.toString();
+                var lastThree = x.substring(x.length-3);
+                var otherNumbers = x.substring(0,x.length-3);
+                if(otherNumbers != '')
+                    lastThree = ',' + lastThree;
+                var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                return `₹ ${res}`
         }
         else {
-          return this.chartOptionsStackedchild.series[2].data[0]
+          if(this.chartOptionsStackedchild.series[2].data[0]) {
+          var x=this.chartOptionsStackedchild.series[2].data[0]
+                x=x.toString();
+                var lastThree = x.substring(x.length-3);
+                var otherNumbers = x.substring(0,x.length-3);
+                if(otherNumbers != '')
+                    lastThree = ',' + lastThree;
+                var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+          return `₹ ${res}`
+        }
         }
       },
       summary_committed_child: function() {
         if(this.chartOptionsStackedchild.series[1].data.length > 0) {
-          return this.chartOptionsStackedchild.series[1].data.reduce((a,b) => a+b,0)
+          var x=this.chartOptionsStackedchild.series[1].data.reduce((a,b) => a+b,0)
+                x=x.toString();
+                var lastThree = x.substring(x.length-3);
+                var otherNumbers = x.substring(0,x.length-3);
+                if(otherNumbers != '')
+                    lastThree = ',' + lastThree;
+                var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+          return `₹ ${res}`
         }
         else {
-          return this.chartOptionsStackedchild.series[1].data[0]
+          if(this.chartOptionsStackedchild.series[1].data[0]) {
+            var x=this.chartOptionsStackedchild.series[1].data[0]
+                x=x.toString();
+                var lastThree = x.substring(x.length-3);
+                var otherNumbers = x.substring(0,x.length-3);
+                if(otherNumbers != '')
+                    lastThree = ',' + lastThree;
+                var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+          return `₹ ${res}`
+          }
         }
       },
       summary_total_child: function() {
         if(this.chartOptionsStackedchild.series[0].data.length > 0) {
-          return this.chartOptionsStackedchild.series[0].data.reduce((a,b) => a+b,0)
+          var x=this.chartOptionsStackedchild.series[0].data.reduce((a,b) => a+b,0)
+                x=x.toString();
+                var lastThree = x.substring(x.length-3);
+                var otherNumbers = x.substring(0,x.length-3);
+                if(otherNumbers != '')
+                    lastThree = ',' + lastThree;
+                var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+          return `₹ ${res}`
         }
         else {
-          return this.chartOptionsStackedchild.series[0].data[0]
+          if(this.chartOptionsStackedchild.series[0].data[0]) {
+             var x=this.chartOptionsStackedchild.series[0].data[0]
+                x=x.toString();
+                var lastThree = x.substring(x.length-3);
+                var otherNumbers = x.substring(0,x.length-3);
+                if(otherNumbers != '')
+                    lastThree = ',' + lastThree;
+                var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+            return `₹ ${res}`
+          }
         }
       },
       budgetdata : [],
@@ -300,7 +376,7 @@ export default {
                 text: 'Percentage'
             }
         },
-        series: [{data:[]},{data:[]},{data:[]}]
+        series: [{data:[]},{data:[]},{data:[]},{data:[]}]
     },
     tree_dept:[],
     chartOptionsStackedchild: {
@@ -328,7 +404,7 @@ export default {
                 text: 'Percentage'
             }
         },
-        series: [{data:[]},{data:[]},{data:[]}]
+        series: [{data:[]},{data:[]},{data:[]},{data:[]}]
     },
     chartOptions1Bar: {
         chart: {
@@ -398,6 +474,9 @@ export default {
     child_flag:false,
     child_tree_dept:[],
     chartOptions3Bar: {
+      tooltip :{
+        shared:true
+      },
         chart: {
           type: 'column',
           width:15000
@@ -424,6 +503,9 @@ export default {
     series: []
     },
     chartOptions3childBar: {
+      tooltip :{
+        shared:true
+      },
         chart: {
           type: 'column',
           width:10000
@@ -713,7 +795,7 @@ export default {
       }
     }
   },
-  mounted() {
+  async mounted() {
     var Session = JSON.parse(localStorage.session_key)
     console.log(Session)
     if(Session.user) {
@@ -726,7 +808,7 @@ export default {
       }
     }
     if(this.isPermitted) {
-      api.get(`${apiUrl}dropdown/head/find/${Session.user.user_type.department}`).then((response) => {
+      await api.get(`${apiUrl}dropdown/head/find/${Session.user.user_type.department}`).then((response) => {
         this.budgetdata = JSON.parse(JSON.stringify(response.data))
         // this.chartOptions1.series[0].data = this.getLeftDataMonth(response.data)
         this.chartOptions1.title.text = "Year's Budget - Total"
@@ -747,12 +829,12 @@ export default {
       })
     }
     if(this.isPermittedDept) {
-    api.get(`${apiUrl}department/dept/get`).then((res) => {
+    await api.get(`${apiUrl}department/dept/get`).then((res) => {
       this.dept = JSON.parse(JSON.stringify(res.data))
       console.log(this.dept)
       this.tree_dept = this.list_to_tree_dept(res.data)
       this.chartOptionsStacked.xAxis.categories = this.getDeptList(this.tree_dept)
-      this.chartOptionsStacked.series = [{name:"Total",data:this.tree_dept.total_data},{name:"Committed",data:this.tree_dept.committed_data},{name:"Remaining",data:this.tree_dept.remaining_data}]
+      this.chartOptionsStacked.series = [{name:"Total",data:this.tree_dept.total_data},{name:"Committed",data:this.tree_dept.committed_data},{name:"Remaining",data:this.tree_dept.remaining_data},{name:"CarryOver",data:this.tree_dept.carry_over_data}]
     }).catch((err)=> {
       if(err.toString().includes("Network Error")) {
         toast({
@@ -764,7 +846,7 @@ export default {
     }
   }else{
     this.isPermitted = true
-    api.get(`${apiUrl}`+`head/head/get`)
+    await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
       this.budgetdata = JSON.parse(JSON.stringify(response.data))
       // this.chartOptions1.series[0].data = this.getLeftDataMonth(response.data)
@@ -784,11 +866,11 @@ export default {
         })
       }
       });
-    api.get(`${apiUrl}department/dept/get`).then((res) => {
+    await api.get(`${apiUrl}department/dept/get`).then((res) => {
       this.dept = JSON.parse(JSON.stringify(res.data))
       this.tree_dept = this.list_to_tree_dept(res.data)
       this.chartOptionsStacked.xAxis.categories = this.getDeptList(this.tree_dept)
-      this.chartOptionsStacked.series = [{name:"Total",data:this.tree_dept.total_data},{name:"Committed",data:this.tree_dept.committed_data},{name:"Remaining",data:this.tree_dept.remaining_data}]
+      this.chartOptionsStacked.series = [{name:"Total",data:this.tree_dept.total_data},{name:"Committed",data:this.tree_dept.committed_data},{name:"Remaining",data:this.tree_dept.remaining_data},{name:"CarryOver",data:this.tree_dept.carry_over_data}]
     }).catch((err)=> {
       if(err.toString().includes("Network Error")) {
         toast({
@@ -862,20 +944,24 @@ export default {
         roots.total_data = []
         roots.committed_data = []
         roots.remaining_data = []
+        roots.carry_over_data = []
         for(var i=0;i<roots.length;i++) {
             await api.get(`${apiUrl}dropdown/head/only/${roots[i]._id}`).then((res) => {
               console.log(res.data)
             var total = 0
             var committed = 0
             var remaining = 0
+            var carry_over = 0
             for(var j=0;j<res.data.length;j++) {
               total = total + res.data[j].permissible_values.reduce((a,b) => a+b,0)
               committed = committed + res.data[j].permissible_values.reduce((a,b) => a+b,0) - res.data[j].amount_left.reduce((a,b) => a+b,0)
               remaining = remaining + res.data[j].amount_left.reduce((a,b) => a+b,0)
+              carry_over = carry_over + res.data[j].carry_over_amount.reduce((a,b) => a+b,0)
             }
             roots.total_data.push(total)
             roots.committed_data.push(committed)
             roots.remaining_data.push(remaining)
+            roots.carry_over_data.push(carry_over)
           }).catch((err)=> {
             if(err.toString().includes("Network Error")) {
         toast({
@@ -900,18 +986,18 @@ export default {
         this.pieModal = true
       }
     },
-    openModal(args) {
+    async openModal(args) {
       if(args.point.category) {
         var val = args.point.category.split('<span style="display:none">').pop()
         var id = val.split('</span>')
-        api.get(`${apiUrl}department/dept/child/${id[0]}`).then((res) => {
+        await api.get(`${apiUrl}department/dept/child/${id[0]}`).then((res) => {
           if(res.data.length > 0) {
             this.departmentLog.push(`${id[0]}`)
             this.chartModal = true
             this.child_dept = JSON.parse(JSON.stringify(res.data))
             this.child_tree_dept = this.child_list_to_tree_dept(res.data)
             this.chartOptionsStackedchild.xAxis.categories = this.getDeptList(res.data)
-            this.chartOptionsStackedchild.series = [{name:"Total",data:this.child_tree_dept.total_data},{name:"Committed",data:this.child_tree_dept.committed_data},{name:"Remaining",data:this.child_tree_dept.remaining_data}]
+            this.chartOptionsStackedchild.series = [{name:"Total",data:this.child_tree_dept.total_data},{name:"Committed",data:this.child_tree_dept.committed_data},{name:"Remaining",data:this.child_tree_dept.remaining_data},{name:"CarryOver",data:this.child_tree_dept.carry_over_data}]
             api.get(`${apiUrl}dropdown/head/only/${id[0]}`).then((response) => {
               this.chartOptions3childBar.xAxis.categories = this.getYearlyBar1(response.data);
               this.chartOptions3childBar.series = this.getYearlyBar2(response.data);
@@ -949,19 +1035,19 @@ export default {
       //   }
       // })
     }, 
-    changeModal(args) {
+    async changeModal(args) {
       if(args.point) {
         if(args.point.category) {
         var val = args.point.category.split('<span style="display:none">').pop()
         var id = val.split('</span>')
-        api.get(`${apiUrl}department/dept/child/${id[0]}`).then((res) => {
+        await api.get(`${apiUrl}department/dept/child/${id[0]}`).then((res) => {
           if(res.data.length > 0) {
             this.departmentLog.push(`${id[0]}`)
             console.log(this.departmentLog)
             this.child_dept = JSON.parse(JSON.stringify(res.data))
             this.child_tree_dept = this.child_list_to_tree_dept(res.data)
             this.chartOptionsStackedchild.xAxis.categories = this.getDeptList(res.data)
-            this.chartOptionsStackedchild.series = [{name:"Total",data:this.child_tree_dept.total_data},{name:"Committed",data:this.child_tree_dept.committed_data},{name:"Remaining",data:this.child_tree_dept.remaining_data}]
+            this.chartOptionsStackedchild.series = [{name:"Total",data:this.child_tree_dept.total_data},{name:"Committed",data:this.child_tree_dept.committed_data},{name:"Remaining",data:this.child_tree_dept.remaining_data},{name:"CarryOver",data:this.child_tree_dept.carry_over_data}]
             api.get(`${apiUrl}dropdown/head/only/${id[0]}`).then((response) => {
               this.chartOptions3childBar.xAxis.categories = this.getYearlyBar1(response.data);
               this.chartOptions3childBar.series = this.getYearlyBar2(response.data);
@@ -1007,24 +1093,28 @@ export default {
       }
       return data
     },
-    getDeptHeadData(nodes) {
+    async getDeptHeadData(nodes) {
       var data = []
       var total_data = []
       var committed_data = []
       var remaining_data = []
+      var carry_over_data = []
       for(var i=0;i<nodes.length;i++) {
-        api.get(`${apiUrl}dropdown/head/only/${nodes[i]._id}`).then((res) => {
+        await api.get(`${apiUrl}dropdown/head/only/${nodes[i]._id}`).then((res) => {
           var total = 0
           var committed = 0
           var remaining = 0
+          var carry_over = 0
           for(var j=0;j<res.data.length;j++) {
             total = total + res.data[j].permissible_values.reduce((a,b) => a+b,0)
             committed = committed + res.data[j].permissible_values.reduce((a,b) => a+b,0) - res.data[j].amount_left.reduce((a,b) => a+b,0)
             remaining = remaining + res.data[j].amount_left.reduce((a,b) => a+b,0)
+            carry_over = carry_over + res.data[j].carry_over_amount.reduce((a,b) => a+b,0)
           }
           total_data.push(total)
           committed_data.push(committed)
           remaining_data.push(remaining)
+          carry_over_data.push(carry_over)
         }).catch((err)=> {
           if(err.toString().includes("Network Error")) {
         toast({
@@ -1045,6 +1135,10 @@ export default {
       data.push({
         name:"Remaining",
         data:remaining_data
+      })
+      data.push({
+        name:"CarryOver",
+        data:carry_over_data
       })
       return data
     },
@@ -1123,12 +1217,12 @@ export default {
       }
       return data
     },
-    goBack() {
+    async goBack() {
      var departmentLog = JSON.parse(JSON.stringify(this.departmentLog))
      departmentLog.pop()
      var previousdept = departmentLog.pop()
      console.log(previousdept)
-     api.get(`${apiUrl}department/dept/child/${previousdept}`).then((res) => {
+     await api.get(`${apiUrl}department/dept/child/${previousdept}`).then((res) => {
           if(res.data.length > 0) {
             this.departmentLog.pop()
             this.chartModal = true
@@ -1330,10 +1424,10 @@ export default {
   }
     return data;
   },
-  getTransactionData(new_data) {
+  async getTransactionData(new_data) {
     var data = []
     for(var i=0;i<new_data.length;i++) {
-      api.get(`${apiUrl}transaction/trans/find/by/${new_data[i]._id}`).then((res) => {
+      await api.get(`${apiUrl}transaction/trans/find/by/${new_data[i]._id}`).then((res) => {
         data[i] = {y:res.data.amount}
       }).catch((err)=> {
         if(err.toString().includes("Network Error")) {

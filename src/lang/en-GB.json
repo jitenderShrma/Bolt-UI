@@ -321,5 +321,9 @@
     "pholdmonthcarryover" : "Select the month to Carry Over",
     "equalto" : "Equal To",
     "pholdfilterfield" : "Select A Field to Filter",
-    "filter" : "Filter"
+    "filter" : "Filter",
+    "contains" : "Contains",
+    "filterbyadmin" : "Filter Admin Transactions" ,
+    "pholdvendor" : "Select Vendor Company",
+    "raisepo" : "Raise PO"
 }

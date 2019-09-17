@@ -165,6 +165,11 @@ export default {
                     name:"Remaining Budget",
                     url:"/budget/approved",
                     icon:"icon-star"
+                  },
+                  {
+                    name:"CarryOver Budget",
+                    url:"/budget/carryover",
+                    icon:"icon-star"
                   }
                 ]
               })
@@ -271,6 +276,11 @@ export default {
       {
         name:"Remaining Budget",
         url:"/budget/approved",
+        icon:"icon-star"
+      },
+      {
+        name:"CarryOver Budget",
+        url:"/budget/carryover",
         icon:"icon-star"
       }
     ]
