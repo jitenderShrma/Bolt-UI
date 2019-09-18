@@ -173,27 +173,30 @@
             </div>
         </div>
             <div class="control-section">
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true' :allowReordering='true'  id='overviewgrid' :allowPaging="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc" :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :pageSettings="pageSettings" :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"  :rowSelected="rowSelected" :beforeCopy="beforeCopy" :dataBound="dataBound"
+            <ejs-grid ref='overviewgrid' :showColumnChooser="true" :rowHeight='rowHeight' :allowResizing='true' :allowReordering='true'  id='overviewgrid' :allowPaging="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc" :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :pageSettings="pageSettings" :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"  :rowSelected="rowSelected" :beforeCopy="beforeCopy" :dataBound="dataBound"
                 :height="height" :enableHover='false'> 
                 <e-columns>
                     <e-column :visible="enableColumn" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
                     <e-column field='ref_id' :template="buttonCopy" headerText='Ref ID' width="167"  :filter='filter' ></e-column>
                     <e-column :sortComparer='sortComparer' :template="buttonLM" field='status' headerText='Status' width="137" :filter='filter' ></e-column>
                     <e-column field='amount' headerText='Amount' format="C0" width="126" :filter='filter' ></e-column>
+                    <e-column field='amount_left' headerText='Left' format="C0" width="126" :allowFiltering='false'></e-column>
                     <e-column field='department.department_name' headerText='Department' width="145" :filter='filter' ></e-column>
                     <e-column field='budget_head.name' headerText='Head' width="110" :filter='filter' ></e-column>
-                    <e-column :visible="true" field="last_updated" headerText='Last Updated At' :template="dateTemplate"></e-column>
+                    <e-column :visible="true" :allowFiltering='false' field="last_updated" headerText='Last Updated At' :template="dateTemplate"></e-column>
                     <e-column field='request_by.user_name' width="120" headerText='Req By'  :filter='filter' ></e-column>
                     <e-column field='month' :template="monthTemplate" width="117" headerText='Month' :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type' width="108" :filter='filter' ></e-column>
                     <e-column field='labels[0].label_name' width="116" headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
                     <e-column field='recurring_rate' headerText='Recur Rate' width="138" :filter='filter' ></e-column>
                     <e-column field='description' headerText='Description' width="143" :filter='filter' ></e-column>
+                    <e-column field='created_date' headerText='Created Date' width="143" :format='formatOptions' type='date' :filter='filter' ></e-column>
                 </e-columns>
                 <e-aggregates>
                     <e-aggregate >
                         <e-columns>
                             <e-column type="Sum" field="amount" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="amount_left" :footerTemplate='footerMax'></e-column>
                         </e-columns>
                   </e-aggregate>
                 </e-aggregates>
@@ -289,6 +292,46 @@
             <b-modal size="sm" :title="$ml.get('confirm')" class="modal-primary" v-model="releaseModal" @ok="releaseApproval">
               <h5 v-text="$ml.get('confirmrelease')"></h5>
             </b-modal>
+
+
+            <b-modal :title="$ml.get('filter')" class="modal-primary" v-model="filterModal" size="md" @ok="filterModal = false" hide-footer>
+    <b-form style="padding:3%" v-on:submit.prevent="applyFilter">
+      <b-form-group>
+        <ejs-dropdownlist :showClearButton="true" :fields='fieldsformat' floatLabelType="Auto" :dataSource='fields' v-model="filterform.field" :placeholder="$ml.get('pholdfilterfield')">
+        </ejs-dropdownlist>
+      </b-form-group>
+      <div v-if="filterform.field == 'department.department_name' ">
+        <treeselect ref='treeselect1' :default-expand-level="10" v-model="filterform.value" :placeholder="$ml.get('pholddept')" :multiple="false" :options="department" />
+      </div>
+      <div v-if="filterform.field == 'budget_head.name' ">
+        <treeselect ref='treeselect1' :default-expand-level="10" :placeholder="$ml.get('pholdhead')" v-model="filterform.value" :multiple="false" :options="head" />
+      </div>
+      <div v-if="filterform.field == 'request_by.user_name'">
+        <ejs-textbox v-model="filterform.value" floatLabelType="Auto" :placeholder="$ml.get('contains')"></ejs-textbox>
+      </div>
+      <div v-if="filterform.field == 'labels[0].label_name'">
+        <ejs-dropdownlist :showClearButton="true" :fields='labelfields' floatLabelType="Auto" :dataSource='labels' v-model="filterform.value" :placeholder="$ml.get('pholdlabel')">
+        </ejs-dropdownlist>
+      </div>
+      <div v-if="filterform.field == 'month' ">
+        <ejs-dropdownlist :showClearButton="true" :fields='monthfields' floatLabelType="Auto" :dataSource='months' v-model="filterform.value" :placeholder="$ml.get('pholdmonth')">
+        </ejs-dropdownlist>
+      </div>
+      <div v-if="filterform.field == 'created_date' ">
+        <vue-daterange-picker 
+            double
+            :start-date="startdate"
+            format="DD/MM/YYYY"
+            place-holders="dd/mm/yyyy"
+            @get-dates="getDates"/>
+      </div>
+      <div v-if="filterform.field == 'approval_type' || filterform.field == 'ref_id' || filterform.field == 'amount' || filterform.field == 'status' || filterform.field == 'description' || filterform.field == 'recurring_rate'">
+        <ejs-textbox v-model="filterform.value" floatLabelType="Auto" :placeholder="$ml.get('equalto')"></ejs-textbox>
+      </div>
+      <br>
+      <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
+    </b-form>
+  </b-modal>
   </div>
  </div>
 </template>
@@ -296,6 +339,7 @@
 import apiUrl from '@/apiUrl'
 import axios from 'axios'
 import Vue from 'vue'
+import VueDaterangePicker from 'vue-daterange-picker';
 import { asideMenuCssClasses, validBreakpoints, checkBreakpoint } from '../../shared/classes'
 import toggleClasses from '../../shared/toggle-classes'
 import { Header as AppHeader, SidebarToggler, Sidebar as AppSidebar, SidebarFooter, SidebarForm, SidebarHeader, SidebarMinimizer, SidebarNav, Aside as AppAside, Footer as TheFooter, Breadcrumb } from '@coreui/vue'
@@ -307,6 +351,9 @@ import VueNotifications from 'vue-notifications'
 import { DatePickerPlugin } from "@syncfusion/ej2-vue-calendars";
 import miniToastr from 'mini-toastr' 
 import moment from 'moment'
+import Treeselect from '@riophae/vue-treeselect'
+import {Parser} from 'json2csv'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import {
   PivotViewPlugin,
   GroupingBar,
@@ -360,6 +407,7 @@ Vue.use(VueNotifications, options)
 export default {
     name: 'ApprovalList',
     components: {
+      Treeselect,VueDaterangePicker,
       ToolbarPlugin, CoolSelect, GridPlugin, AsideToggler, AppHeader, DefaultToggler, AppSidebar, AppAside, TheFooter, Breadcrumb, SidebarForm, SidebarFooter, SidebarToggler, SidebarHeader, SidebarNav, cSwitch, SidebarMinimizer,DatePickerPlugin, NumericTextBoxPlugin 
     },
     provide: {
@@ -974,9 +1022,9 @@ export default {
           departmentBudget:[],
            height : window.innerHeight*0.695,
           toolbar: [
-          'CsvExport',
+          'CsvExport','ColumnChooser',{ prefixIcon: 'e-csvexport', text:"CSV Export All", id: 'exportall', align: 'Left' },
             'Search',
-            { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
+            { prefixIcon: 'e-excl-filter-icon', text:"Clear", id: 'clearfilter', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
             ],
@@ -1011,7 +1059,31 @@ export default {
                 iconTick :false,
                 animationSettings: { effect: 'None' },
                 alertDlgButtons: [{ click: this.alertDlgBtnClick, buttonModel: { content: 'OK', isPrimary: true } }],
-                selectionSettings: { persistSelection: true, type: 'Multiple',mode:"Both" }
+                selectionSettings: { persistSelection: true, type: 'Multiple',mode:"Both" },
+                filterform:{},
+                filterModal:false,
+                department:[],
+                head:[],
+                fieldsformat: { text: 'name', value: 'ID' },
+                fields:[
+                {name:'Ref ID',ID:'ref_id'},
+                  {name:'Status',ID:'status'},
+                  {name:'Amount',ID:'amount'},
+                  {name:'Department',ID:'department.department_name'},
+                  {name:'Head',ID:'budget_head.name'},
+                  {name:'Requested By',ID:'request_by.user_name'},
+                  {name:'Month',ID:'month'},
+                  {name:'Vendor',ID:'vendor.vendor_company'},
+                  {name:'Type',ID:'approval_type'},
+                  {name:'Label',ID:'labels[0].label_name'},
+                  {name:'Recurring Rate',ID:'recurring_rate'},
+                  {name:'Description',ID:'description'},
+                  {name:"Created Date",ID:"created_date"}
+                ],
+                labelfields: { text: 'label_name', value: '_id' },
+        monthfields: { text: 'name', value: 'value' },
+        months:[ {name:"January",value:"0"},{name:"February",value:"1"},{name:"March",value:"2"},{name:"April",value:"3"},{name:"May",value:"4"},{name:"June",value:"5"},{name:"July",value:"6"},{name:"August",value:"7"},{name:"September",value:"8"},{name:"October",value:"9"},{name:"November",value:"10"},{name:"December",value:"11"}],
+        formatOptions: { type: 'date', format: 'dd/MM/yyyy' },
             };
         },
   methods: {
@@ -1023,6 +1095,9 @@ export default {
                           var user =  JSON.parse(localStorage['session_key'])
                             this.datasrc = response.data;
                             for(var i =0;i<this.datasrc.length;i++) {
+                              this.datasrc[i].amount_left = this.datasrc[i].approval_amount_left.reduce((a,b)=>a+b,0)
+                              this.datasrc[i].date = moment(this.datasrc[i].created_date).format('L')
+                              this.datasrc[i].time = moment(this.datasrc[i].created_date).format('h:mm')
                               if(user.user) {
                                 if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
                                    this.enableColumn =  true
@@ -1074,6 +1149,9 @@ export default {
                           var user =  JSON.parse(localStorage['session_key'])
                             this.datasrc = response.data;
                             for(var i =0;i<this.datasrc.length;i++) {
+                              this.datasrc[i].amount_left = this.datasrc[i].approval_amount_left.reduce((a,b)=>a+b,0)
+                              this.datasrc[i].date = moment(this.datasrc[i].created_date).format('L')
+                              this.datasrc[i].time = moment(this.datasrc[i].created_date).format('h:mm')
                               if(user.user) {
                                 if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
                                    this.enableColumn =  true
@@ -1315,7 +1393,11 @@ export default {
       
     },
             actionBegin: function(args) {
-                console.log(args)
+               if(args.requestType == "filterchoicerequest") {
+                this.filterform.field = args.query.distincts[0]
+                this.filterModal = true
+                args.filterModel.dialogObj.hide()
+              }
             },
             addLabel (args) {
             this.addModal =false
@@ -1371,6 +1453,139 @@ export default {
       }
       },
             clickHandler (args) {
+              if (args.item.id === 'exportall') {
+                var datasrc = []
+                api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
+                  datasrc = response.data
+                  for(var i=0;i<datasrc.length;i++) {
+                      datasrc[i].amount_left = datasrc[i].approval_amount_left.reduce((a,b)=>a+b,0)
+                      datasrc[i].date = moment(datasrc[i].created_date).format('L')
+                      datasrc[i].time = moment(datasrc[i].created_date).format('h:mm')
+                      datasrc[i].created_date = new Date(datasrc[i].created_date)
+                  }
+                  const fields = [{
+                        label: 'Reference ID',
+                        value: 'ref_id'
+                      },{
+                        label: 'Status',
+                        value: 'status'
+                      },
+                      {
+                        label: 'Amount',
+                        value: 'amount'
+                      },
+                      {
+                        label: 'Left',
+                        value: 'amount_left'
+                      },
+                      {
+                        label: 'Department',
+                        value: 'department.department_name'
+                      },
+                      {
+                        label: 'Head',
+                        value: 'head.name'
+                      },
+                      {
+                        label: 'Requested By',
+                        value: 'request_by.user_name'
+                      },
+                      {
+                        label: 'Month',
+                        value: 'month'
+                      },
+                      {
+                        label: 'Approval Type',
+                        value: 'approval_type'
+                      },
+                      {
+                        label: 'Label 1',
+                        value: 'labels[0].label_name'
+                      },
+                      {
+                        label: 'Label 2',
+                        value: 'labels[1].label_name'
+                      },
+                      {
+                        label: 'Recurring Rate',
+                        value: 'recurring_rate'
+                      },
+                      {
+                        label: 'Description',
+                        value: 'description'
+                      },
+                      {
+                        label: 'Date',
+                        value: 'date'
+                      },
+                      {
+                        label: 'Time',
+                        value: 'time'
+                      }];
+                    
+                    const json2csvParser = new Parser({ fields });
+                    const csv = json2csvParser.parse(datasrc);
+                    var hiddenElement = document.createElement('a');
+                    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+                    hiddenElement.target = '_blank';
+                    hiddenElement.download = 'Approvals.csv';
+                    hiddenElement.click();
+                }).catch((err)=> {
+                  if(err.toString().includes("Network Error")) {
+                    toast({
+                      type: VueNotifications.types.error,
+                      title: 'Network Error'
+                    })
+                  }
+                })
+                
+              }
+              if (args.item.id === 'clearfilter') {
+                  this.$refs.overviewgrid.clearFiltering()
+                  api.get(`${apiUrl}`+`approvals/preApp/get/all`).then((response) => {
+                    this.loading=true
+                    var user =  JSON.parse(localStorage['session_key'])
+                      this.datasrc = response.data;
+                      console.log(this.datasrc)
+                      for(var i=0;i<this.datasrc.length;i++) {
+                        this.datasrc[i].amount_left = this.datasrc[i].approval_amount_left.reduce((a,b)=>a+b,0)
+                        this.datasrc[i].date = moment(this.datasrc[i].created_date).format('L')
+                        this.datasrc[i].time = moment(this.datasrc[i].created_date).format('h:mm')
+                        this.datasrc[i].created_date = new Date(this.datasrc[i].created_date)
+                        if(user.user) {
+                          if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
+                             this.enableColumn =  true
+                          }
+                        }
+                        else {
+                          if(this.datasrc[i].status=="PENDING") {
+                             this.enableColumn =  true
+                          }
+                        }
+                        if(this.datasrc[i].request_by == null) {
+                          this.datasrc[i].request_by = {
+                            user_name:"No longer exists!"
+                          }
+                        }
+                        if(this.datasrc[i].budget_head == null) {
+                          this.datasrc[i].budget_head = {
+                            name:"No longer exists!"
+                          }
+                        }
+                        this.datasrc[i].labellist = "";
+                        for(var j=0;j<this.datasrc[i].labels.length;j++) {
+                          this.datasrc[i].labellist = this.datasrc[i].labellist+`${this.datasrc[i].labels[j].label_name},`
+                        }
+                      }
+                  }).catch((err)=> {
+                    if(err.toString().includes("Network Error")) {
+          toast({
+            type: VueNotifications.types.error,
+            title: 'Network Error'
+          })
+        }
+        })
+                }
                     if(this.$refs.overviewgrid.getSelectedRecords().length>0){
                     let withHeader = false;
                     if (args.item.id === 'copyHeader') {
@@ -1391,12 +1606,177 @@ export default {
                     this.rowHeight = 60;
                 }
                 if (args.item.text === 'CSV Export') {
-                    this.$refs.overviewgrid.csvExport()
+                  var datasrc = this.datasrc
+                    const fields = [{
+                        label: 'Reference ID',
+                        value: 'ref_id'
+                      },{
+                        label: 'Status',
+                        value: 'status'
+                      },
+                      {
+                        label: 'Amount',
+                        value: 'amount'
+                      },
+                      {
+                        label: 'Left',
+                        value: 'amount_left'
+                      },
+                      {
+                        label: 'Department',
+                        value: 'department.department_name'
+                      },
+                      {
+                        label: 'Head',
+                        value: 'head.name'
+                      },
+                      {
+                        label: 'Requested By',
+                        value: 'request_by.user_name'
+                      },
+                      {
+                        label: 'Month',
+                        value: 'month'
+                      },
+                      {
+                        label: 'Approval Type',
+                        value: 'approval_type'
+                      },
+                      {
+                        label: 'Label 1',
+                        value: 'labels[0].label_name'
+                      },
+                      {
+                        label: 'Label 2',
+                        value: 'labels[1].label_name'
+                      },
+                      {
+                        label: 'Recurring Rate',
+                        value: 'recurring_rate'
+                      },
+                      {
+                        label: 'Description',
+                        value: 'description'
+                      },
+                      {
+                        label: 'Date',
+                        value: 'date'
+                      },
+                      {
+                        label: 'Time',
+                        value: 'time'
+                      }];
+                    
+                    const json2csvParser = new Parser({ fields });
+                    const csv = json2csvParser.parse(datasrc);
+                    var hiddenElement = document.createElement('a');
+                    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+                    hiddenElement.target = '_blank';
+                    hiddenElement.download = 'Approvals.csv';
+                    hiddenElement.click();
                 }
                 if (args.item.text === 'PDF Export') {
                     this.$refs.overviewgrid.pdfExport()
                 }
             },
+            applyFilter() {
+      var link = `approvals/preApp/filter/get`
+      if(this.filterform.field == "department.department_name") {
+        this.filterform.field = "department"
+      }
+      if(this.filterform.field == "budget_head.name") {
+        this.filterform.field = "budget_head"
+      }
+      if(this.filterform.field == "request_by.user_name") {
+        link = `approvals/preApp/filter/user`
+      }
+      // if(this.filterform.field == "user.user_name" && this.filterform.value=="ADMIN") {
+      //   link = `transaction/trans/superuser/get`
+      // }
+      console.log(this.filterform)
+      api.post(`${apiUrl}`+`${link}`,this.filterform).then((response) => {
+        this.loading =true
+        this.filterform = {}
+
+        this.filterModal =false
+                          var user =  JSON.parse(localStorage['session_key'])
+                            this.datasrc = response.data;
+                            for(var i=0;i<this.datasrc.length;i++) {
+                              this.datasrc[i].amount_left = this.datasrc[i].approval_amount_left.reduce((a,b)=>a+b,0)
+                              this.datasrc[i].date = moment(this.datasrc[i].created_date).format('L')
+                              this.datasrc[i].time = moment(this.datasrc[i].created_date).format('h:mm')
+                              this.datasrc[i].created_date = new Date(this.datasrc[i].created_date)
+                              if(user.user) {
+                                if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
+                                   this.enableColumn =  true
+                                }
+                              }
+                              else {
+                                console.log("user")
+                                if(this.datasrc[i].status=="PENDING") {
+                                   this.enableColumn =  true
+                                }
+                              }
+                              if(this.datasrc[i].request_by == null) {
+                                this.datasrc[i].request_by = {
+                                  user_name:"No longer exists!"
+                                }
+                              }
+                              this.datasrc[i].labellist = "";
+                              for(var j=0;j<this.datasrc[i].labels.length;i++) {
+                                this.datasrc[i].labellist = this.datasrc[i].labellist+`${this.datasrc[i].labels[j].label_name},`
+                              }
+                            }
+
+                })
+      // api.get(`${apiUrl}approvals/preApp/get/all `).then((res) => {
+      //       this.loading= true
+      //       this.foreign = res.data
+      //               this.filterModal =false
+
+      //       api.post(`${apiUrl}`+`${link}`,this.filterform).then((response) => {
+      //             console.log(response.data)
+      //               this.datasrc = response.data;
+      //               for(var i =0;i<this.datasrc.length;i++) {
+      //                 this.datasrc[i].amount = parseInt(this.datasrc[i].amount)
+      //                 this.datasrc[i].date = moment(this.datasrc[i].created_date).format('L')
+      //                 this.datasrc[i].time = moment(this.datasrc[i].created_date).format('h:mm')
+      //                 this.datasrc[i].created_date = new Date(this.datasrc[i].created_date)
+      //                 if(this.datasrc[i].user == null) {
+      //                   this.datasrc[i].user = {
+      //                     user_name:"ADMIN"
+      //                   }
+      //                 }
+      //                 if(this.datasrc[i].status == "Approved") {
+      //                   this.datasrc[i].status = "UNPAID"
+      //                 }
+      //                 if(this.datasrc[i].department == null) {
+      //                   this.datasrc[i].department = {
+      //                     department_name:"NONE"
+      //                   }
+      //                 }
+      //                 if(this.datasrc[i].head == null) {
+      //                   this.datasrc[i].head = {
+      //                     name:"NONE"
+      //                   }
+      //                 }
+      //                 for(var j=0;j<this.foreign.length;j++) {
+      //                   if(this.datasrc[i].approvalCode == this.foreign[j].ref_id) {
+      //                     this.datasrc[i].total_amount = this.foreign[j].amount
+      //                     this.datasrc[i].amount_left = this.foreign[j].approval_amount_left[this.foreign[j].month]
+      //                     this.datasrc[i].spent = this.datasrc[i].total_amount - this.datasrc[i].amount_left
+      //                   }
+      //                 }
+      //               }
+      //               this.filterform = {}
+      //           }).catch((err)=> {
+      //   toast({
+      //     type: VueNotifications.types.error,
+      //     title: 'Network Error'
+      //   })
+      // })
+      //     })
+    },
             addEditHandler(args) {
               var data = this.$refs.overviewgrid.getSelectedRecords()
               if(args.item.id == 'label') {
@@ -1515,6 +1895,87 @@ export default {
                 }
                 
             },
+            list_to_tree_dept(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_department != undefined  && this.checkExistDept(node.parent_department)) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_department]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataDept(roots)
+          return roots
+      },
+      convertDataDept(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataDept(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].department_name;
+        delete roots[i]._id;
+        delete roots[i].department_name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
+        }
+      },
+      checkExistDept(node) {
+        for (var i=0; i < this.dept.length; i++) {
+            if (this.dept[i]._id == node)
+                return true;
+        }
+        return false;
+      },
+      checkExistHead(node) {
+        for (var i=0; i < this.or_head.length; i++) {
+            if (this.or_head[i]._id == node)
+                return true;
+        }
+        return false;
+      },
+      list_to_tree_head(list) {
+          var map = {}, node, roots = [], i;
+          for (i = 0; i < list.length; i += 1) {
+              map[list[i]._id] = i; // initialize the map
+              list[i].children = []; // initialize the children
+          }
+          for (i = 0; i < list.length; i += 1) {
+              node = list[i];
+              if (node.parent_head != undefined && this.checkExistHead(node.parent_head)) {
+                  // if you have dangling branches check that map[node.parentId] exists
+                  list[map[node.parent_head]].children.push(node);
+              } else {
+                  roots.push(node);
+              }
+          }
+          this.convertDataHead(roots)
+          return roots
+      },
+      convertDataHead(roots) {
+        for(var i=0;i<roots.length;i++) {
+            if(roots[i].children.length !=0) {
+              this.convertDataHead(roots[i].children);
+            }
+            roots[i].id = roots[i]._id;
+          roots[i].label = roots[i].name;
+        delete roots[i]._id;
+        delete roots[i].name;
+        if(roots[i].children.length<=0) {
+          delete roots[i].children
+        }
+        }
+      },
+      getDates(args) {
+      this.filterform.value = args
+    },
             alertDlgBtnClick() {
                     this.$refs.alertDialog.hide();
                 },
@@ -1575,6 +2036,10 @@ export default {
                     this.datasrc = response.data;
                     console.log(this.datasrc)
                     for(var i=0;i<this.datasrc.length;i++) {
+                      this.datasrc[i].amount_left = this.datasrc[i].approval_amount_left.reduce((a,b)=>a+b,0)
+                      this.datasrc[i].date = moment(this.datasrc[i].created_date).format('L')
+                      this.datasrc[i].time = moment(this.datasrc[i].created_date).format('h:mm')
+                      this.datasrc[i].created_date = new Date(this.datasrc[i].created_date)
                       if(user.user) {
                         if(this.datasrc[i].status=="PENDING" && this.datasrc[i].assigned_to_designation==user.user.user_type.designation) {
                            this.enableColumn =  true
@@ -1619,6 +2084,33 @@ export default {
         })
       }
       })
+                  // Department Tree
+      axios.get(`${apiUrl}`+`dropdown/department/get/all`,{withCredentials:true}).then((res) => {
+        this.dept = JSON.parse(JSON.stringify(res.data))
+        this.department = this.list_to_tree_dept(res.data)
+      }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      }
+      })
+      // Head Tree
+      axios.get(`${apiUrl}`+`head/head/get`,{withCredentials:true}).then((res) => {
+        console.log(res.data);
+        this.or_head = JSON.parse(JSON.stringify(res.data))
+        this.head = this.list_to_tree_head(res.data)
+      }).catch((err)=> {
+        if(err.toString().includes("Network Error")) {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      }
+      })
+      var year = new Date().getFullYear()
+      this.startdate  = new Date(`04/01/${year}`)
               
               // else{
               //   this.pending = true
@@ -1888,7 +2380,7 @@ html:not([dir="rtl"]) .aside-menu-fixed #new_aside, html:not([dir="rtl"]) .aside
 #loader{
     height: 0;
     position: absolute;
-    left: 15%;
+    left: 28%;
     top: -9%;
 }
       .sk-fading-circle {

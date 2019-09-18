@@ -325,5 +325,8 @@
     "contains" : "Contains",
     "filterbyadmin" : "Filter Admin Transactions" ,
     "pholdvendor" : "Select Vendor Company",
-    "raisepo" : "Raise PO"
+    "raisepo" : "Raise PO",
+    "previewdownload" : "Preview/Download",
+    "notuploaded" : "Not Uploaded",
+    "uploadpo" : "Upload"
 }
