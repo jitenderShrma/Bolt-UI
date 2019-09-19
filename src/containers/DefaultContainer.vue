@@ -86,6 +86,21 @@ export default {
             text: 'NEW'
           }
         },
+        {
+          name: 'Finance',
+          icon: 'icon-calculator',
+          children:[
+          ]
+        },
+        {
+          divider:true,
+          class:'mt-auto'
+        },
+        {
+          name: 'Settings',
+          icon: 'icon-settings',
+          children:[]
+        },
       ],
     }
   },
@@ -102,14 +117,14 @@ export default {
         {
           if(permission[i].read_all == true || permission[i].read_own == true ) {
             if(permission[i].text == "Staff") {
-              this.navItems.push({
+              this.navItems[3].children.push({
                   name: 'Staff',
                   url: '/staff',
                   icon: 'icon-user'
             })
             }
             if(permission[i].text=="Vendor") {
-                this.navItems.push({
+                this.navItems[1].children.push({
                 name : "Vendor",
                 url : "/vendor",
                 icon : "icon-star"
@@ -117,14 +132,14 @@ export default {
             }
             if(permission[i].text=="Department") {
               
-                this.navItems.push({
+                this.navItems[3].children.push({
                   name : "Departments",
                   url : "/department/list",
                   icon : "icon-star"
                 })
             }
             if(permission[i].text == "Approval") {
-              this.navItems.push(
+              this.navItems[1].children.push(
                 {
                   name:"Approval Requests",
                   url:"/approval/view/all",
@@ -137,7 +152,7 @@ export default {
             }
             if(permission[i].text=="Designation") {
               
-                this.navItems.push({
+                this.navItems[3].children.push({
                 name : "Designations",
                 url : "/designation/list",
                 icon : "icon-star"
@@ -146,7 +161,7 @@ export default {
             
             if(permission[i].text=="Head") {
               
-                this.navItems.push(  {
+                this.navItems[1].children.push(  {
                 name : "Heads",
                 url : "/heads/list",
                 icon : "icon-star"
@@ -176,14 +191,14 @@ export default {
             }
             if(permission[i].text=="Label") {
               
-                this.navItems.push({
+                this.navItems[3].children.push({
                   name:"Label",
                   url:"/label",
                   icon:"icon-calculator"
                 },)
             }
             if(permission[i].text=="Transcation") {
-                this.navItems.push({
+                this.navItems[1].children.push({
                   name:"Transaction",
                   url:"/transaction",
                   icon:"icon-calculator"
@@ -191,7 +206,7 @@ export default {
             }
             if(permission[i].text=="Budget Transfer") {
               
-                this.navItems.push({
+                this.navItems[1].children.push({
                   name: "Budget Transfer",
                   icon:"icon-star",
                   url:"/budgettrans/list/all",
@@ -217,103 +232,123 @@ export default {
     }
   },  
   {
-        name: 'Staff',
-        url: '/staff',
-        icon: 'icon-user'
-  },
-  {
+    name: 'Finance',
+    icon: 'icon-calculator',
+    children:[
+      {
         name: 'Vendor',
         url: '/vendor',
         icon: 'icon-user'
-  },
-  {
-    name : "Templates",
-    url : '/templates',
-    icon : 'icon-envelope',
-    children : [
-      {
-        name : 'Email Templates',
-        url : '/templates/email',
-        icon : 'icon-envelope',
       },
       {
-        name : 'SMS Templates',
-        url : '/templates/sms',
-        icon : 'icon-envelope',
+        name : "Heads",
+        url : "/heads/list",
+        icon : "icon-star"
+      },
+      {
+        name: "Budget",
+        icon:"icon-star",
+        url:"/budget",
+        children : [
+          {
+            name:"Total Budget",
+            url:"/budget/total",
+            icon:"icon-star"
+          },
+          {
+            name:"Remaining Budget",
+            url:"/budget/approved",
+            icon:"icon-star"
+          },
+          {
+            name:"CarryOver Budget",
+            url:"/budget/carryover",
+            icon:"icon-star"
+          }
+        ]
+      },
+      {
+        name: "Budget Transfer",
+        icon:"icon-star",
+        url:"/budgettrans/list/all",
+        badge: {
+          variant: 'primary',
+          text: this.pendingCount2
+        }
+      },
+      {
+        name:"Transaction",
+        url:"/transaction",
+        icon:"icon-calculator"
+      },
+      {
+        name:"Approval Requests",
+        url:"/approval/view/all",
+        icon:"icon-calculator",
+        badge: {
+          variant: 'primary',
+          text: this.pendingCount1
+        }
       },
     ]
   },
   {
-    name: 'Communication Log',
-    url: '/plugin/log',
+    divider:true,
+    class:'mt-auto'
+  },
+  {
+    name: 'Settings',
     icon: 'icon-settings',
-  },
-  {
-    name : "Departments",
-    url : "/department/list",
-    icon : "icon-star"
-  },
-  {
-    name : "Designations",
-    url : "/designation/list",
-    icon : "icon-star"
-  },
-  {
-    name : "Heads",
-    url : "/heads/list",
-    icon : "icon-star"
-  },
-  {
-    name: "Budget",
-    icon:"icon-star",
-    url:"/budget",
-    children : [
+    children:[
       {
-        name:"Total Budget",
-        url:"/budget/total",
-        icon:"icon-star"
+        name: 'Staff',
+        url: '/staff',
+        icon: 'icon-user'
+      },
+      
+      {
+        name : "Templates",
+        url : '/templates',
+        icon : 'icon-envelope',
+        children : [
+          {
+            name : 'Email Templates',
+            url : '/templates/email',
+            icon : 'icon-envelope',
+          },
+          {
+            name : 'SMS Templates',
+            url : '/templates/sms',
+            icon : 'icon-envelope',
+          },
+        ]
       },
       {
-        name:"Remaining Budget",
-        url:"/budget/approved",
-        icon:"icon-star"
+        name: 'Communication Log',
+        url: '/plugin/log',
+        icon: 'icon-settings',
       },
       {
-        name:"CarryOver Budget",
-        url:"/budget/carryover",
-        icon:"icon-star"
-      }
+        name : "Departments",
+        url : "/department/list",
+        icon : "icon-star"
+      },
+      {
+        name : "Designations",
+        url : "/designation/list",
+        icon : "icon-star"
+      },
+      
+      
+      
+      
+      {
+        name:"Label",
+        url:"/label",
+        icon:"icon-calculator"
+      },
     ]
   },
-  {
-    name: "Budget Transfer",
-    icon:"icon-star",
-    url:"/budgettrans/list/all",
-    badge: {
-      variant: 'primary',
-      text: this.pendingCount2
-    }
-  },
-  {
-    name:"Transaction",
-    url:"/transaction",
-    icon:"icon-calculator"
-  },
-  {
-    name:"Approval Requests",
-    url:"/approval/view/all",
-    icon:"icon-calculator",
-    badge: {
-      variant: 'primary',
-      text: this.pendingCount1
-    }
-  },
-  {
-    name:"Label",
-    url:"/label",
-    icon:"icon-calculator"
-  },
-  
 ]
     }
       })

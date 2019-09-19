@@ -19,7 +19,7 @@
             </div>
         </div>
              <div class="control-section">
-            <ejs-grid ref='overviewgrid' :allowReordering='true' :rowHeight='rowHeight' :showColumnMenu='true' :allowResizing='true'  :showColumnChooser='true'  id='overviewgrid'  :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :dataBound="dataBound"
+            <ejs-grid ref='overviewgrid' :allowReordering='true' :rowHeight='rowHeight' :allowResizing='true'  :showColumnChooser='true'  id='overviewgrid'  :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true' :dataBound="dataBound"
                 :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
                     <e-column type='checkbox' :allowFiltering='false' :allowSorting='false'  ></e-column>

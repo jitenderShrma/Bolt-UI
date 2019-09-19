@@ -176,8 +176,8 @@
             <ejs-grid ref='overviewgrid' :showColumnChooser="true" :rowHeight='rowHeight' :allowResizing='true' :allowReordering='true'  id='overviewgrid' :allowPaging="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc" :allowFiltering='true' :sortSettings='sortOptions' :filterSettings='filterOptions' :allowSelection='true' :pageSettings="pageSettings" :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler"  :rowSelected="rowSelected" :beforeCopy="beforeCopy" :dataBound="dataBound"
                 :height="height" :enableHover='false'> 
                 <e-columns>
-                    <e-column :visible="enableColumn" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
-                    <e-column field='ref_id' :template="buttonCopy" headerText='Ref ID' width="167"  :filter='filter' ></e-column>
+                    <e-column :visible="enableColumn" :showInColumnChooser='false' headerText='Accept/Reject' width='75' :template="buttonTemplate"></e-column>
+                    <e-column  field='ref_id' :template="buttonCopy" headerText='Ref ID' width="167"  :filter='filter' ></e-column>
                     <e-column :sortComparer='sortComparer' :template="buttonLM" field='status' headerText='Status' width="137" :filter='filter' ></e-column>
                     <e-column field='amount' headerText='Amount' format="C0" width="126" :filter='filter' ></e-column>
                     <e-column field='amount_left' headerText='Left' format="C0" width="126" :allowFiltering='false'></e-column>
@@ -189,7 +189,7 @@
                     <e-column field='approval_type' headerText='Type' width="108" :filter='filter' ></e-column>
                     <e-column field='labels[0].label_name' width="116" headerText='Labels' :template="labelTemplate" :filter='filter' ></e-column>
                     <e-column field='recurring_rate' headerText='Recur Rate' width="138" :filter='filter' ></e-column>
-                    <e-column field='description' headerText='Description' width="143" :filter='filter' ></e-column>
+                    <e-column field='description' :template="descrTemplate" headerText='Description' width="143" :filter='filter' ></e-column>
                     <e-column field='created_date' headerText='Created Date' width="143" :format='formatOptions' type='date' :filter='filter' ></e-column>
                 </e-columns>
                 <e-aggregates>
@@ -339,6 +339,7 @@
 import apiUrl from '@/apiUrl'
 import axios from 'axios'
 import Vue from 'vue'
+import { TooltipPlugin } from "@syncfusion/ej2-vue-popups";
 import VueDaterangePicker from 'vue-daterange-picker';
 import { asideMenuCssClasses, validBreakpoints, checkBreakpoint } from '../../shared/classes'
 import toggleClasses from '../../shared/toggle-classes'
@@ -366,7 +367,7 @@ import {Aggregate,PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, Colu
 import { NumericTextBoxPlugin,ColorPickerPlugin } from "@syncfusion/ej2-vue-inputs";
 import { TextBoxPlugin } from '@syncfusion/ej2-vue-inputs';
 import { Switch as cSwitch } from '@coreui/vue'
-
+Vue.use(TooltipPlugin);
 Vue.use(TextBoxPlugin)
 Vue.use(ColorPickerPlugin);
     Vue.use(PivotViewPlugin);
@@ -480,7 +481,7 @@ export default {
         buttonLM: function () {
               return {
                   template: Vue.component('buttonLM', {
-                      template: `<div style="line-height:4"><b-badge v-if="data.status!='BUDGET LIMIT EXCEEDED'" id="label" :variant="data.status">{{data.status}}</b-badge><b-badge v-else id="label" variant="LIMIT">LIMIT EXCEEDED</b-badge><AsideToggler id="toggler"/></div>`,
+                      template: `<div style="line-height:4"><ejs-tooltip ref="tooltip" position="TopCenter" :content='content' :beforeRender="beforeRender"><b-badge v-if="data.status!='BUDGET LIMIT EXCEEDED'" id="label" :variant="data.status">{{data.status}}</b-badge><b-badge v-else id="label" variant="LIMIT">LIMIT EXCEEDED</b-badge><AsideToggler id="toggler"/></ejs-tooltip></div>`,
                       components:{
                         AsideToggler,
                         AppHeader,
@@ -498,9 +499,13 @@ export default {
                   data: function() {
                           return {
                               data: {},
+                              content:'Loading...'
                           }
                       },
                   methods: {
+                    beforeRender(args){
+                      this.content = `<span>Description : ${this.data.description}<br>Status : ${this.data.status}<br>Date : ${moment(this.data.date).format('L')}<br>Requested By : ${this.data.request_by.user_name}<br>Month : ${moment().month(this.data.month).format('MMM')}<span>`
+                    },
                     gotoPage() {
                       console.log("aside on")
                     }
@@ -525,14 +530,35 @@ export default {
                 })
               }
           },
+          descrTemplate: function () {
+              return {
+                  template: Vue.component('descrTemplate', {
+                      template: `<ejs-tooltip ref="tooltip" position="TopCenter" :content='data.description'>
+                      <span>{{data.description}}</span></ejs-tooltip>`,
+                  data: function() {
+                          return {
+                              data: {},
+                          }
+                      },
+                      mounted() {
+                        
+                      },
+                  methods: {
+                    gotoPage() {
+                      console.log("aside on")
+                    }
+                  }
+                })
+              }
+          },
         buttonTemplate: function () {
               return {
                 
                   template: Vue.component('buttonTemplate', {
                       template: `<div>
                                 <div v-if="yes">
-                                  <b-button @click="accept_remarks = true" type="submit" size="sm" variant="primary"><i class="icon-check"></i></b-button>
-                                  <b-button @click="reject_remarks = true" type="submit" size="sm" variant="danger"><i class="icon-close"></i></b-button>
+                                  <span style="cursor:pointer" @click="accept_remarks = true" ><b-badge variant="primary" id="label"><i class="icon-check"></i></b-badge></span>
+                                  <span style="cursor:pointer" @click="reject_remarks = true" ><b-badge variant="danger" id="label"><i class="icon-close"></i></b-badge></span>
                                   </div>
                                 <b-modal size="lg" class="modal-primary py-0" v-model="accept_remarks" @ok="accept_remarks = false" hide-footer>
                                 <template slot="modal-header">

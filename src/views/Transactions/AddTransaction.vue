@@ -166,6 +166,13 @@
                 <ejs-textbox required type="text" v-model="input.bill_number"  :placeholder="$ml.get('pholdbillno')"></ejs-textbox>
               </div>
             </b-col>
+            <b-col sm="4">
+              <span v-if="!isImprest" style="color:red;float:right;height:2px;font-size:20px">*</span>
+              <div v-if="isImprest"><b-form-file v-model="input.bill_file" accept="*" id="BillFile"></b-form-file></div>
+              <div v-else>
+                <b-form-file v-model="input.bill_file" accept="*" id="BillFile"></b-form-file>
+              </div>
+            </b-col>
           </b-row>
             </b-form-group>
             <b-form-group
@@ -856,7 +863,25 @@ Vue.use(TextBoxPlugin);
             }
           else{
           console.log(this.input)
-          axios.post(`${apiUrl}`+`transaction/trans/create`,this.input,{withCredentials:true}).then((res) => { console.log(res.data)
+          var formdata =  new FormData()
+          formdata.append('amount',this.input.amount)
+          formdata.append('approvalCode',this.input.approvalCode)
+          formdata.append('bill_number',this.input.bill_number)
+          formdata.append('bill_file',this.input.bill_file)
+          formdata.append('category',this.input.category)
+          formdata.append('department',this.input.department)
+          formdata.append('head',this.input.head)
+          formdata.append('isApproved',this.input.isApproved)
+          formdata.append('month',this.input.month)
+          formdata.append('po_raised',this.input.po_raised)
+          formdata.append('po_required',this.input.po_required)
+          if(this.input.quotes.length>0) {
+            formdata.append('quotes',this.input.quotes)
+          }
+          formdata.append('status',this.input.status)
+          formdata.append('transaction_id',this.input.transaction_id)
+          formdata.append('vendor',this.input.vendor)
+          axios.post(`${apiUrl}`+`transaction/trans/create`,formdata,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((res) => { console.log(res.data)
             this.$router.push("/transaction/list")
           }).catch((err)=> {
               if(err.toString().includes("Network Error")) {

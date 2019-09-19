@@ -26,7 +26,7 @@
      <div class="col-lg-15 control-section">
         <div class="content-wrapper">
              <div class="control-section">
-            <ejs-grid ref='overviewgrid' :editSettings='editSettings' :rowHeight='rowHeight' :showColumnMenu='true' :allowReordering='true' :allowResizing='true'  :showColumnChooser='true'  id='overviewgrid' :allowExcelExport="true" :allowPdfExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true'
+            <ejs-grid ref='overviewgrid' :editSettings='editSettings' :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true' :showColumnChooser='true'  id='overviewgrid' :allowExcelExport="true" :allowPdfExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :allowSelection='true' :allowSorting='true'
                 :height="height" :actionBegin='actionBegin' :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler" :load='load'>
                 <e-columns>
                     <e-column width="80" type='checkbox' :allowFiltering='false' :allowSorting='false'  ></e-column>
@@ -154,7 +154,7 @@ export default {
             editparams: { params: { popupHeight: '300px' }},
            rowHeight: 40,
           toolbar: [
-            'CsvExport','Search',
+            'CsvExport','ColumnChooser','Search',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },

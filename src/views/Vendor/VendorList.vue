@@ -12,15 +12,30 @@
                 </ejs-toolbar>
              <div class="control-section">
                 
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' :toolbarClick="clickHandler"
+            <ejs-grid ref='overviewgrid' :showColumnChooser="true" :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' :toolbarClick="clickHandler" 
                 :height="height" :enableHover='false' :recordDoubleClick="beginEdit">
                 <e-columns>
-                    <e-column field='name' :template="detailTemplate" headerText='Name' :filter='filter' ></e-column>
+                    <e-column field='name' :template="detailTemplate" headerText='Name' :filter='filter'></e-column>
                     <e-column field='vendor_company' headerText='Vendor Company' :filter='filter'></e-column>
                     <e-column field='address.phone' headerText='Contact 1'  :filter='filter'></e-column>     
                     <e-column field='kcp.kcp_phone' headerText='Contact 2'  :filter='filter'></e-column>
+                    <e-column field='total_amount' format="C0" headerText='Total'  :filter='filter'></e-column>
+                    <e-column field='amount_paid' format="C0" headerText='Paid'  :filter='filter'></e-column>
+                    <e-column field='amount_left' format="C0" headerText='Left'  :filter='filter'></e-column>
+                    <e-column field='po_nos' headerText='No. of PO(s)'  :filter='filter'></e-column>
+
                     <!-- <e-column field='description' :visible="false" headerText='Name'  :filter='filter' ></e-column>  -->
                 </e-columns>
+                <e-aggregates>
+                    <e-aggregate :showChildSummary='false'>
+                        <e-columns>
+                            <e-column type="Sum" field="total_amount" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="amount_paid" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="amount_left" :footerTemplate='footerMax'></e-column>
+                            <e-column type="Sum" field="po_nos" :footerTemplate='footerCount'></e-column>
+                        </e-columns>
+                  </e-aggregate>
+                </e-aggregates>
                 </ejs-grid>
         <b-modal :title="$ml.get('addvendor')" size="lg" class="modal-primary" v-model="vendorModal" @ok="vendorModal = false" hide-footer>
           <b-row class="px-1 py-1">
@@ -60,13 +75,13 @@
                 <b-row>
                   <b-col>
                     <b-form-group>
-                      <label for="street" v-text="$ml.get('pancopy')"></label>
+                      <label v-text="$ml.get('pancopy')"></label>
                       <b-form-file v-model="vendor.pan_copy" accept="image/*" id="fileInput"></b-form-file>
                   </b-form-group>
                   </b-col>
                   <b-col>
                     <b-form-group>
-                      <label for="street" v-text="$ml.get('gstcerti')"></label>
+                      <label v-text="$ml.get('gstcerti')"></label>
                         <b-form-file v-model="vendor.gst_certi" accept="image/*" id="fileInput"></b-form-file>
                     </b-form-group>
                   </b-col>
@@ -280,13 +295,13 @@ import { NumericTextBoxPlugin,ColorPickerPlugin } from "@syncfusion/ej2-vue-inpu
 
 import miniToastr from 'mini-toastr' 
 Vue.use(ColorPickerPlugin);
-
+import _ from 'lodash'
 import {
   PivotViewPlugin,
   GroupingBar,
   FieldList
 } from "@syncfusion/ej2-vue-pivotview";
-import {PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
+import {Aggregate,PdfExport,ExcelExport, Edit, ColumnMenu, Toolbar, Resize, ColumnChooser, Page, GridPlugin, VirtualScroll, Sort, Filter, Selection, GridComponent,Reorder } from "@syncfusion/ej2-vue-grids";
     import { DropDownList, DropDownListPlugin } from '@syncfusion/ej2-vue-dropdowns';
     
     Vue.use(PivotViewPlugin);
@@ -337,7 +352,7 @@ export default {
         Edit
     },
      provide: {
-            grid: [PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder]
+            grid: [Aggregate,PdfExport,ExcelExport,Edit,FieldList,ColumnMenu,Resize, Filter, Selection, Sort, VirtualScroll,Toolbar, Page,ColumnChooser,Reorder]
         },
     data: function () {
       return {
@@ -365,6 +380,7 @@ export default {
         pan_copy: null,
         gst_certi:null
       },
+      transactions:[],
       editvendor : {
         kcp:{},
         payment:{}
@@ -372,7 +388,7 @@ export default {
       detailTemplate: function() {
         return {
           template : Vue.component('detailTemplate', {
-            template:`<div style="line-height:4">{{data.name}}<b-button @click="vendorDetails" class="bg-transparent py-0 px-0" style="margin-left:10px;border:0px"><i class="cui-info"></i></b-button></div>`,
+            template:`<div>{{data.name}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor:pointer" @click="vendorDetails"><b-badge id="label" variant="primary" v-text="$ml.get('moreinfo')"></b-badge></span></div>`,
             data : function() {
               return {
                 data:{}
@@ -522,7 +538,7 @@ export default {
                     '#009688', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107']},
                     squarePalettesColn: 7,
             editparams: { params: { popupHeight: '300px' }},
-           rowHeight: 40,
+           rowHeight: 30,
            searchTemplate: function () {
               return {
                   template: Vue.component("searchTemplate", {
@@ -540,6 +556,35 @@ export default {
                 })
               }
           },
+      footerMax: function () {
+        return  { template : Vue.component('maxTemplate', {
+            template: `<span>{{data.Sum}}</span>`,
+            data () {return { data: {}};},
+            mounted() {
+                this.data.Sum = this.changeAmounttoFormat(this.data.Sum)
+            },
+            methods : {
+                changeAmounttoFormat(amount) {
+                    var x=amount;
+                    x=x.toString();
+                    var lastThree = x.substring(x.length-3);
+                    var otherNumbers = x.substring(0,x.length-3);
+                    if(otherNumbers != '')
+                        lastThree = ',' + lastThree;
+                    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+                    return `₹ ${res}`
+                },
+            }
+            })
+          }
+      },
+      footerCount: function () {
+        return  { template : Vue.component('countTemplate', {
+            template: `<span>Total : {{data.Sum}}</span>`,
+            data () {return { data: {}};}
+            })
+          }
+      },
            monthTemplate: function () {
               return {
                   template: Vue.component("monthTemplate", {
@@ -585,7 +630,7 @@ export default {
           label:0,
           vendorModal :false,
            height : window.innerHeight*0.695,
-          toolbar: ['Search',
+          toolbar: ['ColumnChooser','Search',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },
@@ -788,9 +833,35 @@ export default {
                         }
                         else{
                           axios.delete(`${apiUrl}`+`vendor/vendor/delete/`+`${selected[0]._id}`,{withCredentials:true}).then((response) => {
-                          axios.get(`${apiUrl}`+`vendor/vendor/get/all`,{withCredentials:true}).then((res) => {
-                                    this.datasrc = res.data
-                                  });
+                          api.get(`${apiUrl}transaction/trans/get/all`).then((response) => {
+                    this.transactions = _.groupBy(response.data,'vendor.name');
+                    api.get(`${apiUrl}`+`vendor/vendor/get/all`).then((response) => {
+                    this.datasrc = response.data;
+                    for(var i=0;i<this.datasrc.length;i++) {
+                      this.datasrc[i].total_amount = 0
+                      this.datasrc[i].amount_paid = 0
+                      this.datasrc[i].amount_left = 0
+                      this.datasrc[i].pos = []
+                      if(this.transactions[this.datasrc[i].name]) {
+                        for(var j=0;j<this.transactions[this.datasrc[i].name].length;j++) {
+                          this.datasrc[i].total_amount = this.datasrc[i].total_amount + parseInt(this.transactions[this.datasrc[i].name][j].amount)
+                          if(this.transactions[this.datasrc[i].name][j].po_raised) {
+                            if(this.checkExist(this.transactions[this.datasrc[i].name][j].po_raised,this.transactions[this.datasrc[i].name],j)) {
+                             this.datasrc[i].pos.push(this.transactions[this.datasrc[i].name][j].po_raised)
+                            }
+                          }
+                          if(this.transactions[this.datasrc[i].name][j].status == "PAID") {
+                            this.datasrc[i].amount_paid = this.datasrc[i].amount_paid + parseInt(this.transactions[this.datasrc[i].name][j].amount)
+                          }
+                          else{
+                            this.datasrc[i].amount_left = this.datasrc[i].amount_left + parseInt(this.transactions[this.datasrc[i].name][j].amount)
+                          }
+                        }
+                      }
+                      this.datasrc[i].po_nos = this.datasrc[i].pos.length
+                    }
+                })
+                  })
                                 }).catch((err)=> {
                                   if(err.toString().includes("Network Error")) {
                                   toast({
@@ -845,10 +916,11 @@ export default {
         vfd.append('bank_name',this.vendor.bank_name)
         vfd.append('pan_copy',this.vendor.pan_copy)
         vfd.append('gst_certi',this.vendor.gst_certi)
-        axios.post(`${apiUrl}`+`vendor/vendor/create`,vfd,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((response)=> {
-            axios.get(`${apiUrl}`+`vendor/vendor/get/all`,{withCredentials:true}).then((res) => {
-            this.datasrc = res.data
-            this.vendor = {
+        axios.post(`${apiUrl}`+`vendor/vendor/create`,vfd,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((response)=> {api.get(`${apiUrl}transaction/trans/get/all`).then((response) => {
+                    this.transactions = _.groupBy(response.data,'vendor.name');
+            api.get(`${apiUrl}`+`vendor/vendor/get/all`).then((response) => {
+                    this.datasrc = response.data;
+                    this.vendor = {
                 vendor_company:"",
                 pan:"",
                 gst:"",
@@ -864,7 +936,31 @@ export default {
                 address:[]
               }
               this.addresslist=[]
-          });
+                    for(var i=0;i<this.datasrc.length;i++) {
+                      this.datasrc[i].total_amount = 0
+                      this.datasrc[i].amount_paid = 0
+                      this.datasrc[i].amount_left = 0
+                      this.datasrc[i].pos = []
+                      if(this.transactions[this.datasrc[i].name]) {
+                        for(var j=0;j<this.transactions[this.datasrc[i].name].length;j++) {
+                          this.datasrc[i].total_amount = this.datasrc[i].total_amount + parseInt(this.transactions[this.datasrc[i].name][j].amount)
+                          if(this.transactions[this.datasrc[i].name][j].po_raised) {
+                            if(this.checkExist(this.transactions[this.datasrc[i].name][j].po_raised,this.transactions[this.datasrc[i].name],j)) {
+                             this.datasrc[i].pos.push(this.transactions[this.datasrc[i].name][j].po_raised)
+                            }
+                          }
+                          if(this.transactions[this.datasrc[i].name][j].status == "PAID") {
+                            this.datasrc[i].amount_paid = this.datasrc[i].amount_paid + parseInt(this.transactions[this.datasrc[i].name][j].amount)
+                          }
+                          else{
+                            this.datasrc[i].amount_left = this.datasrc[i].amount_left + parseInt(this.transactions[this.datasrc[i].name][j].amount)
+                          }
+                        }
+                      }
+                      this.datasrc[i].po_nos = this.datasrc[i].pos.length
+                    }
+                })
+          })
         }).catch((err)=> {
           if(err.toString().includes("Network Error")) {
         toast({
@@ -876,15 +972,49 @@ export default {
       })
         this.vendorModal =false
         },
+        checkExist(args,list,lim) {
+        for(var i=0;i<lim;i++) {
+          if(args == list[i].po_raised) {
+            return false;
+          }
+        }
+        return true
+      },
         editVendor() {
           this.editvendor.address = this.editaddresslist
           var id = this.editvendor._id
           this.editvendor._id = undefined
         axios.put(`${apiUrl}`+`vendor/vendor/edit/${id}`,this.editvendor,{withCredentials:true}).then((response)=> {
           console.log(response.data)
-            axios.get(`${apiUrl}`+`vendor/vendor/get/all`,{withCredentials:true}).then((res) => {
-            this.datasrc = res.data
-          });
+            api.get(`${apiUrl}transaction/trans/get/all`).then((response) => {
+                    this.transactions = _.groupBy(response.data,'vendor.name');
+                    api.get(`${apiUrl}`+`vendor/vendor/get/all`).then((response) => {
+                    this.datasrc = response.data;
+                    for(var i=0;i<this.datasrc.length;i++) {
+                      this.datasrc[i].total_amount = 0
+                      this.datasrc[i].amount_paid = 0
+                      this.datasrc[i].amount_left = 0
+                      this.datasrc[i].pos = []
+                      if(this.transactions[this.datasrc[i].name]) {
+                        for(var j=0;j<this.transactions[this.datasrc[i].name].length;j++) {
+                          this.datasrc[i].total_amount = this.datasrc[i].total_amount + parseInt(this.transactions[this.datasrc[i].name][j].amount)
+                          if(this.transactions[this.datasrc[i].name][j].po_raised) {
+                            if(this.checkExist(this.transactions[this.datasrc[i].name][j].po_raised,this.transactions[this.datasrc[i].name],j)) {
+                             this.datasrc[i].pos.push(this.transactions[this.datasrc[i].name][j].po_raised)
+                            }
+                          }
+                          if(this.transactions[this.datasrc[i].name][j].status == "PAID") {
+                            this.datasrc[i].amount_paid = this.datasrc[i].amount_paid + parseInt(this.transactions[this.datasrc[i].name][j].amount)
+                          }
+                          else{
+                            this.datasrc[i].amount_left = this.datasrc[i].amount_left + parseInt(this.transactions[this.datasrc[i].name][j].amount)
+                          }
+                        }
+                      }
+                      this.datasrc[i].po_nos = this.datasrc[i].pos.length
+                    }
+                })
+                  })
         }).catch((err)=> {
           if(err.toString().includes("Network Error")) {
             console.log(err)
@@ -900,9 +1030,36 @@ export default {
             
         },
         async mounted () {
-                api.get(`${apiUrl}`+`vendor/vendor/get/all`).then((response) => {
+          api.get(`${apiUrl}transaction/trans/get/all`).then((response) => {
+                    this.transactions = _.groupBy(response.data,'vendor.name');
+                    api.get(`${apiUrl}`+`vendor/vendor/get/all`).then((response) => {
                     this.datasrc = response.data;
-                }).catch((err)=> {
+                    for(var i=0;i<this.datasrc.length;i++) {
+                      this.datasrc[i].total_amount = 0
+                      this.datasrc[i].amount_paid = 0
+                      this.datasrc[i].amount_left = 0
+                      this.datasrc[i].pos = []
+                      if(this.transactions[this.datasrc[i].name]) {
+                        for(var j=0;j<this.transactions[this.datasrc[i].name].length;j++) {
+                          this.datasrc[i].total_amount = this.datasrc[i].total_amount + parseInt(this.transactions[this.datasrc[i].name][j].amount)
+                          if(this.transactions[this.datasrc[i].name][j].po_raised) {
+                            if(this.checkExist(this.transactions[this.datasrc[i].name][j].po_raised,this.transactions[this.datasrc[i].name],j)) {
+                             this.datasrc[i].pos.push(this.transactions[this.datasrc[i].name][j].po_raised)
+                            }
+                          }
+                          if(this.transactions[this.datasrc[i].name][j].status == "PAID") {
+                            this.datasrc[i].amount_paid = this.datasrc[i].amount_paid + parseInt(this.transactions[this.datasrc[i].name][j].amount)
+                          }
+                          else{
+                            this.datasrc[i].amount_left = this.datasrc[i].amount_left + parseInt(this.transactions[this.datasrc[i].name][j].amount)
+                          }
+                        }
+                      }
+                      this.datasrc[i].po_nos = this.datasrc[i].pos.length
+                    }
+                })
+                  })
+                .catch((err)=> {
                   if(err.toString().includes("Network Error")) {
         toast({
           type: VueNotifications.types.error,

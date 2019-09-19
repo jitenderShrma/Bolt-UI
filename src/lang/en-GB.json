@@ -246,7 +246,7 @@
     "reject" : "Reject",
     "pholdswitchbudget" : "Switch Budget",
     "staff" : "Staff",
-    "more" : "More",
+    "moreinfo" : "More Info",
     "parentdept" : "Parent Department",
     "labels" : "Labels",
     "export" : "Export",
@@ -328,5 +328,7 @@
     "raisepo" : "Raise PO",
     "previewdownload" : "Preview/Download",
     "notuploaded" : "Not Uploaded",
-    "uploadpo" : "Upload"
+    "uploadpo" : "Upload",
+    "uploadbill" : "Upload Bill",
+    "billcopy" : "Bill Copy"
 }

@@ -9,6 +9,12 @@ export default {
 </script>
 
 <style lang="scss">
+.nav-dropdown-items {
+      padding-left: 10px !important;
+}
+.sidebar .nav-link {
+  padding:0.5rem 0.5rem !important;
+}
 .e-spinner-pane.e-spin-show {
              display: none;
         }

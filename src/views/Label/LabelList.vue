@@ -13,13 +13,13 @@
                 </ejs-toolbar>
              <div class="control-section">
                 
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' :toolbarClick="clickHandler"
+            <ejs-grid ref='overviewgrid' :showColumnChooser="true" :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :enableVirtualization="true" :allowPdfExport="true" :allowExcelExport="true" :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :toolbar="toolbar" :allowSelection='true' :allowSorting='true' :toolbarClick="clickHandler"
                 :height="height" :enableHover='false'>
                 <e-columns>
                     <e-column field='context' headerText='Context'  :filter='filter' ></e-column>
                     <e-column field='label_name' :template="labelTemplate" headerText='Name'  :filter='filter' ></e-column>     
-                    <e-column field='color' :visible="false" headerText='Name'  :filter='filter' ></e-column>
-                    <e-column field='description' :visible="false" headerText='Name'  :filter='filter' ></e-column> 
+                    <e-column field='color' :showInColumnChooser='false' :visible="false" headerText='Name'  :filter='filter' ></e-column>
+                    <e-column field='description' :showInColumnChooser='false' :visible="false" headerText='Name'  :filter='filter' ></e-column> 
                 </e-columns>
                 </ejs-grid>
                 <ejs-dialog id='dialog' height="auto" header='Label' showCloseIcon='true' :isModal='LabelAddModal' :animationSettings='animationSettings' width='285px' ref='dialogObj'
@@ -323,7 +323,7 @@ export default {
           },
           label:0,
            height : window.innerHeight*0.695,
-          toolbar: ['Search',
+          toolbar: ['Search','ColumnChooser',
             { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },

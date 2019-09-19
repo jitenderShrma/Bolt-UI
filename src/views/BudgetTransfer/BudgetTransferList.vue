@@ -154,7 +154,7 @@
             <ejs-grid ref='overviewgrid' :showColumnChooser="true" :rowHeight='rowHeight' :allowReordering='true' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowExcelExport="true" :allowPaging='true' :pageSettings='pageSettings' :dataSource="datasrc"  :allowFiltering='true' :filterSettings='filterOptions' :sortSettings='sortOptions' :allowSelection='true' :rowSelected="rowSelected" :allowSorting='true' :actionBegin="actionBegin" :toolbar="toolbar" :toolbarClick="clickHandler" :dataBound="dataBound"
                 :height="height" :enableHover='false'>
                 <e-columns>
-                    <e-column :visible="enableColumn" headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
+                    <e-column :visible="enableColumn" :showInColumnChooser='false' headerText='Accept/Reject' width='140' :template="buttonTemplate"></e-column>
                     <e-column :visible="false" field="last_updated" headerText='last_updated' width='140'></e-column>
                     <!-- <e-column field='ref_id' headerText='Reference ID'  :filter='filter' ></e-column>
                     <e-column field='approval_type' headerText='Type'  :filter='filter' ></e-column> -->

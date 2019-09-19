@@ -303,7 +303,7 @@
                 </ejs-toolbar>
              <div class="control-section">
                 
-            <ejs-grid ref='overviewgrid' :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowReordering="true" :allowExcelExport="true" :pageSettings='pageSettings' :dataSource="datasrc" :allowFiltering='true' :filterSettings='filterOptions' :allowTextWraping="true" :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbarClick="clickHandler" 
+            <ejs-grid ref='overviewgrid' :showColumnChooser="true" :rowHeight='rowHeight' :allowResizing='true'  id='overviewgrid' :allowPdfExport="true" :allowReordering="true" :allowExcelExport="true" :pageSettings='pageSettings' :dataSource="datasrc" :allowFiltering='true' :filterSettings='filterOptions' :allowTextWraping="true" :allowSelection='true' :allowSorting='true' :actionBegin="actionBegin" :toolbarClick="clickHandler" 
              :recordDoubleClick="editStaff" :toolbar="toolbar" :rowSelected="rowSelected"
                 :height="height" :enableHover='false'>
                 <e-columns>
@@ -613,7 +613,7 @@ export default {
           } },
            height : window.innerHeight*0.695,
           toolbar: [
-          'Search',
+          'Search','ColumnChooser',
           { prefixIcon: 'e-small-icon', id: 'big', align: 'Right' },
             { prefixIcon: 'e-medium-icon', id: 'medium', align: 'Right' },
             { prefixIcon: 'e-big-icon', id: 'small', align: 'Right' },

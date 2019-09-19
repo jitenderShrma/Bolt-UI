@@ -33,7 +33,7 @@
                 :height="height" :enableHover='false' :toolbar="toolbar" :toolbarClick="clickHandler">
                 <e-columns>
                     <e-column field='approvalCode' headerText='Ref ID' :filter='filter' ></e-column>
-                    <e-column field='transaction_id' :template="printTemplate" headerText='Transaction ID' :filter='filter'></e-column>
+                    <e-column field='transaction_id' :template="printTemplate" headerText='Transaction ID' :width="262" :filter='filter'></e-column>
                     <e-column field='amount' format="C0" headerText='Transaction AMT' :filter='filter' :width="180"></e-column>
                     <e-column field='total_amount' format="C0" headerText='Approved' :allowFiltering="false" :width="130"></e-column>
                     <e-column field='spent' format="C0" headerText='Spent' :allowFiltering="false" :width="130"></e-column>
@@ -47,7 +47,7 @@
                     <e-column field='transaction_type'  headerText='Type' :filter='filter' :isPrimaryKey='true'></e-column>
                     <e-column field='category' headerText='Category'  :filter='filter' ></e-column>
                     <e-column field='vendor.vendor_company' headerText='Vendor'  :filter='filter' ></e-column>
-                    <e-column field='po_raised' headerText='PO Number'  :filter='filter' ></e-column>
+                    <e-column field='po_raised' headerText='PO Number' :template="poTemplate" :filter='filter' ></e-column>
                     <e-column field='createdAt' headerText='Created At' :visible="true" :format='formatOptions' type='date' :filter='filter2' ></e-column>
                 </e-columns>
                 <e-aggregates>
@@ -71,6 +71,12 @@
               <ejs-uploader ref="uploadObj" id='defaultfileupload' :multiple = "false" :success="onUploadSuccess" :progress="onProgress" :failure="onUploadFailed"  :allowedExtensions="extensions" :asyncSettings="path" name="UploadFiles"></ejs-uploader>
             </div>
   </b-modal>
+  <b-modal size="sm" :title="$ml.get('raisepo')" class="modal-primary" v-model="raisePO" @ok="raisePO = false" hide-footer>
+                    <b-form v-on:submit.prevent = "raisePOTrans">
+                    <ejs-textbox v-model="input.po_raised" floatLabelType="Auto" :placeholder="$ml.get('pholdpoid')" required></ejs-textbox>
+                    <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('raisepo')"></b-button>
+                  </b-form>
+                </b-modal>
   <b-modal :title="$ml.get('print')" class="modal-primary" v-model="printModal" size="lg" @ok="printModal = false" hide-footer>
     <template slot="modal-header">
       <h5 v-text="$ml.get('print')"></h5>
@@ -104,6 +110,15 @@
       </b-form-group>
       <b-form-group>
         <ejs-textbox v-model="payment.notes" floatLabelType="Auto" :placeholder="$ml.get('notes')"></ejs-textbox>
+      </b-form-group>
+      <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
+    </b-form>
+  </b-modal>
+  <b-modal :title="$ml.get('uploadbill') + ' for ' +  selectedTrans.transaction_id" class="modal-primary" v-model="uploadBill" size="md" @ok="uploadBill = false" hide-footer>
+    <b-form style="padding:3%" v-on:submit.prevent="sendUploadBill">
+      <b-form-group>
+        <label v-text="$ml.get('billcopy')"></label>
+        <b-form-file v-model="billupload.bill_file" accept="*" id="BillFile"></b-form-file>
       </b-form-group>
       <b-button type="submit" size="sm" variant="primary" v-text="$ml.get('submit')"></b-button>
     </b-form>
@@ -159,6 +174,7 @@ import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import VueDaterangePicker from 'vue-daterange-picker';
 import apiUrl from '@/apiUrl'
+import { TooltipPlugin } from "@syncfusion/ej2-vue-popups";
 import axios from 'axios'
 import _ from 'lodash'
 import moment from 'moment'
@@ -188,7 +204,7 @@ PdfExport,ExcelExport,Aggregate, Edit,Group, ColumnMenu, Toolbar, Resize, Column
  
     Vue.use(VueHtmlToPaper);
     Vue.use(UploaderPlugin);
-    
+    Vue.use(TooltipPlugin);
     Vue.use(PivotViewPlugin);
     Vue.use(GridPlugin);
     Vue.use(ToolbarPlugin);
@@ -288,7 +304,18 @@ export default {
             })
           }
       },
-
+      poTemplate: function () {
+              return {
+                  template: Vue.component('poTemplate', {
+                      template: `<div>{{data.po_raised}}<span id="addbutton" style="float:right;cursor:pointer" v-if="data.po_raised == null || data.po_raised ==''"><i class="icon-plus"></i></span></div>`,
+                      data: function() {
+                        return {
+                          data:{}
+                        }
+                      }
+                    })
+                }
+              },
       fields:[
       {name:'Ref ID',ID:'approvalCode'},
         {name:'Transaction ID',ID:'transaction_id'},
@@ -398,14 +425,37 @@ export default {
                     })
                   }
                 },
+                transaction:{},
                 printTemplate: function() {
                   return {
                     template: Vue.component("printTemplate", {
-                      template : `<div style="line-height:4">{{data.transaction_id}}<b-button class="bg-transparent py-0 px-2" style="border:0px"><i class="icon-printer"></i></b-button>&nbsp;&nbsp;<span v-if="data.status == 'PAID'"><b-button class="bg-success py-0 px-2" style="border:0px"><b-badge id="label" variant="success" v-text="$ml.get('paid')"></b-badge></b-button></span><span v-if="data.status == 'UNPAID'"><b-button class="bg-transparent py-0 px-2" style="border:0px"><b-badge variant="warning" id="label" v-text="$ml.get('markaspaid')"></b-badge></b-button></span></div>`,
+                      template : `<ejs-tooltip ref="tooltip" position="TopCenter" :content='content' :beforeRender="beforeRender"><div>{{data.transaction_id}}&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor:pointer" title="Print Transaction"><i class="icon-printer"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;<span title="View/Download Bill" style="cursor:pointer" v-if="data.bill_file_path"><i class="fa fa-clipboard"></i></span><span style="cursor:pointer" title="Upload Bill" v-else><i class="icon-cloud-upload"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;<span title="Transaction Paid" v-if="data.status == 'PAID'"><span style="cursor:pointer"><b-badge id="label" variant="success" v-text="$ml.get('paid')"></b-badge></span></span><span title="Pay for Transaction" v-if="data.status == 'UNPAID'"><span style="cursor:pointer"><b-badge variant="warning" id="label" v-text="$ml.get('markaspaid')"></b-badge></span></span></div></ejs-tooltip>`,
                       data()  {
                         return {
-                          data: {}
+                          data: {},
+                          content:'Loading...'
                         };
+                      },
+                      methods:{
+                        beforeRender(args) {
+                          var department=null
+                          var head=null
+                          var user=null
+                          var vendor=null
+                          if(this.data.department) {
+                            department = this.data.department.department_name
+                          }
+                          if(this.data.head) {
+                            head = this.data.head.name
+                          }
+                          if(this.data.user) {
+                            user = this.data.user.user_name
+                          }
+                          if(this.data.vendor) {
+                            vendor = this.data.vendor.vendor_company
+                          }
+                          this.content = `<span>Department : ${department}<br>Head : ${head}<br>Date : ${moment(this.data.date).format('L')}<br>Requested By : ${user}<br>Month : ${moment().month(parseInt(this.data.month)).format('MMM')}<br>Type : ${this.data.transaction_type}<br>Category : ${this.data.category}<br>Vendor : ${vendor}<br>PO Number: ${this.data.po_raised}<span>`
+                        }
                       }
                     
                     })
@@ -453,6 +503,7 @@ export default {
                     })
                   }
                 },
+                raisePO:false,
                 editTemplate: function () {
               return {
                   template: Vue.component("editTemplate", {
@@ -613,6 +664,8 @@ export default {
                 filterOptions: {
                     type: 'Menu'
                 },
+                input:{},
+                billupload:{},
                 filterTID:false,
                 startdate:null,
                 filter: {
@@ -630,10 +683,64 @@ export default {
                 selectionSettings: { persistSelection: true, type: 'Multiple' },
                 sortOptions:{columns: [{field: 'approvalCode', direction: 'Descending'},{field: 'createdAt', direction: 'Descending'}],isMulti:true},
                 department:[],
-                head:[]
+                head:[],
+                uploadBill:false
             };
         },
   methods: {
+    raisePOTrans() {
+        var formdata = new FormData()
+        formdata.append('po_raised',this.input.po_raised)
+        api.put(`${apiUrl}transaction/trans/edit/${this.transaction._id}`,formdata,{headers:{'Content-Type':'multipart/form-data'}}).then((res) => {
+          api.get(`${apiUrl}approvals/preApp/get/all`).then((res) => {
+            this.loading= true
+            this.foreign = res.data
+            api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
+                  console.log(response.data)
+                    this.datasrc = response.data;
+                    for(var i =0;i<this.datasrc.length;i++) {
+                      this.datasrc[i].amount = parseInt(this.datasrc[i].amount)
+                      this.datasrc[i].date = moment(this.datasrc[i].createdAt).format('L')
+                      this.datasrc[i].time = moment(this.datasrc[i].createdAt).format('h:mm')
+                      this.datasrc[i].createdAt = new Date(this.datasrc[i].createdAt)
+                      if(this.datasrc[i].user == null) {
+                        this.datasrc[i].user = {
+                          user_name:"ADMIN"
+                        }
+                      }
+                      if(this.datasrc[i].status == "Approved") {
+                        this.datasrc[i].status = "UNPAID"
+                      }
+                      if(this.datasrc[i].department == null) {
+                        this.datasrc[i].department = {
+                          department_name:"NONE"
+                        }
+                      }
+                      if(this.datasrc[i].head == null) {
+                        this.datasrc[i].head = {
+                          name:"NONE"
+                        }
+                      }
+                      for(var j=0;j<this.foreign.length;j++) {
+                        if(this.datasrc[i].approvalCode == this.foreign[j].ref_id) {
+                          this.datasrc[i].total_amount = this.foreign[j].amount
+                          this.datasrc[i].amount_left = this.foreign[j].approval_amount_left[this.foreign[j].month]
+                          this.datasrc[i].spent = this.datasrc[i].total_amount - this.datasrc[i].amount_left
+                        }
+                      }
+                    }
+                    
+                }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
+          })
+        
+          this.raisePO = false
+        })
+      },
     customAggregateFn : function (data) {
       var total = 0
       var group = _.groupBy(this.datasrc,'approvalCode')
@@ -758,7 +865,9 @@ export default {
       }
       else {
         api.post(`${apiUrl}payments/paymentorder/create`,this.payment).then((res) => {
-          api.put(`${apiUrl}transaction/trans/edit/${this.payment.transaction_id}`,{status:"PAID"}).then((trans) => {
+          var formdata = new FormData()
+          formdata.append('status',"PAID")
+          api.put(`${apiUrl}transaction/trans/edit/${this.payment.transaction_id}`,formdata,{headers:{'Content-Type':'multipart/form-data'}}).then((trans) => {
             api.get(`${apiUrl}approvals/preApp/get/all`).then((res) => {
                     this.foreign = res.data
             api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
@@ -801,6 +910,66 @@ export default {
           })
           
         }).catch((err)=> {
+        toast({
+          type: VueNotifications.types.error,
+          title: 'Network Error'
+        })
+      })
+      }
+    },
+    sendUploadBill(){
+      if(this.billupload.bill_file == null) {
+        toast({
+          type:VueNotifications.types.warn,
+          title:"Please Select a File to Upload"
+        })
+      }
+      else {
+          var formdata = new FormData()
+          formdata.append('bill_file',this.billupload.bill_file)
+          api.put(`${apiUrl}transaction/trans/edit/${this.selectedTrans._id}`,formdata,{headers:{'Content-Type':'multipart/form-data'}}).then((trans) => {
+            console.log(trans.data)
+            this.uploadBill =false
+            api.get(`${apiUrl}approvals/preApp/get/all`).then((res) => {
+                    this.foreign = res.data
+            api.get(`${apiUrl}`+`transaction/trans/get/all`).then((response) => {
+                    this.datasrc = response.data;
+                    this.paymentModal = false
+                    for(var i =0;i<this.datasrc.length;i++) {
+                      this.datasrc[i].amount = parseInt(this.datasrc[i].amount)
+                      this.datasrc[i].date = moment(this.datasrc[i].createdAt).format('L')
+                      this.datasrc[i].time = moment(this.datasrc[i].createdAt).format('h:mm')
+                      this.datasrc[i].createdAt = new Date(this.datasrc[i].createdAt)
+                      if(this.datasrc[i].user == null) {
+                        this.datasrc[i].user = {
+                          user_name:"ADMIN"
+                        }
+                      }
+                      if(this.datasrc[i].status == "Approved") {
+                        this.datasrc[i].status = "UNPAID"
+                      }
+                      if(this.datasrc[i].department == null) {
+                        this.datasrc[i].department = {
+                          department_name:"NONE"
+                        }
+                      }
+                      if(this.datasrc[i].head == null) {
+                        this.datasrc[i].head = {
+                          name:"NONE"
+                        }
+                      }
+                      for(var j=0;j<this.foreign.length;j++) {
+                        if(this.datasrc[i].approvalCode == this.foreign[j].ref_id) {
+                          this.datasrc[i].total_amount = this.foreign[j].amount
+                          this.datasrc[i].amount_left = this.foreign[j].approval_amount_left[this.foreign[j].month]
+                          this.datasrc[i].spent = this.datasrc[i].total_amount - this.datasrc[i].amount_left
+                        }
+                      }
+                    }
+                    
+                })
+          })
+          }).catch((err)=> {
         toast({
           type: VueNotifications.types.error,
           title: 'Network Error'
@@ -1380,6 +1549,18 @@ export default {
                     this.$refs.alertDialog.hide();
                 },
                 rowSelected(args) {
+                  if(args.target.outerHTML == `<i class="icon-plus"></i>`) {
+                    this.raisePO =true
+                    this.transaction = args.data
+                  }
+                  if(args.target.outerHTML == `<i class="fa fa-clipboard"></i>`) {
+                    var apilink = apiUrl.split('/api')
+                    window.open(`${apilink[0]}/${args.data.bill_file_path}`,"_blank");
+                  }
+                  if(args.target.outerHTML == `<i class="icon-cloud-upload"></i>`) {
+                    this.uploadBill= true
+                    this.selectedTrans =args.data
+                  }
                   if(args.target.outerHTML == `<span id="label" class="badge badge-warning">Mark As Paid</span>`) {
                     this.paymentModal = true
                     this.payment.transaction_id = args.data._id
@@ -1533,7 +1714,9 @@ export default {
 
 
 <style>
-
+#addbutton {
+  color:black;
+}
 
 #label {
     font-size: 12px;
