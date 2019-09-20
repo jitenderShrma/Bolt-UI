@@ -396,7 +396,7 @@ export default {
             },
             methods : {
               vendorDetails() {
-                window.location.href = `#/vendor/`+`${this.data._id}`
+                window.location.href = `#/finance/vendor/`+`${this.data._id}`
               }
             }
           })

@@ -119,7 +119,7 @@ export default {
       }
     },
     userDetails() {
-      window.location.href = `#/staff/details/${this.user._id}`;
+      window.location.href = `#/settingviews/staff/details/${this.user._id}`;
     },
     Settings(){
       console.log("settings");

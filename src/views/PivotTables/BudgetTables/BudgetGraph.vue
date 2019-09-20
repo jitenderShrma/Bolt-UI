@@ -1524,10 +1524,13 @@ export default {
         this.something = true
         this.currentView = "Budget"
         if(this.page_from == 'total') {
-            this.$router.push('/budget/total')
+            this.$router.push('/finance/budget/total')
         } 
+        else if(this.page_from == 'remaining'){
+            this.$router.push('/finance/budget/approved')
+        }
         else{
-            this.$router.push('/budget/approved')
+            this.$router.push('/finance/budget/carryover')
         }
       },
        onUploadSuccess: function (args) {

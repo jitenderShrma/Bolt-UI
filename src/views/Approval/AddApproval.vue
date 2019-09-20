@@ -556,7 +556,7 @@
                  }
                  else{ 
                  this.loader = true
-                 setTimeout(function(){window.location.href = ('#/approval/view/all')},2000)
+                 setTimeout(function(){window.location.href = ('#/finance/approval/view/all')},2000)
                 }
               })
             }

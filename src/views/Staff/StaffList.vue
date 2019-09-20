@@ -695,7 +695,7 @@ export default {
             editStaff(args) {
               console.log(args)
 
-              this.$router.push(`/staff/details/${args.rowData._id}`);
+              this.$router.push(`/settingviews/staff/details/${args.rowData._id}`);
             },
             rowSelected(args) {
               if(args.target.outerHTML == `<span class="icon-people"></span>`) {
@@ -773,11 +773,11 @@ export default {
               var selected = this.$refs.overviewgrid.getSelectedRecords()
                 if(args.item.id == "add") {
                     console.log(args)
-                    this.$router.push('/staff/add');
+                    this.$router.push('/settingviews/staff/add');
                 }
                 if(selected.length>0) {
                 if(args.item.id == "edit") {
-                    this.$router.push(`/staff/details/${selected[0]._id}`);
+                    this.$router.push(`/settingviews/staff/details/${selected[0]._id}`);
                 }
                 if(args.item.id == "delete") {
                   axios.delete(`${apiUrl}staff/staff/delete/one/${selected[0].user_type._id}`,{withCredentials:true}).then((resp) => {

@@ -229,7 +229,7 @@
 				                    message: 'Request for Budget Transfer is Sent'
 								})
 								this.input = {}
-								this.$router.push(`/budgettrans/list/all`)
+								this.$router.push(`/finance/budgettrans/list/all`)
 						}).catch((err)=> {
         toast({
           type: VueNotifications.types.error,

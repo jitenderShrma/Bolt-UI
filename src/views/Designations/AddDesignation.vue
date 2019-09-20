@@ -1135,7 +1135,7 @@ export default {
         //         this.input = {}
         //   });
         // // }
-        	this.$router.push('/designation/list')
+        	this.$router.push('/settingviews/designation/list')
             }
           })
       

@@ -1710,7 +1710,7 @@ export default {
                     title: 'Success',
                     message: 'User Created Successfully'
                     })
-                this.$router.push("/staff/list");
+                this.$router.push("/settingviews/staff/list");
               }
             })
             .catch( function (error){
@@ -1764,7 +1764,7 @@ export default {
                     title: 'Success',
                     message: 'User Created Successfully'
                     })
-                this.$router.push("/staff");
+                this.$router.push("/settingviews/staff");
               }
             })
             .catch((err)=> {

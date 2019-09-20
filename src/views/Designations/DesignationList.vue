@@ -441,7 +441,7 @@ export default {
         })
       }
       })
-    if(this.$route.path == '/designation/list') {
+    if(this.$route.path == '/settingviews/designation/list') {
     await api.get(`${apiUrl}`+`designation/desig/get/all`)
     .then((response) => {
       this.loading =true
@@ -505,7 +505,7 @@ export default {
         })
       }
       })
-    if(this.$route.path == '/designation/list') {
+    if(this.$route.path == '/settingviews/designation/list') {
     await api.get(`${apiUrl}`+`designation/desig/get/all`)
     .then((response) => {
       this.loading =true
@@ -633,7 +633,7 @@ export default {
         this.loading =false
       },
       editPage(args) {
-        this.$router.push(`/designation/edit/${args.rowData.id}`)
+        this.$router.push(`/settingviews/designation/edit/${args.rowData.id}`)
       },
       onChange(args) {
         this.formdata.color = args.currentValue.hex.slice(1);
@@ -797,10 +797,10 @@ export default {
         var data = this.$refs.treegrid.ej2Instances.getSelectedRecords()
         if(args.item.id === 'add') {
           if(data.length>0) {
-            this.$router.push(`/designation/add/${data[0]._id}`)
+            this.$router.push(`/settingviews/designation/add/${data[0]._id}`)
           }
           else {
-            this.$router.push(`/designation/add/`)
+            this.$router.push(`/settingviews/designation/add/`)
           }
         }
         if(args.item.id == 'label') {

@@ -259,7 +259,7 @@ export default {
                 },
                 methods:{
                   gotoPage() {
-                    window.location.href = `#/department/`+`head/${this.data._id}`
+                    window.location.href = `#/settingviews/department/`+`head/${this.data._id}`
                   }
                 }
               })
@@ -339,7 +339,7 @@ export default {
                 },
                 methods:{
                   gotoPage() {
-                    window.location.href = `#/department/`+`designation/${this.data._id}`
+                    window.location.href = `#/settingviews/department/`+`designation/${this.data._id}`
                   }
                 }
               })
@@ -720,12 +720,12 @@ export default {
        onClickDes(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
            
-            this.$router.push(`/department/`+`designation/${data[0]._id}`)
+            this.$router.push(`/settingviews/department/`+`designation/${data[0]._id}`)
        },
        onClickHead(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();
            
-            this.$router.push(`/department/`+`head/${data[0]._id}`)
+            this.$router.push(`/settingviews/department/`+`head/${data[0]._id}`)
        },
        onClick(args) {
             let data = this.$refs.treegrid.ej2Instances.getSelectedRecords();

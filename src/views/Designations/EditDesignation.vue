@@ -1108,7 +1108,7 @@ export default {
                 console.log(response.data)
                     api.put(`${apiUrl}`+`super/group/subgroup/edit/by/${this.key}`,user_group).then((res) => {
                         console.log(res)
-                        this.$router.push('/designation/list')
+                        this.$router.push('/settingviews/designation/list')
                     })
                 }).catch((err)=> {
                   if(err.toString().includes("Network Error")) {

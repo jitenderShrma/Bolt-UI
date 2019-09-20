@@ -1629,7 +1629,7 @@ export default {
                     title: 'Success',
                     message: 'User Profile Updated Successfully'
                     })
-                this.$router.push("/staff");
+                this.$router.push("/settingviews/staff");
               }
             })
             .catch( function (error){

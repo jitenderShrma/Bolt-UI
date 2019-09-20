@@ -882,7 +882,7 @@ Vue.use(TextBoxPlugin);
           formdata.append('transaction_id',this.input.transaction_id)
           formdata.append('vendor',this.input.vendor)
           axios.post(`${apiUrl}`+`transaction/trans/create`,formdata,{withCredentials:true,headers:{'Content-Type':'multipart/form-data'}}).then((res) => { console.log(res.data)
-            this.$router.push("/transaction/list")
+            this.$router.push("/finance/transaction/list")
           }).catch((err)=> {
               if(err.toString().includes("Network Error")) {
         toast({

@@ -1817,7 +1817,7 @@ export default {
                 }
                 if(args.item.id == "add") {
                     console.log(args)
-                    this.$router.push('/approval/add');
+                    this.$router.push('/finance/approval/add');
                 }
                 if(args.item.id == "cancel") {
                   if(data.length>0) {

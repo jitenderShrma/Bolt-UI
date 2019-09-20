@@ -466,7 +466,7 @@ export default {
   },
   watch:{
     '$route' : async function() {
-      if(this.$route.path == '/heads/list') {
+      if(this.$route.path == '/finance/heads/list') {
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
       this.loading =true
@@ -513,7 +513,7 @@ export default {
     this.$refs.dialogObj.hide();
     this.link = window.location.href;
      this.key = this.link.split(`head/`).pop()
-     if(this.$route.path == '/heads/list') {
+     if(this.$route.path == '/finance/heads/list') {
         await api.get(`${apiUrl}`+`head/head/get`)
     .then((response) => {
       this.loading =true
@@ -572,7 +572,7 @@ export default {
    methods:{
     deleteHeadfunc() {
       api.delete(`${apiUrl}`+`head/head/delete/one/`+`${this.deleteHead.head_key}`).then((res)=>{
-                                  if(this.$route.path == '/heads/list') {
+                                  if(this.$route.path == '/finance/heads/list') {
                                       api.get(`${apiUrl}`+`head/head/get`)
                                   .then((response) => {
                                     this.loading =true
@@ -831,7 +831,7 @@ export default {
               let parent = this.$refs.treegrid.ej2Instances.getSelectedRecords();
               
               api.post(`${apiUrl}`+`head/head/create`,this.input).then((response) =>{
-                if(this.$route.path == '/heads/list') {
+                if(this.$route.path == '/finance/heads/list') {
                     api.get(`${apiUrl}`+`head/head/get`)
                 .then((response) => {
                   this.loading =true
@@ -887,7 +887,7 @@ export default {
           parent_head : this.editinput.parent_head
         }
         api.put(`${apiUrl}`+`head/head/update/one/`+`${this.editinput._id}`,sendData).then((response)=>{
-            if(this.$route.path == '/heads/list') {
+            if(this.$route.path == '/finance/heads/list') {
                 api.get(`${apiUrl}`+`head/head/get`)
             .then((response) => {
               this.loading =true

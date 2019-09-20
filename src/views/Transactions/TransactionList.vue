@@ -1358,7 +1358,7 @@ export default {
                           deleteperm = true
                         }
                 if(args.item.id == "add") {
-                    this.$router.push('/transaction/add');
+                    this.$router.push('/finance/transaction/add');
                 }
                 if(args.item.id=="upload") {
                   this.browseModal = true

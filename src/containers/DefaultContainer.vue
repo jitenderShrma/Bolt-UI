@@ -88,6 +88,7 @@ export default {
         },
         {
           name: 'Finance',
+          url:'/finance',
           icon: 'icon-calculator',
           children:[
           ]
@@ -98,6 +99,7 @@ export default {
         },
         {
           name: 'Settings',
+          url:'/settingviews',
           icon: 'icon-settings',
           children:[]
         },
@@ -119,14 +121,14 @@ export default {
             if(permission[i].text == "Staff") {
               this.navItems[3].children.push({
                   name: 'Staff',
-                  url: '/staff',
+                  url: '/settingviews/staff',
                   icon: 'icon-user'
             })
             }
             if(permission[i].text=="Vendor") {
                 this.navItems[1].children.push({
                 name : "Vendor",
-                url : "/vendor",
+                url : "/finance/vendor",
                 icon : "icon-star"
               },)
             }
@@ -134,7 +136,7 @@ export default {
               
                 this.navItems[3].children.push({
                   name : "Departments",
-                  url : "/department/list",
+                  url : "/settingviews/department/list",
                   icon : "icon-star"
                 })
             }
@@ -142,7 +144,7 @@ export default {
               this.navItems[1].children.push(
                 {
                   name:"Approval Requests",
-                  url:"/approval/view/all",
+                  url:"/finance/approval/view/all",
                   icon:"icon-calculator",
                   badge: {
                     variant: 'primary',
@@ -154,7 +156,7 @@ export default {
               
                 this.navItems[3].children.push({
                 name : "Designations",
-                url : "/designation/list",
+                url : "/settingviews/designation/list",
                 icon : "icon-star"
               },)
             }
@@ -163,27 +165,27 @@ export default {
               
                 this.navItems[1].children.push(  {
                 name : "Heads",
-                url : "/heads/list",
+                url : "/finance/heads/list",
                 icon : "icon-star"
               },
               {
                 name: "Budget",
                 icon:"icon-star",
-                url:"/budget",
+                url:"/finance/budget",
                 children : [
                   {
                     name:"Total Budget",
-                    url:"/budget/total",
+                    url:"/finance/budget/total",
                     icon:"icon-star"
                   },
                   {
                     name:"Remaining Budget",
-                    url:"/budget/approved",
+                    url:"/finance/budget/approved",
                     icon:"icon-star"
                   },
                   {
                     name:"CarryOver Budget",
-                    url:"/budget/carryover",
+                    url:"/finance/budget/carryover",
                     icon:"icon-star"
                   }
                 ]
@@ -193,14 +195,14 @@ export default {
               
                 this.navItems[3].children.push({
                   name:"Label",
-                  url:"/label",
+                  url:"/settingviews/label",
                   icon:"icon-calculator"
                 },)
             }
             if(permission[i].text=="Transcation") {
                 this.navItems[1].children.push({
                   name:"Transaction",
-                  url:"/transaction",
+                  url:"/finance/transaction",
                   icon:"icon-calculator"
                 },)
             }
@@ -209,7 +211,7 @@ export default {
                 this.navItems[1].children.push({
                   name: "Budget Transfer",
                   icon:"icon-star",
-                  url:"/budgettrans/list/all",
+                  url:"/finance/budgettrans/list/all",
                   badge: {
                     variant: 'primary',
                     text: this.pendingCount2
@@ -233,36 +235,37 @@ export default {
   },  
   {
     name: 'Finance',
+    url:'/finance',
     icon: 'icon-calculator',
     children:[
       {
         name: 'Vendor',
-        url: '/vendor',
+        url: '/finance/vendor',
         icon: 'icon-user'
       },
       {
         name : "Heads",
-        url : "/heads/list",
+        url : "/finance/heads/list",
         icon : "icon-star"
       },
       {
         name: "Budget",
         icon:"icon-star",
-        url:"/budget",
+        url:"/finance/budget",
         children : [
           {
             name:"Total Budget",
-            url:"/budget/total",
+            url:"/finance/budget/total",
             icon:"icon-star"
           },
           {
             name:"Remaining Budget",
-            url:"/budget/approved",
+            url:"/finance/budget/approved",
             icon:"icon-star"
           },
           {
             name:"CarryOver Budget",
-            url:"/budget/carryover",
+            url:"/finance/budget/carryover",
             icon:"icon-star"
           }
         ]
@@ -270,7 +273,7 @@ export default {
       {
         name: "Budget Transfer",
         icon:"icon-star",
-        url:"/budgettrans/list/all",
+        url:"/finance/budgettrans/list/all",
         badge: {
           variant: 'primary',
           text: this.pendingCount2
@@ -278,12 +281,12 @@ export default {
       },
       {
         name:"Transaction",
-        url:"/transaction",
+        url:"/finance/transaction",
         icon:"icon-calculator"
       },
       {
         name:"Approval Requests",
-        url:"/approval/view/all",
+        url:"/finance/approval/view/all",
         icon:"icon-calculator",
         badge: {
           variant: 'primary',
@@ -298,44 +301,45 @@ export default {
   },
   {
     name: 'Settings',
+    url:'/settingviews',
     icon: 'icon-settings',
     children:[
       {
         name: 'Staff',
-        url: '/staff',
+        url: '/settingviews/staff',
         icon: 'icon-user'
       },
       
       {
         name : "Templates",
-        url : '/templates',
+        url : '/settingviews/templates',
         icon : 'icon-envelope',
         children : [
           {
             name : 'Email Templates',
-            url : '/templates/email',
+            url : '/settingviews/templates/email',
             icon : 'icon-envelope',
           },
           {
             name : 'SMS Templates',
-            url : '/templates/sms',
+            url : '/settingviews/templates/sms',
             icon : 'icon-envelope',
           },
         ]
       },
       {
         name: 'Communication Log',
-        url: '/plugin/log',
+        url: '/settingviews/plugin/log',
         icon: 'icon-settings',
       },
       {
         name : "Departments",
-        url : "/department/list",
+        url : "/settingviews/department/list",
         icon : "icon-star"
       },
       {
         name : "Designations",
-        url : "/designation/list",
+        url : "/settingviews/designation/list",
         icon : "icon-star"
       },
       
@@ -344,7 +348,7 @@ export default {
       
       {
         name:"Label",
-        url:"/label",
+        url:"/settingviews/label",
         icon:"icon-calculator"
       },
     ]

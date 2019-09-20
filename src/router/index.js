@@ -129,6 +129,366 @@ var router = new Router({
               component: Dashboard
             },
             {
+              path:'/finance',
+              component : {
+                render (c) {
+                  return c('router-view')
+                } 
+              },
+              children : [
+                {
+                  meta : { requiresAuth : true },
+                  name : `Heads`,
+                  path : `/finance/heads`,
+                  redirect : `/finance/heads/list`,
+                  component : {
+                    render (c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      meta : { requiresAuth : true },
+                      path : '/finance/heads/list',
+                      component: HeadList
+                    },
+                  ]
+                },
+                {
+                  path : "/finance/vendor",
+                  redirect:'/finance/vendor',
+                  name:"Vendors",
+                  meta : { requiresAuth : true },
+                  component : {
+                    render (c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      path : "/finance/vendor",
+                      meta : { requiresAuth : true },
+                      component : VendorList
+                    },
+                    {
+                      name:"Vendor Detail",
+                      path : "/finance/vendor/:id",
+                      meta : { requiresAuth : true },
+                      component : VendorDetail
+                    }
+                  ]
+                },
+                {
+                  path : "/finance/budget",
+                  component : {
+                    render (c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      name:"Total Budget",
+                      path : "/finance/budget/total",
+                      component : TotalBudget
+                    },
+                    {
+                      name:"Remaining Budget",
+                      path : "/finance/budget/approved",
+                      component : ApprovedBudget
+                    },
+                    {
+                      name:"Budget Graph",
+                      path : "/finance/budget/graph",
+                      props:true,
+                      component : BudgetGraph
+                    },
+                    {
+                      name:"CarryOver Budget",
+                      path : "/finance/budget/carryover",
+                      component : CarryOverBudget
+                    }
+                  ]
+                },
+                {
+                  path: '/finance/budgettrans',
+                  name:"Budget Transfer List",
+                  redirect:'/finance/budgettrans/list/add',
+                  meta : { requiresAuth : true },
+                  component: {
+                    render (c) { return c('router-view') }
+                  },
+                  children: [
+                    {
+                      meta : { requiresAuth : true },
+                      path : `/finance/budgettrans/list/:id`,
+                      component : BudgetTransferList
+                    },
+                    {
+                      name : `Add Budget Transfer`,
+                      meta : { requiresAuth : true },
+                      path : `/finance/budgettrans/add`,
+                      component : BudgetTransfer
+                    }
+                  ]
+                },
+                {
+                  path: '/finance/transaction',
+                  meta : { requiresAuth : true },
+                  redirect:'/finance/transaction/list',
+                  name:'Transaction List',
+                  component : {
+                    render(c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      name:'Add Transaction',
+                      meta : { requiresAuth : true },
+                      path:'/finance/transaction/add',
+                      props:true,
+                      component : AddTransaction
+                    },
+                    {
+                      path:'/finance/transaction/list',
+                      component : TransactionList
+                    },
+                    {
+                      path:'/finance/transaction/edit/:id',
+                      meta : { requiresAuth : true },
+                      name:'Edit Transaction',
+                      component : EditTransaction
+                    }
+
+                  ]
+                },
+                {
+                  path: '/finance/approval',
+                  meta : { requiresAuth : true },
+                  redirect:'/finance/approval/view/all',
+                  name:'Approval List',
+                  component : {
+                    render(c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      name:'Add Approval',
+                      meta : { requiresAuth : true },
+                      path:'/finance/approval/add',
+                      component : AddApproval
+                    },
+                    {
+                      path:'/finance/approval/edit/:id',
+                      meta : { requiresAuth : true },
+                      name:'Edit Approval',
+                      component : EditApproval
+                    },
+                    {
+                      path:'/finance/approval/view/:id',
+                      meta : { requiresAuth : true },
+                      component : ApprovalList
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              path:'/settingviews',
+              component : {
+                render (c) {
+                  return c('router-view')
+                } 
+              },
+              children : [
+                {
+                  path:'/settingviews/staff',
+                  redirect:'/settingviews/staff/list',
+                  meta:{requiresAuth : true},
+                  component : {
+                    render(c) {return c('router-view')}
+                  },
+                  children:[
+                    {
+                      
+                      meta : { requiresAuth : true },
+                      path : `/settingviews/staff/list`,
+                      name:"Staff List",
+                      component : StaffList
+                    },
+                    {
+                      path: '/settingviews/staff/add',
+                      meta : { requiresAuth : true },
+                      name: 'Add Staff',
+                      component: AddStaff
+                    },
+                    {
+                      path: '/settingviews/staff/details/:staffId',
+                      meta : { requiresAuth : true },
+                      name: 'Staff Details',
+                      component: StaffDetails
+                    }
+                  ]
+                },
+                {
+                  
+                  meta : { requiresAuth : true },
+                  path : `/settingviews/templates/email`,
+                  component : {
+                    render (c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      name : `E-Mail Template`,
+                      meta : { requiresAuth : true },
+                      path : '',
+                      component: EmailTemplateList
+                    },
+                    {
+                      name : `E-Mail Template Add`,
+                      meta : { requiresAuth : true },
+                      path : `/settingviews/templates/email/add`,
+                      component: EmailTemplate
+                    },
+                    {
+                      name : `E-mail Template Edit`,
+                      meta : { requiresAuth : true },
+                      path : `/settingviews/templates/email/edit/:id`,
+                      component: EmailTemplateEdit
+                    }
+                  ]
+                },
+                
+                {
+                  
+                  meta : { requiresAuth : true },
+                  name : `Departments`,
+                  path : `/settingviews/department`,
+                  redirect : `/settingviews/department/list`,
+                  component : {
+                    render (c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      meta : { requiresAuth : true },
+                      path : '/settingviews/department/list',
+                      component: DepartmentList
+                    },
+                    {
+                      name : `Heads`,
+                      meta : { requiresAuth : true },
+                      path : '/settingviews/department/head/:deptId',
+                      component: HeadList
+                    },
+                    {
+                      name : `Designation`,
+                      meta : { requiresAuth : true },
+                      path : '/settingviews/department/designation/:deptId',
+                      component: DesignationList
+                    }
+                  ]
+                },
+                {
+                  meta : { requiresAuth : true },
+                  name : `Designations`,
+                  path : `/settingviews/designation`,
+                  redirect : `/settingviews/designation/list`,
+                  component : {
+                    render (c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      meta : { requiresAuth : true },
+                      path : '/settingviews/designation/list',
+                      component: DesignationList
+                    },
+                    {
+                      name:"Add Designation",
+                      meta : { requiresAuth : true },
+                      path : '/settingviews/designation/add',
+                      component: AddDesignation
+                    },
+                    {
+                      name:"Add Designation",
+                      meta : { requiresAuth : true },
+                      path : '/settingviews/designation/add/:id',
+                      component: AddDesignation
+                    },
+                    {
+                      name:"Edit Designation",
+                      meta : { requiresAuth : true },
+                      path : '/settingviews/designation/edit/:id',
+                      component: EditDesignation
+                    }
+                  ]
+                },
+                {
+                  meta : { requiresAuth : true },
+                  path : `/settingviews/templates/sms/`,
+                  component : {
+                    render (c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      name : `SMS Template`,
+                      meta : { requiresAuth : true },
+                      path : ``,
+                      component: SmsTemplateList
+                    },
+                    {
+                      name : `SMS Template Add`,
+                      meta : { requiresAuth : true },
+                      path : `/settingviews/templates/sms/add`,
+                      component: SmsTemplate
+                    },
+                    {
+                      name : `SMS Template Edit`,
+                      meta : { requiresAuth : true },
+                      path : `/settingviews/templates/sms/edit/:id`,
+                      component: SmsTemplateEdit
+                    }
+                  ]
+                },
+                {
+                  path : "/settingviews/label",
+                  meta : { requiresAuth : true },
+                  component : {
+                    render (c) { return c('router-view') }
+                  },
+                  children : [
+                    {
+                      name:"Labels",
+                      path : "/settingviews/label",
+                      meta : { requiresAuth : true },
+                      component : LabelList
+                    }
+                  ]
+                },
+                {
+                  path: '/settingviews/plugin',
+                  meta : { requiresAuth : true },
+                  component: {
+                    render (c) { return c('router-view') }
+                  },
+                  children: [
+                    {
+                      name : `Plugin List`,
+                      meta : { requiresAuth : true },
+                      path : ``,
+                      component : PluginList
+                    },
+                    {
+                      name : `Communication Log`,
+                      meta : { requiresAuth : true },
+                      path : `/settingviews/plugin/log`,
+                      component : CommunicationLog
+                    },
+                  ]
+                },
+              ]
+            },
+            {
+              path:'/academics',
+              component : {
+                render (c) {
+                  return c('router-view')
+                } 
+              },
+              children : [
+              ]
+            },
+            {
               path:'/company',
               meta : { requiresAuth : true },
               component: {
@@ -371,6 +731,7 @@ var router = new Router({
                     }
                   ]
                 },
+
                 {
                   
                   meta : { requiresAuth : true },

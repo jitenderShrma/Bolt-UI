@@ -1142,7 +1142,7 @@ export default {
                 }
                 if(args.item.id == "add") {
                     console.log(args)
-                    this.$router.push('/budgettrans/add');
+                    this.$router.push('/finance/budgettrans/add');
                 }
                 
             },

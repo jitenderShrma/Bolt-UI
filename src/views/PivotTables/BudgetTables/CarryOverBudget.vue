@@ -1610,7 +1610,7 @@ export default {
       }, 
       switchGraph() {
         this.currentView = "Graph"
-        this.$router.push({name:"Budget Graph", params:{page_from : "remaining"}})
+        this.$router.push({name:"Budget Graph", params:{page_from : "carryover"}})
 
       },
       switchValue() {

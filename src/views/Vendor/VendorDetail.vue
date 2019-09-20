@@ -230,11 +230,33 @@ Vue.use(VueNotifications, options)
               printTemplate: function() {
                   return {
                     template: Vue.component("printTemplate", {
-                      template : `<div>{{data.transaction_id}}&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor:pointer" title="Print Transaction"><i class="icon-printer"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;<span title="View/Download Bill" style="cursor:pointer" v-if="data.bill_file_path"><i class="fa fa-clipboard"></i></span><span style="cursor:pointer" title="Upload Bill" v-else><i class="icon-cloud-upload"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;<span title="Transaction Paid" v-if="data.status == 'PAID'"><span style="cursor:pointer"><b-badge id="label" variant="success" v-text="$ml.get('paid')"></b-badge></span></span><span title="Pay for Transaction" v-if="data.status == 'UNPAID'"><span style="cursor:pointer"><b-badge variant="warning" id="label" v-text="$ml.get('markaspaid')"></b-badge></span></span></div>`,
+                      template : `<ejs-tooltip ref="tooltip" position="TopCenter" :content='content' :beforeRender="beforeRender"><div>{{data.transaction_id}}&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor:pointer" title="Print Transaction"><i class="icon-printer"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;<span title="View/Download Bill" style="cursor:pointer" v-if="data.bill_file_path"><i class="fa fa-clipboard"></i></span><span style="cursor:pointer" title="Upload Bill" v-else><i class="icon-cloud-upload"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;<span title="Transaction Paid" v-if="data.status == 'PAID'"><span style="cursor:pointer"><b-badge id="label" variant="success" v-text="$ml.get('paid')"></b-badge></span></span><span title="Pay for Transaction" v-if="data.status == 'UNPAID'"><span style="cursor:pointer"><b-badge variant="warning" id="label" v-text="$ml.get('markaspaid')"></b-badge></span></span></div></ejs-tooltip>`,
                       data()  {
                         return {
-                          data: {}
+                          data: {},
+                          content:'Loading...'
                         };
+                      },
+                      methods:{
+                        beforeRender(args) {
+                          var department=null
+                          var head=null
+                          var user=null
+                          var vendor=null
+                          if(this.data.department) {
+                            department = this.data.department.department_name
+                          }
+                          if(this.data.head) {
+                            head = this.data.head.name
+                          }
+                          if(this.data.user) {
+                            user = this.data.user.user_name
+                          }
+                          if(this.data.vendor) {
+                            vendor = this.data.vendor.vendor_company
+                          }
+                          this.content = `<span>Department : ${department}<br>Head : ${head}<br>Date : ${moment(this.data.date).format('L')}<br>Requested By : ${user}<br>Month : ${moment().month(parseInt(this.data.month)).format('MMM')}<br>Type : ${this.data.transaction_type}<br>Category : ${this.data.category}<br>Vendor : ${vendor}<br>PO Number: ${this.data.po_raised}<span>`
+                        }
                       }
                     
                     })
